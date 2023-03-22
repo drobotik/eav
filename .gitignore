@@ -3,4 +3,5 @@
 /.vscode
 /Docker
 .phpunit.cache
+.phpunit.result.cache
 

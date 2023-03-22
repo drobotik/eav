@@ -2,11 +2,12 @@
 
 namespace Kuperwood\Eav;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Connection as DBALConnection;
 class Connection
 {
-    protected static \Doctrine\DBAL\Connection|null $conn = null;
+    protected static DBALConnection|null $conn = null;
 
-    public static function getConnection(array $params = null)
+    public static function getConnection(array $params = null) : DBALConnection
     {
         if(!is_null(self::$conn)) {
             return self::$conn;
@@ -38,7 +39,4 @@ class Connection
         self::$conn = DriverManager::getConnection($params);
         return self::$conn;
     }
-
-
-
 }

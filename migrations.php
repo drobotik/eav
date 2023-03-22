@@ -11,6 +11,15 @@ return [
     'migrations' => [
         'Kuperwood\Eav\Migration\DomainMigration',
         'Kuperwood\Eav\Migration\EntityMigration',
+        'Kuperwood\Eav\Migration\AttributeMigration',
+        'Kuperwood\Eav\Migration\SetMigration',
+        'Kuperwood\Eav\Migration\GroupMigration',
+        'Kuperwood\Eav\Migration\PivotMigration',
+        'Kuperwood\Eav\Migration\ValueDatetimeMigration',
+        'Kuperwood\Eav\Migration\ValueDecimalMigration',
+        'Kuperwood\Eav\Migration\ValueIntegerMigration',
+        'Kuperwood\Eav\Migration\ValueStringMigration',
+        'Kuperwood\Eav\Migration\ValueTextMigration',
     ],
 
     'migrations_paths' => [

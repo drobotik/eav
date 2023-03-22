@@ -10,7 +10,7 @@ enum _ENTITY implements TableEnumInterface
 
     public static function table() : string
     {
-        return 'eav_entity';
+        return 'eav_entities';
     }
 
     public function column() : string
