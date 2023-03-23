@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Kuperwood\Eav\Enum;
 use Kuperwood\Eav\Interface\DefineTableInterface;
+use Kuperwood\Eav\Strategy;
 
 enum _ATTR implements DefineTableInterface
 {
@@ -30,6 +31,20 @@ enum _ATTR implements DefineTableInterface
             self::SOURCE => "source",
             self::DEFAULT_VALUE => "default_value",
             self::DESCRIPTION => "description",
+        };
+    }
+
+    public function default() : string|bool|null
+    {
+        return match ($this) {
+            self::ID,
+            self::NAME,
+            self::DOMAIN_ID,
+            self::SOURCE,
+            self::DEFAULT_VALUE => null,
+            self::TYPE => ATTR_TYPE::STRING->value(),
+            self::STRATEGY => Strategy::class,
+            self::DESCRIPTION => false,
         };
     }
 }

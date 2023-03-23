@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kuperwood\Dev\Transporter;
+namespace Kuperwood\Dev;
 
 use Exception;
 
@@ -10,7 +10,7 @@ class Transporter
 {
     private array $data = [];
 
-    public function setField(string $field, $value) : self
+    public function setField($field, $value) : self
     {
         $this->data[$field] = $value;
         return $this;
