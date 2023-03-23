@@ -28,29 +28,29 @@ class PivotModel extends Model
         return $this->{_PIVOT::DOMAIN_ID->column()};
     }
 
-    public function setDomainKey($key) : self
+    public function setDomainKey(int $key) : self
     {
         $this->{_PIVOT::DOMAIN_ID->column()} = $key;
         return $this;
     }
 
-    public function getSetKey()
+    public function getAttrSetKey()
     {
         return $this->{_PIVOT::SET_ID->column()};
     }
 
-    public function setSetKey($key) : self
+    public function setAttrSetKey(int $key) : self
     {
         $this->{_PIVOT::SET_ID->column()} = $key;
         return $this;
     }
 
-    public function getGroupKey()
+    public function getAttrGroupKey()
     {
         return $this->{_PIVOT::GROUP_ID->column()};
     }
 
-    public function setGroupKey($key) : self
+    public function setGroupKey(int $key) : self
     {
         $this->{_PIVOT::GROUP_ID->column()} = $key;
         return $this;
@@ -61,7 +61,7 @@ class PivotModel extends Model
         return $this->{_PIVOT::ATTR_ID->column()};
     }
 
-    public function setAttrKey($key) : self
+    public function setAttrKey(int $key) : self
     {
         $this->{_PIVOT::ATTR_ID->column()} = $key;
         return $this;

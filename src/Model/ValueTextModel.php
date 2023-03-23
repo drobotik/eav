@@ -7,11 +7,11 @@ namespace Kuperwood\Eav\Model;
 use Kuperwood\Eav\Enum\_VALUE;
 use Kuperwood\Eav\Enum\ATTR_TYPE;
 
-class ValueTextModel extends Value
+class ValueTextModel extends ValueBase
 {
     public function __construct(array $attributes = [])
     {
-        $this->table = sprintf(_VALUE::table(), ATTR_TYPE::TEXT->value());
+        $this->table = ATTR_TYPE::TEXT->valueTable();
         parent::__construct($attributes);
     }
 }

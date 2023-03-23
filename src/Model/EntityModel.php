@@ -25,7 +25,7 @@ class EntityModel extends Model
         return $this->{_ENTITY::DOMAIN_ID->column()};
     }
 
-    public function setDomainKey($key) : self
+    public function setDomainKey(int $key) : self
     {
         $this->{_ENTITY::DOMAIN_ID->column()} = $key;
         return $this;

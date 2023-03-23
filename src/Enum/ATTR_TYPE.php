@@ -27,6 +27,17 @@ enum ATTR_TYPE
         };
     }
 
+    public function valueTable(): string
+    {
+        return match ($this) {
+            self::INTEGER => sprintf(_VALUE::table(), self::INTEGER->value()),
+            self::DATETIME => sprintf(_VALUE::table(), self::DATETIME->value()),
+            self::DECIMAL => sprintf(_VALUE::table(), self::DECIMAL->value()),
+            self::STRING => sprintf(_VALUE::table(), self::STRING->value()),
+            self::TEXT => sprintf(_VALUE::table(), self::TEXT->value())
+        };
+    }
+
     public function doctrineType() : string
     {
         return match ($this) {

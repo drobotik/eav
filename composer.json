@@ -12,7 +12,7 @@
         "files": [],
         "psr-4": {
             "Tests\\": "tests/",
-            "Kuperwood\\Dev": "dev/"
+            "Kuperwood\\Dev\\": "dev/"
         }
     },
     "authors": [

@@ -7,7 +7,7 @@ namespace Kuperwood\Eav\Model;
 use Illuminate\Database\Eloquent\Model;
 use Kuperwood\Eav\Enum\_VALUE;
 
-class Value extends Model
+class ValueBase extends Model
 {
     public function __construct(array $attributes = [])
     {
@@ -26,7 +26,7 @@ class Value extends Model
         return $this->{_VALUE::DOMAIN_ID->column()};
     }
 
-    public function setDomainKey($key) : self
+    public function setDomainKey(int $key) : self
     {
         $this->{_VALUE::DOMAIN_ID->column()} = $key;
         return $this;
@@ -37,7 +37,7 @@ class Value extends Model
         return $this->{_VALUE::ENTITY_ID->column()};
     }
 
-    public function setEntityKey($key) : self
+    public function setEntityKey(int $key) : self
     {
         $this->{_VALUE::ENTITY_ID->column()} = $key;
         return $this;
@@ -48,7 +48,7 @@ class Value extends Model
         return $this->{_VALUE::ATTRIBUTE_ID->column()};
     }
 
-    public function setAttrKey($key) : self
+    public function setAttrKey(int $key) : self
     {
         $this->{_VALUE::ATTRIBUTE_ID->column()} = $key;
         return $this;

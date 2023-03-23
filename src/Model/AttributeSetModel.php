@@ -7,7 +7,7 @@ namespace Kuperwood\Eav\Model;
 use Illuminate\Database\Eloquent\Model;
 use Kuperwood\Eav\Enum\_SET;
 
-class SetModel extends Model
+class AttributeSetModel extends Model
 {
     public function __construct(array $attributes = [])
     {
@@ -25,7 +25,7 @@ class SetModel extends Model
         return $this->{_SET::NAME->column()};
     }
 
-    public function setName($name) : self
+    public function setName(string $name) : self
     {
         $this->{_SET::NAME->column()} = $name;
         return $this;

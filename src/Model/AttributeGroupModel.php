@@ -7,7 +7,7 @@ namespace Kuperwood\Eav\Model;
 use Illuminate\Database\Eloquent\Model;
 use Kuperwood\Eav\Enum\_GROUP;
 
-class GroupModel extends Model
+class AttributeGroupModel extends Model
 {
     public function __construct(array $attributes = [])
     {
@@ -21,12 +21,12 @@ class GroupModel extends Model
         parent::__construct($attributes);
     }
 
-    public function getSetKey()
+    public function getAttrSetKey()
     {
         return $this->{_GROUP::SET_ID->column()};
     }
 
-    public function setSetKey($key) : self
+    public function setAttrSetKey(int $key) : self
     {
         $this->{_GROUP::SET_ID->column()} = $key;
         return $this;
@@ -37,7 +37,7 @@ class GroupModel extends Model
         return $this->{_GROUP::NAME->column()};
     }
 
-    public function setName($name) : self
+    public function setName(string $name) : self
     {
         $this->{_GROUP::NAME->column()} = $name;
         return $this;
