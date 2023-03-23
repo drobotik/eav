@@ -4,4 +4,5 @@
 /Docker
 .phpunit.cache
 .phpunit.result.cache
+/tests/test.sqlite
 

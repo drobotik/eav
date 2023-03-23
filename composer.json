@@ -22,15 +22,15 @@
     "minimum-stability": "dev",
     "require": {
         "php": "^8.1",
-        "doctrine/dbal": "^3.6",
-        "doctrine/migrations": "4.0.x-dev",
-        "symfony/yaml": "6.3.x-dev",
-        "doctrine/orm": "2.14.1",
-        "symfony/cache": "6.3.x-dev",
         "illuminate/database": "10.x-dev"
     },
     "require-dev": {
         "fakerphp/faker": "^1.21",
-        "phpunit/phpunit": "9.6.5"
+        "phpunit/phpunit": "9.6.5",
+        "doctrine/dbal": "^3.6",
+        "doctrine/migrations": "4.0.x-dev",
+        "symfony/yaml": "6.3.x-dev",
+        "doctrine/orm": "2.14.1",
+        "symfony/cache": "6.3.x-dev"
     }
 }

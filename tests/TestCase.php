@@ -3,6 +3,7 @@ namespace Tests;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 
+
 class TestCase extends \PHPUnit\Framework\TestCase
 {
     protected function setUp() : void
@@ -14,7 +15,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
         $capsule = new Capsule;
         $capsule->addConnection([
             'driver'   => 'sqlite',
-            'database' => __DIR__.'/../../../test.sqlite',
+            'database' => __DIR__.'/test.sqlite',
         ]);
         $this->capsule = $capsule;
         $capsule->setAsGlobal();
@@ -23,6 +24,8 @@ class TestCase extends \PHPUnit\Framework\TestCase
 
     protected function tearDown(): void
     {
+        $migrator = new Migrator();
+        $migrator->rollback();
         parent::tearDown();
     }
 
