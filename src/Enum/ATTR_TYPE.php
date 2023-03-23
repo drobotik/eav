@@ -6,7 +6,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Builder\ClassMetadataBuilder;
 use Doctrine\ORM\Mapping\ClassMetadata;
 
-enum AttributeTypeEnum
+enum ATTR_TYPE
 {
     case INTEGER;
     case DATETIME;

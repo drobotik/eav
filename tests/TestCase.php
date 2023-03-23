@@ -1,21 +1,24 @@
 <?php
 namespace Tests;
 
-use Kuperwood\Eav\Migrator;
-use Doctrine\DBAL\Connection as DBALConnection;
-use Kuperwood\Eav\ModelsManager;
+use Illuminate\Database\Capsule\Manager as Capsule;
 
 class TestCase extends \PHPUnit\Framework\TestCase
 {
-    protected DBALConnection $connection;
-
     protected function setUp() : void
     {
         parent::setUp();
-        $this->em = ModelsManager::getMe();
         $migrator = new Migrator();
         $migrator->rollback();
         $migrator->migrate();
+        $capsule = new Capsule;
+        $capsule->addConnection([
+            'driver'   => 'sqlite',
+            'database' => __DIR__.'/../../../test.sqlite',
+        ]);
+        $this->capsule = $capsule;
+        $capsule->setAsGlobal();
+        $capsule->bootEloquent();
     }
 
     protected function tearDown(): void

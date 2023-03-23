@@ -6,11 +6,11 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Types;
 use Kuperwood\Eav\Enum\_VALUE;
-use Kuperwood\Eav\Enum\AttributeTypeEnum;
+use Kuperwood\Eav\Enum\ATTR_TYPE;
 
 class ValueMigration
 {
-    public static function runUp(Schema $schema, AttributeTypeEnum $type) : Table
+    public static function runUp(Schema $schema, ATTR_TYPE $type) : Table
     {
         $table = $schema->createTable(sprintf(_VALUE::table(), $type->value()));
         $table->addColumn(_VALUE::ID->column(), Types::INTEGER , ['Autoincrement' => true, 'unsigned' => true]);
@@ -30,7 +30,7 @@ class ValueMigration
         return $table;
     }
 
-    public static function runDown(Schema $schema, AttributeTypeEnum $type) : void
+    public static function runDown(Schema $schema, ATTR_TYPE $type) : void
     {
         $schema->dropTable(sprintf(_VALUE::table(), $type->value()));
     }

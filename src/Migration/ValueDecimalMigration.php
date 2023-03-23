@@ -6,7 +6,7 @@ namespace Kuperwood\Eav\Migration;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
-use Kuperwood\Eav\Enum\AttributeTypeEnum;
+use Kuperwood\Eav\Enum\ATTR_TYPE;
 
 final class ValueDecimalMigration extends AbstractMigration
 {
@@ -17,11 +17,11 @@ final class ValueDecimalMigration extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        ValueMigration::runUp($schema, AttributeTypeEnum::DECIMAL);
+        ValueMigration::runUp($schema, ATTR_TYPE::DECIMAL);
     }
 
     public function down(Schema $schema): void
     {
-        ValueMigration::runDown($schema, AttributeTypeEnum::DECIMAL);
+        ValueMigration::runDown($schema, ATTR_TYPE::DECIMAL);
     }
 }

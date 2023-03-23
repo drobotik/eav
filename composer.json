@@ -26,7 +26,8 @@
         "doctrine/migrations": "4.0.x-dev",
         "symfony/yaml": "6.3.x-dev",
         "doctrine/orm": "2.14.1",
-        "symfony/cache": "6.3.x-dev"
+        "symfony/cache": "6.3.x-dev",
+        "illuminate/database": "10.x-dev"
     },
     "require-dev": {
         "fakerphp/faker": "^1.21",

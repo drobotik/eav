@@ -1,10 +1,11 @@
 <?php
 
-namespace Kuperwood\Eav;
+namespace Tests;
 
 use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
 use Doctrine\Migrations\Configuration\Migration\PhpFile;
 use Doctrine\Migrations\DependencyFactory;
+use Kuperwood\Eav\Connection;
 use Symfony\Component\Console\Input\ArrayInput;
 
 class Migrator
