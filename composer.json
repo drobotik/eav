@@ -11,7 +11,8 @@
     "autoload-dev": {
         "files": [],
         "psr-4": {
-            "Tests\\": "tests/"
+            "Tests\\": "tests/",
+            "Kuperwood\\Dev": "dev/"
         }
     },
     "authors": [

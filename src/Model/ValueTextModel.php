@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kuperwood\Eav\Model;
 
 use Kuperwood\Eav\Enum\_VALUE;

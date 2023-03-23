@@ -2,7 +2,7 @@
 
 namespace Kuperwood\Eav\Interface;
 
-interface TableEnumInterface
+interface DefineTableInterface
 {
     public static function table() : string;
     public function column() : string;

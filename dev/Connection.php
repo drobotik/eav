@@ -1,8 +1,9 @@
 <?php
 
-namespace Kuperwood\Eav;
-use Doctrine\DBAL\DriverManager;
+namespace Kuperwood\Dev;
 use Doctrine\DBAL\Connection as DBALConnection;
+use Doctrine\DBAL\DriverManager;
+
 class Connection
 {
     protected static DBALConnection|null $conn = null;

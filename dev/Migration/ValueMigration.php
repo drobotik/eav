@@ -1,6 +1,6 @@
 <?php
 
-namespace Kuperwood\Eav\Migration;
+namespace Kuperwood\Dev\Migration;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Table;

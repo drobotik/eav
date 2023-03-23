@@ -4,9 +4,9 @@ namespace Kuperwood\Eav\Enum;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Builder\ClassMetadataBuilder;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Kuperwood\Eav\Interface\TableEnumInterface;
+use Kuperwood\Eav\Interface\DefineTableInterface;
 
-enum _VALUE implements TableEnumInterface
+enum _VALUE implements DefineTableInterface
 {
     case ID;
     case DOMAIN_ID;

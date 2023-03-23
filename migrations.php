@@ -9,17 +9,17 @@ return [
     ],
 
     'migrations' => [
-        'Kuperwood\Eav\Migration\DomainMigration',
-        'Kuperwood\Eav\Migration\EntityMigration',
-        'Kuperwood\Eav\Migration\AttributeMigration',
-        'Kuperwood\Eav\Migration\SetMigration',
-        'Kuperwood\Eav\Migration\GroupMigration',
-        'Kuperwood\Eav\Migration\PivotMigration',
-        'Kuperwood\Eav\Migration\ValueDatetimeMigration',
-        'Kuperwood\Eav\Migration\ValueDecimalMigration',
-        'Kuperwood\Eav\Migration\ValueIntegerMigration',
-        'Kuperwood\Eav\Migration\ValueStringMigration',
-        'Kuperwood\Eav\Migration\ValueTextMigration',
+        'Dev\Migration\DomainMigration',
+        'Dev\Migration\EntityMigration',
+        'Dev\Migration\AttributeMigration',
+        'Dev\Migration\SetMigration',
+        'Dev\Migration\GroupMigration',
+        'Dev\Migration\PivotMigration',
+        'Dev\Migration\ValueDatetimeMigration',
+        'Dev\Migration\ValueDecimalMigration',
+        'Dev\Migration\ValueIntegerMigration',
+        'Dev\Migration\ValueStringMigration',
+        'Dev\Migration\ValueTextMigration',
     ],
 
     'migrations_paths' => [

@@ -1,9 +1,9 @@
 <?php
 
 namespace Kuperwood\Eav\Enum;
-use Kuperwood\Eav\Interface\TableEnumInterface;
+use Kuperwood\Eav\Interface\DefineTableInterface;
 
-enum _PIVOT implements TableEnumInterface
+enum _PIVOT implements DefineTableInterface
 {
     case ID;
     case DOMAIN_ID;

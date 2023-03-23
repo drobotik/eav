@@ -1,9 +1,9 @@
 <?php
 
 namespace Kuperwood\Eav\Enum;
-use Kuperwood\Eav\Interface\TableEnumInterface;
+use Kuperwood\Eav\Interface\DefineTableInterface;
 
-enum _GROUP implements TableEnumInterface
+enum _GROUP implements DefineTableInterface
 {
     CASE ID;
     case SET_ID;

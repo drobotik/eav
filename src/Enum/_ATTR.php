@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 namespace Kuperwood\Eav\Enum;
-use Kuperwood\Eav\Interface\TableEnumInterface;
+use Kuperwood\Eav\Interface\DefineTableInterface;
 
-enum _ATTR implements TableEnumInterface
+enum _ATTR implements DefineTableInterface
 {
     CASE ID;
     CASE DOMAIN_ID;

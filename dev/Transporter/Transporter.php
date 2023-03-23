@@ -1,6 +1,8 @@
 <?php
 
-namespace Kuperwood\Eav\Transporter;
+declare(strict_types=1);
+
+namespace Kuperwood\Dev\Transporter;
 
 use Exception;
 

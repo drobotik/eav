@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 
+use Kuperwood\Dev\ModelsManager;
 use Doctrine\Migrations\Configuration\EntityManager\ExistingEntityManager;
 use Doctrine\Migrations\Configuration\Migration\PhpFile;
 use Doctrine\Migrations\DependencyFactory;
@@ -19,7 +20,6 @@ use Doctrine\Migrations\Tools\Console\Command\UpToDateCommand;
 use Doctrine\Migrations\Tools\Console\Command\VersionCommand;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
-use Kuperwood\Eav\ModelsManager;
 use Symfony\Component\Console\Application;
 
 require_once "vendor/autoload.php";

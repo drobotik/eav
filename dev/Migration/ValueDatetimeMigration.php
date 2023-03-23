@@ -2,26 +2,26 @@
 
 declare(strict_types=1);
 
-namespace Kuperwood\Eav\Migration;
+namespace Kuperwood\Dev\Migration;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 use Kuperwood\Eav\Enum\ATTR_TYPE;
 
-final class ValueTextMigration extends AbstractMigration
+final class ValueDatetimeMigration extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Attribute text value table';
+        return 'Attribute datetime value table';
     }
 
     public function up(Schema $schema): void
     {
-        ValueMigration::runUp($schema, ATTR_TYPE::TEXT);
+        ValueMigration::runUp($schema, ATTR_TYPE::DATETIME);
     }
 
     public function down(Schema $schema): void
     {
-        ValueMigration::runDown($schema, ATTR_TYPE::TEXT);
+        ValueMigration::runDown($schema, ATTR_TYPE::DATETIME);
     }
 }

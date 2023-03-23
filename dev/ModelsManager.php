@@ -1,6 +1,6 @@
 <?php
 
-namespace Kuperwood\Eav;
+namespace Kuperwood\Dev;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
 use Doctrine\Persistence\Mapping\Driver\StaticPHPDriver;
