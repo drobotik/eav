@@ -6,15 +6,28 @@ namespace Kuperwood\Eav;
 
 use Kuperwood\Eav\Value\ValueState;
 
-class Value
+class ValueManager
 {
     private ValueState $runtime;
     private ValueState $stored;
+
+    private int $key;
 
     public function __construct()
     {
         $this->runtime = new ValueState();
         $this->stored = new ValueState();
+    }
+
+    public function getKey() : int
+    {
+        return $this->key;
+    }
+
+    public function setKey(int $key) : self
+    {
+        $this->key = $key;
+        return $this;
     }
 
     public function isClean() : bool

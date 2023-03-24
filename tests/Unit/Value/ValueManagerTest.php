@@ -2,17 +2,23 @@
 
 namespace Tests\Unit\Value;
 
-use Kuperwood\Eav\Value;
+use Kuperwood\Eav\ValueManager;
 use PHPUnit\Framework\TestCase;
 
-class ValueTest extends TestCase
+class ValueManagerTest extends TestCase
 {
-    protected Value $value;
+    protected ValueManager $value;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->value = new Value();
+        $this->value = new ValueManager();
+    }
+
+    /** @test  */
+    public function key() {
+        $this->value->setKey(1);
+        $this->assertEquals(1, $this->value->getKey());
     }
 
     /** @test  */
