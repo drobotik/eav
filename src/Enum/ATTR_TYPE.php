@@ -33,6 +33,11 @@ enum ATTR_TYPE
         };
     }
 
+    public static function isValid(string $type): bool
+    {
+        return in_array($type, array_map(fn($case) => $case->value(), self::cases()));
+    }
+
     public function valueTable(): string
     {
         return match ($this) {

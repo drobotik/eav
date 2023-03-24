@@ -5,6 +5,9 @@ namespace Tests\Unit\Attribute;
 use Kuperwood\Eav\Attribute;
 use Kuperwood\Eav\AttributeBag;
 use Kuperwood\Eav\AttributeSet;
+use Kuperwood\Eav\Enum\_ATTR;
+use Kuperwood\Eav\Enum\ATTR_TYPE;
+use Kuperwood\Eav\Exception\AttributeException;
 use Kuperwood\Eav\Source;
 use Kuperwood\Eav\Strategy;
 use PHPUnit\Framework\TestCase;
@@ -12,32 +15,111 @@ use PHPUnit\Framework\TestCase;
 class AttributeTest extends TestCase
 {
 
+    private Attribute $attribute;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->attribute = new Attribute();
+    }
+
     /** @test */
     public function bag() {
-        $attribute = new Attribute();
+        $this->assertInstanceOf(AttributeBag::class, $this->attribute->getBag());
         $bag = new AttributeBag();
-        $attribute->setBag(new AttributeBag());
-        $this->assertEquals($bag, $attribute->getBag());
+        $this->attribute->setBag($bag);
+        $this->assertSame($bag, $this->attribute->getBag());
     }
-
+    /** @test */
     public function strategy() {
-        $attribute = new Attribute();
         $strategy = new Strategy();
-        $attribute->setStrategy($strategy);
-        $this->assertEquals($strategy, $attribute->getStrategy());
+        $this->attribute->setStrategy($strategy);
+        $this->assertSame($strategy, $this->attribute->getStrategy());
     }
-
+    /** @test */
     public function attributeSet() {
-        $attribute = new Attribute();
         $attrSet = new AttributeSet();
-        $attribute->setAttributeSet($attrSet);
-        $this->assertEquals($attrSet, $attribute->getAttributeSet());
+        $this->attribute->setAttributeSet($attrSet);
+        $this->assertSame($attrSet, $this->attribute->getAttributeSet());
+    }
+    /** @test */
+    public function source() {
+        $source = new Source();
+        $this->attribute->setSource($source);
+        $this->assertSame($source, $this->attribute->getSource());
     }
 
-    public function source() {
-        $attribute = new Attribute();
-        $source = new Source();
-        $attribute->setSource($source);
-        $this->assertEquals($source, $attribute->getSource());
+    /** @test */
+    public function get_key() {
+        $bag = new AttributeBag();
+        $bag->setField(_ATTR::ID, 123);
+        $this->attribute->setBag($bag);
+        $this->assertEquals(123, $this->attribute->getKey());
     }
+
+    /** @test */
+    public function get_name() {
+        $bag = new AttributeBag();
+        $bag->setField(_ATTR::NAME, 'test');
+        $this->attribute->setBag($bag);
+        $this->assertEquals('test', $this->attribute->getName());
+    }
+
+    /** @test */
+    public function get_type() {
+        $bag = new AttributeBag();
+        $bag->setField(_ATTR::TYPE, 'test');
+        $this->attribute->setBag($bag);
+        $this->assertEquals('test', $this->attribute->getType());
+    }
+
+    /** @test */
+    public function get_domain_key() {
+        $bag = new AttributeBag();
+        $bag->setField(_ATTR::DOMAIN_ID, 123);
+        $this->attribute->setBag($bag);
+        $this->assertEquals(123, $this->attribute->getDomainKey());
+    }
+
+    /** @test */
+    public function get_default_value() {
+        $bag = new AttributeBag();
+        $bag->setField(_ATTR::DEFAULT_VALUE, 'test');
+        $this->attribute->setBag($bag);
+        $this->assertEquals('test', $this->attribute->getDefaultValue());
+    }
+
+    /** @test */
+    public function get_description() {
+        $bag = new AttributeBag();
+        $bag->setField(_ATTR::DESCRIPTION, 'test');
+        $this->attribute->setBag($bag);
+        $this->assertEquals('test', $this->attribute->getDescription());
+    }
+
+    /** @test */
+    public function set_key() {
+        $this->attribute->setKey(123);
+        $this->assertEquals(123, $this->attribute->getKey());
+    }
+
+    /** @test */
+    public function set_name() {
+        $this->attribute->setName('test');
+        $this->assertEquals('test', $this->attribute->getName());
+    }
+
+    /** @test */
+    public function set_type() {
+        $this->attribute->setType(ATTR_TYPE::STRING->value());
+        $this->assertEquals(ATTR_TYPE::STRING->value(), $this->attribute->getType());
+    }
+
+    /** @test */
+    public function set_type_throws_unexpected_type() {
+        $this->expectException(AttributeException::class);
+        $this->expectExceptionMessage(sprintf(AttributeException::UNEXPECTED_TYPE, 'test'));
+        $this->attribute->setType('test');
+    }
+
 }

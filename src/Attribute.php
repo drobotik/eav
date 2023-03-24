@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Kuperwood\Eav;
 
+use Kuperwood\Eav\Enum\_ATTR;
+use Kuperwood\Eav\Enum\ATTR_TYPE;
+use Kuperwood\Eav\Exception\AttributeException;
 use Kuperwood\Eav\Interface\StrategyInterface;
 
 class Attribute
@@ -13,6 +16,10 @@ class Attribute
     private StrategyInterface $strategy;
 
     private Source $source;
+
+    public function __construct() {
+        $this->setBag(new AttributeBag());
+    }
 
     public function getBag(): AttributeBag
     {
@@ -56,5 +63,59 @@ class Attribute
     {
         $this->source = $source;
         return $this;
+    }
+
+    public function getKey() : int
+    {
+        return $this->getBag()->getField(_ATTR::ID);
+    }
+
+    public function setKey(int $key) : self
+    {
+        $this->getBag()->setField(_ATTR::ID, $key);
+        return $this;
+    }
+
+    public function getName() : string
+    {
+        return $this->getBag()->getField(_ATTR::NAME);
+    }
+
+    public function setName(string $name) : self
+    {
+        $this->getBag()->setField(_ATTR::NAME, $name);
+        return $this;
+    }
+
+    public function getType() : string
+    {
+        return $this->getBag()->getField(_ATTR::TYPE);
+    }
+
+    /**
+     * @throws AttributeException
+     */
+    public function setType(string $type) : self
+    {
+        if (!ATTR_TYPE::isValid($type)) {
+            AttributeException::unexpectedType($type);
+        }
+        $this->getBag()->setField(_ATTR::TYPE, $type);
+        return $this;
+    }
+
+    public function getDomainKey() : int
+    {
+        return $this->getBag()->getField(_ATTR::DOMAIN_ID);
+    }
+
+    public function getDefaultValue() : string
+    {
+        return $this->getBag()->getField(_ATTR::DEFAULT_VALUE);
+    }
+
+    public function getDescription() : string
+    {
+        return $this->getBag()->getField(_ATTR::DESCRIPTION);
     }
 }
