@@ -76,6 +76,8 @@ class StrategyTest extends TestCase
         $this->assertEquals(VALUE_RESULT::CREATED->code(), $result->getCode());
         $this->assertEquals(VALUE_RESULT::CREATED->message(), $result->getMessage());
     }
+
+    /** @test */
     public function create_value_no_runtime() {
         $entity = new Entity();
         $attrSet = new AttributeSet();
@@ -92,6 +94,52 @@ class StrategyTest extends TestCase
         $this->assertEquals(VALUE_RESULT::EMPTY->message(), $result->getMessage());
     }
 
+    /** @test */
+    public function update_value() {
+        $valueToSave = 'test';
+        $valueKey = 1;
 
+        $record = new ValueStringModel();
+        $record->setDomainKey(1)
+            ->setEntityKey(2)
+            ->setAttrKey(3)
+            ->setVal('old');
+        $record->save();
+        $record->refresh();
+
+        $attribute = new Attribute();
+        $this->strategy->setAttribute($attribute);
+
+        $value = new ValueManager();
+        $value->setKey($valueKey);
+        $value->setRuntime($valueToSave);
+        $this->strategy->setValueManager($value);
+
+        $result = $this->strategy->updateValue();
+
+        $record = ValueStringModel::query()->first();
+        $this->assertEquals($valueToSave, $record->getVal());
+
+        $this->assertNull($value->getRuntime());
+        $this->assertEquals($valueToSave, $value->getStored());
+        $this->assertEquals($record->getKey(), $value->getKey());
+
+        $this->assertInstanceOf(ValueResult::class, $result);
+        $this->assertEquals(VALUE_RESULT::UPDATED->code(), $result->getCode());
+        $this->assertEquals(VALUE_RESULT::UPDATED->message(), $result->getMessage());
+    }
+
+    /** @test */
+    public function update_value_no_runtime() {
+        $attribute = new Attribute();
+        $this->strategy->setAttribute($attribute);
+        $value = new ValueManager();
+        $value->setKey(1);
+        $this->strategy->setValueManager($value);
+        $result = $this->strategy->updateValue();
+        $this->assertInstanceOf(ValueResult::class, $result);
+        $this->assertEquals(VALUE_RESULT::EMPTY->code(), $result->getCode());
+        $this->assertEquals(VALUE_RESULT::EMPTY->message(), $result->getMessage());
+    }
 
 }

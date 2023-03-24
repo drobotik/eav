@@ -17,6 +17,7 @@ class ValueManagerTest extends TestCase
 
     /** @test  */
     public function key() {
+        $this->assertEquals(null, $this->value->getKey());
         $this->value->setKey(1);
         $this->assertEquals(1, $this->value->getKey());
     }

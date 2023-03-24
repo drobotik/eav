@@ -42,10 +42,10 @@ class Strategy implements StrategyInterface
         $attribute = $this->getAttribute();
         $set = $attribute->getAttributeSet();
         $entity = $set->getEntity();
-        $value = $this->getValueManager();
+        $valueManager = $this->getValueManager();
         $model = $attribute->getValueModel();
 
-        if(!$value->isRuntime()) {
+        if(!$valueManager->isRuntime()) {
             $result->setCode(VALUE_RESULT::EMPTY->code())
                 ->setMessage(VALUE_RESULT::EMPTY->message());
             return $result;
@@ -54,11 +54,11 @@ class Strategy implements StrategyInterface
         $model->setDomainKey($entity->getDomainKey())
             ->setEntityKey($entity->getKey())
             ->setAttrKey($attribute->getKey())
-            ->setVal($value->getRuntime())
+            ->setVal($valueManager->getRuntime())
             ->save();
 
         $model->refresh();
-        $value->setStored($model->getVal())
+        $valueManager->setStored($model->getVal())
             ->setKey($model->getKey())
             ->clearRuntime();
 
@@ -66,6 +66,30 @@ class Strategy implements StrategyInterface
             ->setMessage(VALUE_RESULT::CREATED->message());
 
         return $result;
+    }
+
+    public function updateValue() : ValueResult
+    {
+        $result = new ValueResult();
+        $attribute = $this->getAttribute();
+        $valueManager = $this->getValueManager();
+        $model = $attribute->getValueModel();
+
+        if(!$valueManager->isRuntime()) {
+            $result->setCode(VALUE_RESULT::EMPTY->code())
+                ->setMessage(VALUE_RESULT::EMPTY->message());
+            return $result;
+        }
+
+        $record = $model->findOrFail($valueManager->getKey());
+        $record->setVal($valueManager->getRuntime())
+            ->save();
+        $record->refresh();
+        $valueManager->setStored($record->getVal())
+            ->clearRuntime();
+
+        return $result->setCode(VALUE_RESULT::UPDATED->code())
+            ->setMessage(VALUE_RESULT::UPDATED->message());
     }
 
 

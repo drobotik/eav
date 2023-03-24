@@ -11,7 +11,7 @@ class ValueManager
     private ValueState $runtime;
     private ValueState $stored;
 
-    private int $key;
+    private ?int $key = null;
 
     public function __construct()
     {
@@ -19,7 +19,7 @@ class ValueManager
         $this->stored = new ValueState();
     }
 
-    public function getKey() : int
+    public function getKey() : ?int
     {
         return $this->key;
     }
