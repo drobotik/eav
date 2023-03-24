@@ -10,23 +10,11 @@ class Value
 {
     private ValueState $runtime;
     private ValueState $stored;
-    private Attribute  $attribute;
 
     public function __construct()
     {
         $this->runtime = new ValueState();
         $this->stored = new ValueState();
-    }
-
-    public function getAttribute() : Attribute
-    {
-        return $this->attribute;
-    }
-
-    public function setAttribute(Attribute $attribute) : self
-    {
-        $this->attribute = $attribute;
-        return $this;
     }
 
     public function isClean() : bool
