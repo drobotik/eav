@@ -1,12 +1,13 @@
 <?php
 namespace Tests;
 
+use Faker\Generator;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Kuperwood\Dev\Factory;
 
-
 class TestCase extends \PHPUnit\Framework\TestCase
 {
+    protected Generator $faker;
     protected function setUp() : void
     {
         parent::setUp();
@@ -22,6 +23,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
         $capsule->setAsGlobal();
         $capsule->bootEloquent();
         $this->factory = new Factory();
+        $this->faker = \Faker\Factory::create();
     }
 
     protected function tearDown(): void
