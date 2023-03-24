@@ -24,7 +24,7 @@ class ValueManager
         return $this->key;
     }
 
-    public function setKey(int $key) : self
+    public function setKey(?int $key) : self
     {
         $this->key = $key;
         return $this;
@@ -64,8 +64,10 @@ class ValueManager
         return $this;
     }
 
-    public function clearStored() {
+    public function clearStored() : self
+    {
         $this->stored->clear();
+        return $this;
     }
 
     public function isRuntime(): bool

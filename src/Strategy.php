@@ -46,9 +46,7 @@ class Strategy implements StrategyInterface
         $model = $attribute->getValueModel();
 
         if(!$valueManager->isRuntime()) {
-            $result->setCode(VALUE_RESULT::EMPTY->code())
-                ->setMessage(VALUE_RESULT::EMPTY->message());
-            return $result;
+            return $result->empty();
         }
 
         $model->setDomainKey($entity->getDomainKey())
@@ -62,10 +60,7 @@ class Strategy implements StrategyInterface
             ->setKey($model->getKey())
             ->clearRuntime();
 
-        $result->setCode(VALUE_RESULT::CREATED->code())
-            ->setMessage(VALUE_RESULT::CREATED->message());
-
-        return $result;
+        return $result->created();
     }
 
     public function updateValue() : ValueResult
@@ -76,9 +71,7 @@ class Strategy implements StrategyInterface
         $model = $attribute->getValueModel();
 
         if(!$valueManager->isRuntime()) {
-            $result->setCode(VALUE_RESULT::EMPTY->code())
-                ->setMessage(VALUE_RESULT::EMPTY->message());
-            return $result;
+            return $result->empty();
         }
 
         $record = $model->findOrFail($valueManager->getKey());
@@ -88,8 +81,7 @@ class Strategy implements StrategyInterface
         $valueManager->setStored($record->getVal())
             ->clearRuntime();
 
-        return $result->setCode(VALUE_RESULT::UPDATED->code())
-            ->setMessage(VALUE_RESULT::UPDATED->message());
+        return $result->updated();
     }
 
 
@@ -105,7 +97,26 @@ class Strategy implements StrategyInterface
 
     public function find(): ValueResult
     {
-        // TODO: Implement find() method.
+        $result = new ValueResult();
+        $attribute = $this->getAttribute();
+        $valueManager = $this->getValueManager();
+        $model = $attribute->getValueModel();
+        $key = $valueManager->getKey();
+
+        if(is_null($key)) {
+            return $result->empty();
+        }
+
+        $record = $model->whereKey($key)->first();
+
+        if(is_null($record)) {
+            return $result->notFound();
+        }
+
+        $valueManager->setStored($record->getVal())
+            ->clearRuntime();
+
+        return $result->found();
     }
 
     public function save(string $type): ValueResult
@@ -115,6 +126,26 @@ class Strategy implements StrategyInterface
 
     public function destroy(): ValueResult
     {
-        // TODO: Implement destroy() method.
+        $result = new ValueResult();
+        $attribute = $this->getAttribute();
+        $valueManager = $this->getValueManager();
+        $model = $attribute->getValueModel();
+        $key = $valueManager->getKey();
+
+        if(is_null($key)) {
+            return $result->empty();
+        }
+
+        $record = $model->findOrFail($key);
+        $deleted = $record->delete();
+        if(!$deleted) {
+            return $result->notDeleted();
+        }
+
+        $valueManager->clearStored()
+            ->clearRuntime()
+            ->setKey(null);
+
+        return $result->deleted();
     }
 }

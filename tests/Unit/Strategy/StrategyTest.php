@@ -142,4 +142,99 @@ class StrategyTest extends TestCase
         $this->assertEquals(VALUE_RESULT::EMPTY->message(), $result->getMessage());
     }
 
+    /** @test */
+    public function destroy() {
+        $record = new ValueStringModel();
+        $record->setDomainKey(1)
+            ->setEntityKey(2)
+            ->setAttrKey(3)
+            ->setVal('old')
+            ->save();
+
+        $attribute = new Attribute();
+        $this->strategy->setAttribute($attribute);
+        $value = new ValueManager();
+        $value->setKey($record->getKey());
+        $value->setStored($record->getVal());
+        $value->setRuntime('new');
+        $this->strategy->setValueManager($value);
+        $result = $this->strategy->destroy();
+
+        $this->assertEquals(0, ValueStringModel::query()->count());
+
+        $this->assertNull($value->getRuntime());
+        $this->assertNull($value->getStored());
+        $this->assertNull($value->getKey());
+
+        $this->assertInstanceOf(ValueResult::class, $result);
+        $this->assertEquals(VALUE_RESULT::DELETED->code(), $result->getCode());
+        $this->assertEquals(VALUE_RESULT::DELETED->message(), $result->getMessage());
+    }
+
+    /** @test */
+    public function destroy_no_key() {
+        $attribute = new Attribute();
+        $this->strategy->setAttribute($attribute);
+        $value = new ValueManager();
+        $value->setRuntime('new');
+        $this->strategy->setValueManager($value);
+        $result = $this->strategy->destroy();
+        $this->assertInstanceOf(ValueResult::class, $result);
+        $this->assertEquals(VALUE_RESULT::EMPTY->code(), $result->getCode());
+        $this->assertEquals(VALUE_RESULT::EMPTY->message(), $result->getMessage());
+    }
+
+    /** @test */
+    public function find() {
+        $record = new ValueStringModel();
+        $record->setDomainKey(1)
+            ->setEntityKey(2)
+            ->setAttrKey(3)
+            ->setVal('test')
+            ->save();
+
+        $attribute = new Attribute();
+        $this->strategy->setAttribute($attribute);
+        $value = new ValueManager();
+        $value->setKey($record->getKey());
+        $this->strategy->setValueManager($value);
+
+        $result = $this->strategy->find();
+
+        $this->assertNull($value->getRuntime());
+        $this->assertEquals("test", $value->getStored());
+
+        $this->assertInstanceOf(ValueResult::class, $result);
+        $this->assertEquals(VALUE_RESULT::FOUND->code(), $result->getCode());
+        $this->assertEquals(VALUE_RESULT::FOUND->message(), $result->getMessage());
+    }
+
+    /** @test */
+    public function find_no_key() {
+        $attribute = new Attribute();
+        $this->strategy->setAttribute($attribute);
+        $value = new ValueManager();
+        $this->strategy->setValueManager($value);
+        $result = $this->strategy->find();
+        $this->assertNull($value->getRuntime());
+        $this->assertNull($value->getStored());
+        $this->assertInstanceOf(ValueResult::class, $result);
+        $this->assertEquals(VALUE_RESULT::EMPTY->code(), $result->getCode());
+        $this->assertEquals(VALUE_RESULT::EMPTY->message(), $result->getMessage());
+    }
+
+    /** @test */
+    public function find_no_record() {
+        $attribute = new Attribute();
+        $this->strategy->setAttribute($attribute);
+        $value = new ValueManager();
+        $value->setKey(123);
+        $this->strategy->setValueManager($value);
+        $result = $this->strategy->find();
+        $this->assertNull($value->getRuntime());
+        $this->assertNull($value->getStored());
+        $this->assertInstanceOf(ValueResult::class, $result);
+        $this->assertEquals(VALUE_RESULT::NOT_FOUND->code(), $result->getCode());
+        $this->assertEquals(VALUE_RESULT::NOT_FOUND->message(), $result->getMessage());
+    }
 }
