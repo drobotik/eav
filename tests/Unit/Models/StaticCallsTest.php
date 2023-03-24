@@ -36,8 +36,10 @@ class StaticCallsTest extends TestCase
     /** @test */
     public function attributeSet() {
         $model = new AttributeSetModel();
-        $model->setName("test");
+        $model->setName("test")
+            ->setDomainKey(123);
         $this->assertEquals("test", $model->getName());
+        $this->assertEquals(123, $model->getDomainKey());
     }
 
     /** @test */

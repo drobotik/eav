@@ -2,6 +2,7 @@
 namespace Tests;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Kuperwood\Dev\Factory;
 
 
 class TestCase extends \PHPUnit\Framework\TestCase
@@ -20,6 +21,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
         $this->capsule = $capsule;
         $capsule->setAsGlobal();
         $capsule->bootEloquent();
+        $this->factory = new Factory();
     }
 
     protected function tearDown(): void

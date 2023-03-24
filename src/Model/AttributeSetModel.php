@@ -14,10 +14,22 @@ class AttributeSetModel extends Model
         $this->table = _SET::table();
         $this->primaryKey = _SET::ID->column();
         $this->fillable = [
+            _SET::DOMAIN_ID->column(),
             _SET::NAME->column()
         ];
         $this->timestamps = false;
         parent::__construct($attributes);
+    }
+
+    public function getDomainKey()
+    {
+        return $this->{_SET::DOMAIN_ID->column()};
+    }
+
+    public function setDomainKey(int $key) : self
+    {
+        $this->{_SET::DOMAIN_ID->column()} = $key;
+        return $this;
     }
 
     public function getName()

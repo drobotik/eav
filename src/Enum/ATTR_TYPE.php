@@ -5,6 +5,12 @@ namespace Kuperwood\Eav\Enum;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Builder\ClassMetadataBuilder;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Kuperwood\Eav\Model\ValueBase;
+use Kuperwood\Eav\Model\ValueDatetimeModel;
+use Kuperwood\Eav\Model\ValueDecimalModel;
+use Kuperwood\Eav\Model\ValueIntegerModel;
+use Kuperwood\Eav\Model\ValueStringModel;
+use Kuperwood\Eav\Model\ValueTextModel;
 
 enum ATTR_TYPE
 {
@@ -35,6 +41,17 @@ enum ATTR_TYPE
             self::DECIMAL => sprintf(_VALUE::table(), self::DECIMAL->value()),
             self::STRING => sprintf(_VALUE::table(), self::STRING->value()),
             self::TEXT => sprintf(_VALUE::table(), self::TEXT->value())
+        };
+    }
+
+    public function model(): ValueBase
+    {
+        return match ($this) {
+            self::INTEGER => new ValueIntegerModel,
+            self::DATETIME => new ValueDatetimeModel,
+            self::DECIMAL => new ValueDecimalModel,
+            self::STRING => new ValueStringModel,
+            self::TEXT => new ValueTextModel
         };
     }
 

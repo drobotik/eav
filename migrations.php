@@ -9,21 +9,21 @@ return [
     ],
 
     'migrations' => [
-        'Dev\Migration\DomainMigration',
-        'Dev\Migration\EntityMigration',
-        'Dev\Migration\AttributeMigration',
-        'Dev\Migration\SetMigration',
-        'Dev\Migration\GroupMigration',
-        'Dev\Migration\PivotMigration',
-        'Dev\Migration\ValueDatetimeMigration',
-        'Dev\Migration\ValueDecimalMigration',
-        'Dev\Migration\ValueIntegerMigration',
-        'Dev\Migration\ValueStringMigration',
-        'Dev\Migration\ValueTextMigration',
+        'Kuperwood\Dev\Migration\DomainMigration',
+        'Kuperwood\Dev\Migration\EntityMigration',
+        'Kuperwood\Dev\Migration\AttributeMigration',
+        'Kuperwood\Dev\Migration\AttributeSetMigration',
+        'Kuperwood\Dev\Migration\GroupMigration',
+        'Kuperwood\Dev\Migration\PivotMigration',
+        'Kuperwood\Dev\Migration\ValueDatetimeMigration',
+        'Kuperwood\Dev\Migration\ValueDecimalMigration',
+        'Kuperwood\Dev\Migration\ValueIntegerMigration',
+        'Kuperwood\Dev\Migration\ValueStringMigration',
+        'Kuperwood\Dev\Migration\ValueTextMigration',
     ],
 
     'migrations_paths' => [
-        'Kuperwood\Eav\Migration' => './src/Migration',
+        'Kuperwood\Eav\Migration' => './dev/Migration',
     ],
 
     'all_or_nothing' => true,

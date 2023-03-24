@@ -9,7 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\Migrations\AbstractMigration;
 use Kuperwood\Eav\Enum\_SET;
 
-final class SetMigration extends AbstractMigration
+final class AttributeSetMigration extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,8 +20,10 @@ final class SetMigration extends AbstractMigration
     {
         $table = $schema->createTable(_SET::table());
         $table->addColumn(_SET::ID->column(), Types::INTEGER , ['Autoincrement' => true,'unsigned' => true]);
+        $table->addColumn(_SET::DOMAIN_ID->column(), Types::INTEGER, ['unsigned' => true]);
         $table->addColumn(_SET::NAME->column(), Types::INTEGER);
         $table->setPrimaryKey([_SET::ID->column()]);
+        $table->addIndex([_SET::DOMAIN_ID->column()]);
     }
 
     public function down(Schema $schema): void
