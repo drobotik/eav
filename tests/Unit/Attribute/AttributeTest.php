@@ -8,6 +8,8 @@ use Kuperwood\Eav\AttributeSet;
 use Kuperwood\Eav\Enum\_ATTR;
 use Kuperwood\Eav\Enum\ATTR_TYPE;
 use Kuperwood\Eav\Exception\AttributeException;
+use Kuperwood\Eav\Model\ValueDecimalModel;
+use Kuperwood\Eav\Model\ValueStringModel;
 use Kuperwood\Eav\Source;
 use Kuperwood\Eav\Strategy;
 use PHPUnit\Framework\TestCase;
@@ -120,6 +122,13 @@ class AttributeTest extends TestCase
         $this->expectException(AttributeException::class);
         $this->expectExceptionMessage(sprintf(AttributeException::UNEXPECTED_TYPE, 'test'));
         $this->attribute->setType('test');
+    }
+
+    /** @test */
+    public function get_value_model() {
+        $this->assertInstanceOf(ValueStringModel::class, $this->attribute->getValueModel());
+        $this->attribute->setType(ATTR_TYPE::DECIMAL->value());
+        $this->assertInstanceOf(ValueDecimalModel::class, $this->attribute->getValueModel());
     }
 
 }

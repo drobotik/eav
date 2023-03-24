@@ -21,8 +21,6 @@ class AttributeBagTest extends TestCase
     /** @test */
     public function fields() {
         $bag = new AttributeBag();
-        $expected = array_map(fn(_ATTR $field) => $field->default(), _ATTR::cases());
-        $fields = $bag->getFields();
-        $this->assertEquals($expected, $fields);
+        $this->assertSame(_ATTR::bag(), $bag->getFields());
     }
 }

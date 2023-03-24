@@ -47,4 +47,13 @@ enum _ATTR implements DefineTableInterface
             self::DESCRIPTION => false,
         };
     }
+
+    public static function bag() : array
+    {
+        $output = [];
+        foreach (self::cases() as $case) {
+            $output[$case->column()] = $case->default();
+        }
+        return $output;
+    }
 }

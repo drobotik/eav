@@ -12,7 +12,7 @@ class AttributeBag
 
     public function __construct()
     {
-        $this->data = array_map(fn(_ATTR $field) => $field->default(), _ATTR::cases());
+        $this->data = _ATTR::bag();
     }
 
     public function setField(_ATTR $field, $value) : self

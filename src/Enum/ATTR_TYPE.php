@@ -49,6 +49,17 @@ enum ATTR_TYPE
         };
     }
 
+    public static function modelByType(string $type): ValueBase
+    {
+        return match ($type) {
+            self::INTEGER->value() => new ValueIntegerModel,
+            self::DATETIME->value() => new ValueDatetimeModel,
+            self::DECIMAL->value() => new ValueDecimalModel,
+            self::STRING->value() => new ValueStringModel,
+            self::TEXT->value() => new ValueTextModel
+        };
+    }
+
     public function model(): ValueBase
     {
         return match ($this) {

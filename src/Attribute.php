@@ -8,6 +8,7 @@ use Kuperwood\Eav\Enum\_ATTR;
 use Kuperwood\Eav\Enum\ATTR_TYPE;
 use Kuperwood\Eav\Exception\AttributeException;
 use Kuperwood\Eav\Interface\StrategyInterface;
+use Kuperwood\Eav\Model\ValueBase;
 
 class Attribute
 {
@@ -117,5 +118,10 @@ class Attribute
     public function getDescription() : string
     {
         return $this->getBag()->getField(_ATTR::DESCRIPTION);
+    }
+
+    public function getValueModel() : ValueBase
+    {
+        return ATTR_TYPE::modelByType($this->getType());
     }
 }
