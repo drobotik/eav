@@ -8,40 +8,82 @@ use Kuperwood\Eav\Result\ValueResult;
 
 class ValueResultTest extends TestCase
 {
+    private ValueResult $result;
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->result = new ValueResult();
+    }
 
     /** @test */
     public function created()
     {
-        $result = new ValueResult();
-        $result->created();
-        $this->assertEquals(VALUE_RESULT::CREATED->code(), $result->code());
-        $this->assertEquals(VALUE_RESULT::CREATED->message(), $result->message());
+        $this->result->created();
+        $this->assertEquals(VALUE_RESULT::CREATED->code(), $this->result->getCode());
+        $this->assertEquals(VALUE_RESULT::CREATED->message(), $this->result->getMessage());
     }
 
     /** @test */
     public function updated()
     {
-        $result = new ValueResult();
-        $result->updated();
-        $this->assertEquals(VALUE_RESULT::UPDATED->code(), $result->code());
-        $this->assertEquals(VALUE_RESULT::UPDATED->message(), $result->message());
+        $this->result->updated();
+        $this->assertEquals(VALUE_RESULT::UPDATED->code(), $this->result->getCode());
+        $this->assertEquals(VALUE_RESULT::UPDATED->message(), $this->result->getMessage());
     }
 
     /** @test */
-    public function notAllowed()
+    public function deleted()
     {
-        $result = new ValueResult();
-        $result->notAllowed();
-        $this->assertEquals(VALUE_RESULT::NOT_ALLOWED->code(), $result->code());
-        $this->assertEquals(VALUE_RESULT::NOT_ALLOWED->message(), $result->message());
+        $this->result->deleted();
+        $this->assertEquals(VALUE_RESULT::DELETED->code(), $this->result->getCode());
+        $this->assertEquals(VALUE_RESULT::DELETED->message(), $this->result->getMessage());
+    }
+
+    /** @test */
+    public function not_deleted()
+    {
+        $this->result->notDeleted();
+        $this->assertEquals(VALUE_RESULT::NOT_DELETED->code(), $this->result->getCode());
+        $this->assertEquals(VALUE_RESULT::NOT_DELETED->message(), $this->result->getMessage());
+    }
+
+    /** @test */
+    public function found()
+    {
+        $this->result->found();
+        $this->assertEquals(VALUE_RESULT::FOUND->code(), $this->result->getCode());
+        $this->assertEquals(VALUE_RESULT::FOUND->message(), $this->result->getMessage());
+    }
+
+    /** @test */
+    public function not_found()
+    {
+        $this->result->notFound();
+        $this->assertEquals(VALUE_RESULT::NOT_FOUND->code(), $this->result->getCode());
+        $this->assertEquals(VALUE_RESULT::NOT_FOUND->message(), $this->result->getMessage());
+    }
+
+    /** @test */
+    public function not_enough_args()
+    {
+        $this->result->notEnoughArgs();
+        $this->assertEquals(VALUE_RESULT::NOT_ENOUGH_ARGS->code(), $this->result->getCode());
+        $this->assertEquals(VALUE_RESULT::NOT_ENOUGH_ARGS->message(), $this->result->getMessage());
+    }
+
+    /** @test */
+    public function not_allowed()
+    {
+        $this->result->notAllowed();
+        $this->assertEquals(VALUE_RESULT::NOT_ALLOWED->code(), $this->result->getCode());
+        $this->assertEquals(VALUE_RESULT::NOT_ALLOWED->message(), $this->result->getMessage());
     }
 
     /** @test */
     public function empty()
     {
-        $result = new ValueResult();
-        $result->empty();
-        $this->assertEquals(VALUE_RESULT::EMPTY->code(), $result->code());
-        $this->assertEquals(VALUE_RESULT::EMPTY->message(), $result->message());
+        $this->result->empty();
+        $this->assertEquals(VALUE_RESULT::EMPTY->code(), $this->result->getCode());
+        $this->assertEquals(VALUE_RESULT::EMPTY->message(), $this->result->getMessage());
     }
 }

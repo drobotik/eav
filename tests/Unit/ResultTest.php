@@ -2,22 +2,30 @@
 
 namespace Tests\Unit;
 
+use Kuperwood\Eav\Model\ValueStringModel;
 use Kuperwood\Eav\Result\Result;
 use PHPUnit\Framework\TestCase;
 
 class ResultTest extends TestCase
 {
-    public function code()
+    private Result $result;
+    public function setUp(): void
     {
-        $result = new Result();
-        $result->code = 1;
-        $this->assertEquals(1, $result->code());
+        parent::setUp();
+        $this->result = new Result();
     }
 
+    /** @test */
+    public function code()
+    {
+        $this->result->setCode(1);
+        $this->assertEquals(1, $this->result->getCode());
+    }
+
+    /** @test */
     public function message()
     {
-        $result = new Result();
-        $result->message = 'test';
-        $this->assertEquals('test', $result->message());
+        $this->result->setMessage('test');
+        $this->assertEquals('test', $this->result->getMessage());
     }
 }
