@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Models;
+namespace Tests\Unit;
 
 use Kuperwood\Eav\Enum\ATTR_TYPE;
 use Kuperwood\Eav\Model\AttributeGroupModel;
@@ -17,7 +17,7 @@ use Kuperwood\Eav\Model\ValueStringModel;
 use Kuperwood\Eav\Model\ValueTextModel;
 use PHPUnit\Framework\TestCase;
 
-class StaticCallsTest extends TestCase
+class ModelsTest extends TestCase
 {
     /** @test */
     public function domain() {
