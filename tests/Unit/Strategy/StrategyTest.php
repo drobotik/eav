@@ -10,10 +10,12 @@ use Kuperwood\Eav\Model\ValueStringModel;
 use Kuperwood\Eav\Result\ValueResult;
 use Kuperwood\Eav\Strategy;
 use Kuperwood\Eav\ValueManager;
+use Tests\Fixtures\StrategyFixture;
 use Tests\TestCase;
 
 class StrategyTest extends TestCase
 {
+    private Strategy $strategy;
     public function setUp(): void
     {
         parent::setUp();
@@ -143,7 +145,7 @@ class StrategyTest extends TestCase
     }
 
     /** @test */
-    public function destroy() {
+    public function delete_value() {
         $record = new ValueStringModel();
         $record->setDomainKey(1)
             ->setEntityKey(2)
@@ -158,7 +160,7 @@ class StrategyTest extends TestCase
         $value->setStored($record->getVal());
         $value->setRuntime('new');
         $this->strategy->setValueManager($value);
-        $result = $this->strategy->destroy();
+        $result = $this->strategy->deleteValue();
 
         $this->assertEquals(0, ValueStringModel::query()->count());
 
@@ -178,7 +180,7 @@ class StrategyTest extends TestCase
         $value = new ValueManager();
         $value->setRuntime('new');
         $this->strategy->setValueManager($value);
-        $result = $this->strategy->destroy();
+        $result = $this->strategy->deleteValue();
         $this->assertInstanceOf(ValueResult::class, $result);
         $this->assertEquals(VALUE_RESULT::EMPTY->code(), $result->getCode());
         $this->assertEquals(VALUE_RESULT::EMPTY->message(), $result->getMessage());
@@ -236,5 +238,145 @@ class StrategyTest extends TestCase
         $this->assertInstanceOf(ValueResult::class, $result);
         $this->assertEquals(VALUE_RESULT::NOT_FOUND->code(), $result->getCode());
         $this->assertEquals(VALUE_RESULT::NOT_FOUND->message(), $result->getMessage());
+    }
+
+    /** @test */
+    public function before_create_called() {
+        $strategy = $this->getMockBuilder(Strategy::class)
+            ->onlyMethods(['beforeCreate', 'createValue'])
+            ->getMock();
+        $strategy->expects($this->once())
+            ->method('beforeCreate');
+        $strategy->create();
+    }
+
+    /** @test */
+    public function after_create_called() {
+        $strategy = $this->getMockBuilder(Strategy::class)
+            ->onlyMethods(['afterCreate', 'createValue'])
+            ->getMock();
+        $strategy->expects($this->once())
+            ->method('afterCreate');
+        $strategy->create();
+    }
+
+    /** @test */
+    public function hooks_order_on_create() {
+        $strategy = $this->getMockBuilder(StrategyFixture::class)
+            ->onlyMethods(['createValue'])
+            ->getMock();
+        $strategy->create();
+        $this->assertEquals(['before', 'after'], $strategy->creatingLifecycle);
+    }
+
+    /** @test */
+    public function before_update_called() {
+        $strategy = $this->getMockBuilder(Strategy::class)
+            ->onlyMethods(['beforeUpdate', 'updateValue'])
+            ->getMock();
+        $strategy->expects($this->once())
+            ->method('beforeUpdate');
+        $strategy->update();
+    }
+
+    /** @test */
+    public function after_update_called() {
+        $strategy = $this->getMockBuilder(Strategy::class)
+            ->onlyMethods(['afterUpdate', 'updateValue'])
+            ->getMock();
+        $strategy->expects($this->once())
+            ->method('afterUpdate');
+        $strategy->update();
+    }
+
+    /** @test */
+    public function hooks_order_on_update() {
+        $strategy = $this->getMockBuilder(StrategyFixture::class)
+            ->onlyMethods(['updateValue'])
+            ->getMock();
+        $strategy->update();
+        $this->assertEquals(['before', 'after'], $strategy->updatingLifecycle);
+    }
+
+
+    /** @test */
+    public function before_delete_called() {
+        $strategy = $this->getMockBuilder(Strategy::class)
+            ->onlyMethods(['beforeDelete', 'deleteValue'])
+            ->getMock();
+        $strategy->expects($this->once())
+            ->method('beforeDelete');
+        $strategy->destroy();
+    }
+
+    /** @test */
+    public function after_delete_called() {
+        $strategy = $this->getMockBuilder(Strategy::class)
+            ->onlyMethods(['afterDelete', 'deleteValue'])
+            ->getMock();
+        $strategy->expects($this->once())
+            ->method('afterDelete');
+        $strategy->destroy();
+    }
+
+    /** @test */
+    public function hooks_order_on_delete() {
+        $strategy = $this->getMockBuilder(StrategyFixture::class)
+            ->onlyMethods(['deleteValue'])
+            ->getMock();
+        $strategy->destroy();
+        $this->assertEquals(['before', 'after'], $strategy->deletingLifecycle);
+    }
+
+    /** @test */
+    public function is_create() {
+        $this->assertTrue($this->strategy->isCreate());
+        $this->strategy->create = false;
+        $this->assertFalse($this->strategy->isCreate());
+    }
+
+    /** @test */
+    public function no_create() {
+        $this->strategy->create = false;
+        $entity = new Entity();
+        $attrSet = new AttributeSet();
+        $attrSet->setEntity($entity);
+        $attribute = new Attribute();
+        $attribute->setAttributeSet($attrSet);
+        $this->strategy->setAttribute($attribute);
+        $value = new ValueManager();
+        $value->setKey(123);
+        $this->strategy->setValueManager($value);
+        $result = $this->strategy->createValue();
+        $this->assertFalse($value->isRuntime());
+        $this->assertInstanceOf(ValueResult::class, $result);
+        $this->assertEquals(VALUE_RESULT::NOT_ALLOWED->code(), $result->getCode());
+        $this->assertEquals(VALUE_RESULT::NOT_ALLOWED->message(), $result->getMessage());
+    }
+
+    /** @test */
+    public function is_update() {
+        $this->assertTrue($this->strategy->isUpdate());
+        $this->strategy->update = false;
+        $this->assertFalse($this->strategy->isUpdate());
+    }
+
+    /** @test */
+    public function no_update() {
+        $this->strategy->update = false;
+        $entity = new Entity();
+        $attrSet = new AttributeSet();
+        $attrSet->setEntity($entity);
+        $attribute = new Attribute();
+        $attribute->setAttributeSet($attrSet);
+        $this->strategy->setAttribute($attribute);
+        $value = new ValueManager();
+        $value->setKey(123);
+        $this->strategy->setValueManager($value);
+        $result = $this->strategy->updateValue();
+        $this->assertFalse($value->isRuntime());
+        $this->assertInstanceOf(ValueResult::class, $result);
+        $this->assertEquals(VALUE_RESULT::NOT_ALLOWED->code(), $result->getCode());
+        $this->assertEquals(VALUE_RESULT::NOT_ALLOWED->message(), $result->getMessage());
     }
 }
