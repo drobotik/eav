@@ -377,4 +377,76 @@ class StrategyTest extends TestCase
         $this->assertEquals(_RESULT::NOT_ALLOWED->code(), $result->getCode());
         $this->assertEquals(_RESULT::NOT_ALLOWED->message(), $result->getMessage());
     }
+
+    /** @test */
+    public function save_action_create()
+    {
+        $entity = $this->getMockBuilder(Entity::class)
+            ->onlyMethods(['getKey'])
+            ->getMock();
+        $entity->expects($this->once())
+            ->method('getKey')
+            ->willReturn(null);
+        $attributeSet = $this->getMockBuilder(AttributeSet::class)
+            ->onlyMethods(['getEntity'])
+            ->getMock();
+        $attributeSet->expects($this->once())
+            ->method('getEntity')
+            ->willReturn($entity);
+        $attribute = $this->getMockBuilder(Attribute::class)
+            ->onlyMethods(['getAttributeSet'])
+            ->getMock();
+        $attribute->expects($this->once())
+            ->method('getAttributeSet')
+            ->willReturn($attributeSet);
+        $strategy = $this->getMockBuilder(Strategy::class)
+            ->onlyMethods(['getAttribute', 'createAction'])
+            ->getMock();
+        $strategy->expects($this->once())
+            ->method('getAttribute')
+            ->willReturn($attribute);
+        $strategy->expects($this->once())
+            ->method('createAction')
+            ->willReturn((new Result())->created());
+        $result = $strategy->saveAction();
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::CREATED->code(), $result->getCode());
+        $this->assertEquals(_RESULT::CREATED->message(), $result->getMessage());
+    }
+
+    /** @test */
+    public function save_action_update()
+    {
+        $entity = $this->getMockBuilder(Entity::class)
+            ->onlyMethods(['getKey'])
+            ->getMock();
+        $entity->expects($this->once())
+            ->method('getKey')
+            ->willReturn(1);
+        $attributeSet = $this->getMockBuilder(AttributeSet::class)
+            ->onlyMethods(['getEntity'])
+            ->getMock();
+        $attributeSet->expects($this->once())
+            ->method('getEntity')
+            ->willReturn($entity);
+        $attribute = $this->getMockBuilder(Attribute::class)
+            ->onlyMethods(['getAttributeSet'])
+            ->getMock();
+        $attribute->expects($this->once())
+            ->method('getAttributeSet')
+            ->willReturn($attributeSet);
+        $strategy = $this->getMockBuilder(Strategy::class)
+            ->onlyMethods(['getAttribute', 'updateAction'])
+            ->getMock();
+        $strategy->expects($this->once())
+            ->method('getAttribute')
+            ->willReturn($attribute);
+        $strategy->expects($this->once())
+            ->method('updateAction')
+            ->willReturn((new Result())->updated());
+        $result = $strategy->saveAction();
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::UPDATED->code(), $result->getCode());
+        $this->assertEquals(_RESULT::UPDATED->message(), $result->getMessage());
+    }
 }

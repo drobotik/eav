@@ -6,12 +6,12 @@ namespace Kuperwood\Eav;
 
 class Entity
 {
-    private int $key;
+    private ?int $key = null;
     private int $domainKey;
 
     private AttributeSet $attributeSet;
 
-    public function getKey(): int
+    public function getKey(): ?int
     {
         return $this->key;
     }

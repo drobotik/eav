@@ -16,6 +16,7 @@ class EntityTest extends TestCase
 
     /** @test */
     public function key() {
+        $this->assertNull($this->entity->getKey());
         $this->entity->setKey(1);
         $this->assertSame(1, $this->entity->getKey());
     }

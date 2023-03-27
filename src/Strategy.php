@@ -162,7 +162,10 @@ class Strategy implements StrategyInterface
 
     public function saveAction(): Result
     {
-        // TODO: Implement save() method.
+        $entity = $this->getAttribute()->getAttributeSet()->getEntity();
+        return $entity->getKey()
+            ? $this->updateAction()
+            : $this->createAction();
     }
 
     public function deleteValue(): Result
