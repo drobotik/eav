@@ -2,14 +2,14 @@
 
 namespace Kuperwood\Eav\Interface;
 
-use Kuperwood\Eav\Result\ValueResult;
+use Kuperwood\Eav\Result\Result;
 
 interface StrategyInterface
 {
     public function rules(): array;
-    public function validate(): false|array;
-    public function find() : ValueResult;
-    public function save(string $type) : ValueResult;
-    public function destroy() : ValueResult;
+    public function validateAction(): Result;
+    public function findAction() : Result;
+    public function saveAction() : Result;
+    public function deleteAction() : Result;
 
 }

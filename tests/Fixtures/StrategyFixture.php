@@ -2,41 +2,58 @@
 
 namespace Tests\Fixtures;
 
+use Kuperwood\Eav\Result\Result;
 use Kuperwood\Eav\Strategy;
 
 class StrategyFixture extends Strategy
 {
-    public array $creatingLifecycle = [];
-    public array $updatingLifecycle = [];
-    public array $deletingLifecycle = [];
+    public array $lifecycle = [];
 
     public function beforeCreate(): void
     {
-        $this->creatingLifecycle[] = 'before';
+        $this->lifecycle[] = 'beforeCreate';
+    }
+
+    public function createValue(): Result
+    {
+        $this->lifecycle[] = 'createValue';
+        return (new Result())->created();
     }
 
     public function afterCreate(): void
     {
-        $this->creatingLifecycle[] = 'after';
+        $this->lifecycle[] = 'afterCreate';
+    }
+
+    public function updateValue(): Result
+    {
+        $this->lifecycle[] = 'updateValue';
+        return (new Result())->updated();
     }
 
     public function beforeUpdate(): void
     {
-        $this->updatingLifecycle[] = 'before';
+        $this->lifecycle[] = 'beforeUpdate';
     }
 
     public function afterUpdate(): void
     {
-        $this->updatingLifecycle[] = 'after';
+        $this->lifecycle[] = 'afterUpdate';
     }
 
     public function beforeDelete(): void
     {
-        $this->deletingLifecycle [] = 'before';
+        $this->lifecycle [] = 'beforeDelete';
     }
 
     public function afterDelete(): void
     {
-        $this->deletingLifecycle [] = 'after';
+        $this->lifecycle [] = 'afterDelete';
+    }
+
+    public function deleteValue(): Result
+    {
+        $this->lifecycle[] = 'deleteValue';
+        return (new Result())->deleted();
     }
 }

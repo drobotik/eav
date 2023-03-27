@@ -5,16 +5,12 @@ declare(strict_types=1);
 namespace Kuperwood\Eav;
 
 use Kuperwood\Eav\Interface\StrategyInterface;
-use Kuperwood\Eav\Result\ValueResult;
-use Kuperwood\Eav\Value\ValueState;
+use Kuperwood\Eav\Result\Result;
 
 class Strategy implements StrategyInterface
 {
     public bool $create = true;
     public bool $update = true;
-    public ?ValueState $forcedValueOnCreate = null;
-    public ?ValueState $forcedValueOnUpdate = null;
-
     private Attribute    $attribute;
     private ValueManager $valueManager;
 
@@ -40,9 +36,9 @@ class Strategy implements StrategyInterface
         return $this;
     }
 
-    public function createValue() : ValueResult
+    public function createValue() : Result
     {
-        $result = new ValueResult();
+        $result = new Result();
 
         $attribute = $this->getAttribute();
         $set = $attribute->getAttributeSet();
@@ -73,7 +69,7 @@ class Strategy implements StrategyInterface
         return $result->created();
     }
 
-    public function create() : ValueResult
+    public function createAction() : Result
     {
         $this->beforeCreate();
         $result = $this->createValue();
@@ -81,15 +77,20 @@ class Strategy implements StrategyInterface
         return $result;
     }
 
-    public function update() : ValueResult
+    public function updateAction() : Result
     {
+        $valueManager = $this->getValueManager();
         $this->beforeUpdate();
-        $result = $this->updateValue();
+
+        $result = $valueManager->getKey()
+            ? $this->updateValue()
+            : $this->createValue();
+
         $this->afterUpdate();
         return $result;
     }
 
-    public function destroy(): ValueResult
+    public function deleteAction() : Result
     {
         $this->beforeDelete();
         $result = $this->deleteValue();
@@ -97,9 +98,9 @@ class Strategy implements StrategyInterface
         return $result;
     }
 
-    public function updateValue() : ValueResult
+    public function updateValue() : Result
     {
-        $result = new ValueResult();
+        $result = new Result();
         $attribute = $this->getAttribute();
         $valueManager = $this->getValueManager();
         $model = $attribute->getValueModel();
@@ -129,18 +130,19 @@ class Strategy implements StrategyInterface
         // TODO: Implement rules() method.
     }
 
-    public function validate(): false|array
+    public function validateAction(): Result
     {
         // TODO: Implement validate() method.
     }
 
-    public function find(): ValueResult
+    public function findAction(): Result
     {
-        $result = new ValueResult();
+        $result = new Result();
         $attribute = $this->getAttribute();
         $valueManager = $this->getValueManager();
         $model = $attribute->getValueModel();
         $key = $valueManager->getKey();
+
 
         if(is_null($key)) {
             return $result->empty();
@@ -158,14 +160,14 @@ class Strategy implements StrategyInterface
         return $result->found();
     }
 
-    public function save(string $type): ValueResult
+    public function saveAction(): Result
     {
         // TODO: Implement save() method.
     }
 
-    public function deleteValue(): ValueResult
+    public function deleteValue(): Result
     {
-        $result = new ValueResult();
+        $result = new Result();
         $attribute = $this->getAttribute();
         $valueManager = $this->getValueManager();
         $model = $attribute->getValueModel();

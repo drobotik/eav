@@ -5,9 +5,9 @@ namespace Tests\Unit\Strategy;
 use Kuperwood\Eav\Attribute;
 use Kuperwood\Eav\AttributeSet;
 use Kuperwood\Eav\Entity;
-use Kuperwood\Eav\Enum\VALUE_RESULT;
+use Kuperwood\Eav\Enum\_RESULT;
 use Kuperwood\Eav\Model\ValueStringModel;
-use Kuperwood\Eav\Result\ValueResult;
+use Kuperwood\Eav\Result\Result;
 use Kuperwood\Eav\Strategy;
 use Kuperwood\Eav\ValueManager;
 use Tests\Fixtures\StrategyFixture;
@@ -74,9 +74,9 @@ class StrategyTest extends TestCase
         $this->assertEquals($valueToSave, $value->getStored());
         $this->assertEquals($record->getKey(), $value->getKey());
 
-        $this->assertInstanceOf(ValueResult::class, $result);
-        $this->assertEquals(VALUE_RESULT::CREATED->code(), $result->getCode());
-        $this->assertEquals(VALUE_RESULT::CREATED->message(), $result->getMessage());
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::CREATED->code(), $result->getCode());
+        $this->assertEquals(_RESULT::CREATED->message(), $result->getMessage());
     }
 
     /** @test */
@@ -91,9 +91,9 @@ class StrategyTest extends TestCase
         $this->strategy->setValueManager($value);
         $result = $this->strategy->createValue();
         $this->assertEquals(0, ValueStringModel::query()->count());
-        $this->assertInstanceOf(ValueResult::class, $result);
-        $this->assertEquals(VALUE_RESULT::EMPTY->code(), $result->getCode());
-        $this->assertEquals(VALUE_RESULT::EMPTY->message(), $result->getMessage());
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::EMPTY->code(), $result->getCode());
+        $this->assertEquals(_RESULT::EMPTY->message(), $result->getMessage());
     }
 
     /** @test */
@@ -126,9 +126,9 @@ class StrategyTest extends TestCase
         $this->assertEquals($valueToSave, $value->getStored());
         $this->assertEquals($record->getKey(), $value->getKey());
 
-        $this->assertInstanceOf(ValueResult::class, $result);
-        $this->assertEquals(VALUE_RESULT::UPDATED->code(), $result->getCode());
-        $this->assertEquals(VALUE_RESULT::UPDATED->message(), $result->getMessage());
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::UPDATED->code(), $result->getCode());
+        $this->assertEquals(_RESULT::UPDATED->message(), $result->getMessage());
     }
 
     /** @test */
@@ -139,9 +139,9 @@ class StrategyTest extends TestCase
         $value->setKey(1);
         $this->strategy->setValueManager($value);
         $result = $this->strategy->updateValue();
-        $this->assertInstanceOf(ValueResult::class, $result);
-        $this->assertEquals(VALUE_RESULT::EMPTY->code(), $result->getCode());
-        $this->assertEquals(VALUE_RESULT::EMPTY->message(), $result->getMessage());
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::EMPTY->code(), $result->getCode());
+        $this->assertEquals(_RESULT::EMPTY->message(), $result->getMessage());
     }
 
     /** @test */
@@ -168,26 +168,26 @@ class StrategyTest extends TestCase
         $this->assertNull($value->getStored());
         $this->assertNull($value->getKey());
 
-        $this->assertInstanceOf(ValueResult::class, $result);
-        $this->assertEquals(VALUE_RESULT::DELETED->code(), $result->getCode());
-        $this->assertEquals(VALUE_RESULT::DELETED->message(), $result->getMessage());
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::DELETED->code(), $result->getCode());
+        $this->assertEquals(_RESULT::DELETED->message(), $result->getMessage());
     }
 
     /** @test */
-    public function destroy_no_key() {
+    public function delete_value_no_key() {
         $attribute = new Attribute();
         $this->strategy->setAttribute($attribute);
         $value = new ValueManager();
         $value->setRuntime('new');
         $this->strategy->setValueManager($value);
         $result = $this->strategy->deleteValue();
-        $this->assertInstanceOf(ValueResult::class, $result);
-        $this->assertEquals(VALUE_RESULT::EMPTY->code(), $result->getCode());
-        $this->assertEquals(VALUE_RESULT::EMPTY->message(), $result->getMessage());
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::EMPTY->code(), $result->getCode());
+        $this->assertEquals(_RESULT::EMPTY->message(), $result->getMessage());
     }
 
     /** @test */
-    public function find() {
+    public function find_action() {
         $record = new ValueStringModel();
         $record->setDomainKey(1)
             ->setEntityKey(2)
@@ -201,131 +201,129 @@ class StrategyTest extends TestCase
         $value->setKey($record->getKey());
         $this->strategy->setValueManager($value);
 
-        $result = $this->strategy->find();
+        $result = $this->strategy->findAction();
 
         $this->assertNull($value->getRuntime());
         $this->assertEquals("test", $value->getStored());
 
-        $this->assertInstanceOf(ValueResult::class, $result);
-        $this->assertEquals(VALUE_RESULT::FOUND->code(), $result->getCode());
-        $this->assertEquals(VALUE_RESULT::FOUND->message(), $result->getMessage());
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::FOUND->code(), $result->getCode());
+        $this->assertEquals(_RESULT::FOUND->message(), $result->getMessage());
     }
 
     /** @test */
-    public function find_no_key() {
+    public function find_action_no_key() {
         $attribute = new Attribute();
         $this->strategy->setAttribute($attribute);
         $value = new ValueManager();
         $this->strategy->setValueManager($value);
-        $result = $this->strategy->find();
+        $result = $this->strategy->findAction();
         $this->assertNull($value->getRuntime());
         $this->assertNull($value->getStored());
-        $this->assertInstanceOf(ValueResult::class, $result);
-        $this->assertEquals(VALUE_RESULT::EMPTY->code(), $result->getCode());
-        $this->assertEquals(VALUE_RESULT::EMPTY->message(), $result->getMessage());
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::EMPTY->code(), $result->getCode());
+        $this->assertEquals(_RESULT::EMPTY->message(), $result->getMessage());
     }
 
     /** @test */
-    public function find_no_record() {
+    public function find_action_no_record() {
         $attribute = new Attribute();
         $this->strategy->setAttribute($attribute);
         $value = new ValueManager();
         $value->setKey(123);
         $this->strategy->setValueManager($value);
-        $result = $this->strategy->find();
+        $result = $this->strategy->findAction();
         $this->assertNull($value->getRuntime());
         $this->assertNull($value->getStored());
-        $this->assertInstanceOf(ValueResult::class, $result);
-        $this->assertEquals(VALUE_RESULT::NOT_FOUND->code(), $result->getCode());
-        $this->assertEquals(VALUE_RESULT::NOT_FOUND->message(), $result->getMessage());
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::NOT_FOUND->code(), $result->getCode());
+        $this->assertEquals(_RESULT::NOT_FOUND->message(), $result->getMessage());
     }
 
     /** @test */
-    public function before_create_called() {
+    public function create_action() {
         $strategy = $this->getMockBuilder(Strategy::class)
-            ->onlyMethods(['beforeCreate', 'createValue'])
-            ->getMock();
-        $strategy->expects($this->once())
-            ->method('beforeCreate');
-        $strategy->create();
-    }
-
-    /** @test */
-    public function after_create_called() {
-        $strategy = $this->getMockBuilder(Strategy::class)
-            ->onlyMethods(['afterCreate', 'createValue'])
-            ->getMock();
-        $strategy->expects($this->once())
-            ->method('afterCreate');
-        $strategy->create();
-    }
-
-    /** @test */
-    public function hooks_order_on_create() {
-        $strategy = $this->getMockBuilder(StrategyFixture::class)
             ->onlyMethods(['createValue'])
             ->getMock();
-        $strategy->create();
-        $this->assertEquals(['before', 'after'], $strategy->creatingLifecycle);
+        $strategy->expects($this->once())
+            ->method('createValue')
+            ->willReturn((new Result())->created());
+        $result = $strategy->createAction();
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::CREATED->code(), $result->getCode());
+        $this->assertEquals(_RESULT::CREATED->message(), $result->getMessage());
     }
 
     /** @test */
-    public function before_update_called() {
+    public function create_action_order() {
+        $strategy = new StrategyFixture;
+        $strategy->createAction();
+        $this->assertEquals(['beforeCreate', 'createValue', 'afterCreate'], $strategy->lifecycle);
+    }
+
+    /** @test */
+    public function update_action() {
+        $valueManager = $this->getMockBuilder(ValueManager::class)
+            ->onlyMethods(['getKey'])
+            ->getMock();
+        $valueManager->expects($this->once())
+            ->method('getKey')
+            ->willReturn(1);
         $strategy = $this->getMockBuilder(Strategy::class)
-            ->onlyMethods(['beforeUpdate', 'updateValue'])
+            ->onlyMethods(['updateValue', 'getValueManager'])
             ->getMock();
         $strategy->expects($this->once())
-            ->method('beforeUpdate');
-        $strategy->update();
-    }
-
-    /** @test */
-    public function after_update_called() {
-        $strategy = $this->getMockBuilder(Strategy::class)
-            ->onlyMethods(['afterUpdate', 'updateValue'])
-            ->getMock();
+            ->method('getValueManager')
+            ->willReturn($valueManager);
         $strategy->expects($this->once())
-            ->method('afterUpdate');
-        $strategy->update();
+            ->method('updateValue')
+            ->willReturn((new Result())->updated());
+        $result = $strategy->updateAction();
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::UPDATED->code(), $result->getCode());
+        $this->assertEquals(_RESULT::UPDATED->message(), $result->getMessage());
     }
 
     /** @test */
-    public function hooks_order_on_update() {
-        $strategy = $this->getMockBuilder(StrategyFixture::class)
-            ->onlyMethods(['updateValue'])
-            ->getMock();
-        $strategy->update();
-        $this->assertEquals(['before', 'after'], $strategy->updatingLifecycle);
+    public function update_action_order() {
+        $strategy = new StrategyFixture;
+        $value = new ValueManager();
+        $strategy->setValueManager($value);
+        $strategy->updateAction();
+        $this->assertEquals(['beforeUpdate', 'createValue', 'afterUpdate'], $strategy->lifecycle);
     }
 
+    /** @test */
+    public function update_action_order_when_existing_value_key() {
+        $strategy = new StrategyFixture;
+        $value = new ValueManager();
+        $value->setKey(123);
+        $strategy->setValueManager($value);
+        $strategy->updateAction();
+        $this->assertEquals(['beforeUpdate', 'updateValue', 'afterUpdate'], $strategy->lifecycle);
+    }
 
     /** @test */
-    public function before_delete_called() {
+    public function delete_action() {
         $strategy = $this->getMockBuilder(Strategy::class)
-            ->onlyMethods(['beforeDelete', 'deleteValue'])
-            ->getMock();
-        $strategy->expects($this->once())
-            ->method('beforeDelete');
-        $strategy->destroy();
-    }
-
-    /** @test */
-    public function after_delete_called() {
-        $strategy = $this->getMockBuilder(Strategy::class)
-            ->onlyMethods(['afterDelete', 'deleteValue'])
-            ->getMock();
-        $strategy->expects($this->once())
-            ->method('afterDelete');
-        $strategy->destroy();
-    }
-
-    /** @test */
-    public function hooks_order_on_delete() {
-        $strategy = $this->getMockBuilder(StrategyFixture::class)
             ->onlyMethods(['deleteValue'])
             ->getMock();
-        $strategy->destroy();
-        $this->assertEquals(['before', 'after'], $strategy->deletingLifecycle);
+        $strategy->expects($this->once())
+            ->method('deleteValue')
+            ->willReturn((new Result())->deleted());
+        $result = $strategy->deleteAction();
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::DELETED->code(), $result->getCode());
+        $this->assertEquals(_RESULT::DELETED->message(), $result->getMessage());
+    }
+
+    /** @test */
+    public function delete_action_order() {
+        $strategy = new StrategyFixture;
+        $value = new ValueManager();
+        $strategy->setValueManager($value);
+        $strategy->deleteAction();
+        $this->assertEquals(['beforeDelete', 'deleteValue', 'afterDelete'], $strategy->lifecycle);
     }
 
     /** @test */
@@ -349,9 +347,9 @@ class StrategyTest extends TestCase
         $this->strategy->setValueManager($value);
         $result = $this->strategy->createValue();
         $this->assertFalse($value->isRuntime());
-        $this->assertInstanceOf(ValueResult::class, $result);
-        $this->assertEquals(VALUE_RESULT::NOT_ALLOWED->code(), $result->getCode());
-        $this->assertEquals(VALUE_RESULT::NOT_ALLOWED->message(), $result->getMessage());
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::NOT_ALLOWED->code(), $result->getCode());
+        $this->assertEquals(_RESULT::NOT_ALLOWED->message(), $result->getMessage());
     }
 
     /** @test */
@@ -375,8 +373,8 @@ class StrategyTest extends TestCase
         $this->strategy->setValueManager($value);
         $result = $this->strategy->updateValue();
         $this->assertFalse($value->isRuntime());
-        $this->assertInstanceOf(ValueResult::class, $result);
-        $this->assertEquals(VALUE_RESULT::NOT_ALLOWED->code(), $result->getCode());
-        $this->assertEquals(VALUE_RESULT::NOT_ALLOWED->message(), $result->getMessage());
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::NOT_ALLOWED->code(), $result->getCode());
+        $this->assertEquals(_RESULT::NOT_ALLOWED->message(), $result->getMessage());
     }
 }

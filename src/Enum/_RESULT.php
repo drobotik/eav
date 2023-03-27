@@ -2,7 +2,7 @@
 
 namespace Kuperwood\Eav\Enum;
 
-enum VALUE_RESULT
+enum _RESULT
 {
     case CREATED;
     case UPDATED;
