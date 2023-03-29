@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace Kuperwood\Eav;
 
 use Kuperwood\Eav\Exception\AttributeSetException;
+use Kuperwood\Eav\Trait\EavContainerTrait;
 
 class AttributeSet
 {
+    use EavContainerTrait;
+
     private int $key;
     private string $name;
     private array $attributes = [];
@@ -32,17 +35,6 @@ class AttributeSet
     public function setName(string $name) : self
     {
         $this->name = $name;
-        return $this;
-    }
-
-    public function getEntity(): Entity
-    {
-        return $this->entity;
-    }
-
-    public function setEntity(Entity $entity) : self
-    {
-        $this->entity = $entity;
         return $this;
     }
 

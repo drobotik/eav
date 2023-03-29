@@ -32,18 +32,7 @@ class AttributeTest extends TestCase
         $this->attribute->setBag($bag);
         $this->assertSame($bag, $this->attribute->getBag());
     }
-    /** @test */
-    public function strategy() {
-        $strategy = new Strategy();
-        $this->attribute->setStrategy($strategy);
-        $this->assertSame($strategy, $this->attribute->getStrategy());
-    }
-    /** @test */
-    public function attributeSet() {
-        $attrSet = new AttributeSet();
-        $this->attribute->setAttributeSet($attrSet);
-        $this->assertSame($attrSet, $this->attribute->getAttributeSet());
-    }
+
     /** @test */
     public function source() {
         $source = new Source();

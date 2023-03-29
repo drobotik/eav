@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace Kuperwood\Eav;
 
+use Kuperwood\Eav\Trait\EavContainerTrait;
+
 class Entity
 {
+    use EavContainerTrait;
+
     private ?int $key = null;
     private int $domainKey;
 
@@ -31,16 +35,5 @@ class Entity
     public function getDomainKey(): int
     {
         return $this->domainKey;
-    }
-
-    public function getAttributeSet(): AttributeSet
-    {
-        return $this->attributeSet;
-    }
-
-    public function setAttributeSet(AttributeSet $attributeSet): self
-    {
-        $this->attributeSet = $attributeSet;
-        return $this;
     }
 }

@@ -30,13 +30,6 @@ class AttributeSetTest extends TestCase
     }
 
     /** @test */
-    public function entity() {
-        $entity = new Entity();
-        $this->instance->setEntity($entity);
-        $this->assertSame($entity, $this->instance->getEntity());
-    }
-
-    /** @test */
     public function get_attributes() {
         $this->assertEquals([], $this->instance->getAttributes());
     }

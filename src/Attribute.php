@@ -9,9 +9,11 @@ use Kuperwood\Eav\Enum\ATTR_TYPE;
 use Kuperwood\Eav\Exception\AttributeException;
 use Kuperwood\Eav\Interface\StrategyInterface;
 use Kuperwood\Eav\Model\ValueBase;
+use Kuperwood\Eav\Trait\EavContainerTrait;
 
 class Attribute
 {
+    use EavContainerTrait;
     private AttributeBag $bag;
     private AttributeSet $attributeSet;
     private StrategyInterface $strategy;
@@ -30,28 +32,6 @@ class Attribute
     public function setBag(AttributeBag $bag): self
     {
         $this->bag = $bag;
-        return $this;
-    }
-
-    public function getStrategy(): StrategyInterface
-    {
-        return $this->strategy;
-    }
-
-    public function setStrategy(StrategyInterface $strategy): self
-    {
-        $this->strategy = $strategy;
-        return $this;
-    }
-
-    public function getAttributeSet() : AttributeSet
-    {
-        return $this->attributeSet;
-    }
-
-    public function setAttributeSet(AttributeSet $attributeSet) : self
-    {
-        $this->attributeSet = $attributeSet;
         return $this;
     }
 

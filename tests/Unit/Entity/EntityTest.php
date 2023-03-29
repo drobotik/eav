@@ -26,11 +26,4 @@ class EntityTest extends TestCase
         $this->entity->setDomainKey(1);
         $this->assertSame(1, $this->entity->getDomainKey());
     }
-
-    /** @test */
-    public function attribute_set() {
-        $set = new AttributeSet();
-        $this->entity->setAttributeSet($set);
-        $this->assertSame($set, $this->entity->getAttributeSet());
-    }
 }

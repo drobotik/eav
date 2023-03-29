@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Kuperwood\Eav;
 
+use Kuperwood\Eav\Trait\EavContainerTrait;
 use Kuperwood\Eav\Value\ValueState;
 
 class ValueManager
 {
+    use EavContainerTrait;
     private ValueState $runtime;
     private ValueState $stored;
 

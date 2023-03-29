@@ -8,44 +8,24 @@ use Illuminate\Validation\Validator;
 use Kuperwood\Eav\Enum\_VALUE;
 use Kuperwood\Eav\Interface\StrategyInterface;
 use Kuperwood\Eav\Result\Result;
+use Kuperwood\Eav\Trait\EavContainerTrait;
 
 class Strategy implements StrategyInterface
 {
+    use EavContainerTrait;
     public bool $create = true;
     public bool $update = true;
     private Attribute    $attribute;
     private ValueManager $valueManager;
 
-    public function getAttribute() : Attribute
-    {
-        return $this->attribute;
-    }
-
-    public function setAttribute(Attribute $attribute) : self
-    {
-        $this->attribute = $attribute;
-        return $this;
-    }
-    
-    public function getValueManager() : ValueManager
-    {
-        return $this->valueManager;
-    }
-
-    public function setValueManager(ValueManager $value) : self
-    {
-        $this->valueManager = $value;
-        return $this;
-    }
-
     public function createValue() : Result
     {
         $result = new Result();
 
-        $attribute = $this->getAttribute();
-        $set = $attribute->getAttributeSet();
-        $entity = $set->getEntity();
-        $valueManager = $this->getValueManager();
+        $container = $this->getEavContainer();
+        $attribute = $container->getAttribute();
+        $entity = $container->getEntity();
+        $valueManager = $container->getValueManager();
         $model = $attribute->getValueModel();
 
         if (!$this->isCreate()) {
@@ -81,7 +61,8 @@ class Strategy implements StrategyInterface
 
     public function updateAction() : Result
     {
-        $valueManager = $this->getValueManager();
+        $container = $this->getEavContainer();
+        $valueManager = $container->getValueManager();
         $this->beforeUpdate();
 
         $result = $valueManager->getKey()
@@ -103,8 +84,9 @@ class Strategy implements StrategyInterface
     public function updateValue() : Result
     {
         $result = new Result();
-        $attribute = $this->getAttribute();
-        $valueManager = $this->getValueManager();
+        $container = $this->getEavContainer();
+        $attribute = $container->getAttribute();
+        $valueManager = $container->getValueManager();
         $model = $attribute->getValueModel();
 
         if (!$this->isUpdate()) {
@@ -133,7 +115,10 @@ class Strategy implements StrategyInterface
     }
 
     public function getDefaultValueRule() {
-        return $this->getAttribute()->getType()->validationRule();
+        return $this->getEavContainer()
+            ->getAttribute()
+            ->getType()
+            ->validationRule();
     }
 
     public function getRules() {
@@ -150,14 +135,15 @@ class Strategy implements StrategyInterface
 
     public function getValidatedData() : array
     {
-        $attribute = $this->getAttribute();
-        $attrSet = $attribute->getAttributeSet();
-        $entity = $attrSet->getEntity();
+        $container = $this->getEavContainer();
+        $attribute = $container->getAttribute();
+        $entity = $container->getEntity();
+        $valueManager = $container->getValueManager();
         return [
             _VALUE::ENTITY_ID->column() => $entity->getKey(),
             _VALUE::DOMAIN_ID->column() => $entity->getDomainKey(),
             _VALUE::ATTRIBUTE_ID->column() => $attribute->getKey(),
-            _VALUE::VALUE->column() => $this->getValueManager()->getRuntime()
+            _VALUE::VALUE->column() => $valueManager->getRuntime()
         ];
     }
 
@@ -178,8 +164,9 @@ class Strategy implements StrategyInterface
     public function findAction(): Result
     {
         $result = new Result();
-        $attribute = $this->getAttribute();
-        $valueManager = $this->getValueManager();
+        $container = $this->getEavContainer();
+        $attribute = $container->getAttribute();
+        $valueManager = $container->getValueManager();
         $model = $attribute->getValueModel();
         $key = $valueManager->getKey();
 
@@ -202,7 +189,7 @@ class Strategy implements StrategyInterface
 
     public function saveAction(): Result
     {
-        $entity = $this->getAttribute()->getAttributeSet()->getEntity();
+        $entity = $this->getEavContainer()->getEntity();
         return $entity->getKey()
             ? $this->updateAction()
             : $this->createAction();
@@ -211,8 +198,9 @@ class Strategy implements StrategyInterface
     public function deleteValue(): Result
     {
         $result = new Result();
-        $attribute = $this->getAttribute();
-        $valueManager = $this->getValueManager();
+        $container = $this->getEavContainer();
+        $attribute = $container->getAttribute();
+        $valueManager = $container->getValueManager();
         $model = $attribute->getValueModel();
         $key = $valueManager->getKey();
 
