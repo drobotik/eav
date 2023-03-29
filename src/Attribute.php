@@ -88,7 +88,7 @@ class Attribute
         return $this;
     }
 
-    public function getType() : string
+    public function getType() : ATTR_TYPE
     {
         return $this->getBag()->getField(_ATTR::TYPE);
     }
@@ -101,7 +101,8 @@ class Attribute
         if (!ATTR_TYPE::isValid($type)) {
             AttributeException::unexpectedType($type);
         }
-        $this->getBag()->setField(_ATTR::TYPE, $type);
+        $case = ATTR_TYPE::getCase($type);
+        $this->getBag()->setField(_ATTR::TYPE, $case);
         return $this;
     }
 
@@ -122,6 +123,6 @@ class Attribute
 
     public function getValueModel() : ValueBase
     {
-        return ATTR_TYPE::modelByType($this->getType());
+        return $this->getType()->model();
     }
 }

@@ -34,17 +34,17 @@ enum _ATTR implements DefineTableInterface
         };
     }
 
-    public function default() : string|bool|null
+    public function default() : string|bool|null|ATTR_TYPE
     {
         return match ($this) {
             self::ID,
             self::NAME,
             self::DOMAIN_ID,
             self::SOURCE,
-            self::DEFAULT_VALUE => null,
-            self::TYPE => ATTR_TYPE::STRING->value(),
-            self::STRATEGY => Strategy::class,
-            self::DESCRIPTION => false,
+            self::DEFAULT_VALUE,
+            self::DESCRIPTION=> null,
+            self::TYPE => ATTR_TYPE::STRING,
+            self::STRATEGY => Strategy::class
         };
     }
 

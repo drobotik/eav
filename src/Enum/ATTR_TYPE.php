@@ -35,7 +35,9 @@ enum ATTR_TYPE
 
     public static function isValid(string $type): bool
     {
-        return in_array($type, array_map(fn($case) => $case->value(), self::cases()));
+        if($type === self::MANUAL->value()) return false;
+        $cases = array_map(fn($case) => $case->value(), self::cases());
+        return in_array($type, $cases);
     }
 
     public function valueTable(): string
@@ -46,17 +48,6 @@ enum ATTR_TYPE
             self::DECIMAL => sprintf(_VALUE::table(), self::DECIMAL->value()),
             self::STRING => sprintf(_VALUE::table(), self::STRING->value()),
             self::TEXT => sprintf(_VALUE::table(), self::TEXT->value())
-        };
-    }
-
-    public static function modelByType(string $type): ValueBase
-    {
-        return match ($type) {
-            self::INTEGER->value() => new ValueIntegerModel,
-            self::DATETIME->value() => new ValueDatetimeModel,
-            self::DECIMAL->value() => new ValueDecimalModel,
-            self::STRING->value() => new ValueStringModel,
-            self::TEXT->value() => new ValueTextModel
         };
     }
 
@@ -82,6 +73,39 @@ enum ATTR_TYPE
         };
     }
 
+    public function validationRule() {
+        return match ($this) {
+            self::INTEGER => [
+                "integer"
+            ],
+            self::DATETIME => [
+                "date"
+            ],
+            self::DECIMAL => [
+                "regex:/^[0-9]{1,11}(?:\.[0-9]{1,3})?$/"
+            ],
+            self::STRING => [
+                "string",
+                "min:1",
+                "max:191"
+            ],
+            self::TEXT => [
+                "min:1",
+                "max:1000"
+            ]
+        };
+    }
+
+    public static function getCase(string $type) {
+        return match ($type) {
+            self::INTEGER->value() => self::INTEGER,
+            self::DATETIME->value() => self::DATETIME,
+            self::DECIMAL->value() => self::DECIMAL,
+            self::STRING->value() => self::STRING,
+            self::TEXT->value() => self::TEXT
+        };
+    }
+
     public function loadMetadata(ClassMetadata $metadata) {
 
         $builder = new ClassMetadataBuilder($metadata);
@@ -95,5 +119,4 @@ enum ATTR_TYPE
         $builder->addField( _VALUE::ATTRIBUTE_ID->column(), Types::INTEGER);
         $builder->addField( _VALUE::VALUE->column(), $this->doctrineType());
     }
-
 }

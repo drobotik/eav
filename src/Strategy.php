@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Kuperwood\Eav;
 
+use Illuminate\Validation\Validator;
+use Kuperwood\Eav\Enum\_VALUE;
 use Kuperwood\Eav\Interface\StrategyInterface;
 use Kuperwood\Eav\Result\Result;
 
@@ -125,14 +127,52 @@ class Strategy implements StrategyInterface
     }
 
 
-    public function rules(): array
+    public function rules(): ?array
     {
-        // TODO: Implement rules() method.
+        return null;
+    }
+
+    public function getDefaultValueRule() {
+        return $this->getAttribute()->getType()->validationRule();
+    }
+
+    public function getRules() {
+        $rules = $this->rules();
+        return [
+            _VALUE::ENTITY_ID->column() => ['required', 'integer'],
+            _VALUE::DOMAIN_ID->column() => ['required','integer'],
+            _VALUE::ATTRIBUTE_ID->column() => ['required','integer'],
+            _VALUE::VALUE->column() => is_null($rules)
+                ? $this->getDefaultValueRule()
+                : $rules
+        ];
+    }
+
+    public function getValidatedData() : array
+    {
+        $attribute = $this->getAttribute();
+        $attrSet = $attribute->getAttributeSet();
+        $entity = $attrSet->getEntity();
+        return [
+            _VALUE::ENTITY_ID->column() => $entity->getKey(),
+            _VALUE::DOMAIN_ID->column() => $entity->getDomainKey(),
+            _VALUE::ATTRIBUTE_ID->column() => $attribute->getKey(),
+            _VALUE::VALUE->column() => $this->getValueManager()->getRuntime()
+        ];
+    }
+
+    public function getValidator() : Validator
+    {
+        return Container::getInstance()->getValidator()->make(
+            $this->getValidatedData(),
+            $this->getRules()
+        );
     }
 
     public function validateAction(): Result
     {
-        // TODO: Implement validate() method.
+        $result = new Result();
+        return $result;
     }
 
     public function findAction(): Result

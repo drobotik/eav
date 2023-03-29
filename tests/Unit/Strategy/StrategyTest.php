@@ -6,6 +6,8 @@ use Kuperwood\Eav\Attribute;
 use Kuperwood\Eav\AttributeSet;
 use Kuperwood\Eav\Entity;
 use Kuperwood\Eav\Enum\_RESULT;
+use Kuperwood\Eav\Enum\_VALUE;
+use Kuperwood\Eav\Enum\ATTR_TYPE;
 use Kuperwood\Eav\Model\ValueStringModel;
 use Kuperwood\Eav\Result\Result;
 use Kuperwood\Eav\Strategy;
@@ -448,5 +450,90 @@ class StrategyTest extends TestCase
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::UPDATED->code(), $result->getCode());
         $this->assertEquals(_RESULT::UPDATED->message(), $result->getMessage());
+    }
+
+    /** @test */
+    public function default_value_rule() {
+        $attribute = new Attribute();
+        $attribute->setType(ATTR_TYPE::INTEGER->value());
+        $strategy = new Strategy();
+        $strategy->setAttribute($attribute);
+        $this->assertEquals(
+            ATTR_TYPE::INTEGER->validationRule(),
+            $strategy->getDefaultValueRule()
+        );
+
+        $attribute->setType(ATTR_TYPE::TEXT->value());
+        $this->assertEquals(
+            ATTR_TYPE::TEXT->validationRule(),
+            $strategy->getDefaultValueRule()
+        );
+    }
+
+    /** @test */
+    public function validation_rules() {
+        $attribute = new Attribute();
+        $attribute->setType(ATTR_TYPE::INTEGER->value());
+        $strategy = new Strategy();
+        $strategy->setAttribute($attribute);
+        $this->assertEquals(
+            [
+                _VALUE::ENTITY_ID->column() => ['required', 'integer'],
+                _VALUE::DOMAIN_ID->column() => ['required','integer'],
+                _VALUE::ATTRIBUTE_ID->column() => ['required','integer'],
+                _VALUE::VALUE->column() => $strategy->getDefaultValueRule()
+            ],
+            $strategy->getRules()
+        );
+    }
+
+    /** @test */
+    public function validation_data() {
+        $entity = new Entity();
+        $entity->setDomainKey(4);
+        $entity->setKey(3);
+        $attrSet = new AttributeSet();
+        $attrSet->setKey(2);
+        $attrSet->setEntity($entity);
+        $attribute = new Attribute();
+        $attribute->setAttributeSet($attrSet);
+        $attribute->setKey(1);
+        $strategy = new Strategy();
+        $strategy->setAttribute($attribute);
+        $valueManager = new ValueManager();
+        $valueManager->setRuntime('test');
+        $strategy->setValueManager($valueManager);
+        $this->assertEquals(
+            [
+                _VALUE::ENTITY_ID->column() => $entity->getKey(),
+                _VALUE::DOMAIN_ID->column() => $entity->getDomainKey(),
+                _VALUE::ATTRIBUTE_ID->column() => $attribute->getKey(),
+                _VALUE::VALUE->column() => $valueManager->getRuntime()
+            ],
+            $strategy->getValidatedData()
+        );
+    }
+
+    /** @test */
+    public function validator() {
+        $entity = new Entity();
+        $entity->setDomainKey(4);
+        $entity->setKey(3);
+        $attrSet = new AttributeSet();
+        $attrSet->setKey(2);
+        $attrSet->setEntity($entity);
+        $attribute = new Attribute();
+        $attribute->setAttributeSet($attrSet);
+        $attribute->setKey(1);
+        $attribute->setType(ATTR_TYPE::STRING->value());
+        $strategy = new Strategy();
+        $strategy->setAttribute($attribute);
+        $valueManager = new ValueManager();
+        $valueManager->setRuntime('test');
+        $strategy->setValueManager($valueManager);
+
+        $validator = $strategy->getValidator();
+        $this->assertEquals($strategy->getRules(), $validator->getRules());
+        $this->assertEquals($strategy->getValidatedData(), $validator->getData());
     }
 }

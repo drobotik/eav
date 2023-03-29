@@ -70,9 +70,22 @@ class AttributeTest extends TestCase
     /** @test */
     public function get_type() {
         $bag = new AttributeBag();
-        $bag->setField(_ATTR::TYPE, 'test');
+        $bag->setField(_ATTR::TYPE, ATTR_TYPE::STRING);
         $this->attribute->setBag($bag);
-        $this->assertEquals('test', $this->attribute->getType());
+        $this->assertEquals(ATTR_TYPE::STRING, $this->attribute->getType());
+    }
+
+    /** @test */
+    public function set_type() {
+        $this->attribute->setType(ATTR_TYPE::STRING->value());
+        $this->assertEquals(ATTR_TYPE::STRING, $this->attribute->getType());
+    }
+
+    /** @test */
+    public function set_type_throws_unexpected_type() {
+        $this->expectException(AttributeException::class);
+        $this->expectExceptionMessage(sprintf(AttributeException::UNEXPECTED_TYPE, 'test'));
+        $this->attribute->setType('test');
     }
 
     /** @test */
@@ -109,19 +122,6 @@ class AttributeTest extends TestCase
     public function set_name() {
         $this->attribute->setName('test');
         $this->assertEquals('test', $this->attribute->getName());
-    }
-
-    /** @test */
-    public function set_type() {
-        $this->attribute->setType(ATTR_TYPE::STRING->value());
-        $this->assertEquals(ATTR_TYPE::STRING->value(), $this->attribute->getType());
-    }
-
-    /** @test */
-    public function set_type_throws_unexpected_type() {
-        $this->expectException(AttributeException::class);
-        $this->expectExceptionMessage(sprintf(AttributeException::UNEXPECTED_TYPE, 'test'));
-        $this->attribute->setType('test');
     }
 
     /** @test */
