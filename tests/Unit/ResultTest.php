@@ -18,14 +18,25 @@ class ResultTest extends TestCase
     /** @test */
     public function code()
     {
-        $this->result->setCode(1);
+        $result = $this->result->setCode(1);
+        $this->assertSame($this->result, $result);
         $this->assertEquals(1, $this->result->getCode());
     }
 
     /** @test */
     public function message()
     {
-        $this->result->setMessage('test');
+        $result = $this->result->setMessage('test');
+        $this->assertSame($this->result, $result);
         $this->assertEquals('test', $this->result->getMessage());
+    }
+
+    /** @test */
+    public function data()
+    {
+        $this->assertNull($this->result->getData());
+        $result = $this->result->setData(['data']);
+        $this->assertSame($this->result, $result);
+        $this->assertEquals(['data'], $this->result->getData());
     }
 }

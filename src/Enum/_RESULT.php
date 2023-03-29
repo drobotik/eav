@@ -14,6 +14,8 @@ enum _RESULT
     case NOT_ALLOWED;
     case EMPTY;
 
+    case VALIDATION_FAILS;
+    case VALIDATION_PASSED;
     public function code(): int
     {
         return match ($this) {
@@ -26,6 +28,8 @@ enum _RESULT
             self::EMPTY => 7,
             self::DELETED => 8,
             self::NOT_DELETED => 9,
+            self::VALIDATION_FAILS => 10,
+            self::VALIDATION_PASSED => 11,
         };
     }
 
@@ -41,6 +45,8 @@ enum _RESULT
             self::EMPTY => "Nothing to perform",
             self::DELETED => "Deleted",
             self::NOT_DELETED => "Not deleted",
+            self::VALIDATION_FAILS => "Validation fails",
+            self::VALIDATION_PASSED => "Validation passed",
         };
     }
 }

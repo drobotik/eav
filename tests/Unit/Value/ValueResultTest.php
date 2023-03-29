@@ -86,4 +86,20 @@ class ValueResultTest extends TestCase
         $this->assertEquals(_RESULT::EMPTY->code(), $this->result->getCode());
         $this->assertEquals(_RESULT::EMPTY->message(), $this->result->getMessage());
     }
+
+    /** @test */
+    public function validation_fails()
+    {
+        $this->result->validationFails();
+        $this->assertEquals(_RESULT::VALIDATION_FAILS->code(), $this->result->getCode());
+        $this->assertEquals(_RESULT::VALIDATION_FAILS->message(), $this->result->getMessage());
+    }
+
+    /** @test */
+    public function validation_passed()
+    {
+        $this->result->validationPassed();
+        $this->assertEquals(_RESULT::VALIDATION_PASSED->code(), $this->result->getCode());
+        $this->assertEquals(_RESULT::VALIDATION_PASSED->message(), $this->result->getMessage());
+    }
 }

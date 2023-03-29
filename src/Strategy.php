@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kuperwood\Eav;
 
 use Illuminate\Validation\Validator;
+use Kuperwood\Eav\Enum\_RESULT;
 use Kuperwood\Eav\Enum\_VALUE;
 use Kuperwood\Eav\Interface\StrategyInterface;
 use Kuperwood\Eav\Result\Result;
@@ -109,57 +110,6 @@ class Strategy implements StrategyInterface
     }
 
 
-    public function rules(): ?array
-    {
-        return null;
-    }
-
-    public function getDefaultValueRule() {
-        return $this->getEavContainer()
-            ->getAttribute()
-            ->getType()
-            ->validationRule();
-    }
-
-    public function getRules() {
-        $rules = $this->rules();
-        return [
-            _VALUE::ENTITY_ID->column() => ['required', 'integer'],
-            _VALUE::DOMAIN_ID->column() => ['required','integer'],
-            _VALUE::ATTRIBUTE_ID->column() => ['required','integer'],
-            _VALUE::VALUE->column() => is_null($rules)
-                ? $this->getDefaultValueRule()
-                : $rules
-        ];
-    }
-
-    public function getValidatedData() : array
-    {
-        $container = $this->getEavContainer();
-        $attribute = $container->getAttribute();
-        $entity = $container->getEntity();
-        $valueManager = $container->getValueManager();
-        return [
-            _VALUE::ENTITY_ID->column() => $entity->getKey(),
-            _VALUE::DOMAIN_ID->column() => $entity->getDomainKey(),
-            _VALUE::ATTRIBUTE_ID->column() => $attribute->getKey(),
-            _VALUE::VALUE->column() => $valueManager->getRuntime()
-        ];
-    }
-
-    public function getValidator() : Validator
-    {
-        return Container::getInstance()->getValidator()->make(
-            $this->getValidatedData(),
-            $this->getRules()
-        );
-    }
-
-    public function validateAction(): Result
-    {
-        $result = new Result();
-        return $result;
-    }
 
     public function findAction(): Result
     {
@@ -245,5 +195,63 @@ class Strategy implements StrategyInterface
     public function isUpdate() : bool
     {
         return $this->update;
+    }
+
+    public function rules(): ?array
+    {
+        return null;
+    }
+
+    public function getDefaultValueRule() {
+        return $this->getEavContainer()
+            ->getAttribute()
+            ->getType()
+            ->validationRule();
+    }
+
+    public function getRules() {
+        $rules = $this->rules();
+        return [
+            _VALUE::ENTITY_ID->column() => ['required', 'integer'],
+            _VALUE::DOMAIN_ID->column() => ['required','integer'],
+            _VALUE::ATTRIBUTE_ID->column() => ['required','integer'],
+            _VALUE::VALUE->column() => is_null($rules)
+                ? $this->getDefaultValueRule()
+                : $rules
+        ];
+    }
+
+    public function getValidatedData() : array
+    {
+        $container = $this->getEavContainer();
+        $attribute = $container->getAttribute();
+        $entity = $container->getEntity();
+        $valueManager = $container->getValueManager();
+        return [
+            _VALUE::ENTITY_ID->column() => $entity->getKey(),
+            _VALUE::DOMAIN_ID->column() => $entity->getDomainKey(),
+            _VALUE::ATTRIBUTE_ID->column() => $attribute->getKey(),
+            _VALUE::VALUE->column() => $valueManager->getRuntime()
+        ];
+    }
+
+    public function getValidator() : Validator
+    {
+        return Container::getInstance()->getValidator()->make(
+            $this->getValidatedData(),
+            $this->getRules()
+        );
+    }
+
+    public function validateAction(): Result
+    {
+        $result = new Result();
+        $validator = $this->getValidator();
+        if($validator->fails()) {
+            return $result->validationFails()
+                ->setData($validator->errors());
+        }
+        return $result->setCode(_RESULT::VALIDATION_PASSED->code())
+            ->setMessage(_RESULT::VALIDATION_PASSED->message());
     }
 }

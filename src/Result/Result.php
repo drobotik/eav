@@ -11,6 +11,8 @@ class Result
     private int $code;
     private string $message;
 
+    private mixed $data = null;
+
     public function getCode() : int
     {
         return $this->code;
@@ -30,6 +32,17 @@ class Result
     public function setMessage(string $message) : self
     {
         $this->message = $message;
+        return $this;
+    }
+
+    public function getData() : mixed
+    {
+        return $this->data;
+    }
+
+    public function setData(mixed $data) : self
+    {
+        $this->data = $data;
         return $this;
     }
 
@@ -85,5 +98,17 @@ class Result
     {
         return $this->setCode(_RESULT::EMPTY->code())
             ->setMessage(_RESULT::EMPTY->message());
+    }
+
+    public function validationFails() : self
+    {
+        return $this->setCode(_RESULT::VALIDATION_FAILS->code())
+            ->setMessage(_RESULT::VALIDATION_FAILS->message());
+    }
+
+    public function validationPassed() : self
+    {
+        return $this->setCode(_RESULT::VALIDATION_PASSED->code())
+            ->setMessage(_RESULT::VALIDATION_PASSED->message());
     }
 }
