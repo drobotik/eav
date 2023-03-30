@@ -21,8 +21,10 @@ final class EntityMigration extends AbstractMigration
         $table = $schema->createTable(_ENTITY::table());
         $table->addColumn(_ENTITY::ID->column(), Types::INTEGER , ['Autoincrement' => true, 'unsigned' => true]);
         $table->addColumn(_ENTITY::DOMAIN_ID->column(), Types::INTEGER, ['unsigned' => true]);
+        $table->addColumn(_ENTITY::ATTR_SET_ID->column(), Types::INTEGER, ['unsigned' => true]);
         $table->setPrimaryKey([_ENTITY::ID->column()]);
         $table->addIndex([_ENTITY::DOMAIN_ID->column()]);
+        $table->addIndex([_ENTITY::ATTR_SET_ID->column()]);
     }
 
     public function down(Schema $schema): void

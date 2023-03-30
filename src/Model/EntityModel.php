@@ -14,7 +14,8 @@ class EntityModel extends Model
         $this->table = _ENTITY::table();
         $this->primaryKey = _ENTITY::ID->column();
         $this->fillable = [
-            _ENTITY::DOMAIN_ID->column()
+            _ENTITY::DOMAIN_ID->column(),
+            _ENTITY::ATTR_SET_ID->column()
         ];
         $this->timestamps = false;
         parent::__construct($attributes);
@@ -29,5 +30,16 @@ class EntityModel extends Model
     {
         $this->{_ENTITY::DOMAIN_ID->column()} = $key;
         return $this;
+    }
+
+    public function setAttrSetKey(int $key) : self
+    {
+        $this->{_ENTITY::ATTR_SET_ID->column()} = $key;
+        return $this;
+    }
+
+    public function getAttrSetKey()
+    {
+        return $this->{_ENTITY::ATTR_SET_ID->column()};
     }
 }

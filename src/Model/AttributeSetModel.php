@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Kuperwood\Eav\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Kuperwood\Eav\Enum\_PIVOT;
 use Kuperwood\Eav\Enum\_SET;
 
 class AttributeSetModel extends Model
@@ -41,5 +43,15 @@ class AttributeSetModel extends Model
     {
         $this->{_SET::NAME->column()} = $name;
         return $this;
+    }
+
+    public function attributes(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            AttributeModel::class,
+            _PIVOT::table(),
+            _PIVOT::SET_ID->column(),
+            _PIVOT::ATTR_ID->column()
+        );
     }
 }

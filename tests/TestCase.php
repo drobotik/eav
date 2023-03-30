@@ -3,10 +3,11 @@ namespace Tests;
 
 use Faker\Generator;
 use Illuminate\Database\Capsule\Manager as Capsule;
-use Kuperwood\Dev\Factory;
+use Kuperwood\Dev\EavFactory;
 
 class TestCase extends \PHPUnit\Framework\TestCase
 {
+    protected EavFactory $eavFactory;
     protected Generator $faker;
     protected function setUp() : void
     {
@@ -22,7 +23,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
         $this->capsule = $capsule;
         $capsule->setAsGlobal();
         $capsule->bootEloquent();
-        $this->factory = new Factory();
+        $this->eavFactory = new EavFactory();
         $this->faker = \Faker\Factory::create();
     }
 

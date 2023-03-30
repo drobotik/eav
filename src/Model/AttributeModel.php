@@ -71,7 +71,7 @@ class AttributeModel extends Model
         return $this->{_ATTR::DESCRIPTION->column()};
     }
 
-    public function setDescription(string $description) : self
+    public function setDescription(?string $description) : self
     {
         $this->{_ATTR::DESCRIPTION->column()} = $description;
         return $this;
@@ -93,7 +93,7 @@ class AttributeModel extends Model
         return $this->{_ATTR::SOURCE->column()};
     }
 
-    public function setSource(string $source) : self
+    public function setSource(?string $source) : self
     {
         $this->{_ATTR::SOURCE->column()} = $source;
         return $this;

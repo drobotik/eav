@@ -41,11 +41,11 @@ class Strategy implements StrategyInterface
         $model->setDomainKey($entity->getDomainKey())
             ->setEntityKey($entity->getKey())
             ->setAttrKey($attribute->getKey())
-            ->setVal($valueManager->getRuntime())
+            ->setValue($valueManager->getRuntime())
             ->save();
 
         $model->refresh();
-        $valueManager->setStored($model->getVal())
+        $valueManager->setStored($model->getValue())
             ->setKey($model->getKey())
             ->clearRuntime();
 

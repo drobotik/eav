@@ -19,8 +19,20 @@ class AttributeBagTest extends TestCase
     }
 
     /** @test */
-    public function fields() {
+    public function get_fields() {
         $bag = new AttributeBag();
         $this->assertSame(_ATTR::bag(), $bag->getFields());
+    }
+
+    /** @test */
+    public function set_fields() {
+        $bag = new AttributeBag();
+        $input = [
+            _ATTR::ID->column() => 123,
+            _ATTR::STRATEGY->column() => 'test',
+        ];
+        $result = $bag->setFields($input);
+        $this->assertSame($bag, $result);
+        $this->assertEquals($input, $bag->getFields());
     }
 }

@@ -30,7 +30,9 @@ class ModelsTest extends TestCase
     public function entity() {
         $model = new EntityModel();
         $model->setDomainKey(123);
+        $model->setAttrSetKey(456);
         $this->assertEquals(123, $model->getDomainKey());
+        $this->assertEquals(456, $model->getAttrSetKey());
     }
 
     /** @test */
@@ -79,7 +81,7 @@ class ModelsTest extends TestCase
             ->setAttrKey(101);
         $this->assertEquals(123, $model->getDomainKey());
         $this->assertEquals(456, $model->getAttrSetKey());
-        $this->assertEquals(789, $model->getAttrGroupKey());
+        $this->assertEquals(789, $model->getGroupKey());
         $this->assertEquals(101, $model->getAttrKey());
     }
 
@@ -89,11 +91,11 @@ class ModelsTest extends TestCase
         $model->setDomainKey(123)
             ->setEntityKey(456)
             ->setAttrKey(789)
-            ->setVal("test");
+            ->setValue("test");
         $this->assertEquals(123, $model->getDomainKey());
         $this->assertEquals(456, $model->getEntityKey());
         $this->assertEquals(789, $model->getAttrKey());
-        $this->assertEquals("test", $model->getVal());
+        $this->assertEquals("test", $model->getValue());
     }
 
     /** @test */

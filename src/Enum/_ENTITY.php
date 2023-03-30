@@ -5,8 +5,9 @@ use Kuperwood\Eav\Interface\DefineTableInterface;
 
 enum _ENTITY implements DefineTableInterface
 {
-    CASE ID;
-    CASE DOMAIN_ID;
+    case ID;
+    case DOMAIN_ID;
+    case ATTR_SET_ID;
 
     public static function table() : string
     {
@@ -18,6 +19,7 @@ enum _ENTITY implements DefineTableInterface
         return match ($this) {
             self::ID => 'entity_id',
             self::DOMAIN_ID => _DOMAIN::ID->column(),
+            self::ATTR_SET_ID => _SET::ID->column(),
         };
     }
 }

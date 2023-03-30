@@ -36,4 +36,10 @@ class AttributeBag
     {
         return $this->data;
     }
+
+    public function setFields(array $fields) : self
+    {
+        $this->data = $fields;
+        return $this;
+    }
 }

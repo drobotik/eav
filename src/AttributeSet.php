@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Kuperwood\Eav;
 
+use Kuperwood\Eav\Enum\_SET;
 use Kuperwood\Eav\Exception\AttributeSetException;
+use Kuperwood\Eav\Model\AttributeModel;
+use Kuperwood\Eav\Model\AttributeSetModel;
 use Kuperwood\Eav\Trait\EavContainerTrait;
 
 class AttributeSet
@@ -67,6 +70,19 @@ class AttributeSet
     public function reset() : self
     {
         $this->attributes = [];
+        return $this;
+    }
+
+    public function fetch() : self
+    {
+        $set = AttributeSetModel::where(_SET::ID->column(), "=", $this->getKey())->firstOrFail();
+        $attributes = $set->attributes()->get();
+        /** @var AttributeModel $attr */
+        foreach ($attributes as $attr) {
+            $instance = new Attribute();
+            $instance->getBag()->setFields($attr->makeHidden('pivot')->toArray());
+            $this->push($instance);
+        }
         return $this;
     }
 }

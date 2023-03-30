@@ -54,12 +54,12 @@ class ValueBase extends Model
         return $this;
     }
 
-    public function getVal()
+    public function getValue()
     {
         return $this->{_VALUE::VALUE->column()};
     }
 
-    public function setVal($value) : self
+    public function setValue($value) : self
     {
         $this->{_VALUE::VALUE->column()} = $value;
         return $this;

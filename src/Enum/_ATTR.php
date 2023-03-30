@@ -6,8 +6,8 @@ use Kuperwood\Eav\Strategy;
 
 enum _ATTR implements DefineTableInterface
 {
-    CASE ID;
-    CASE DOMAIN_ID;
+    case ID;
+    case DOMAIN_ID;
     case NAME;
     case TYPE;
     case STRATEGY;

@@ -90,7 +90,7 @@ class StrategyTest extends TestCase
         $record->setDomainKey(1)
             ->setEntityKey(2)
             ->setAttrKey(3)
-            ->setVal('old');
+            ->setValue('old');
         $record->save();
         $record->refresh();
 
@@ -137,7 +137,7 @@ class StrategyTest extends TestCase
         $record->setDomainKey(1)
             ->setEntityKey(2)
             ->setAttrKey(3)
-            ->setVal('old')
+            ->setValue('old')
             ->save();
         $value = new ValueManager();
         $value->setKey($record->getKey());
@@ -181,7 +181,7 @@ class StrategyTest extends TestCase
         $record->setDomainKey(1)
             ->setEntityKey(2)
             ->setAttrKey(3)
-            ->setVal('test')
+            ->setValue('test')
             ->save();
         $valueManager = new ValueManager();
         $valueManager->setKey($record->getKey());

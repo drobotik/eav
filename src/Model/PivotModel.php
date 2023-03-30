@@ -45,7 +45,7 @@ class PivotModel extends Model
         return $this;
     }
 
-    public function getAttrGroupKey()
+    public function getGroupKey()
     {
         return $this->{_PIVOT::GROUP_ID->column()};
     }

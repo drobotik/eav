@@ -5,9 +5,9 @@ use Kuperwood\Eav\Interface\DefineTableInterface;
 
 enum _SET implements DefineTableInterface
 {
-    CASE ID;
-    CASE DOMAIN_ID;
-    CASE NAME;
+    case ID;
+    case DOMAIN_ID;
+    case NAME;
 
     public static function table() : string
     {
