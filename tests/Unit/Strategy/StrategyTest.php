@@ -5,9 +5,9 @@ namespace Tests\Unit\Strategy;
 use Illuminate\Support\MessageBag;
 use Illuminate\Validation\Validator;
 use Kuperwood\Eav\Attribute;
+use Kuperwood\Eav\AttributeContainer;
 use Kuperwood\Eav\AttributeSet;
 use Kuperwood\Eav\Entity;
-use Kuperwood\Eav\EavContainer;
 use Kuperwood\Eav\Enum\_RESULT;
 use Kuperwood\Eav\Enum\_VALUE;
 use Kuperwood\Eav\Enum\ATTR_TYPE;
@@ -37,16 +37,16 @@ class StrategyTest extends TestCase
         $entity->setKey($entityKey);
         $entity->setDomainKey($domainKey);
         $attrSet = new AttributeSet();
+        $attrSet->setEntity($entity);
         $attribute = new Attribute();
         $attribute->setKey($attrKey);
         $valueManager = new ValueManager();
         $valueManager->setRuntime($valueToSave);
-        $container = new EavContainer();
-        $container->setEntity($entity)
-            ->setAttributeSet($attrSet)
+        $container = new AttributeContainer();
+        $container->setAttributeSet($attrSet)
             ->setAttribute($attribute)
             ->setValueManager($valueManager);
-        $this->strategy->setEavContainer($container);
+        $this->strategy->setAttributeContainer($container);
         $result = $this->strategy->createValue();
 
         $this->assertEquals(1, ValueStringModel::query()->count());
@@ -56,7 +56,7 @@ class StrategyTest extends TestCase
         $this->assertEquals($domainKey, $record->getDomainKey());
         $this->assertEquals($entityKey, $record->getEntityKey());
         $this->assertEquals($attrKey, $record->getAttrKey());
-        $this->assertEquals($valueToSave, $record->getVal());
+        $this->assertEquals($valueToSave, $record->getValue());
 
         $this->assertNull($valueManager->getRuntime());
         $this->assertEquals($valueToSave, $valueManager->getStored());
@@ -69,9 +69,12 @@ class StrategyTest extends TestCase
 
     /** @test */
     public function create_value_no_runtime() {
-        $container = new EavContainer();
-        $container->makeEntity()
-            ->makeAttributeSet()
+        $entity = new Entity();
+        $attrSet = new AttributeSet();
+        $attrSet->setEntity($entity);
+        $container = new AttributeContainer();
+        $container
+            ->setAttributeSet($attrSet)
             ->makeAttribute()
             ->makeValueManager()
             ->setStrategy($this->strategy);
@@ -98,14 +101,14 @@ class StrategyTest extends TestCase
         $valueManager->setKey($valueKey);
         $valueManager->setRuntime($valueToSave);
 
-        $container = new EavContainer();
+        $container = new AttributeContainer();
         $container->makeAttribute()
             ->setValueManager($valueManager);
-        $this->strategy->setEavContainer($container);
+        $this->strategy->setAttributeContainer($container);
         $result = $this->strategy->updateValue();
 
         $record = ValueStringModel::query()->first();
-        $this->assertEquals($valueToSave, $record->getVal());
+        $this->assertEquals($valueToSave, $record->getValue());
 
         $this->assertNull($valueManager->getRuntime());
         $this->assertEquals($valueToSave, $valueManager->getStored());
@@ -118,13 +121,13 @@ class StrategyTest extends TestCase
 
     /** @test */
     public function update_value_no_runtime() {
-        $container = new EavContainer();
+        $container = new AttributeContainer();
         $valueManager = new ValueManager();
         $valueManager->setKey(1);
         $container
             ->makeAttribute()
             ->setValueManager($valueManager);
-        $this->strategy->setEavContainer($container);
+        $this->strategy->setAttributeContainer($container);
         $result = $this->strategy->updateValue();
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::EMPTY->code(), $result->getCode());
@@ -141,12 +144,12 @@ class StrategyTest extends TestCase
             ->save();
         $value = new ValueManager();
         $value->setKey($record->getKey());
-        $value->setStored($record->getVal());
+        $value->setStored($record->getValue());
         $value->setRuntime('new');
-        $container = new EavContainer();
+        $container = new AttributeContainer();
         $container->makeAttribute()
             ->setValueManager($value);
-        $this->strategy->setEavContainer($container);
+        $this->strategy->setAttributeContainer($container);
 
         $result = $this->strategy->deleteValue();
 
@@ -165,10 +168,10 @@ class StrategyTest extends TestCase
     public function delete_value_no_key() {
         $valueManager = new ValueManager();
         $valueManager->setRuntime('new');
-        $container = new EavContainer();
+        $container = new AttributeContainer();
         $container->makeAttribute()
             ->setValueManager($valueManager);
-        $this->strategy->setEavContainer($container);
+        $this->strategy->setAttributeContainer($container);
         $result = $this->strategy->deleteValue();
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::EMPTY->code(), $result->getCode());
@@ -177,24 +180,36 @@ class StrategyTest extends TestCase
 
     /** @test */
     public function find_action() {
-        $record = new ValueStringModel();
-        $record->setDomainKey(1)
-            ->setEntityKey(2)
-            ->setAttrKey(3)
-            ->setValue('test')
-            ->save();
-        $valueManager = new ValueManager();
-        $valueManager->setKey($record->getKey());
-        $container = new EavContainer();
-        $container->makeAttribute()
-            ->setValueManager($valueManager);
+        $domainModel = $this->eavFactory->createDomain();
+        $entityModel = $this->eavFactory->createEntity($domainModel);
+        $setModel = $this->eavFactory->createAttributeSet($domainModel);
+        $groupModel = $this->eavFactory->createGroup($setModel);
+        $attributeModel = $this->eavFactory->createAttribute($domainModel);
+        $this->eavFactory->createPivot($domainModel, $setModel, $groupModel, $attributeModel);
+        $valueModel = $this->eavFactory->createValue(
+            ATTR_TYPE::STRING, $domainModel, $entityModel, $attributeModel, "test");
 
-        $this->strategy->setEavContainer($container);
+        $entity = new Entity();
+        $entity->setKey($entityModel->getKey());
+        $entity->setDomainKey($domainModel->getKey());
+        $attrSet = new AttributeSet();
+        $attrSet->setKey($setModel->getKey());
+        $attrSet->setEntity($entity);
+        $attribute = new Attribute();
+        $attribute->getBag()->setFields($attributeModel->toArray());
+        $valueManager = new ValueManager();
+        $container = new AttributeContainer();
+        $container
+            ->setAttributeSet($attrSet)
+            ->setAttribute($attribute)
+            ->setValueManager($valueManager);
+        $this->strategy->setAttributeContainer($container);
 
         $result = $this->strategy->findAction();
 
         $this->assertNull($valueManager->getRuntime());
         $this->assertEquals("test", $valueManager->getStored());
+        $this->assertEquals($valueModel->getKey(), $valueManager->getKey());
 
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::FOUND->code(), $result->getCode());
@@ -202,11 +217,17 @@ class StrategyTest extends TestCase
     }
 
     /** @test */
-    public function find_action_no_key() {
-        $container = new EavContainer();
-        $container->makeAttribute()
+    public function find_action_no_keys() {
+
+        $entity = new Entity();
+        $attrSet = new AttributeSet();
+        $attrSet->setEntity($entity);
+        $container = new AttributeContainer();
+        $container
+            ->setAttributeSet($attrSet)
+            ->makeAttribute()
             ->makeValueManager();
-        $this->strategy->setEavContainer($container);
+        $this->strategy->setAttributeContainer($container);
         $result = $this->strategy->findAction();
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::EMPTY->code(), $result->getCode());
@@ -214,14 +235,25 @@ class StrategyTest extends TestCase
     }
 
     /** @test */
-    public function find_action_no_record() {
+    public function find_action_not_found() {
+        $entity = new Entity();
+        $entity->setKey(1)
+            ->setDomainKey(2);
+        $attrSet = new AttributeSet();
+        $attrSet->setEntity($entity);
+        $attribute = new Attribute();
+        $attribute->setKey(3);
         $valueManager = new ValueManager();
-        $valueManager->setKey(123);
-        $container = new EavContainer();
-        $container->makeAttribute()
+        $container = new AttributeContainer();
+        $container
+            ->setAttributeSet($attrSet)
+            ->setAttribute($attribute)
             ->setValueManager($valueManager);
-        $this->strategy->setEavContainer($container);
+        $this->strategy->setAttributeContainer($container);
+
         $result = $this->strategy->findAction();
+
+        $this->assertNull($valueManager->getKey());
         $this->assertNull($valueManager->getRuntime());
         $this->assertNull($valueManager->getStored());
         $this->assertInstanceOf(Result::class, $result);
@@ -258,17 +290,17 @@ class StrategyTest extends TestCase
         $valueManager->expects($this->once())
             ->method('getKey')
             ->willReturn(1);
-        $container = $this->getMockBuilder(EavContainer::class)
+        $container = $this->getMockBuilder(AttributeContainer::class)
             ->onlyMethods(['getValueManager'])
             ->getMock();
         $container->expects($this->once())
             ->method('getValueManager')
             ->willReturn($valueManager);
         $strategy = $this->getMockBuilder(Strategy::class)
-            ->onlyMethods(['updateValue', 'getEavContainer'])
+            ->onlyMethods(['updateValue', 'getAttributeContainer'])
             ->getMock();
         $strategy->expects($this->once())
-            ->method('getEavContainer')
+            ->method('getAttributeContainer')
             ->willReturn($container);
         $strategy->expects($this->once())
             ->method('updateValue')
@@ -282,9 +314,9 @@ class StrategyTest extends TestCase
     /** @test */
     public function update_action_order() {
         $strategy = new StrategyFixture;
-        $container = new EavContainer();
+        $container = new AttributeContainer();
         $container->makeValueManager();
-        $strategy->setEavContainer($container);
+        $strategy->setAttributeContainer($container);
         $strategy->updateAction();
         $this->assertEquals(['beforeUpdate', 'createValue', 'afterUpdate'], $strategy->lifecycle);
     }
@@ -294,9 +326,9 @@ class StrategyTest extends TestCase
         $strategy = new StrategyFixture;
         $valueManager = new ValueManager();
         $valueManager->setKey(123);
-        $container = new EavContainer();
+        $container = new AttributeContainer();
         $container->setValueManager($valueManager);
-        $strategy->setEavContainer($container);
+        $strategy->setAttributeContainer($container);
         $strategy->updateAction();
         $this->assertEquals(['beforeUpdate', 'updateValue', 'afterUpdate'], $strategy->lifecycle);
     }
@@ -318,9 +350,9 @@ class StrategyTest extends TestCase
     /** @test */
     public function delete_action_order() {
         $strategy = new StrategyFixture;
-        $container = new EavContainer();
+        $container = new AttributeContainer();
         $container->makeValueManager();
-        $strategy->setEavContainer($container);
+        $strategy->setAttributeContainer($container);
         $strategy->deleteAction();
         $this->assertEquals(['beforeDelete', 'deleteValue', 'afterDelete'], $strategy->lifecycle);
     }
@@ -335,14 +367,18 @@ class StrategyTest extends TestCase
     /** @test */
     public function no_create() {
         $this->strategy->create = false;
+        $entity = new Entity();
+        $attrSet = new AttributeSet();
+        $attrSet->setEntity($entity);
+
         $valueManager = new ValueManager();
         $valueManager->setKey(123);
-        $container = new EavContainer();
-        $container->makeEntity()
-            ->makeAttributeSet()
+        $container = new AttributeContainer();
+        $container
+            ->setAttributeSet($attrSet)
             ->makeAttribute()
             ->setValueManager($valueManager);
-        $this->strategy->setEavContainer($container);
+        $this->strategy->setAttributeContainer($container);
         $result = $this->strategy->createValue();
         $this->assertFalse($valueManager->isRuntime());
         $this->assertInstanceOf(Result::class, $result);
@@ -360,14 +396,17 @@ class StrategyTest extends TestCase
     /** @test */
     public function no_update() {
         $this->strategy->update = false;
+        $entity = new Entity();
+        $attrSet = new AttributeSet();
+        $attrSet->setEntity($entity);
         $valueManager = new ValueManager();
         $valueManager->setKey(123);
-        $container = new EavContainer();
-        $container->makeEntity()
-            ->makeAttributeSet()
+        $container = new AttributeContainer();
+        $container
+            ->setAttributeSet($attrSet)
             ->makeAttribute()
             ->setValueManager($valueManager);
-        $this->strategy->setEavContainer($container);
+        $this->strategy->setAttributeContainer($container);
         $result = $this->strategy->updateValue();
         $this->assertFalse($valueManager->isRuntime());
         $this->assertInstanceOf(Result::class, $result);
@@ -384,19 +423,25 @@ class StrategyTest extends TestCase
         $entity->expects($this->once())
             ->method('getKey')
             ->willReturn(null);
-        $container = $this->getMockBuilder(EavContainer::class)
+        $attrSet = $this->getMockBuilder(AttributeSet::class)
             ->onlyMethods(['getEntity'])
             ->getMock();
-        $container->expects($this->once())
+        $attrSet->expects($this->once())
             ->method('getEntity')
             ->willReturn($entity);
+        $container = $this->getMockBuilder(AttributeContainer::class)
+            ->onlyMethods(['getAttributeSet'])
+            ->getMock();
+        $container->expects($this->once())
+            ->method('getAttributeSet')
+            ->willReturn($attrSet);
         $strategy = $this->getMockBuilder(Strategy::class)
             ->onlyMethods(['createAction'])
             ->getMock();
         $strategy->expects($this->once())
             ->method('createAction')
             ->willReturn((new Result())->created());
-        $strategy->setEavContainer($container);
+        $strategy->setAttributeContainer($container);
         $result = $strategy->saveAction();
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::CREATED->code(), $result->getCode());
@@ -412,19 +457,25 @@ class StrategyTest extends TestCase
         $entity->expects($this->once())
             ->method('getKey')
             ->willReturn(1);
-        $container = $this->getMockBuilder(EavContainer::class)
+        $attrSet = $this->getMockBuilder(AttributeSet::class)
             ->onlyMethods(['getEntity'])
             ->getMock();
-        $container->expects($this->once())
+        $attrSet->expects($this->once())
             ->method('getEntity')
             ->willReturn($entity);
+        $container = $this->getMockBuilder(AttributeContainer::class)
+            ->onlyMethods(['getAttributeSet'])
+            ->getMock();
+        $container->expects($this->once())
+            ->method('getAttributeSet')
+            ->willReturn($attrSet);
         $strategy = $this->getMockBuilder(Strategy::class)
             ->onlyMethods(['updateAction'])
             ->getMock();
         $strategy->expects($this->once())
             ->method('updateAction')
             ->willReturn((new Result())->updated());
-        $strategy->setEavContainer($container);
+        $strategy->setAttributeContainer($container);
         $result = $strategy->saveAction();
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::UPDATED->code(), $result->getCode());
@@ -435,9 +486,9 @@ class StrategyTest extends TestCase
     public function default_value_rule() {
         $attribute = new Attribute();
         $attribute->setType(ATTR_TYPE::INTEGER->value());
-        $container = new EavContainer();
+        $container = new AttributeContainer();
         $container->setAttribute($attribute);
-        $this->strategy->setEavContainer($container);
+        $this->strategy->setAttributeContainer($container);
         $this->assertEquals(
             ATTR_TYPE::INTEGER->validationRule(),
             $this->strategy->getDefaultValueRule()
@@ -453,9 +504,9 @@ class StrategyTest extends TestCase
     public function validation_rules() {
         $attribute = new Attribute();
         $attribute->setType(ATTR_TYPE::INTEGER->value());
-        $container = new EavContainer();
+        $container = new AttributeContainer();
         $container->setAttribute($attribute);
-        $this->strategy->setEavContainer($container);
+        $this->strategy->setAttributeContainer($container);
         $this->assertEquals(
             [
                 _VALUE::ENTITY_ID->column() => ['required', 'integer'],
@@ -471,7 +522,7 @@ class StrategyTest extends TestCase
     public function validation_rules_with_custom_rule() {
         $attribute = new Attribute();
         $attribute->setType(ATTR_TYPE::INTEGER->value());
-        $container = new EavContainer();
+        $container = new AttributeContainer();
         $container->setAttribute($attribute);
         $strategy = $this->getMockBuilder(Strategy::class)
             ->onlyMethods(['rules'])
@@ -479,8 +530,7 @@ class StrategyTest extends TestCase
         $strategy->expects($this->once())
             ->method('rules')
             ->willReturn(['new_rule']);
-        $strategy->setEavContainer($container);
-        $strategy->setEavContainer($container);
+        $strategy->setAttributeContainer($container);
         $result = $strategy->getRules();
         $this->assertEquals(['new_rule'], $result[_VALUE::VALUE->column()]);
     }
@@ -492,16 +542,17 @@ class StrategyTest extends TestCase
         $entity->setKey(3);
         $attrSet = new AttributeSet();
         $attrSet->setKey(2);
+        $attrSet->setEntity($entity);
         $attribute = new Attribute();
         $attribute->setKey(1);
         $valueManager = new ValueManager();
         $valueManager->setRuntime('test');
-        $container = new EavContainer();
-        $container->setEntity($entity)
+        $container = new AttributeContainer();
+        $container
             ->setAttributeSet($attrSet)
             ->setAttribute($attribute)
             ->setValueManager($valueManager);
-        $this->strategy->setEavContainer($container);
+        $this->strategy->setAttributeContainer($container);
         $this->assertEquals(
             [
                 _VALUE::ENTITY_ID->column() => $entity->getKey(),
@@ -520,17 +571,18 @@ class StrategyTest extends TestCase
         $entity->setKey(3);
         $attrSet = new AttributeSet();
         $attrSet->setKey(2);
+        $attrSet->setEntity($entity);
         $attribute = new Attribute();
         $attribute->setKey(1);
         $attribute->setType(ATTR_TYPE::STRING->value());
         $valueManager = new ValueManager();
         $valueManager->setRuntime('test');
-        $container = new EavContainer();
-        $container->setEntity($entity)
+        $container = new AttributeContainer();
+        $container
             ->setAttributeSet($attrSet)
             ->setAttribute($attribute)
             ->setValueManager($valueManager);
-        $this->strategy->setEavContainer($container);
+        $this->strategy->setAttributeContainer($container);
         $validator = $this->strategy->getValidator();
         $this->assertEquals($this->strategy->getRules(), $validator->getRules());
         $this->assertEquals($this->strategy->getValidatedData(), $validator->getData());
@@ -562,23 +614,24 @@ class StrategyTest extends TestCase
             ->method('getValidator')
             ->willReturn($validator);
 
-        $container = new EavContainer();
+        $container = new AttributeContainer();
         $entity = new Entity();
         $entity->setDomainKey(4);
         $entity->setKey(3);
         $attrSet = new AttributeSet();
         $attrSet->setKey(2);
+        $attrSet->setEntity($entity);
         $attribute = new Attribute();
         $attribute->setKey(1);
         $attribute->setType(ATTR_TYPE::STRING->value());
         $valueManager = new ValueManager();
         $valueManager->setRuntime('test');
-        $container->setEntity($entity)
+        $container
             ->setAttributeSet($attrSet)
             ->setAttribute($attribute)
             ->setValueManager($valueManager);
 
-        $strategy->setEavContainer($container);
+        $strategy->setAttributeContainer($container);
         $result = $strategy->validateAction();
 
         $this->assertInstanceOf(Result::class, $result);
@@ -603,23 +656,24 @@ class StrategyTest extends TestCase
             ->method('getValidator')
             ->willReturn($validator);
 
-        $container = new EavContainer();
+        $container = new AttributeContainer();
         $entity = new Entity();
         $entity->setDomainKey(4);
         $entity->setKey(3);
         $attrSet = new AttributeSet();
         $attrSet->setKey(2);
+        $attrSet->setEntity($entity);
         $attribute = new Attribute();
         $attribute->setKey(1);
         $attribute->setType(ATTR_TYPE::STRING->value());
         $valueManager = new ValueManager();
         $valueManager->setRuntime('test');
-        $container->setEntity($entity)
+        $container
             ->setAttributeSet($attrSet)
             ->setAttribute($attribute)
             ->setValueManager($valueManager);
 
-        $strategy->setEavContainer($container);
+        $strategy->setAttributeContainer($container);
         $result = $strategy->validateAction();
 
         $this->assertInstanceOf(Result::class, $result);

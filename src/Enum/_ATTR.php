@@ -43,7 +43,7 @@ enum _ATTR implements DefineTableInterface
             self::SOURCE,
             self::DEFAULT_VALUE,
             self::DESCRIPTION=> null,
-            self::TYPE => ATTR_TYPE::STRING,
+            self::TYPE => ATTR_TYPE::STRING->value(),
             self::STRATEGY => Strategy::class
         };
     }

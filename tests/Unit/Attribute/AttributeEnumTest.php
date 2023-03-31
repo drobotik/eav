@@ -21,7 +21,7 @@ class AttributeEnumTest extends TestCase
             _ATTR::DOMAIN_ID->column() => null,
             _ATTR::SOURCE->column() => null,
             _ATTR::DEFAULT_VALUE->column() => null,
-            _ATTR::TYPE->column() => ATTR_TYPE::STRING,
+            _ATTR::TYPE->column() => ATTR_TYPE::STRING->value(),
             _ATTR::STRATEGY->column() => Strategy::class,
             _ATTR::DESCRIPTION->column() => null,
         ], $cases);

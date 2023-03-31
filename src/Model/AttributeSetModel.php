@@ -54,4 +54,11 @@ class AttributeSetModel extends Model
             _PIVOT::ATTR_ID->column()
         );
     }
+
+    public function firstOrFail(int $key) : AttributeSetModel
+    {
+        return $this
+            ->where(_SET::ID->column(), "=", $key)
+            ->firstOrFail();
+    }
 }

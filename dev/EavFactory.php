@@ -3,7 +3,6 @@
 namespace Kuperwood\Dev;
 
 use Faker\Generator;
-use Kuperwood\Eav\AttributeSet;
 use Kuperwood\Eav\Enum\_ATTR;
 use Kuperwood\Eav\Enum\_DOMAIN;
 use Kuperwood\Eav\Enum\_GROUP;
@@ -98,7 +97,7 @@ class EavFactory
         $defaultData = [
             _ATTR::DOMAIN_ID->column() => $domain->getKey(),
             _ATTR::NAME->column()      => $this->faker->slug(2),
-            _ATTR::TYPE->column()   => _ATTR::TYPE->default()->value(),
+            _ATTR::TYPE->column()   => _ATTR::TYPE->default(),
             _ATTR::STRATEGY->column() => _ATTR::STRATEGY->default(),
             _ATTR::SOURCE->column() => _ATTR::SOURCE->default(),
             _ATTR::DEFAULT_VALUE->column() => _ATTR::DEFAULT_VALUE->default(),

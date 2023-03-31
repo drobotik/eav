@@ -3,41 +3,23 @@
 namespace Tests\Unit\Attribute;
 
 use Kuperwood\Eav\Attribute;
-use Kuperwood\Eav\EavContainer;
+use Kuperwood\Eav\AttributeContainer;
 use Kuperwood\Eav\AttributeSet;
-use Kuperwood\Eav\Domain;
 use Kuperwood\Eav\Entity;
+use Kuperwood\Eav\Enum\ATTR_TYPE;
 use Kuperwood\Eav\Strategy;
 use Kuperwood\Eav\ValueManager;
-
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class AttributeContainerTest extends TestCase
 {
-    private EavContainer $container;
+    private AttributeContainer $container;
+
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->container = new EavContainer();
-    }
-
-    /** @test */
-    public function domain() {
-        $domain = new Domain();
-        $result = $this->container->setDomain($domain);
-        $this->assertSame($result, $this->container);
-        $this->assertSame($domain, $this->container->getDomain());
-        $this->assertSame($this->container, $this->container->getDomain()->getEavContainer());
-    }
-
-    /** @test */
-    public function entity() {
-        $entity = new Entity();
-        $result = $this->container->setEntity($entity);
-        $this->assertSame($result, $this->container);
-        $this->assertSame($entity, $this->container->getEntity());
-        $this->assertSame($this->container, $this->container->getEntity()->getEavContainer());
+        $this->container = new AttributeContainer();
     }
 
     /** @test */
@@ -45,8 +27,8 @@ class AttributeContainerTest extends TestCase
         $attributeSet = new AttributeSet();
         $result = $this->container->setAttributeSet($attributeSet);
         $this->assertSame($result, $this->container);
-        $this->assertSame($attributeSet, $this->container->getAttributeSet());
-        $this->assertSame($this->container, $this->container->getAttributeSet()->getEavContainer());
+        $this->assertSame($attributeSet , $this->container->getAttributeSet());
+        $this->assertSame($this->container, $this->container->getAttributeSet()->getAttributeContainer());
     }
 
     /** @test */
@@ -55,7 +37,7 @@ class AttributeContainerTest extends TestCase
         $result = $this->container->setAttribute($attribute);
         $this->assertSame($result, $this->container);
         $this->assertSame($attribute, $this->container->getAttribute());
-        $this->assertSame($this->container, $this->container->getAttribute()->getEavContainer());
+        $this->assertSame($this->container, $this->container->getAttribute()->getAttributeContainer());
     }
 
     /** @test */
@@ -64,7 +46,7 @@ class AttributeContainerTest extends TestCase
         $result = $this->container->setStrategy($strategy);
         $this->assertSame($result, $this->container);
         $this->assertSame($strategy, $this->container->getStrategy());
-        $this->assertSame($this->container, $this->container->getStrategy()->getEavContainer());
+        $this->assertSame($this->container, $this->container->getStrategy()->getAttributeContainer());
     }
 
     /** @test */
@@ -73,63 +55,35 @@ class AttributeContainerTest extends TestCase
         $result = $this->container->setValueManager($valueManager);
         $this->assertSame($result, $this->container);
         $this->assertSame($valueManager, $this->container->getValueManager());
-        $this->assertSame($this->container, $this->container->getValueManager()->getEavContainer());
-    }
-
-    /** @test */
-    public function makeDomain() {
-        $instance = $this->container->make(Domain::class);
-        $this->assertSame($this->container, $instance->getEavContainer());
-        $this->assertInstanceOf(Domain::class, $instance);
-    }
-
-    /** @test */
-    public function makeEntity() {
-        $instance = $this->container->make(Entity::class);
-        $this->assertSame($this->container, $instance->getEavContainer());
-        $this->assertInstanceOf(Entity::class, $instance);
+        $this->assertSame($this->container, $this->container->getValueManager()->getAttributeContainer());
     }
 
     /** @test */
     public function makeAttributeSet() {
         $instance = $this->container->make(AttributeSet::class);
-        $this->assertSame($this->container, $instance->getEavContainer());
+        $this->assertSame($this->container, $instance->getAttributeContainer());
         $this->assertInstanceOf(AttributeSet::class, $instance);
     }
 
     /** @test */
     public function makeAttribute() {
         $instance = $this->container->make(Attribute::class);
-        $this->assertSame($this->container, $instance->getEavContainer());
+        $this->assertSame($this->container, $instance->getAttributeContainer());
         $this->assertInstanceOf(Attribute::class, $instance);
     }
 
     /** @test */
     public function makeStrategy() {
         $instance = $this->container->make(Strategy::class);
-        $this->assertSame($this->container, $instance->getEavContainer());
+        $this->assertSame($this->container, $instance->getAttributeContainer());
         $this->assertInstanceOf(Strategy::class, $instance);
     }
 
     /** @test */
     public function makeValueManager() {
         $instance = $this->container->make(ValueManager::class);
-        $this->assertSame($this->container, $instance->getEavContainer());
+        $this->assertSame($this->container, $instance->getAttributeContainer());
         $this->assertInstanceOf(ValueManager::class, $instance);
-    }
-
-    /** @test */
-    public function makeDomainAlias() {
-        $result = $this->container->makeDomain();
-        $this->assertSame($result, $this->container);
-        $this->assertInstanceOf(Domain::class, $this->container->getDomain());
-    }
-
-    /** @test */
-    public function makeEntityAlias() {
-        $result = $this->container->makeEntity();
-        $this->assertSame($result, $this->container);
-        $this->assertInstanceOf(Entity::class, $this->container->getEntity());
     }
 
     /** @test */
@@ -158,5 +112,36 @@ class AttributeContainerTest extends TestCase
         $result = $this->container->makeValueManager();
         $this->assertSame($result, $this->container);
         $this->assertInstanceOf(ValueManager::class, $this->container->getValueManager());
+    }
+
+    /** @test */
+    public function initialize() {
+        $domainModel = $this->eavFactory->createDomain();
+        $entityModel = $this->eavFactory->createEntity($domainModel);
+        $setModel = $this->eavFactory->createAttributeSet($domainModel);
+        $groupModel = $this->eavFactory->createGroup($setModel);
+        $attributeModel = $this->eavFactory->createAttribute($domainModel);
+        $this->eavFactory->createPivot($domainModel, $setModel, $groupModel, $attributeModel);
+        $valueModel = $this->eavFactory->createValue(
+            ATTR_TYPE::STRING, $domainModel, $entityModel, $attributeModel, "test");
+
+        $entity = new Entity();
+        $entity->setKey($entityModel->getKey());
+        $entity->setDomainKey($domainModel->getKey());
+        $attrSet = new AttributeSet();
+        $attrSet->setEntity($entity);
+
+        $this->container
+            ->setAttributeSet($attrSet)
+            ->initialize($attributeModel);
+
+        // attribute
+        $attribute = $this->container->getAttribute();
+        $this->assertInstanceOf(Attribute::class, $attribute);
+        $this->assertEquals($attributeModel->toArray(), $attribute->getBag()->getFields());
+        // value
+        $valueManager = $this->container->getValueManager();
+        $this->assertEquals($valueModel->getKey(), $valueManager->getKey());
+        $this->assertEquals($valueModel->getValue(), $valueManager->getStored());
     }
 }

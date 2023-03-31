@@ -9,11 +9,11 @@ use Kuperwood\Eav\Enum\_RESULT;
 use Kuperwood\Eav\Enum\_VALUE;
 use Kuperwood\Eav\Interface\StrategyInterface;
 use Kuperwood\Eav\Result\Result;
-use Kuperwood\Eav\Trait\EavContainerTrait;
+use Kuperwood\Eav\Trait\ContainerTrait;
 
 class Strategy implements StrategyInterface
 {
-    use EavContainerTrait;
+    use ContainerTrait;
     public bool $create = true;
     public bool $update = true;
     private Attribute    $attribute;
@@ -23,9 +23,9 @@ class Strategy implements StrategyInterface
     {
         $result = new Result();
 
-        $container = $this->getEavContainer();
+        $container = $this->getAttributeContainer();
         $attribute = $container->getAttribute();
-        $entity = $container->getEntity();
+        $entity = $container->getAttributeSet()->getEntity();
         $valueManager = $container->getValueManager();
         $model = $attribute->getValueModel();
 
@@ -62,7 +62,7 @@ class Strategy implements StrategyInterface
 
     public function updateAction() : Result
     {
-        $container = $this->getEavContainer();
+        $container = $this->getAttributeContainer();
         $valueManager = $container->getValueManager();
         $this->beforeUpdate();
 
@@ -85,7 +85,7 @@ class Strategy implements StrategyInterface
     public function updateValue() : Result
     {
         $result = new Result();
-        $container = $this->getEavContainer();
+        $container = $this->getAttributeContainer();
         $attribute = $container->getAttribute();
         $valueManager = $container->getValueManager();
         $model = $attribute->getValueModel();
@@ -100,10 +100,10 @@ class Strategy implements StrategyInterface
         }
 
         $record = $model->findOrFail($valueManager->getKey());
-        $record->setVal($valueManager->getRuntime())
+        $record->setValue($valueManager->getRuntime())
             ->save();
         $record->refresh();
-        $valueManager->setStored($record->getVal())
+        $valueManager->setStored($record->getValue())
             ->clearRuntime();
 
         return $result->updated();
@@ -114,24 +114,32 @@ class Strategy implements StrategyInterface
     public function findAction(): Result
     {
         $result = new Result();
-        $container = $this->getEavContainer();
+        $container = $this->getAttributeContainer();
         $attribute = $container->getAttribute();
+        $attributeKey = $attribute->getKey();
+        $entity = $container->getAttributeSet()->getEntity();
+        $entityKey = $entity->getKey();
+        $domainKey = $entity->getDomainKey();
         $valueManager = $container->getValueManager();
         $model = $attribute->getValueModel();
-        $key = $valueManager->getKey();
 
-
-        if(is_null($key)) {
+        if(is_null($attributeKey) || is_null($entityKey) || is_null($domainKey)) {
             return $result->empty();
         }
 
-        $record = $model->whereKey($key)->first();
+        $record = $model
+            ->where(_VALUE::ENTITY_ID->column(), $entityKey)
+            ->where(_VALUE::DOMAIN_ID->column(), $domainKey)
+            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributeKey)
+            ->first();
 
         if(is_null($record)) {
             return $result->notFound();
         }
 
-        $valueManager->setStored($record->getVal())
+        $valueManager
+            ->setKey($record->getKey())
+            ->setStored($record->getValue())
             ->clearRuntime();
 
         return $result->found();
@@ -139,7 +147,7 @@ class Strategy implements StrategyInterface
 
     public function saveAction(): Result
     {
-        $entity = $this->getEavContainer()->getEntity();
+        $entity = $this->getAttributeContainer()->getAttributeSet()->getEntity();
         return $entity->getKey()
             ? $this->updateAction()
             : $this->createAction();
@@ -148,7 +156,7 @@ class Strategy implements StrategyInterface
     public function deleteValue(): Result
     {
         $result = new Result();
-        $container = $this->getEavContainer();
+        $container = $this->getAttributeContainer();
         $attribute = $container->getAttribute();
         $valueManager = $container->getValueManager();
         $model = $attribute->getValueModel();
@@ -203,7 +211,7 @@ class Strategy implements StrategyInterface
     }
 
     public function getDefaultValueRule() {
-        return $this->getEavContainer()
+        return $this->getAttributeContainer()
             ->getAttribute()
             ->getType()
             ->validationRule();
@@ -223,9 +231,9 @@ class Strategy implements StrategyInterface
 
     public function getValidatedData() : array
     {
-        $container = $this->getEavContainer();
+        $container = $this->getAttributeContainer();
         $attribute = $container->getAttribute();
-        $entity = $container->getEntity();
+        $entity = $container->getAttributeSet()->getEntity();
         $valueManager = $container->getValueManager();
         return [
             _VALUE::ENTITY_ID->column() => $entity->getKey(),

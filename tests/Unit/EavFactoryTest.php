@@ -161,7 +161,7 @@ class EavFactoryTest extends TestCase
         $this->assertInstanceOf(AttributeModel::class, $result);
         $this->assertEquals(1, $result->getKey());
         $this->assertEquals(1, $result->getDomainKey());
-        $this->assertEquals(_ATTR::TYPE->default()->value(), $result->getType());
+        $this->assertEquals(_ATTR::TYPE->default(), $result->getType());
         $this->assertEquals(_ATTR::STRATEGY->default(), $result->getStrategy());
         $this->assertEquals(_ATTR::SOURCE->default(), $result->getSource());
         $this->assertEquals(_ATTR::DEFAULT_VALUE->default(), $result->getDefaultValue());

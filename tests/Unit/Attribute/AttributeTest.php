@@ -4,14 +4,11 @@ namespace Tests\Unit\Attribute;
 
 use Kuperwood\Eav\Attribute;
 use Kuperwood\Eav\AttributeBag;
-use Kuperwood\Eav\AttributeSet;
-use Kuperwood\Eav\Enum\_ATTR;
 use Kuperwood\Eav\Enum\ATTR_TYPE;
 use Kuperwood\Eav\Exception\AttributeException;
 use Kuperwood\Eav\Model\ValueDecimalModel;
 use Kuperwood\Eav\Model\ValueStringModel;
-use Kuperwood\Eav\Source;
-use Kuperwood\Eav\Strategy;
+
 use PHPUnit\Framework\TestCase;
 
 class AttributeTest extends TestCase
@@ -34,83 +31,65 @@ class AttributeTest extends TestCase
     }
 
     /** @test */
-    public function source() {
-        $source = new Source();
-        $this->attribute->setSource($source);
-        $this->assertSame($source, $this->attribute->getSource());
-    }
-
-    /** @test */
-    public function get_key() {
-        $bag = new AttributeBag();
-        $bag->setField(_ATTR::ID, 123);
-        $this->attribute->setBag($bag);
+    public function key() {
+        $this->attribute->setKey(123);
         $this->assertEquals(123, $this->attribute->getKey());
+        $this->attribute->setKey(null);
+        $this->assertNull($this->attribute->getKey());
     }
 
     /** @test */
-    public function get_name() {
-        $bag = new AttributeBag();
-        $bag->setField(_ATTR::NAME, 'test');
-        $this->attribute->setBag($bag);
+    public function domain_key() {
+        $this->attribute->setDomainKey(123);
+        $this->assertEquals(123, $this->attribute->getDomainKey());
+        $this->attribute->setDomainKey(null);
+        $this->assertNull($this->attribute->getDomainKey());
+    }
+
+    /** @test */
+    public function name() {
+        $this->attribute->setName('test');
         $this->assertEquals('test', $this->attribute->getName());
+        $this->attribute->setName(null);
+        $this->assertNull($this->attribute->getName());
     }
 
     /** @test */
     public function get_type() {
-        $bag = new AttributeBag();
-        $bag->setField(_ATTR::TYPE, ATTR_TYPE::STRING);
-        $this->attribute->setBag($bag);
-        $this->assertEquals(ATTR_TYPE::STRING, $this->attribute->getType());
-    }
-
-    /** @test */
-    public function set_type() {
         $this->attribute->setType(ATTR_TYPE::STRING->value());
         $this->assertEquals(ATTR_TYPE::STRING, $this->attribute->getType());
     }
 
     /** @test */
-    public function set_type_throws_unexpected_type() {
+    public function get_type_throws_unexpected_type() {
         $this->expectException(AttributeException::class);
         $this->expectExceptionMessage(sprintf(AttributeException::UNEXPECTED_TYPE, 'test'));
-        $this->attribute->setType('test');
+        $this->attribute->setType("test");
+        $this->attribute->getType();
     }
 
     /** @test */
-    public function get_domain_key() {
-        $bag = new AttributeBag();
-        $bag->setField(_ATTR::DOMAIN_ID, 123);
-        $this->attribute->setBag($bag);
-        $this->assertEquals(123, $this->attribute->getDomainKey());
+    public function strategy() {
+        $this->attribute->setStrategy('test');
+        $this->assertEquals('test', $this->attribute->getStrategy());
     }
 
     /** @test */
-    public function get_default_value() {
-        $bag = new AttributeBag();
-        $bag->setField(_ATTR::DEFAULT_VALUE, 'test');
-        $this->attribute->setBag($bag);
+    public function source() {
+        $this->attribute->setSource('test');
+        $this->assertEquals('test', $this->attribute->getSource());
+    }
+
+    /** @test */
+    public function default_value() {
+        $this->attribute->setDefaultValue('test');
         $this->assertEquals('test', $this->attribute->getDefaultValue());
     }
 
     /** @test */
     public function get_description() {
-        $bag = new AttributeBag();
-        $bag->setField(_ATTR::DESCRIPTION, 'test');
-        $this->attribute->setBag($bag);
+        $this->attribute->setDescription('test');
         $this->assertEquals('test', $this->attribute->getDescription());
-    }
-
-    /** @test */
-    public function set_key() {
-        $this->attribute->setKey(123);
-        $this->assertEquals(123, $this->attribute->getKey());
-    }
-
-    /** @test */
-    public function set_name() {
-        $this->attribute->setName('test');
-        $this->assertEquals('test', $this->attribute->getName());
     }
 
     /** @test */
@@ -119,5 +98,4 @@ class AttributeTest extends TestCase
         $this->attribute->setType(ATTR_TYPE::DECIMAL->value());
         $this->assertInstanceOf(ValueDecimalModel::class, $this->attribute->getValueModel());
     }
-
 }

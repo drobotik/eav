@@ -9,30 +9,35 @@ use PHPUnit\Framework\TestCase;
 
 class AttributeBagTest extends TestCase
 {
+    protected AttributeBag $bag;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->bag = new AttributeBag();
+    }
+
     /** @test */
     public function field() {
-        $bag = new AttributeBag();
-        $bag->setField(_ATTR::STRATEGY, 'test');
-        $this->assertEquals('test', $bag->getField(_ATTR::STRATEGY));
-        $bag->resetField(_ATTR::STRATEGY);
-        $this->assertEquals(Strategy::class, $bag->getField(_ATTR::STRATEGY));
+        $this->bag->setField(_ATTR::STRATEGY, 'test');
+        $this->assertEquals('test', $this->bag->getField(_ATTR::STRATEGY));
+        $this->bag->resetField(_ATTR::STRATEGY);
+        $this->assertEquals(Strategy::class, $this->bag->getField(_ATTR::STRATEGY));
     }
 
     /** @test */
     public function get_fields() {
-        $bag = new AttributeBag();
-        $this->assertSame(_ATTR::bag(), $bag->getFields());
+        $this->assertSame(_ATTR::bag(), $this->bag->getFields());
     }
 
     /** @test */
     public function set_fields() {
-        $bag = new AttributeBag();
         $input = [
             _ATTR::ID->column() => 123,
             _ATTR::STRATEGY->column() => 'test',
         ];
-        $result = $bag->setFields($input);
-        $this->assertSame($bag, $result);
-        $this->assertEquals($input, $bag->getFields());
+        $result = $this->bag->setFields($input);
+        $this->assertSame($this->bag, $result);
+        $this->assertEquals($input, $this->bag->getFields());
     }
 }

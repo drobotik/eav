@@ -9,16 +9,14 @@ use Kuperwood\Eav\Enum\ATTR_TYPE;
 use Kuperwood\Eav\Exception\AttributeException;
 use Kuperwood\Eav\Interface\StrategyInterface;
 use Kuperwood\Eav\Model\ValueBase;
-use Kuperwood\Eav\Trait\EavContainerTrait;
+use Kuperwood\Eav\Trait\ContainerTrait;
 
 class Attribute
 {
-    use EavContainerTrait;
+    use ContainerTrait;
     private AttributeBag $bag;
     private AttributeSet $attributeSet;
     private StrategyInterface $strategy;
-
-    private Source $source;
 
     public function __construct() {
         $this->setBag(new AttributeBag());
@@ -35,70 +33,98 @@ class Attribute
         return $this;
     }
 
-    public function getSource() : Source
-    {
-        return $this->source;
-    }
-
-    public function setSource(Source $source) : self
-    {
-        $this->source = $source;
-        return $this;
-    }
-
-    public function getKey() : int
+    public function getKey() : ?int
     {
         return $this->getBag()->getField(_ATTR::ID);
     }
 
-    public function setKey(int $key) : self
+    public function setKey(?int $key) : self
     {
         $this->getBag()->setField(_ATTR::ID, $key);
         return $this;
     }
 
-    public function getName() : string
+    public function getDomainKey() : ?int
+    {
+        return $this->getBag()->getField(_ATTR::DOMAIN_ID);
+    }
+
+    public function setDomainKey(?int $key) : self
+    {
+        $this->getBag()->setField(_ATTR::DOMAIN_ID, $key);
+        return $this;
+    }
+
+    public function getName() : ?string
     {
         return $this->getBag()->getField(_ATTR::NAME);
     }
 
-    public function setName(string $name) : self
+    public function setName(?string $name) : self
     {
         $this->getBag()->setField(_ATTR::NAME, $name);
         return $this;
     }
 
-    public function getType() : ATTR_TYPE
-    {
-        return $this->getBag()->getField(_ATTR::TYPE);
-    }
-
     /**
      * @throws AttributeException
      */
-    public function setType(string $type) : self
+    public function getType() : ATTR_TYPE
     {
+        $type =  $this->getBag()->getField(_ATTR::TYPE);
         if (!ATTR_TYPE::isValid($type)) {
             AttributeException::unexpectedType($type);
         }
-        $case = ATTR_TYPE::getCase($type);
-        $this->getBag()->setField(_ATTR::TYPE, $case);
+        return ATTR_TYPE::getCase($type);
+    }
+
+    public function setType(string $type) : self
+    {
+        $this->getBag()->setField(_ATTR::TYPE, $type);
         return $this;
     }
 
-    public function getDomainKey() : int
+    public function getStrategy() : string
     {
-        return $this->getBag()->getField(_ATTR::DOMAIN_ID);
+        return  $this->getBag()->getField(_ATTR::STRATEGY);
     }
 
-    public function getDefaultValue() : string
+    public function setStrategy(string $strategy) : self
+    {
+        $this->getBag()->setField(_ATTR::STRATEGY, $strategy);
+        return $this;
+    }
+
+    public function getSource() : ?string
+    {
+        return $this->getBag()->getField(_ATTR::SOURCE);
+    }
+
+    public function setSource(?string $source) : self
+    {
+        $this->getBag()->setField(_ATTR::SOURCE, $source);
+        return $this;
+    }
+
+    public function getDefaultValue() : ?string
     {
         return $this->getBag()->getField(_ATTR::DEFAULT_VALUE);
+    }
+    public function setDefaultValue($value) : self
+    {
+        $this->getBag()->setField(_ATTR::DEFAULT_VALUE, $value);
+        return $this;
     }
 
     public function getDescription() : string
     {
         return $this->getBag()->getField(_ATTR::DESCRIPTION);
+    }
+
+    public function setDescription($value) : self
+    {
+        $this->getBag()->setField(_ATTR::DESCRIPTION, $value);
+        return $this;
     }
 
     public function getValueModel() : ValueBase
