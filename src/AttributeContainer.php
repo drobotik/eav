@@ -163,7 +163,7 @@ class AttributeContainer
         $attribute = $this->initializeAttribute($attributeModel);
         $strategy = $this->initializeStrategy($attribute);
         $this->makeValueManager();
-        $strategy->findAction();
+        $strategy->find();
         return $this;
     }
 }

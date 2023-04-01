@@ -6,10 +6,9 @@ use Kuperwood\Eav\Result\Result;
 
 interface StrategyInterface
 {
-    public function rules(): ?array;
-    public function validateAction(): Result;
-    public function findAction() : Result;
-    public function saveAction() : Result;
-    public function deleteAction() : Result;
+    public function validate(): Result;
+    public function find() : Result;
+    public function save() : Result;
+    public function delete() : Result;
 
 }

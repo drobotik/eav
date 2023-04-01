@@ -215,10 +215,10 @@ class AttributeContainerTest extends TestCase
             ->with($attributeModel)
             ->willReturn($attribute);
         $strategy = $this->getMockBuilder(Strategy::class)
-            ->onlyMethods(['findAction'])
+            ->onlyMethods(['find'])
             ->getMock();
         $strategy->expects($this->once())
-            ->method('findAction');
+            ->method('find');
         $container->expects($this->once())
             ->method('initializeStrategy')
             ->with($attribute)

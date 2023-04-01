@@ -5,19 +5,18 @@ declare(strict_types=1);
 namespace Kuperwood\Eav;
 
 use Kuperwood\Eav\Enum\_RESULT;
+use Kuperwood\Eav\Interface\EavStrategyInterface;
 use Kuperwood\Eav\Interface\StrategyInterface;
 use Kuperwood\Eav\Result\Result;
 use Kuperwood\Eav\Trait\ContainerTrait;
 
-class Strategy implements StrategyInterface
+class Strategy implements StrategyInterface, EavStrategyInterface
 {
     use ContainerTrait;
     public bool $create = true;
     public bool $update = true;
-    private Attribute    $attribute;
-    private ValueManager $valueManager;
 
-    public function createAction() : Result
+    public function create() : Result
     {
         $container = $this->getAttributeContainer();
         $valueAction = $container->getValueAction();
@@ -33,7 +32,7 @@ class Strategy implements StrategyInterface
         return $result;
     }
 
-    public function updateAction() : Result
+    public function update() : Result
     {
         $container = $this->getAttributeContainer();
         $valueManager = $container->getValueManager();
@@ -52,7 +51,7 @@ class Strategy implements StrategyInterface
         return $result;
     }
 
-    public function deleteAction() : Result
+    public function delete() : Result
     {
         $container = $this->getAttributeContainer();
         $valueAction = $container->getValueAction();
@@ -63,17 +62,29 @@ class Strategy implements StrategyInterface
         return $result;
     }
 
-    public function findAction(): Result
+    public function find(): Result
     {
         return $this->getAttributeContainer()->getValueAction()->find();
     }
 
-    public function saveAction(): Result
+    public function validate(): Result
+    {
+        $result = new Result();
+        $validator = $this->getAttributeContainer()->getValueValidator()->getValidator();
+        if($validator->fails()) {
+            return $result->validationFails()
+                ->setData($validator->errors());
+        }
+        return $result->setCode(_RESULT::VALIDATION_PASSED->code())
+            ->setMessage(_RESULT::VALIDATION_PASSED->message());
+    }
+
+    public function save(): Result
     {
         $entity = $this->getAttributeContainer()->getAttributeSet()->getEntity();
         return $entity->getKey()
-            ? $this->updateAction()
-            : $this->createAction();
+            ? $this->update()
+            : $this->create();
     }
 
     public function afterCreate() : void {}
@@ -88,6 +99,11 @@ class Strategy implements StrategyInterface
 
     public function afterDelete() : void {}
 
+    public function rules(): ?array
+    {
+        return null;
+    }
+
     public function isCreate() : bool
     {
         return $this->create;
@@ -95,22 +111,5 @@ class Strategy implements StrategyInterface
     public function isUpdate() : bool
     {
         return $this->update;
-    }
-
-    public function rules(): ?array
-    {
-        return null;
-    }
-
-    public function validateAction(): Result
-    {
-        $result = new Result();
-        $validator = $this->getAttributeContainer()->getValueValidator()->getValidator();
-        if($validator->fails()) {
-            return $result->validationFails()
-                ->setData($validator->errors());
-        }
-        return $result->setCode(_RESULT::VALIDATION_PASSED->code())
-            ->setMessage(_RESULT::VALIDATION_PASSED->message());
     }
 }

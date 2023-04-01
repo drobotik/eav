@@ -40,7 +40,7 @@ class StrategyTest extends TestCase
         $container->setValueAction($valueAction);
         $this->strategy->setAttributeContainer($container);
 
-        $result = $this->strategy->createAction();
+        $result = $this->strategy->create();
 
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::CREATED->code(), $result->getCode());
@@ -54,7 +54,7 @@ class StrategyTest extends TestCase
         $container = new AttributeContainer();
         $container->setStrategy($strategy)
             ->setValueAction($valueAction);
-        $strategy->createAction();
+        $strategy->create();
         $this->assertEquals(['beforeCreate', 'createValue', 'afterCreate'], $strategy->lifecycle);
     }
 
@@ -75,7 +75,7 @@ class StrategyTest extends TestCase
             ->makeValueAction();
         $this->strategy->setAttributeContainer($container);
 
-        $result = $this->strategy->createAction();
+        $result = $this->strategy->create();
 
         $this->assertFalse($valueManager->isRuntime());
         $this->assertInstanceOf(Result::class, $result);
@@ -95,7 +95,7 @@ class StrategyTest extends TestCase
         $container->setValueAction($valueAction);
         $this->strategy->setAttributeContainer($container);
 
-        $result = $this->strategy->findAction();
+        $result = $this->strategy->find();
 
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::FOUND->code(), $result->getCode());
@@ -120,7 +120,7 @@ class StrategyTest extends TestCase
         $container->setValueAction($valueAction)
             ->setValueManager($valueManager);
         $this->strategy->setAttributeContainer($container);
-        $result = $this->strategy->updateAction();
+        $result = $this->strategy->update();
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::UPDATED->code(), $result->getCode());
         $this->assertEquals(_RESULT::UPDATED->message(), $result->getMessage());
@@ -138,7 +138,7 @@ class StrategyTest extends TestCase
         $container->setValueAction($valueAction)
             ->makeValueManager();
         $this->strategy->setAttributeContainer($container);
-        $result = $this->strategy->updateAction();
+        $result = $this->strategy->update();
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::CREATED->code(), $result->getCode());
         $this->assertEquals(_RESULT::CREATED->message(), $result->getMessage());
@@ -152,7 +152,7 @@ class StrategyTest extends TestCase
         $container->setStrategy($strategy)
             ->setValueAction($valueAction)
             ->makeValueManager();
-        $strategy->updateAction();
+        $strategy->update();
         $this->assertEquals(['beforeUpdate', 'createValue', 'afterUpdate'], $strategy->lifecycle);
     }
 
@@ -167,7 +167,7 @@ class StrategyTest extends TestCase
             ->setStrategy($strategy)
             ->setValueAction($valueAction);
 
-        $strategy->updateAction();
+        $strategy->update();
 
         $this->assertEquals(['beforeUpdate', 'updateValue', 'afterUpdate'], $strategy->lifecycle);
     }
@@ -189,7 +189,7 @@ class StrategyTest extends TestCase
             ->makeValueAction();
         $this->strategy->setAttributeContainer($container);
 
-        $result = $this->strategy->updateAction();
+        $result = $this->strategy->update();
 
         $this->assertFalse($valueManager->isRuntime());
         $this->assertInstanceOf(Result::class, $result);
@@ -210,7 +210,7 @@ class StrategyTest extends TestCase
         $container->setValueAction($strategy);
         $this->strategy->setAttributeContainer($container);
 
-        $result = $this->strategy->deleteAction();
+        $result = $this->strategy->delete();
 
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::DELETED->code(), $result->getCode());
@@ -225,7 +225,7 @@ class StrategyTest extends TestCase
         $container->setStrategy($strategy)
             ->setValueAction($valueAction);
         $strategy->setAttributeContainer($container);
-        $strategy->deleteAction();
+        $strategy->delete();
         $this->assertEquals(['beforeDelete', 'deleteValue', 'afterDelete'], $strategy->lifecycle);
     }
 
@@ -251,13 +251,13 @@ class StrategyTest extends TestCase
             ->method('getAttributeSet')
             ->willReturn($attrSet);
         $strategy = $this->getMockBuilder(Strategy::class)
-            ->onlyMethods(['createAction'])
+            ->onlyMethods(['create'])
             ->getMock();
         $strategy->expects($this->once())
-            ->method('createAction')
+            ->method('create')
             ->willReturn((new Result())->created());
         $strategy->setAttributeContainer($container);
-        $result = $strategy->saveAction();
+        $result = $strategy->save();
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::CREATED->code(), $result->getCode());
         $this->assertEquals(_RESULT::CREATED->message(), $result->getMessage());
@@ -285,13 +285,13 @@ class StrategyTest extends TestCase
             ->method('getAttributeSet')
             ->willReturn($attrSet);
         $strategy = $this->getMockBuilder(Strategy::class)
-            ->onlyMethods(['updateAction'])
+            ->onlyMethods(['update'])
             ->getMock();
         $strategy->expects($this->once())
-            ->method('updateAction')
+            ->method('update')
             ->willReturn((new Result())->updated());
         $strategy->setAttributeContainer($container);
-        $result = $strategy->saveAction();
+        $result = $strategy->save();
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::UPDATED->code(), $result->getCode());
         $this->assertEquals(_RESULT::UPDATED->message(), $result->getMessage());
@@ -325,7 +325,7 @@ class StrategyTest extends TestCase
         $strategy->expects($this->once())
             ->method('getAttributeContainer')
             ->willReturn($container);
-        $result = $strategy->validateAction();
+        $result = $strategy->validate();
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::VALIDATION_FAILS->code(), $result->getCode());
         $this->assertEquals(_RESULT::VALIDATION_FAILS->message(), $result->getMessage());
@@ -355,7 +355,7 @@ class StrategyTest extends TestCase
         $strategy->expects($this->once())
             ->method('getAttributeContainer')
             ->willReturn($container);
-        $result = $strategy->validateAction();
+        $result = $strategy->validate();
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::VALIDATION_PASSED->code(), $result->getCode());
         $this->assertEquals(_RESULT::VALIDATION_PASSED->message(), $result->getMessage());
