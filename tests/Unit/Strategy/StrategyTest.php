@@ -9,11 +9,11 @@ use Kuperwood\Eav\AttributeContainer;
 use Kuperwood\Eav\AttributeSet;
 use Kuperwood\Eav\Entity;
 use Kuperwood\Eav\Enum\_RESULT;
-use Kuperwood\Eav\Enum\_VALUE;
 use Kuperwood\Eav\Enum\ATTR_TYPE;
 use Kuperwood\Eav\Model\ValueStringModel;
 use Kuperwood\Eav\Result\Result;
 use Kuperwood\Eav\Strategy;
+use Kuperwood\Eav\Value\ValueValidator;
 use Kuperwood\Eav\ValueManager;
 use Tests\Fixtures\StrategyFixture;
 use Tests\TestCase;
@@ -483,157 +483,34 @@ class StrategyTest extends TestCase
     }
 
     /** @test */
-    public function default_value_rule() {
-        $attribute = new Attribute();
-        $attribute->setType(ATTR_TYPE::INTEGER->value());
-        $container = new AttributeContainer();
-        $container->setAttribute($attribute);
-        $this->strategy->setAttributeContainer($container);
-        $this->assertEquals(
-            ATTR_TYPE::INTEGER->validationRule(),
-            $this->strategy->getDefaultValueRule()
-        );
-        $attribute->setType(ATTR_TYPE::TEXT->value());
-        $this->assertEquals(
-            ATTR_TYPE::TEXT->validationRule(),
-            $this->strategy->getDefaultValueRule()
-        );
-    }
-
-    /** @test */
-    public function validation_rules() {
-        $attribute = new Attribute();
-        $attribute->setType(ATTR_TYPE::INTEGER->value());
-        $container = new AttributeContainer();
-        $container->setAttribute($attribute);
-        $this->strategy->setAttributeContainer($container);
-        $this->assertEquals(
-            [
-                _VALUE::ENTITY_ID->column() => ['required', 'integer'],
-                _VALUE::DOMAIN_ID->column() => ['required','integer'],
-                _VALUE::ATTRIBUTE_ID->column() => ['required','integer'],
-                _VALUE::VALUE->column() => $this->strategy->getDefaultValueRule()
-            ],
-            $this->strategy->getRules()
-        );
-    }
-
-    /** @test */
-    public function validation_rules_with_custom_rule() {
-        $attribute = new Attribute();
-        $attribute->setType(ATTR_TYPE::INTEGER->value());
-        $container = new AttributeContainer();
-        $container->setAttribute($attribute);
-        $strategy = $this->getMockBuilder(Strategy::class)
-            ->onlyMethods(['rules'])
-            ->getMock();
-        $strategy->expects($this->once())
-            ->method('rules')
-            ->willReturn(['new_rule']);
-        $strategy->setAttributeContainer($container);
-        $result = $strategy->getRules();
-        $this->assertEquals(['new_rule'], $result[_VALUE::VALUE->column()]);
-    }
-
-    /** @test */
-    public function validation_data() {
-        $entity = new Entity();
-        $entity->setDomainKey(4);
-        $entity->setKey(3);
-        $attrSet = new AttributeSet();
-        $attrSet->setKey(2);
-        $attrSet->setEntity($entity);
-        $attribute = new Attribute();
-        $attribute->setKey(1);
-        $valueManager = new ValueManager();
-        $valueManager->setRuntime('test');
-        $container = new AttributeContainer();
-        $container
-            ->setAttributeSet($attrSet)
-            ->setAttribute($attribute)
-            ->setValueManager($valueManager);
-        $this->strategy->setAttributeContainer($container);
-        $this->assertEquals(
-            [
-                _VALUE::ENTITY_ID->column() => $entity->getKey(),
-                _VALUE::DOMAIN_ID->column() => $entity->getDomainKey(),
-                _VALUE::ATTRIBUTE_ID->column() => $attribute->getKey(),
-                _VALUE::VALUE->column() => $valueManager->getRuntime()
-            ],
-            $this->strategy->getValidatedData()
-        );
-    }
-
-    /** @test */
-    public function validator() {
-        $entity = new Entity();
-        $entity->setDomainKey(4);
-        $entity->setKey(3);
-        $attrSet = new AttributeSet();
-        $attrSet->setKey(2);
-        $attrSet->setEntity($entity);
-        $attribute = new Attribute();
-        $attribute->setKey(1);
-        $attribute->setType(ATTR_TYPE::STRING->value());
-        $valueManager = new ValueManager();
-        $valueManager->setRuntime('test');
-        $container = new AttributeContainer();
-        $container
-            ->setAttributeSet($attrSet)
-            ->setAttribute($attribute)
-            ->setValueManager($valueManager);
-        $this->strategy->setAttributeContainer($container);
-        $validator = $this->strategy->getValidator();
-        $this->assertEquals($this->strategy->getRules(), $validator->getRules());
-        $this->assertEquals($this->strategy->getValidatedData(), $validator->getData());
-    }
-
-    /** @test */
     public function validate_fails_action() {
         $validator = $this->getMockBuilder(Validator::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['fails', 'errors'])
             ->getMock();
-
         $validator->expects($this->once())
             ->method('fails')
             ->willReturn(true);
-
         $messageBag = new MessageBag();
         $messageBag->add('test', 'test');
-
         $validator->expects($this->once())
             ->method('errors')
             ->willReturn($messageBag);
-
-        $strategy = $this->getMockBuilder(Strategy::class)
+        $valueValidator = $this->getMockBuilder(ValueValidator::class)
             ->onlyMethods(['getValidator'])
             ->getMock();
-
-        $strategy->expects($this->once())
+        $valueValidator->expects($this->once())
             ->method('getValidator')
             ->willReturn($validator);
-
         $container = new AttributeContainer();
-        $entity = new Entity();
-        $entity->setDomainKey(4);
-        $entity->setKey(3);
-        $attrSet = new AttributeSet();
-        $attrSet->setKey(2);
-        $attrSet->setEntity($entity);
-        $attribute = new Attribute();
-        $attribute->setKey(1);
-        $attribute->setType(ATTR_TYPE::STRING->value());
-        $valueManager = new ValueManager();
-        $valueManager->setRuntime('test');
-        $container
-            ->setAttributeSet($attrSet)
-            ->setAttribute($attribute)
-            ->setValueManager($valueManager);
-
-        $strategy->setAttributeContainer($container);
+        $container->setValueValidator($valueValidator);
+        $strategy = $this->getMockBuilder(Strategy::class)
+            ->onlyMethods(['getAttributeContainer'])
+            ->getMock();
+        $strategy->expects($this->once())
+            ->method('getAttributeContainer')
+            ->willReturn($container);
         $result = $strategy->validateAction();
-
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::VALIDATION_FAILS->code(), $result->getCode());
         $this->assertEquals(_RESULT::VALIDATION_FAILS->message(), $result->getMessage());
@@ -649,33 +526,21 @@ class StrategyTest extends TestCase
         $validator->expects($this->once())
             ->method('fails')
             ->willReturn(false);
-        $strategy = $this->getMockBuilder(Strategy::class)
+        $valueValidator = $this->getMockBuilder(ValueValidator::class)
             ->onlyMethods(['getValidator'])
             ->getMock();
-        $strategy->expects($this->once())
+        $valueValidator->expects($this->once())
             ->method('getValidator')
             ->willReturn($validator);
-
         $container = new AttributeContainer();
-        $entity = new Entity();
-        $entity->setDomainKey(4);
-        $entity->setKey(3);
-        $attrSet = new AttributeSet();
-        $attrSet->setKey(2);
-        $attrSet->setEntity($entity);
-        $attribute = new Attribute();
-        $attribute->setKey(1);
-        $attribute->setType(ATTR_TYPE::STRING->value());
-        $valueManager = new ValueManager();
-        $valueManager->setRuntime('test');
-        $container
-            ->setAttributeSet($attrSet)
-            ->setAttribute($attribute)
-            ->setValueManager($valueManager);
-
-        $strategy->setAttributeContainer($container);
+        $container->setValueValidator($valueValidator);
+        $strategy = $this->getMockBuilder(Strategy::class)
+            ->onlyMethods(['getAttributeContainer'])
+            ->getMock();
+        $strategy->expects($this->once())
+            ->method('getAttributeContainer')
+            ->willReturn($container);
         $result = $strategy->validateAction();
-
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::VALIDATION_PASSED->code(), $result->getCode());
         $this->assertEquals(_RESULT::VALIDATION_PASSED->message(), $result->getMessage());

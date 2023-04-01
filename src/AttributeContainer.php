@@ -3,19 +3,22 @@
 namespace Kuperwood\Eav;
 
 use Kuperwood\Eav\Model\AttributeModel;
+use Kuperwood\Eav\Value\ValueValidator;
 
 class AttributeContainer
 {
     protected Attribute $attribute;
-    protected ValueManager $valueManager;
     protected Strategy $strategy;
     protected AttributeSet $attributeSet;
+    protected ValueManager $valueManager;
+    protected ValueValidator $valueValidator;
 
     public function make(string $className) {
         $supported = [
             AttributeSet::class,
             Attribute::class,
             ValueManager::class,
+            ValueValidator::class,
             Strategy::class
         ];
 
@@ -52,6 +55,12 @@ class AttributeContainer
         return $this;
     }
 
+    public function makeValueValidator() : self
+    {
+        $this->setValueValidator($this->make(ValueValidator::class));
+        return $this;
+    }
+
     public function setAttribute(Attribute $attribute) : self
     {
         $attribute->setAttributeContainer($this);
@@ -74,6 +83,18 @@ class AttributeContainer
     public function getValueManager(): ValueManager
     {
         return $this->valueManager;
+    }
+
+    public function setValueValidator(ValueValidator $valueValidator) : self
+    {
+        $valueValidator->setAttributeContainer($this);
+        $this->valueValidator = $valueValidator;
+        return $this;
+    }
+
+    public function getValueValidator(): ValueValidator
+    {
+        return $this->valueValidator;
     }
 
     public function setStrategy(Strategy $strategy) : self

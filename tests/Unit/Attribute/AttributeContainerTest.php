@@ -8,6 +8,7 @@ use Kuperwood\Eav\AttributeSet;
 use Kuperwood\Eav\Entity;
 use Kuperwood\Eav\Enum\ATTR_TYPE;
 use Kuperwood\Eav\Strategy;
+use Kuperwood\Eav\Value\ValueValidator;
 use Kuperwood\Eav\ValueManager;
 use Tests\TestCase;
 
@@ -59,6 +60,15 @@ class AttributeContainerTest extends TestCase
     }
 
     /** @test */
+    public function value_validator() {
+        $valueValidator = new ValueValidator();
+        $result = $this->container->setValueValidator($valueValidator);
+        $this->assertSame($result, $this->container);
+        $this->assertSame($valueValidator, $this->container->getValueValidator());
+        $this->assertSame($this->container, $this->container->getValueValidator()->getAttributeContainer());
+    }
+
+    /** @test */
     public function makeAttributeSet() {
         $instance = $this->container->make(AttributeSet::class);
         $this->assertSame($this->container, $instance->getAttributeContainer());
@@ -87,6 +97,13 @@ class AttributeContainerTest extends TestCase
     }
 
     /** @test */
+    public function makeValueValidator() {
+        $instance = $this->container->make(ValueValidator::class);
+        $this->assertSame($this->container, $instance->getAttributeContainer());
+        $this->assertInstanceOf(ValueValidator::class, $instance);
+    }
+
+    /** @test */
     public function makeAttributeSetAlias() {
         $result = $this->container->makeAttributeSet();
         $this->assertSame($result, $this->container);
@@ -112,6 +129,13 @@ class AttributeContainerTest extends TestCase
         $result = $this->container->makeValueManager();
         $this->assertSame($result, $this->container);
         $this->assertInstanceOf(ValueManager::class, $this->container->getValueManager());
+    }
+
+    /** @test */
+    public function makeValueValidatorAlias() {
+        $result = $this->container->makeValueValidator();
+        $this->assertSame($result, $this->container);
+        $this->assertInstanceOf(ValueValidator::class, $this->container->getValueValidator());
     }
 
     /** @test */

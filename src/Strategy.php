@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Kuperwood\Eav;
 
-use Illuminate\Validation\Validator;
 use Kuperwood\Eav\Enum\_RESULT;
 use Kuperwood\Eav\Enum\_VALUE;
 use Kuperwood\Eav\Interface\StrategyInterface;
@@ -52,6 +51,65 @@ class Strategy implements StrategyInterface
         return $result->created();
     }
 
+    public function updateValue() : Result
+    {
+        $result = new Result();
+        $container = $this->getAttributeContainer();
+        $attribute = $container->getAttribute();
+        $valueManager = $container->getValueManager();
+        $model = $attribute->getValueModel();
+
+        if (!$this->isUpdate()) {
+            $valueManager->clearRuntime();
+            return $result->notAllowed();
+        }
+
+        if(!$valueManager->isRuntime()) {
+            return $result->empty();
+        }
+
+        $record = $model->findOrFail($valueManager->getKey());
+        $record->setValue($valueManager->getRuntime())
+            ->save();
+        $record->refresh();
+        $valueManager->setStored($record->getValue())
+            ->clearRuntime();
+
+        return $result->updated();
+    }
+
+
+    public function deleteValue(): Result
+    {
+        $result = new Result();
+        $container = $this->getAttributeContainer();
+        $attribute = $container->getAttribute();
+        $valueManager = $container->getValueManager();
+        $model = $attribute->getValueModel();
+        $key = $valueManager->getKey();
+
+        if(is_null($key)) {
+            return $result->empty();
+        }
+
+        $record = $model->findOrFail($key);
+
+        $this->beforeDelete();
+
+        $deleted = $record->delete();
+        if(!$deleted) {
+            return $result->notDeleted();
+        }
+
+        $valueManager->clearStored()
+            ->clearRuntime()
+            ->setKey(null);
+
+        $this->afterDelete();
+
+        return $result->deleted();
+    }
+
     public function createAction() : Result
     {
         $this->beforeCreate();
@@ -81,35 +139,6 @@ class Strategy implements StrategyInterface
         $this->afterDelete();
         return $result;
     }
-
-    public function updateValue() : Result
-    {
-        $result = new Result();
-        $container = $this->getAttributeContainer();
-        $attribute = $container->getAttribute();
-        $valueManager = $container->getValueManager();
-        $model = $attribute->getValueModel();
-
-        if (!$this->isUpdate()) {
-            $valueManager->clearRuntime();
-            return $result->notAllowed();
-        }
-
-        if(!$valueManager->isRuntime()) {
-            return $result->empty();
-        }
-
-        $record = $model->findOrFail($valueManager->getKey());
-        $record->setValue($valueManager->getRuntime())
-            ->save();
-        $record->refresh();
-        $valueManager->setStored($record->getValue())
-            ->clearRuntime();
-
-        return $result->updated();
-    }
-
-
 
     public function findAction(): Result
     {
@@ -153,37 +182,6 @@ class Strategy implements StrategyInterface
             : $this->createAction();
     }
 
-    public function deleteValue(): Result
-    {
-        $result = new Result();
-        $container = $this->getAttributeContainer();
-        $attribute = $container->getAttribute();
-        $valueManager = $container->getValueManager();
-        $model = $attribute->getValueModel();
-        $key = $valueManager->getKey();
-
-        if(is_null($key)) {
-            return $result->empty();
-        }
-
-        $record = $model->findOrFail($key);
-
-        $this->beforeDelete();
-
-        $deleted = $record->delete();
-        if(!$deleted) {
-            return $result->notDeleted();
-        }
-
-        $valueManager->clearStored()
-            ->clearRuntime()
-            ->setKey(null);
-
-        $this->afterDelete();
-
-        return $result->deleted();
-    }
-
     public function afterCreate() : void {}
 
     public function beforeCreate() : void {}
@@ -210,51 +208,10 @@ class Strategy implements StrategyInterface
         return null;
     }
 
-    public function getDefaultValueRule() {
-        return $this->getAttributeContainer()
-            ->getAttribute()
-            ->getType()
-            ->validationRule();
-    }
-
-    public function getRules() {
-        $rules = $this->rules();
-        return [
-            _VALUE::ENTITY_ID->column() => ['required', 'integer'],
-            _VALUE::DOMAIN_ID->column() => ['required','integer'],
-            _VALUE::ATTRIBUTE_ID->column() => ['required','integer'],
-            _VALUE::VALUE->column() => is_null($rules)
-                ? $this->getDefaultValueRule()
-                : $rules
-        ];
-    }
-
-    public function getValidatedData() : array
-    {
-        $container = $this->getAttributeContainer();
-        $attribute = $container->getAttribute();
-        $entity = $container->getAttributeSet()->getEntity();
-        $valueManager = $container->getValueManager();
-        return [
-            _VALUE::ENTITY_ID->column() => $entity->getKey(),
-            _VALUE::DOMAIN_ID->column() => $entity->getDomainKey(),
-            _VALUE::ATTRIBUTE_ID->column() => $attribute->getKey(),
-            _VALUE::VALUE->column() => $valueManager->getRuntime()
-        ];
-    }
-
-    public function getValidator() : Validator
-    {
-        return Container::getInstance()->getValidator()->make(
-            $this->getValidatedData(),
-            $this->getRules()
-        );
-    }
-
     public function validateAction(): Result
     {
         $result = new Result();
-        $validator = $this->getValidator();
+        $validator = $this->getAttributeContainer()->getValueValidator()->getValidator();
         if($validator->fails()) {
             return $result->validationFails()
                 ->setData($validator->errors());
