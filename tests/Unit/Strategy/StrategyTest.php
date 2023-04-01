@@ -28,90 +28,6 @@ class StrategyTest extends TestCase
         $this->strategy = new Strategy();
     }
 
-
-    /** @test */
-    public function find_action() {
-        $domainModel = $this->eavFactory->createDomain();
-        $entityModel = $this->eavFactory->createEntity($domainModel);
-        $setModel = $this->eavFactory->createAttributeSet($domainModel);
-        $groupModel = $this->eavFactory->createGroup($setModel);
-        $attributeModel = $this->eavFactory->createAttribute($domainModel);
-        $this->eavFactory->createPivot($domainModel, $setModel, $groupModel, $attributeModel);
-        $valueModel = $this->eavFactory->createValue(
-            ATTR_TYPE::STRING, $domainModel, $entityModel, $attributeModel, "test");
-
-        $entity = new Entity();
-        $entity->setKey($entityModel->getKey());
-        $entity->setDomainKey($domainModel->getKey());
-        $attrSet = new AttributeSet();
-        $attrSet->setKey($setModel->getKey());
-        $attrSet->setEntity($entity);
-        $attribute = new Attribute();
-        $attribute->getBag()->setFields($attributeModel->toArray());
-        $valueManager = new ValueManager();
-        $container = new AttributeContainer();
-        $container
-            ->setAttributeSet($attrSet)
-            ->setAttribute($attribute)
-            ->setValueManager($valueManager);
-        $this->strategy->setAttributeContainer($container);
-
-        $result = $this->strategy->findAction();
-
-        $this->assertNull($valueManager->getRuntime());
-        $this->assertEquals("test", $valueManager->getStored());
-        $this->assertEquals($valueModel->getKey(), $valueManager->getKey());
-
-        $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::FOUND->code(), $result->getCode());
-        $this->assertEquals(_RESULT::FOUND->message(), $result->getMessage());
-    }
-
-    /** @test */
-    public function find_action_no_keys() {
-
-        $entity = new Entity();
-        $attrSet = new AttributeSet();
-        $attrSet->setEntity($entity);
-        $container = new AttributeContainer();
-        $container
-            ->setAttributeSet($attrSet)
-            ->makeAttribute()
-            ->makeValueManager();
-        $this->strategy->setAttributeContainer($container);
-        $result = $this->strategy->findAction();
-        $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::EMPTY->code(), $result->getCode());
-        $this->assertEquals(_RESULT::EMPTY->message(), $result->getMessage());
-    }
-
-    /** @test */
-    public function find_action_not_found() {
-        $entity = new Entity();
-        $entity->setKey(1)
-            ->setDomainKey(2);
-        $attrSet = new AttributeSet();
-        $attrSet->setEntity($entity);
-        $attribute = new Attribute();
-        $attribute->setKey(3);
-        $valueManager = new ValueManager();
-        $container = new AttributeContainer();
-        $container
-            ->setAttributeSet($attrSet)
-            ->setAttribute($attribute)
-            ->setValueManager($valueManager);
-        $this->strategy->setAttributeContainer($container);
-
-        $result = $this->strategy->findAction();
-
-        $this->assertNull($valueManager->getKey());
-        $this->assertNull($valueManager->getRuntime());
-        $this->assertNull($valueManager->getStored());
-        $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::NOT_FOUND->code(), $result->getCode());
-        $this->assertEquals(_RESULT::NOT_FOUND->message(), $result->getMessage());
-    }
-
     /** @test */
     public function create_action() {
         $valueAction = $this->getMockBuilder(ValueAction::class)
@@ -165,6 +81,25 @@ class StrategyTest extends TestCase
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::NOT_ALLOWED->code(), $result->getCode());
         $this->assertEquals(_RESULT::NOT_ALLOWED->message(), $result->getMessage());
+    }
+
+    /** @test */
+    public function find_action() {
+        $valueAction = $this->getMockBuilder(ValueAction::class)
+            ->onlyMethods(['find'])
+            ->getMock();
+        $valueAction->expects($this->once())
+            ->method('find')
+            ->willReturn((new Result())->found());
+        $container = new AttributeContainer();
+        $container->setValueAction($valueAction);
+        $this->strategy->setAttributeContainer($container);
+
+        $result = $this->strategy->findAction();
+
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::FOUND->code(), $result->getCode());
+        $this->assertEquals(_RESULT::FOUND->message(), $result->getMessage());
     }
 
     /** @test */

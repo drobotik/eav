@@ -186,6 +186,7 @@ class AttributeContainerTest extends TestCase
 
         $this->container
             ->setAttributeSet($attrSet)
+            ->makeValueAction()
             ->initialize($attributeModel);
 
         // attribute

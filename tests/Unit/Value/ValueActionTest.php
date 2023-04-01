@@ -7,6 +7,7 @@ use Kuperwood\Eav\AttributeContainer;
 use Kuperwood\Eav\AttributeSet;
 use Kuperwood\Eav\Entity;
 use Kuperwood\Eav\Enum\_RESULT;
+use Kuperwood\Eav\Enum\ATTR_TYPE;
 use Kuperwood\Eav\Model\ValueStringModel;
 use Kuperwood\Eav\Result\Result;
 use Kuperwood\Eav\Value\ValueAction;
@@ -82,6 +83,88 @@ class ValueActionTest extends TestCase
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::EMPTY->code(), $result->getCode());
         $this->assertEquals(_RESULT::EMPTY->message(), $result->getMessage());
+    }
+
+    /** @test */
+    public function find() {
+        $domainModel = $this->eavFactory->createDomain();
+        $entityModel = $this->eavFactory->createEntity($domainModel);
+        $setModel = $this->eavFactory->createAttributeSet($domainModel);
+        $groupModel = $this->eavFactory->createGroup($setModel);
+        $attributeModel = $this->eavFactory->createAttribute($domainModel);
+        $this->eavFactory->createPivot($domainModel, $setModel, $groupModel, $attributeModel);
+        $valueModel = $this->eavFactory->createValue(
+            ATTR_TYPE::STRING, $domainModel, $entityModel, $attributeModel, "test");
+
+        $entity = new Entity();
+        $entity->setKey($entityModel->getKey());
+        $entity->setDomainKey($domainModel->getKey());
+        $attrSet = new AttributeSet();
+        $attrSet->setKey($setModel->getKey());
+        $attrSet->setEntity($entity);
+        $attribute = new Attribute();
+        $attribute->getBag()->setFields($attributeModel->toArray());
+        $valueManager = new ValueManager();
+        $container = new AttributeContainer();
+        $container
+            ->setAttributeSet($attrSet)
+            ->setAttribute($attribute)
+            ->setValueManager($valueManager);
+        $this->action->setAttributeContainer($container);
+
+        $result = $this->action->find();
+
+        $this->assertNull($valueManager->getRuntime());
+        $this->assertEquals("test", $valueManager->getStored());
+        $this->assertEquals($valueModel->getKey(), $valueManager->getKey());
+
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::FOUND->code(), $result->getCode());
+        $this->assertEquals(_RESULT::FOUND->message(), $result->getMessage());
+    }
+
+    /** @test */
+    public function find_no_keys() {
+        $entity = new Entity();
+        $attrSet = new AttributeSet();
+        $attrSet->setEntity($entity);
+        $container = new AttributeContainer();
+        $container
+            ->setAttributeSet($attrSet)
+            ->makeAttribute()
+            ->makeValueManager();
+        $this->action->setAttributeContainer($container);
+        $result = $this->action->find();
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::EMPTY->code(), $result->getCode());
+        $this->assertEquals(_RESULT::EMPTY->message(), $result->getMessage());
+    }
+
+    /** @test */
+    public function find_not_found() {
+        $entity = new Entity();
+        $entity->setKey(1)
+            ->setDomainKey(2);
+        $attrSet = new AttributeSet();
+        $attrSet->setEntity($entity);
+        $attribute = new Attribute();
+        $attribute->setKey(3);
+        $valueManager = new ValueManager();
+        $container = new AttributeContainer();
+        $container
+            ->setAttributeSet($attrSet)
+            ->setAttribute($attribute)
+            ->setValueManager($valueManager);
+        $this->action->setAttributeContainer($container);
+
+        $result = $this->action->find();
+
+        $this->assertNull($valueManager->getKey());
+        $this->assertNull($valueManager->getRuntime());
+        $this->assertNull($valueManager->getStored());
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::NOT_FOUND->code(), $result->getCode());
+        $this->assertEquals(_RESULT::NOT_FOUND->message(), $result->getMessage());
     }
 
     /** @test */
