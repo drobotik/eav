@@ -10,12 +10,13 @@ use Kuperwood\Eav\AttributeSet;
 use Kuperwood\Eav\Entity;
 use Kuperwood\Eav\Enum\_RESULT;
 use Kuperwood\Eav\Enum\ATTR_TYPE;
-use Kuperwood\Eav\Model\ValueStringModel;
 use Kuperwood\Eav\Result\Result;
 use Kuperwood\Eav\Strategy;
+use Kuperwood\Eav\Value\ValueAction;
 use Kuperwood\Eav\Value\ValueValidator;
 use Kuperwood\Eav\ValueManager;
 use Tests\Fixtures\StrategyFixture;
+use Tests\Fixtures\ValueActionFixture;
 use Tests\TestCase;
 
 class StrategyTest extends TestCase
@@ -27,156 +28,6 @@ class StrategyTest extends TestCase
         $this->strategy = new Strategy();
     }
 
-    /** @test */
-    public function create_value() {
-        $entityKey = 1;
-        $domainKey = 2;
-        $attrKey = 3;
-        $valueToSave = 'test';
-        $entity = new Entity();
-        $entity->setKey($entityKey);
-        $entity->setDomainKey($domainKey);
-        $attrSet = new AttributeSet();
-        $attrSet->setEntity($entity);
-        $attribute = new Attribute();
-        $attribute->setKey($attrKey);
-        $valueManager = new ValueManager();
-        $valueManager->setRuntime($valueToSave);
-        $container = new AttributeContainer();
-        $container->setAttributeSet($attrSet)
-            ->setAttribute($attribute)
-            ->setValueManager($valueManager);
-        $this->strategy->setAttributeContainer($container);
-        $result = $this->strategy->createValue();
-
-        $this->assertEquals(1, ValueStringModel::query()->count());
-
-        $record = ValueStringModel::query()->first();
-        $this->assertNotNull($record);
-        $this->assertEquals($domainKey, $record->getDomainKey());
-        $this->assertEquals($entityKey, $record->getEntityKey());
-        $this->assertEquals($attrKey, $record->getAttrKey());
-        $this->assertEquals($valueToSave, $record->getValue());
-
-        $this->assertNull($valueManager->getRuntime());
-        $this->assertEquals($valueToSave, $valueManager->getStored());
-        $this->assertEquals($record->getKey(), $valueManager->getKey());
-
-        $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::CREATED->code(), $result->getCode());
-        $this->assertEquals(_RESULT::CREATED->message(), $result->getMessage());
-    }
-
-    /** @test */
-    public function create_value_no_runtime() {
-        $entity = new Entity();
-        $attrSet = new AttributeSet();
-        $attrSet->setEntity($entity);
-        $container = new AttributeContainer();
-        $container
-            ->setAttributeSet($attrSet)
-            ->makeAttribute()
-            ->makeValueManager()
-            ->setStrategy($this->strategy);
-        $result = $this->strategy->createValue();
-        $this->assertEquals(0, ValueStringModel::query()->count());
-        $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::EMPTY->code(), $result->getCode());
-        $this->assertEquals(_RESULT::EMPTY->message(), $result->getMessage());
-    }
-
-    /** @test */
-    public function update_value() {
-        $valueToSave = 'new';
-        $valueKey = 1;
-        $record = new ValueStringModel();
-        $record->setDomainKey(1)
-            ->setEntityKey(2)
-            ->setAttrKey(3)
-            ->setValue('old');
-        $record->save();
-        $record->refresh();
-
-        $valueManager = new ValueManager();
-        $valueManager->setKey($valueKey);
-        $valueManager->setRuntime($valueToSave);
-
-        $container = new AttributeContainer();
-        $container->makeAttribute()
-            ->setValueManager($valueManager);
-        $this->strategy->setAttributeContainer($container);
-        $result = $this->strategy->updateValue();
-
-        $record = ValueStringModel::query()->first();
-        $this->assertEquals($valueToSave, $record->getValue());
-
-        $this->assertNull($valueManager->getRuntime());
-        $this->assertEquals($valueToSave, $valueManager->getStored());
-        $this->assertEquals($record->getKey(), $valueManager->getKey());
-
-        $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::UPDATED->code(), $result->getCode());
-        $this->assertEquals(_RESULT::UPDATED->message(), $result->getMessage());
-    }
-
-    /** @test */
-    public function update_value_no_runtime() {
-        $container = new AttributeContainer();
-        $valueManager = new ValueManager();
-        $valueManager->setKey(1);
-        $container
-            ->makeAttribute()
-            ->setValueManager($valueManager);
-        $this->strategy->setAttributeContainer($container);
-        $result = $this->strategy->updateValue();
-        $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::EMPTY->code(), $result->getCode());
-        $this->assertEquals(_RESULT::EMPTY->message(), $result->getMessage());
-    }
-
-    /** @test */
-    public function delete_value() {
-        $record = new ValueStringModel();
-        $record->setDomainKey(1)
-            ->setEntityKey(2)
-            ->setAttrKey(3)
-            ->setValue('old')
-            ->save();
-        $value = new ValueManager();
-        $value->setKey($record->getKey());
-        $value->setStored($record->getValue());
-        $value->setRuntime('new');
-        $container = new AttributeContainer();
-        $container->makeAttribute()
-            ->setValueManager($value);
-        $this->strategy->setAttributeContainer($container);
-
-        $result = $this->strategy->deleteValue();
-
-        $this->assertEquals(0, ValueStringModel::query()->count());
-
-        $this->assertNull($value->getRuntime());
-        $this->assertNull($value->getStored());
-        $this->assertNull($value->getKey());
-
-        $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::DELETED->code(), $result->getCode());
-        $this->assertEquals(_RESULT::DELETED->message(), $result->getMessage());
-    }
-
-    /** @test */
-    public function delete_value_no_key() {
-        $valueManager = new ValueManager();
-        $valueManager->setRuntime('new');
-        $container = new AttributeContainer();
-        $container->makeAttribute()
-            ->setValueManager($valueManager);
-        $this->strategy->setAttributeContainer($container);
-        $result = $this->strategy->deleteValue();
-        $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::EMPTY->code(), $result->getCode());
-        $this->assertEquals(_RESULT::EMPTY->message(), $result->getMessage());
-    }
 
     /** @test */
     public function find_action() {
@@ -263,13 +114,18 @@ class StrategyTest extends TestCase
 
     /** @test */
     public function create_action() {
-        $strategy = $this->getMockBuilder(Strategy::class)
-            ->onlyMethods(['createValue'])
+        $valueAction = $this->getMockBuilder(ValueAction::class)
+            ->onlyMethods(['create'])
             ->getMock();
-        $strategy->expects($this->once())
-            ->method('createValue')
+        $valueAction->expects($this->once())
+            ->method('create')
             ->willReturn((new Result())->created());
-        $result = $strategy->createAction();
+        $container = new AttributeContainer();
+        $container->setValueAction($valueAction);
+        $this->strategy->setAttributeContainer($container);
+
+        $result = $this->strategy->createAction();
+
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::CREATED->code(), $result->getCode());
         $this->assertEquals(_RESULT::CREATED->message(), $result->getMessage());
@@ -278,83 +134,12 @@ class StrategyTest extends TestCase
     /** @test */
     public function create_action_order() {
         $strategy = new StrategyFixture;
+        $valueAction = new ValueActionFixture();
+        $container = new AttributeContainer();
+        $container->setStrategy($strategy)
+            ->setValueAction($valueAction);
         $strategy->createAction();
         $this->assertEquals(['beforeCreate', 'createValue', 'afterCreate'], $strategy->lifecycle);
-    }
-
-    /** @test */
-    public function update_action() {
-        $valueManager = $this->getMockBuilder(ValueManager::class)
-            ->onlyMethods(['getKey'])
-            ->getMock();
-        $valueManager->expects($this->once())
-            ->method('getKey')
-            ->willReturn(1);
-        $container = $this->getMockBuilder(AttributeContainer::class)
-            ->onlyMethods(['getValueManager'])
-            ->getMock();
-        $container->expects($this->once())
-            ->method('getValueManager')
-            ->willReturn($valueManager);
-        $strategy = $this->getMockBuilder(Strategy::class)
-            ->onlyMethods(['updateValue', 'getAttributeContainer'])
-            ->getMock();
-        $strategy->expects($this->once())
-            ->method('getAttributeContainer')
-            ->willReturn($container);
-        $strategy->expects($this->once())
-            ->method('updateValue')
-            ->willReturn((new Result())->updated());
-        $result = $strategy->updateAction();
-        $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::UPDATED->code(), $result->getCode());
-        $this->assertEquals(_RESULT::UPDATED->message(), $result->getMessage());
-    }
-
-    /** @test */
-    public function update_action_order() {
-        $strategy = new StrategyFixture;
-        $container = new AttributeContainer();
-        $container->makeValueManager();
-        $strategy->setAttributeContainer($container);
-        $strategy->updateAction();
-        $this->assertEquals(['beforeUpdate', 'createValue', 'afterUpdate'], $strategy->lifecycle);
-    }
-
-    /** @test */
-    public function update_action_order_when_existing_value_key() {
-        $strategy = new StrategyFixture;
-        $valueManager = new ValueManager();
-        $valueManager->setKey(123);
-        $container = new AttributeContainer();
-        $container->setValueManager($valueManager);
-        $strategy->setAttributeContainer($container);
-        $strategy->updateAction();
-        $this->assertEquals(['beforeUpdate', 'updateValue', 'afterUpdate'], $strategy->lifecycle);
-    }
-
-    /** @test */
-    public function delete_action() {
-        $strategy = $this->getMockBuilder(Strategy::class)
-            ->onlyMethods(['deleteValue'])
-            ->getMock();
-        $strategy->expects($this->once())
-            ->method('deleteValue')
-            ->willReturn((new Result())->deleted());
-        $result = $strategy->deleteAction();
-        $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::DELETED->code(), $result->getCode());
-        $this->assertEquals(_RESULT::DELETED->message(), $result->getMessage());
-    }
-
-    /** @test */
-    public function delete_action_order() {
-        $strategy = new StrategyFixture;
-        $container = new AttributeContainer();
-        $container->makeValueManager();
-        $strategy->setAttributeContainer($container);
-        $strategy->deleteAction();
-        $this->assertEquals(['beforeDelete', 'deleteValue', 'afterDelete'], $strategy->lifecycle);
     }
 
     /** @test */
@@ -367,23 +152,89 @@ class StrategyTest extends TestCase
     /** @test */
     public function no_create() {
         $this->strategy->create = false;
-        $entity = new Entity();
-        $attrSet = new AttributeSet();
-        $attrSet->setEntity($entity);
-
         $valueManager = new ValueManager();
         $valueManager->setKey(123);
         $container = new AttributeContainer();
-        $container
-            ->setAttributeSet($attrSet)
-            ->makeAttribute()
-            ->setValueManager($valueManager);
+        $container->setValueManager($valueManager)
+            ->makeValueAction();
         $this->strategy->setAttributeContainer($container);
-        $result = $this->strategy->createValue();
+
+        $result = $this->strategy->createAction();
+
         $this->assertFalse($valueManager->isRuntime());
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::NOT_ALLOWED->code(), $result->getCode());
         $this->assertEquals(_RESULT::NOT_ALLOWED->message(), $result->getMessage());
+    }
+
+    /** @test */
+    public function update_action_updated() {
+        $valueAction = $this->getMockBuilder(ValueAction::class)
+            ->onlyMethods(['update'])
+            ->getMock();
+        $valueAction->expects($this->once())
+            ->method('update')
+            ->willReturn((new Result())->updated());
+        $valueManager = $this->getMockBuilder(ValueManager::class)
+            ->onlyMethods(['getKey'])
+            ->getMock();
+        $valueManager->expects($this->once())
+            ->method('getKey')
+            ->willReturn(1);
+        $container = new AttributeContainer();
+        $container->setValueAction($valueAction)
+            ->setValueManager($valueManager);
+        $this->strategy->setAttributeContainer($container);
+        $result = $this->strategy->updateAction();
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::UPDATED->code(), $result->getCode());
+        $this->assertEquals(_RESULT::UPDATED->message(), $result->getMessage());
+    }
+
+    /** @test */
+    public function update_action_created() {
+        $valueAction = $this->getMockBuilder(ValueAction::class)
+            ->onlyMethods(['create'])
+            ->getMock();
+        $valueAction->expects($this->once())
+            ->method('create')
+            ->willReturn((new Result())->created());
+        $container = new AttributeContainer();
+        $container->setValueAction($valueAction)
+            ->makeValueManager();
+        $this->strategy->setAttributeContainer($container);
+        $result = $this->strategy->updateAction();
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::CREATED->code(), $result->getCode());
+        $this->assertEquals(_RESULT::CREATED->message(), $result->getMessage());
+    }
+
+    /** @test */
+    public function update_action_order() {
+        $strategy = new StrategyFixture();
+        $valueAction = new ValueActionFixture();
+        $container = new AttributeContainer();
+        $container->setStrategy($strategy)
+            ->setValueAction($valueAction)
+            ->makeValueManager();
+        $strategy->updateAction();
+        $this->assertEquals(['beforeUpdate', 'createValue', 'afterUpdate'], $strategy->lifecycle);
+    }
+
+    /** @test */
+    public function update_action_order_when_existing_value_key() {
+        $strategy = new StrategyFixture();
+        $valueAction = new ValueActionFixture();
+        $valueManager = new ValueManager();
+        $valueManager->setKey(123);
+        $container = new AttributeContainer();
+        $container->setValueManager($valueManager)
+            ->setStrategy($strategy)
+            ->setValueAction($valueAction);
+
+        $strategy->updateAction();
+
+        $this->assertEquals(['beforeUpdate', 'updateValue', 'afterUpdate'], $strategy->lifecycle);
     }
 
     /** @test */
@@ -396,22 +247,51 @@ class StrategyTest extends TestCase
     /** @test */
     public function no_update() {
         $this->strategy->update = false;
-        $entity = new Entity();
-        $attrSet = new AttributeSet();
-        $attrSet->setEntity($entity);
         $valueManager = new ValueManager();
         $valueManager->setKey(123);
         $container = new AttributeContainer();
-        $container
-            ->setAttributeSet($attrSet)
-            ->makeAttribute()
-            ->setValueManager($valueManager);
+        $container->setValueManager($valueManager)
+            ->makeValueAction();
         $this->strategy->setAttributeContainer($container);
-        $result = $this->strategy->updateValue();
+
+        $result = $this->strategy->updateAction();
+
         $this->assertFalse($valueManager->isRuntime());
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::NOT_ALLOWED->code(), $result->getCode());
         $this->assertEquals(_RESULT::NOT_ALLOWED->message(), $result->getMessage());
+    }
+
+
+    /** @test */
+    public function delete_action() {
+        $strategy = $this->getMockBuilder(ValueAction::class)
+            ->onlyMethods(['delete'])
+            ->getMock();
+        $strategy->expects($this->once())
+            ->method('delete')
+            ->willReturn((new Result())->deleted());
+        $container = new AttributeContainer();
+        $container->setValueAction($strategy);
+        $this->strategy->setAttributeContainer($container);
+
+        $result = $this->strategy->deleteAction();
+
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::DELETED->code(), $result->getCode());
+        $this->assertEquals(_RESULT::DELETED->message(), $result->getMessage());
+    }
+
+    /** @test */
+    public function delete_action_order() {
+        $strategy = new StrategyFixture;
+        $valueAction = new ValueActionFixture;
+        $container = new AttributeContainer();
+        $container->setStrategy($strategy)
+            ->setValueAction($valueAction);
+        $strategy->setAttributeContainer($container);
+        $strategy->deleteAction();
+        $this->assertEquals(['beforeDelete', 'deleteValue', 'afterDelete'], $strategy->lifecycle);
     }
 
     /** @test */

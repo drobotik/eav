@@ -3,6 +3,7 @@
 namespace Kuperwood\Eav;
 
 use Kuperwood\Eav\Model\AttributeModel;
+use Kuperwood\Eav\Value\ValueAction;
 use Kuperwood\Eav\Value\ValueValidator;
 
 class AttributeContainer
@@ -12,14 +13,15 @@ class AttributeContainer
     protected AttributeSet $attributeSet;
     protected ValueManager $valueManager;
     protected ValueValidator $valueValidator;
-
+    protected ValueAction $valueAction;
     public function make(string $className) {
         $supported = [
             AttributeSet::class,
             Attribute::class,
+            Strategy::class,
             ValueManager::class,
             ValueValidator::class,
-            Strategy::class
+            ValueAction::class
         ];
 
         if(!in_array($className, $supported)) {
@@ -61,6 +63,12 @@ class AttributeContainer
         return $this;
     }
 
+    public function makeValueAction() : self
+    {
+        $this->setValueAction($this->make(ValueAction::class));
+        return $this;
+    }
+
     public function setAttribute(Attribute $attribute) : self
     {
         $attribute->setAttributeContainer($this);
@@ -95,6 +103,18 @@ class AttributeContainer
     public function getValueValidator(): ValueValidator
     {
         return $this->valueValidator;
+    }
+
+    public function setValueAction(ValueAction $valueAction) : self
+    {
+        $valueAction->setAttributeContainer($this);
+        $this->valueAction = $valueAction;
+        return $this;
+    }
+
+    public function getValueAction(): ValueAction
+    {
+        return $this->valueAction;
     }
 
     public function setStrategy(Strategy $strategy) : self

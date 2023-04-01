@@ -18,102 +18,18 @@ class Strategy implements StrategyInterface
     private Attribute    $attribute;
     private ValueManager $valueManager;
 
-    public function createValue() : Result
-    {
-        $result = new Result();
-
-        $container = $this->getAttributeContainer();
-        $attribute = $container->getAttribute();
-        $entity = $container->getAttributeSet()->getEntity();
-        $valueManager = $container->getValueManager();
-        $model = $attribute->getValueModel();
-
-        if (!$this->isCreate()) {
-            $valueManager->clearRuntime();
-            return $result->notAllowed();
-        }
-
-        if(!$valueManager->isRuntime()) {
-            return $result->empty();
-        }
-
-        $model->setDomainKey($entity->getDomainKey())
-            ->setEntityKey($entity->getKey())
-            ->setAttrKey($attribute->getKey())
-            ->setValue($valueManager->getRuntime())
-            ->save();
-
-        $model->refresh();
-        $valueManager->setStored($model->getValue())
-            ->setKey($model->getKey())
-            ->clearRuntime();
-
-        return $result->created();
-    }
-
-    public function updateValue() : Result
-    {
-        $result = new Result();
-        $container = $this->getAttributeContainer();
-        $attribute = $container->getAttribute();
-        $valueManager = $container->getValueManager();
-        $model = $attribute->getValueModel();
-
-        if (!$this->isUpdate()) {
-            $valueManager->clearRuntime();
-            return $result->notAllowed();
-        }
-
-        if(!$valueManager->isRuntime()) {
-            return $result->empty();
-        }
-
-        $record = $model->findOrFail($valueManager->getKey());
-        $record->setValue($valueManager->getRuntime())
-            ->save();
-        $record->refresh();
-        $valueManager->setStored($record->getValue())
-            ->clearRuntime();
-
-        return $result->updated();
-    }
-
-
-    public function deleteValue(): Result
-    {
-        $result = new Result();
-        $container = $this->getAttributeContainer();
-        $attribute = $container->getAttribute();
-        $valueManager = $container->getValueManager();
-        $model = $attribute->getValueModel();
-        $key = $valueManager->getKey();
-
-        if(is_null($key)) {
-            return $result->empty();
-        }
-
-        $record = $model->findOrFail($key);
-
-        $this->beforeDelete();
-
-        $deleted = $record->delete();
-        if(!$deleted) {
-            return $result->notDeleted();
-        }
-
-        $valueManager->clearStored()
-            ->clearRuntime()
-            ->setKey(null);
-
-        $this->afterDelete();
-
-        return $result->deleted();
-    }
-
     public function createAction() : Result
     {
+        $container = $this->getAttributeContainer();
+        $valueAction = $container->getValueAction();
+
+        if (!$this->isCreate()) {
+            $container->getValueManager()->clearRuntime();
+            return (new Result())->notAllowed();
+        }
+
         $this->beforeCreate();
-        $result = $this->createValue();
+        $result = $valueAction->create();
         $this->afterCreate();
         return $result;
     }
@@ -122,20 +38,28 @@ class Strategy implements StrategyInterface
     {
         $container = $this->getAttributeContainer();
         $valueManager = $container->getValueManager();
+        $valueAction = $container->getValueAction();
+
+        if (!$this->isUpdate()) {
+            $valueManager->clearRuntime();
+            return (new Result())->notAllowed();
+        }
+
         $this->beforeUpdate();
-
         $result = $valueManager->getKey()
-            ? $this->updateValue()
-            : $this->createValue();
-
+            ? $valueAction->update()
+            : $valueAction->create();
         $this->afterUpdate();
         return $result;
     }
 
     public function deleteAction() : Result
     {
+        $container = $this->getAttributeContainer();
+        $valueAction = $container->getValueAction();
+
         $this->beforeDelete();
-        $result = $this->deleteValue();
+        $result = $valueAction->delete();
         $this->afterDelete();
         return $result;
     }
