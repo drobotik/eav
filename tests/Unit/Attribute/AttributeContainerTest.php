@@ -115,6 +115,35 @@ class AttributeContainerTest extends TestCase
     }
 
     /** @test */
+    public function initialize_attribute() {
+        $attribute = $this->eavFactory->createAttribute();
+        $result = $this->container->initializeAttribute($attribute);
+        $this->assertInstanceOf(Attribute::class, $result);
+        $this->assertEquals($attribute->toArray(),  $result->getBag()->getFields());
+    }
+
+    /** @test */
+    public function initialized_attribute_without_pivot() {
+        $domainModel = $this->eavFactory->createDomain();
+        $setModel = $this->eavFactory->createAttributeSet($domainModel);
+        $groupModel = $this->eavFactory->createGroup($setModel);
+        $attributeModel = $this->eavFactory->createAttribute($domainModel);
+        $this->eavFactory->createPivot($domainModel, $setModel, $groupModel, $attributeModel);
+        $attribute = $setModel->attributes()->get()->first();
+        $result = $this->container->initializeAttribute($attribute);
+        $this->assertEquals($attributeModel->toArray(), $result->getBag()->getFields());
+        $this->assertSame($result, $this->container->getAttribute());
+    }
+
+    /** @test */
+    public function initialized_strategy() {
+        $attribute = new Attribute();
+        $result = $this->container->initializeStrategy($attribute);
+        $this->assertInstanceOf(Strategy::class, $result);
+        $this->assertSame($result, $this->container->getStrategy());
+    }
+
+    /** @test */
     public function initialize() {
         $domainModel = $this->eavFactory->createDomain();
         $entityModel = $this->eavFactory->createEntity($domainModel);
@@ -144,4 +173,34 @@ class AttributeContainerTest extends TestCase
         $this->assertEquals($valueModel->getKey(), $valueManager->getKey());
         $this->assertEquals($valueModel->getValue(), $valueManager->getStored());
     }
+
+    /** @test */
+    public function initialize_calls() {
+        $attributeModel = $this->eavFactory->createAttribute();
+        $container = $this->getMockBuilder(AttributeContainer::class)
+            ->onlyMethods([
+                'initializeAttribute',
+                'initializeStrategy',
+                'makeValueManager',
+            ])
+            ->getMock();
+        $attribute = new Attribute();
+        $container->expects($this->once())
+            ->method('initializeAttribute')
+            ->with($attributeModel)
+            ->willReturn($attribute);
+        $strategy = $this->getMockBuilder(Strategy::class)
+            ->onlyMethods(['findAction'])
+            ->getMock();
+        $strategy->expects($this->once())
+            ->method('findAction');
+        $container->expects($this->once())
+            ->method('initializeStrategy')
+            ->with($attribute)
+            ->willReturn($strategy);
+        $container->expects($this->once())
+            ->method('makeValueManager');
+        $container->initialize($attributeModel);
+    }
+
 }

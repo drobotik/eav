@@ -100,13 +100,27 @@ class AttributeContainer
         return $this->attributeSet;
     }
 
-    public function initialize(AttributeModel $attributeModel) : self
+    public function initializeAttribute(AttributeModel $record) : Attribute
     {
         $attribute = new Attribute();
-        $attribute->getBag()->setFields($attributeModel->toArray());
+        $data = $record->makeHidden('pivot')->toArray();
+        $attribute->getBag()->setFields($data);
         $this->setAttribute($attribute);
+        return $attribute;
+    }
+
+    public function initializeStrategy(Attribute $attribute) : Strategy
+    {
         $className = $attribute->getStrategy();
-        $strategy = $this->setStrategy(new $className)->getStrategy();
+        $strategy = new $className;
+        $this->setStrategy($strategy);
+        return $strategy;
+    }
+
+    public function initialize(AttributeModel $attributeModel) : self
+    {
+        $attribute = $this->initializeAttribute($attributeModel);
+        $strategy = $this->initializeStrategy($attribute);
         $this->makeValueManager();
         $strategy->findAction();
         return $this;
