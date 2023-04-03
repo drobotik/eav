@@ -7,6 +7,17 @@ use Kuperwood\Eav\Value\ValueValidator;
 
 class AttributeContainer
 {
+    private array $supported = [
+        AttributeSet::class,
+        AttributeSetAction::class,
+        Attribute::class,
+        Strategy::class,
+        ValueManager::class,
+        ValueValidator::class,
+        ValueAction::class,
+        EntityAction::class,
+    ];
+
     protected Attribute $attribute;
     protected Strategy $strategy;
     protected AttributeSet $attributeSet;
@@ -14,22 +25,12 @@ class AttributeContainer
     protected ValueManager $valueManager;
     protected ValueValidator $valueValidator;
     protected ValueAction $valueAction;
+    protected EntityAction $entityAction;
 
     public function make(string $className) {
-        $supported = [
-            AttributeSet::class,
-            AttributeSetAction::class,
-            Attribute::class,
-            Strategy::class,
-            ValueManager::class,
-            ValueValidator::class,
-            ValueAction::class
-        ];
-
-        if(!in_array($className, $supported)) {
+        if(!in_array($className, $this->supported)) {
             return false;
         }
-
         $instance = new $className();
         $instance->setAttributeContainer($this);
         return $instance;
@@ -74,6 +75,12 @@ class AttributeContainer
     public function makeValueAction() : self
     {
         $this->setValueAction($this->make(ValueAction::class));
+        return $this;
+    }
+
+    public function makeEntityAction() : self
+    {
+        $this->setEntityAction($this->make(EntityAction::class));
         return $this;
     }
 
@@ -159,6 +166,18 @@ class AttributeContainer
     public function getAttributeSetAction(): AttributeSetAction
     {
         return $this->attributeSetAction;
+    }
+
+    public function setEntityAction(EntityAction $entityAction) : self
+    {
+        $entityAction->setAttributeContainer($this);
+        $this->entityAction = $entityAction;
+        return $this;
+    }
+
+    public function getEntityAction(): EntityAction
+    {
+        return $this->entityAction;
     }
 
 }

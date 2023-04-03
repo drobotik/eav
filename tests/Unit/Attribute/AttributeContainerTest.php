@@ -6,6 +6,7 @@ use Kuperwood\Eav\Attribute;
 use Kuperwood\Eav\AttributeContainer;
 use Kuperwood\Eav\AttributeSet;
 use Kuperwood\Eav\AttributeSetAction;
+use Kuperwood\Eav\EntityAction;
 use Kuperwood\Eav\Strategy;
 use Kuperwood\Eav\Value\ValueValidator;
 use Kuperwood\Eav\ValueManager;
@@ -19,6 +20,29 @@ class AttributeContainerTest extends TestCase
     {
         parent::setUp();
         $this->container = new AttributeContainer();
+    }
+
+    /** @test */
+    public function entity_action() {
+        $entityAction = new EntityAction();
+        $result = $this->container->setEntityAction($entityAction);
+        $this->assertSame($result, $this->container);
+        $this->assertSame($entityAction , $this->container->getEntityAction());
+        $this->assertSame($this->container, $this->container->getEntityAction()->getAttributeContainer());
+    }
+
+    /** @test */
+    public function makeEntityAction() {
+        $instance = $this->container->make(EntityAction::class);
+        $this->assertSame($this->container, $instance->getAttributeContainer());
+        $this->assertInstanceOf(EntityAction::class, $instance);
+    }
+
+    /** @test */
+    public function makeEntityActionAlias() {
+        $result = $this->container->makeEntityAction();
+        $this->assertSame($result, $this->container);
+        $this->assertInstanceOf(EntityAction::class, $this->container->getEntityAction());
     }
 
     /** @test */
