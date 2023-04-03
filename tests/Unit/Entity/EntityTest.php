@@ -76,5 +76,54 @@ class EntityTest extends TestCase
         $this->assertEquals(_RESULT::CREATED->message(), $result->getMessage());
     }
 
+    /** @test */
+    public function find_no_key() {
+        $result = $this->entity->find();
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::EMPTY->code(), $result->getCode());
+        $this->assertEquals(_RESULT::EMPTY->message(), $result->getMessage());
+    }
+
+    /** @test */
+    public function find_no_record() {
+        $this->entity->setKey(123);
+        $result = $this->entity->find();
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::NOT_FOUND->code(), $result->getCode());
+        $this->assertEquals(_RESULT::NOT_FOUND->message(), $result->getMessage());
+    }
+
+    /** @test */
+    public function find() {
+        $domainModel = $this->eavFactory->createDomain();
+        $setModel = $this->eavFactory->createAttributeSet();
+        $entityModel = $this->eavFactory->createEntity($domainModel, $setModel);
+
+        $set = $this->getMockBuilder(AttributeSet::class)
+            ->onlyMethods(['fetchContainers', 'setKey', 'setEntity'])
+            ->getMock();
+        $set->expects($this->once())->method('setKey')->with($setModel->getKey());
+        $set->expects($this->once())->method('fetchContainers');
+        $set->expects($this->once())->method('setEntity');
+        $entity = $this->getMockBuilder(Entity::class)
+            ->onlyMethods(['makeAttributeSet', 'setAttributeSet', 'setDomainKey'])
+            ->getMock();
+        $entity->expects($this->once())
+            ->method('setDomainKey')
+            ->with($domainModel->getKey());
+        $entity->expects($this->once())
+            ->method('makeAttributeSet')
+            ->willReturn($set);
+        $entity->expects($this->once())
+            ->method('setAttributeSet')
+            ->with($set);
+
+        $entity->setKey($entityModel->getKey());
+
+        $result = $entity->find();
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::FOUND->code(), $result->getCode());
+        $this->assertEquals(_RESULT::FOUND->message(), $result->getMessage());
+    }
 
 }

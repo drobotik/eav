@@ -6,9 +6,11 @@ namespace Kuperwood\Eav;
 
 use Kuperwood\Eav\Result\Result;
 use Kuperwood\Eav\Trait\ContainerTrait;
+use Kuperwood\Eav\Trait\SingletonsTrait;
 
 class Entity
 {
+    use SingletonsTrait;
     use ContainerTrait;
 
     private ?int $key = null;
@@ -65,6 +67,27 @@ class Entity
     public function find() : Result
     {
         $result = new Result();
+
+        $key = $this->getKey();
+        if(is_null($key)) {
+            return $result->empty();
+        }
+
+        $model = $this->makeEntityModel();
+        $record = $model->find($key);
+
+        if(is_null($record)) {
+            return $result->notFound();
+        }
+
+        $this->setDomainKey($record->getDomainKey());
+        $set = $this->makeAttributeSet();
+        $set->setKey($record->getAttrSetKey());
+        $set->fetchContainers();
+        $set->setEntity($this);
+        $this->setAttributeSet($set);
+
+        $result->found();
         return $result;
     }
 
