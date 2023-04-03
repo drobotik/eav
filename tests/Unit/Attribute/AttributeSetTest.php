@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Kuperwood\Eav\Attribute;
 use Kuperwood\Eav\AttributeContainer;
 use Kuperwood\Eav\AttributeSet;
+use Kuperwood\Eav\AttributeSetAction;
 use Kuperwood\Eav\Model\AttributeModel;
 use Kuperwood\Eav\Model\AttributeSetModel;
 use Tests\TestCase;
@@ -105,18 +106,21 @@ class AttributeSetTest extends TestCase
         $instance->expects($this->once())
             ->method('makeAttributeSetModel')
             ->willReturn($attrSetModel);
-        $container = $this->getMockBuilder(AttributeContainer::class)
-            ->onlyMethods(['setAttributeSet', 'initialize'])
+        $attrSetAction = $this->getMockBuilder(AttributeSetAction::class)
+            ->onlyMethods(['initialize'])
             ->getMock();
+        $container = $this->getMockBuilder(AttributeContainer::class)
+            ->onlyMethods(['setAttributeSet', 'getAttributeSetAction'])
+            ->getMock();
+        $container->expects($this->once())
+            ->method('getAttributeSetAction')
+            ->willReturn($attrSetAction);
         $instance->expects($this->once())
             ->method('makeAttributeContainer')
             ->willReturn($container);
         $container->expects($this->once())
             ->method('setAttributeSet')
             ->with($instance);
-        $container->expects($this->once())
-            ->method('initialize')
-            ->with($attribute);
         $instance->expects($this->once())
             ->method('pushContainer')
             ->with($container);

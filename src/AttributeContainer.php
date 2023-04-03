@@ -2,7 +2,6 @@
 
 namespace Kuperwood\Eav;
 
-use Kuperwood\Eav\Model\AttributeModel;
 use Kuperwood\Eav\Value\ValueAction;
 use Kuperwood\Eav\Value\ValueValidator;
 
@@ -11,12 +10,15 @@ class AttributeContainer
     protected Attribute $attribute;
     protected Strategy $strategy;
     protected AttributeSet $attributeSet;
+    protected AttributeSetAction $attributeSetAction;
     protected ValueManager $valueManager;
     protected ValueValidator $valueValidator;
     protected ValueAction $valueAction;
+
     public function make(string $className) {
         $supported = [
             AttributeSet::class,
+            AttributeSetAction::class,
             Attribute::class,
             Strategy::class,
             ValueManager::class,
@@ -36,6 +38,12 @@ class AttributeContainer
     public function makeAttributeSet() : self
     {
         $this->setAttributeSet($this->make(AttributeSet::class));
+        return $this;
+    }
+
+    public function makeAttributeSetAction() : self
+    {
+        $this->setAttributeSetAction($this->make(AttributeSetAction::class));
         return $this;
     }
 
@@ -141,29 +149,16 @@ class AttributeContainer
         return $this->attributeSet;
     }
 
-    public function initializeAttribute(AttributeModel $record) : Attribute
+    public function setAttributeSetAction(AttributeSetAction $attrSetAction) : self
     {
-        $attribute = new Attribute();
-        $data = $record->makeHidden('pivot')->toArray();
-        $attribute->getBag()->setFields($data);
-        $this->setAttribute($attribute);
-        return $attribute;
-    }
-
-    public function initializeStrategy(Attribute $attribute) : Strategy
-    {
-        $className = $attribute->getStrategy();
-        $strategy = new $className;
-        $this->setStrategy($strategy);
-        return $strategy;
-    }
-
-    public function initialize(AttributeModel $attributeModel) : self
-    {
-        $attribute = $this->initializeAttribute($attributeModel);
-        $strategy = $this->initializeStrategy($attribute);
-        $this->makeValueManager();
-        $strategy->find();
+        $attrSetAction->setAttributeContainer($this);
+        $this->attributeSetAction = $attrSetAction;
         return $this;
     }
+
+    public function getAttributeSetAction(): AttributeSetAction
+    {
+        return $this->attributeSetAction;
+    }
+
 }

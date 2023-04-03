@@ -58,7 +58,9 @@ class AttributeSet
         foreach ($model->getAttrs($this->getKey()) as $attribute) {
             $container = $this->makeAttributeContainer();
             $container->setAttributeSet($this);
-            $container->initialize($attribute);
+            $container->makeAttributeSetAction();
+            $action = $container->getAttributeSetAction();
+            $action->initialize($attribute);
             $this->pushContainer($container);
         }
         return $this;
