@@ -3,15 +3,12 @@
 namespace Tests\Unit\Attribute;
 
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Kuperwood\Eav\Attribute;
 use Kuperwood\Eav\AttributeContainer;
 use Kuperwood\Eav\AttributeSet;
-use Kuperwood\Eav\Exception\AttributeSetException;
 use Kuperwood\Eav\Model\AttributeModel;
 use Kuperwood\Eav\Model\AttributeSetModel;
 use Tests\TestCase;
-use Throwable;
 
 class AttributeSetTest extends TestCase
 {
@@ -45,7 +42,7 @@ class AttributeSetTest extends TestCase
         $attribute->setName('test');
         $container = new AttributeContainer();
         $container->setAttribute($attribute);
-        $this->instance->push($container);
+        $this->instance->pushContainer($container);
         $this->assertEquals([$attribute->getName() => $container], $this->instance->getContainers());
     }
 
@@ -55,8 +52,13 @@ class AttributeSetTest extends TestCase
         $attribute->setName('test');
         $container = new AttributeContainer();
         $container->setAttribute($attribute);
-        $this->instance->push($container);
+        $this->instance->pushContainer($container);
         $this->assertSame($container, $this->instance->getContainer($attribute->getName()));
+    }
+
+    /** @test */
+    public function get_container_return_nul() {
+        $this->assertNull($this->instance->getContainer('test'));
     }
 
     /** @test */
@@ -66,15 +68,8 @@ class AttributeSetTest extends TestCase
         $attribute->setName('test');
         $container = new AttributeContainer();
         $container->setAttribute($attribute);
-        $this->instance->push($container);
+        $this->instance->pushContainer($container);
         $this->assertTrue($this->instance->hasContainer('test'));
-    }
-
-    /** @test */
-    public function get_container_throws_exception() {
-        $this->expectException(AttributeSetException::class);
-        $this->expectExceptionMessage(sprintf(AttributeSetException::UNDEFINED_ATTRIBUTE, 'test'));
-        $this->instance->getContainer('test');
     }
 
     /** @test */
@@ -83,63 +78,33 @@ class AttributeSetTest extends TestCase
         $attribute->setName('test');
         $container = new AttributeContainer();
         $container->setAttribute($attribute);
-        $this->instance->push($container);
-        $this->instance->reset();
+        $this->instance->pushContainer($container);
+        $this->instance->resetContainers();
         $this->assertEquals([], $this->instance->getContainers());
     }
 
     /** @test */
-    public function get_record() {
-        $record = $this->eavFactory->createAttributeSet();
-        $this->instance->setKey($record->getKey());
-        $result = $this->instance->getRecord();
-        $this->assertInstanceOf(AttributeSetModel::class, $result);
-        $this->assertEquals($record->toArray(), $result->toArray());
-    }
-
-    public function get_record_throws_exception() {
-        $this->expectException(Throwable::class);
-        $this->instance->getRecord();
-    }
-
-    /** @test */
-    public function get_record_attributes() {
-        $collection = new Collection(123);
-        $belongsToMany = $this->getMockBuilder(BelongsToMany::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['get'])
-            ->getMock();
-        $belongsToMany->expects($this->once())
-            ->method('get')
-            ->willReturn($collection);
-        $record = $this->getMockBuilder(AttributeSetModel::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['attributes'])
-            ->getMock();
-        $record->expects($this->once())
-            ->method('attributes')
-            ->willReturn($belongsToMany);
-        $instance = $this->getMockBuilder(AttributeSet::class)
-            ->onlyMethods(['getRecord'])
-            ->getMock();
-        $instance->expects($this->once())
-            ->method('getRecord')
-            ->willReturn($record);
-        $result = $instance->getRecordAttributes();
-        $this->assertSame($collection, $result);
-    }
-
-    /** @test */
     public function fetch() {
+        $key = 321;
         $collection = new Collection();
         $attribute = new AttributeModel();
         $collection->push($attribute);
+        $attrSetModel = $this->getMockBuilder(AttributeSetModel::class)
+            ->onlyMethods(['getAttrs'])
+            ->getMock();
+        $attrSetModel->expects($this->once())
+            ->method('getAttrs')
+            ->with($key)
+            ->willReturn($collection);
         $instance = $this->getMockBuilder(AttributeSet::class)
-            ->onlyMethods(['makeAttributeContainer', 'getRecordAttributes', 'push'])
+            ->onlyMethods(['makeAttributeContainer', 'makeAttributeSetModel', 'pushContainer', 'getKey'])
             ->getMock();
         $instance->expects($this->once())
-            ->method('getRecordAttributes')
-            ->willReturn($collection);
+            ->method('getKey')
+            ->willReturn($key);
+        $instance->expects($this->once())
+            ->method('makeAttributeSetModel')
+            ->willReturn($attrSetModel);
         $container = $this->getMockBuilder(AttributeContainer::class)
             ->onlyMethods(['setAttributeSet', 'initialize'])
             ->getMock();
@@ -153,10 +118,9 @@ class AttributeSetTest extends TestCase
             ->method('initialize')
             ->with($attribute);
         $instance->expects($this->once())
-            ->method('push')
+            ->method('pushContainer')
             ->with($container);
-
-        $result = $instance->fetch();
+        $result = $instance->fetchContainers();
         $this->assertEquals($instance, $result);
     }
 }

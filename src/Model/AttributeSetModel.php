@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kuperwood\Eav\Model;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Kuperwood\Eav\Enum\_PIVOT;
@@ -60,5 +61,10 @@ class AttributeSetModel extends Model
         return $this
             ->where(_SET::ID->column(), "=", $key)
             ->firstOrFail();
+    }
+
+    public function getAttrs(int $key) : Collection
+    {
+        return $this->firstOrFail($key)->attributes()->get();
     }
 }

@@ -4,11 +4,6 @@ declare(strict_types=1);
 
 namespace Kuperwood\Eav;
 
-use Illuminate\Database\Eloquent\Collection;
-use Kuperwood\Eav\Enum\_SET;
-use Kuperwood\Eav\Exception\AttributeSetException;
-use Kuperwood\Eav\Model\AttributeModel;
-use Kuperwood\Eav\Model\AttributeSetModel;
 use Kuperwood\Eav\Trait\ContainerTrait;
 use Kuperwood\Eav\Trait\SingletonsTrait;
 
@@ -23,16 +18,6 @@ class AttributeSet
     private array $containers = [];
     private Entity $entity;
 
-    public function getEntity(): Entity
-    {
-        return $this->entity;
-    }
-
-    public function setEntity(Entity $entity) : self
-    {
-        $this->entity = $entity;
-        return $this;
-    }
 
     public function getKey(): int
     {
@@ -56,9 +41,38 @@ class AttributeSet
         return $this;
     }
 
-    public function push(AttributeContainer $container) : self
+    public function getEntity(): Entity
+    {
+        return $this->entity;
+    }
+
+    public function setEntity(Entity $entity) : self
+    {
+        $this->entity = $entity;
+        return $this;
+    }
+
+    public function fetchContainers() : self
+    {
+        $model = $this->makeAttributeSetModel();
+        foreach ($model->getAttrs($this->getKey()) as $attribute) {
+            $container = $this->makeAttributeContainer();
+            $container->setAttributeSet($this);
+            $container->initialize($attribute);
+            $this->pushContainer($container);
+        }
+        return $this;
+    }
+
+    public function pushContainer(AttributeContainer $container) : self
     {
         $this->containers[$container->getAttribute()->getName()] = $container;
+        return $this;
+    }
+
+    public function resetContainers() : self
+    {
+        $this->containers = [];
         return $this;
     }
 
@@ -67,13 +81,9 @@ class AttributeSet
         return $this->containers;
     }
 
-    /**
-     * @throws AttributeSetException
-     */
-    public function getContainer(string $name) : AttributeContainer
+    public function getContainer(string $name) : ?AttributeContainer
     {
-        if(!$this->hasContainer($name))
-            AttributeSetException::undefinedAttribute($name);
+        if(!$this->hasContainer($name)) return null;
         return $this->containers[$name];
     }
 
@@ -82,32 +92,4 @@ class AttributeSet
         return array_key_exists($name, $this->containers);
     }
 
-    public function reset() : self
-    {
-        $this->containers = [];
-        return $this;
-    }
-
-    public function getRecord() : AttributeSetModel
-    {
-        return $this->makeAttributeSetModel()->firstOrFail($this->getKey());
-    }
-
-    public function getRecordAttributes(): Collection
-    {
-        return $this->getRecord()->attributes()->get();
-    }
-
-    public function fetch() : self
-    {
-        /** @var AttributeModel $attribute */
-        foreach ($this->getRecordAttributes() as $attribute) {
-            $container = $this->makeAttributeContainer();
-            $container->setAttributeSet($this);
-            $container->initialize($attribute);
-            // TODO shift ->makeHidden('pivot') to AttributeContainer
-            $this->push($container);
-        }
-        return $this;
-    }
 }
