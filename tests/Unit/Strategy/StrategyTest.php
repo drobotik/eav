@@ -4,12 +4,10 @@ namespace Tests\Unit\Strategy;
 
 use Illuminate\Support\MessageBag;
 use Illuminate\Validation\Validator;
-use Kuperwood\Eav\Attribute;
 use Kuperwood\Eav\AttributeContainer;
 use Kuperwood\Eav\AttributeSet;
 use Kuperwood\Eav\Entity;
 use Kuperwood\Eav\Enum\_RESULT;
-use Kuperwood\Eav\Enum\ATTR_TYPE;
 use Kuperwood\Eav\Result\Result;
 use Kuperwood\Eav\Strategy;
 use Kuperwood\Eav\Value\ValueAction;
@@ -235,9 +233,6 @@ class StrategyTest extends TestCase
         $entity = $this->getMockBuilder(Entity::class)
             ->onlyMethods(['getKey'])
             ->getMock();
-        $entity->expects($this->once())
-            ->method('getKey')
-            ->willReturn(null);
         $attrSet = $this->getMockBuilder(AttributeSet::class)
             ->onlyMethods(['getEntity'])
             ->getMock();

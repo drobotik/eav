@@ -45,18 +45,19 @@ class ValueAction
         $attribute = $container->getAttribute();
         $attributeKey = $attribute->getKey();
         $entity = $container->getAttributeSet()->getEntity();
-        $entityKey = $entity->getKey();
-        $domainKey = $entity->getDomainKey();
+
+
         $valueManager = $container->getValueManager();
         $model = $attribute->getValueModel();
 
-        if(is_null($attributeKey) || is_null($entityKey) || is_null($domainKey)) {
+        if(is_null($attributeKey) || !$entity->hasKey()) {
             return $result->empty();
         }
 
+        $entityKey = $entity->getKey();
+
         $record = $model
             ->where(_VALUE::ENTITY_ID->column(), $entityKey)
-            ->where(_VALUE::DOMAIN_ID->column(), $domainKey)
             ->where(_VALUE::ATTRIBUTE_ID->column(), $attributeKey)
             ->first();
 

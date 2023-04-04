@@ -4,28 +4,43 @@ declare(strict_types=1);
 
 namespace Kuperwood\Eav;
 
+use Kuperwood\Eav\Exception\EntityException;
+use Kuperwood\Eav\Model\AttributeSetModel;
+use Kuperwood\Eav\Model\DomainModel;
+use Kuperwood\Eav\Model\EntityModel;
 use Kuperwood\Eav\Result\Result;
 use Kuperwood\Eav\Trait\ContainerTrait;
 use Kuperwood\Eav\Trait\SingletonsTrait;
+use Throwable;
 
 class Entity
 {
     use SingletonsTrait;
     use ContainerTrait;
 
-    private ?int $key = null;
-    private ?int $domainKey = null;
+    private int $key;
+    private int $domainKey;
     private AttributeSet $attributeSet;
 
-    public function getKey(): ?int
+    public function __construct()
+    {
+        $this->attributeSet = $this->makeAttributeSet();
+    }
+
+    public function getKey(): int
     {
         return $this->key;
     }
 
-    public function setKey(?int $key): self
+    public function setKey(int $key): self
     {
         $this->key = $key;
         return $this;
+    }
+
+    public function hasKey(): bool
+    {
+        return isset($this->key);
     }
 
     public function setDomainKey(?int $key): self
@@ -39,7 +54,12 @@ class Entity
         return $this->domainKey;
     }
 
-    public function getAttributeSet(): AttributeSet
+    public function hasDomainKey(): bool
+    {
+        return isset($this->domainKey);
+    }
+
+    public function getAttributeSet(): ?AttributeSet
     {
         return $this->attributeSet;
     }
@@ -68,10 +88,10 @@ class Entity
     {
         $result = new Result();
 
-        $key = $this->getKey();
-        if(is_null($key)) {
+        if(!$this->hasKey()) {
             return $result->empty();
         }
+        $key = $this->getKey();
 
         $model = $this->makeEntityModel();
         $record = $model->find($key);
@@ -91,10 +111,66 @@ class Entity
         return $result;
     }
 
-    public function update() : Result
+    private function checkEntityExists(int $key) : EntityModel
     {
-        $result = new Result();
-        return $result;
+        try {
+            return $this->makeEntityModel()->findOrFail($key);
+        } catch(Throwable $e) {
+            EntityException::entityNotFound();
+        }
+    }
+
+    private function checkDomainExists(int $key) : DomainModel
+    {
+        try {
+            return $this->makeDomainModel()->findOrFail($key);
+        } catch(Throwable $e) {
+            EntityException::domainNotFound();
+        }
+    }
+
+    private function checkAttrSetExist(int $key) : AttributeSetModel
+    {
+        try {
+            return $this->makeAttributeSetModel()->findOrFail($key);
+        } catch(Throwable $e) {
+            EntityException::attrSetNotFound();
+        }
+    }
+
+    private function beforeSave(): int
+    {
+        $set = $this->getAttributeSet();
+        if (!$this->hasKey()) {
+            if(!$this->hasDomainKey()) {
+                EntityException::undefinedDomainKey();
+            }
+            if(!$set->hasKey()) {
+                EntityException::undefinedAttributeSetKey();
+            }
+            $domainKey = $this->getDomainKey();
+            $this->checkDomainExists($domainKey);
+            $setKey = $set->getKey();
+            $this->checkAttrSetExist($setKey);
+            $model = $this->makeEntityModel();
+            $model->setDomainKey($domainKey);
+            $model->setAttrSetKey($setKey);
+            $model->save();
+            $this->setKey($model->getKey());
+            return 1;
+        } else {
+            $key = $this->getKey();
+            $record = $this->checkEntityExists($key);
+            $this->checkDomainExists($record->getDomainKey());
+            $this->checkAttrSetExist($record->getAttrSetKey());
+            $set->setKey($record->getAttrSetKey());
+            $this->setDomainKey($record->getDomainKey());
+            return 2;
+        }
+    }
+
+    public function save() {
+        $this->beforeSave();
     }
 
     public function delete() : Result

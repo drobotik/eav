@@ -6,7 +6,10 @@ use Kuperwood\Eav\AttributeContainer;
 use Kuperwood\Eav\AttributeSet;
 use Kuperwood\Eav\Entity;
 use Kuperwood\Eav\EntityAction;
+use Kuperwood\Eav\Enum\_ENTITY;
 use Kuperwood\Eav\Enum\_RESULT;
+use Kuperwood\Eav\Exception\EntityException;
+use Kuperwood\Eav\Model\EntityModel;
 use Kuperwood\Eav\Result\Result;
 
 use Tests\TestCase;
@@ -21,20 +24,25 @@ class EntityTest extends TestCase
 
     /** @test */
     public function key() {
-        $this->assertNull($this->entity->getKey());
+        $this->assertFalse($this->entity->hasKey());
         $this->entity->setKey(1);
         $this->assertEquals(1, $this->entity->getKey());
-        $this->entity->setKey(null);
-        $this->assertNull($this->entity->getKey());
+        $this->assertTrue($this->entity->hasKey());
     }
 
     /** @test */
     public function domain_key() {
-        $this->assertNull($this->entity->getDomainKey());
+        $this->assertFalse($this->entity->hasDomainKey());
         $this->entity->setDomainKey(1);
         $this->assertEquals(1, $this->entity->getDomainKey());
-        $this->entity->setDomainKey(null);
-        $this->assertNull($this->entity->getDomainKey());
+        $this->assertTrue($this->entity->hasDomainKey());
+    }
+
+    public function attribute_set() {
+        $this->assertInstanceOf(AttributeSet::class, $this->entity->getAttributeSet());
+        $attributeSet = new AttributeSet();
+        $this->entity->setAttributeSet($attributeSet);
+        $this->assertSame($attributeSet, $this->entity->getAttributeSet());
     }
 
     /** @test */
@@ -126,4 +134,110 @@ class EntityTest extends TestCase
         $this->assertEquals(_RESULT::FOUND->message(), $result->getMessage());
     }
 
+    /** @test */
+    public function save_no_entity_key_no_domain() {
+        $this->expectException(EntityException::class);
+        $this->expectExceptionMessage(EntityException::UNDEFINED_DOMAIN_KEY);
+        $this->entity->save();
+    }
+
+    /** @test */
+    public function save_no_entity_key_no_attr_set_key() {
+        $this->expectException(EntityException::class);
+        $this->expectExceptionMessage(EntityException::UNDEFINED_ATTRIBUTE_SET_KEY);
+        $this->entity->setDomainKey(1);
+        $this->entity->save();
+    }
+
+    /** @test */
+    public function save_no_entity_key_domain_not_in_db() {
+        $this->expectException(EntityException::class);
+        $this->expectExceptionMessage(EntityException::DOMAIN_NOT_FOUND);
+        $this->entity->setDomainKey(1);
+        $this->entity->getAttributeSet()->setKey(1);
+        $this->entity->save();
+    }
+
+    /** @test */
+    public function save_no_entity_key_attr_set_not_in_db() {
+        $this->expectException(EntityException::class);
+        $this->expectExceptionMessage(EntityException::ATTR_SET_NOT_FOUND);
+        $domain = $this->eavFactory->createDomain();
+        $this->entity->setDomainKey($domain->getKey());
+        $this->entity->getAttributeSet()->setKey(1);
+        $this->entity->save();
+    }
+
+    /** @test */
+    public function save_no_entity_key_creating_record() {
+        $this->eavFactory->createDomain();
+        $this->eavFactory->createAttributeSet();
+        $domain = $this->eavFactory->createDomain();
+        $attrSet = $this->eavFactory->createAttributeSet($domain);
+        $this->entity->setDomainKey($domain->getKey());
+        $this->entity->getAttributeSet()->setKey($attrSet->getKey());
+
+        $this->entity->save();
+
+        $this->assertEquals(1, EntityModel::count());
+        $record = EntityModel::where(_ENTITY::DOMAIN_ID->column(), $domain->getKey())
+            ->where(_ENTITY::ATTR_SET_ID->column(), $attrSet->getKey())
+            ->first();
+        $this->assertInstanceOf(EntityModel::class, $record);
+        $this->assertEquals($record->getKey(), $this->entity->getKey());
+        $this->assertEquals($record->getDomainKey(), $this->entity->getDomainKey());
+        $this->assertEquals($record->getAttrSetKey(), $this->entity->getAttributeSet()->getKey());
+    }
+
+    /** @test */
+    public function save_with_entity_key_no_record_in_db() {
+        $this->expectException(EntityException::class);
+        $this->expectExceptionMessage(EntityException::ENTITY_NOT_FOUND);
+        $this->entity->setKey(123);
+        $this->entity->save();
+    }
+
+    /** @test */
+    public function save_with_entity_key_no_domain_in_db() {
+        $this->expectException(EntityException::class);
+        $this->expectExceptionMessage(EntityException::DOMAIN_NOT_FOUND);
+        $entity = new EntityModel();
+        $entity ->setDomainKey(123);
+        $entity ->setAttrSetKey(123);
+        $entity ->save();
+        $this->entity->setKey($entity->getKey());
+        $this->entity->save();
+    }
+
+    /** @test */
+    public function save_with_entity_key_no_attr_set_in_db() {
+        $this->expectException(EntityException::class);
+        $this->expectExceptionMessage(EntityException::ATTR_SET_NOT_FOUND);
+        $domain = $this->eavFactory->createDomain();
+        $entity = new EntityModel();
+        $entity ->setDomainKey($domain->getKey());
+        $entity ->setAttrSetKey(123);
+        $entity ->save();
+        $this->entity->setKey($entity->getKey());
+        $this->entity->save();
+    }
+
+    /** @test */
+    public function save_with_entity_key_fetching_record() {
+        $domain = $this->eavFactory->createDomain();
+        $attrSet = $this->eavFactory->createAttributeSet($domain);
+        $entity = $this->eavFactory->createEntity($domain, $attrSet);
+        $this->entity->setKey($entity->getKey());
+
+        $this->entity->save();
+
+        $this->assertEquals(1, EntityModel::count());
+        $record = EntityModel::where(_ENTITY::DOMAIN_ID->column(), $domain->getKey())
+            ->where(_ENTITY::ATTR_SET_ID->column(), $attrSet->getKey())
+            ->first();
+        $this->assertInstanceOf(EntityModel::class, $record);
+        $this->assertEquals($record->getKey(), $this->entity->getKey());
+        $this->assertEquals($record->getDomainKey(), $this->entity->getDomainKey());
+        $this->assertEquals($record->getAttrSetKey(), $this->entity->getAttributeSet()->getKey());
+    }
 }

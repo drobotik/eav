@@ -5,6 +5,7 @@ namespace Kuperwood\Eav\Trait;
 use Kuperwood\Eav\AttributeContainer;
 use Kuperwood\Eav\AttributeSet;
 use Kuperwood\Eav\Model\AttributeSetModel;
+use Kuperwood\Eav\Model\DomainModel;
 use Kuperwood\Eav\Model\EntityModel;
 
 trait SingletonsTrait
@@ -27,6 +28,11 @@ trait SingletonsTrait
     public function makeAttributeSet() : AttributeSet
     {
         return new AttributeSet();
+    }
+
+    public function makeDomainModel() : DomainModel
+    {
+        return new DomainModel();
     }
 
 }

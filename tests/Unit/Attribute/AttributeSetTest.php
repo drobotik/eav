@@ -22,8 +22,10 @@ class AttributeSetTest extends TestCase
 
     /** @test */
     public function key() {
+        $this->assertFalse($this->instance->hasKey());
         $this->instance->setKey(1);
         $this->assertEquals(1, $this->instance->getKey());
+        $this->assertTrue($this->instance->hasKey());
     }
 
     /** @test */
@@ -85,7 +87,7 @@ class AttributeSetTest extends TestCase
     }
 
     /** @test */
-    public function fetch() {
+    public function fetch_containers() {
         $key = 321;
         $collection = new Collection();
         $attribute = new AttributeModel();
@@ -98,8 +100,11 @@ class AttributeSetTest extends TestCase
             ->with($key)
             ->willReturn($collection);
         $instance = $this->getMockBuilder(AttributeSet::class)
-            ->onlyMethods(['makeAttributeContainer', 'makeAttributeSetModel', 'pushContainer', 'getKey'])
+            ->onlyMethods(['makeAttributeContainer', 'makeAttributeSetModel', 'pushContainer', 'getKey', 'hasKey'])
             ->getMock();
+        $instance->expects($this->once())
+            ->method('hasKey')
+            ->willReturn(true);
         $instance->expects($this->once())
             ->method('getKey')
             ->willReturn($key);
@@ -124,6 +129,17 @@ class AttributeSetTest extends TestCase
         $instance->expects($this->once())
             ->method('pushContainer')
             ->with($container);
+        $result = $instance->fetchContainers();
+        $this->assertEquals($instance, $result);
+    }
+
+    /** @test */
+    public function fetch_containers_no_key() {
+        $instance = $this->getMockBuilder(AttributeSet::class)
+            ->onlyMethods(['pushContainer'])
+            ->getMock();
+        $instance->expects($this->never())
+            ->method('pushContainer');
         $result = $instance->fetchContainers();
         $this->assertEquals($instance, $result);
     }

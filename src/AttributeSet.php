@@ -30,6 +30,11 @@ class AttributeSet
         return $this;
     }
 
+    public function hasKey() : bool
+    {
+        return isset($this->key);
+    }
+
     public function getName(): string
     {
         return $this->name;
@@ -54,6 +59,7 @@ class AttributeSet
 
     public function fetchContainers() : self
     {
+        if(!$this->hasKey()) return $this;
         $model = $this->makeAttributeSetModel();
         foreach ($model->getAttrs($this->getKey()) as $attribute) {
             $container = $this->makeAttributeContainer();
