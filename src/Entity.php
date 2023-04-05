@@ -213,7 +213,12 @@ class Entity
 
     public function toArray() : array
     {
-        return [];
+        $set = $this->getAttributeSet();
+        $result = [];
+        foreach ($set->getContainers() as $container) {
+            $result[$container->getAttribute()->getName()] = $container->getValueManager()->getValue();
+        }
+        return $result;
     }
 
 }

@@ -18,6 +18,7 @@ use Kuperwood\Eav\Model\ValueStringModel;
 use Kuperwood\Eav\Result\Result;
 
 use Kuperwood\Eav\Transporter;
+use Kuperwood\Eav\ValueManager;
 use Tests\TestCase;
 
 class EntityTest extends TestCase
@@ -466,6 +467,49 @@ class EntityTest extends TestCase
         $this->assertEquals(_RESULT::VALIDATION_PASSED->code(), $result->getCode());
         $this->assertEquals(_RESULT::VALIDATION_PASSED->message(), $result->getMessage());
         $this->assertNull($result->getData());
+    }
+
+    /** @test */
+    public function to_array() {
+        $data = [
+            'email' => 'email@emal.com',
+            'phone' => '1234567',
+        ];
+        $attribute = $this->getMockBuilder(Attribute::class)
+            ->onlyMethods(['getName'])
+            ->getMock();
+        $attribute->expects($this->exactly(2))
+            ->method('getName')
+            ->willReturn('email', 'phone');
+        $valueManager = $this->getMockBuilder(ValueManager::class)
+            ->onlyMethods(['getValue'])
+            ->getMock();
+        $valueManager->expects($this->exactly(2))
+            ->method('getValue')
+            ->willReturn($data['email'], $data['phone']);
+        $container = $this->getMockBuilder(AttributeContainer::class)
+            ->onlyMethods(['getValueManager', 'getAttribute'])
+            ->getMock();
+        $container->expects($this->exactly(2))
+            ->method('getValueManager')
+            ->willReturn($valueManager);
+        $container->expects($this->exactly(2))
+            ->method('getAttribute')
+            ->willReturn($attribute);
+        $set = $this->getMockBuilder(AttributeSet::class)
+            ->onlyMethods(['getContainers'])
+            ->getMock();
+        $set->expects($this->once())
+            ->method('getContainers')
+            ->willReturn([$container, $container]);
+        $entity = $this->getMockBuilder(Entity::class)
+            ->onlyMethods(['getAttributeSet'])
+            ->getMock();
+        $entity->expects($this->once())
+            ->method('getAttributeSet')
+            ->willReturn($set);
+        $result = $entity->toArray();
+        $this->assertEquals($data, $result);
     }
 
 }
