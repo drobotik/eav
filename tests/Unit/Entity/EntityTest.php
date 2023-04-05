@@ -7,6 +7,7 @@ use Kuperwood\Eav\AttributeContainer;
 use Kuperwood\Eav\AttributeSet;
 use Kuperwood\Eav\Entity;
 use Kuperwood\Eav\EntityAction;
+use Kuperwood\Eav\EntityBag;
 use Kuperwood\Eav\Enum\_ATTR;
 use Kuperwood\Eav\Enum\_ENTITY;
 use Kuperwood\Eav\Enum\_RESULT;
@@ -235,7 +236,7 @@ class EntityTest extends TestCase
             "phone" => "1234567890",
             "email" => "test@email.com"
         ];
-        $bag = $this->getMockBuilder(Transporter::class)
+        $bag = $this->getMockBuilder(EntityBag::class)
             ->onlyMethods(['getData', 'clear'])
             ->getMock();
         $bag->expects($this->once())
