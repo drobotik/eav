@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Entity;
 
+use Kuperwood\Eav\Attribute;
 use Kuperwood\Eav\AttributeContainer;
 use Kuperwood\Eav\AttributeSet;
 use Kuperwood\Eav\Entity;
@@ -54,45 +55,6 @@ class EntityTest extends TestCase
     /** @test */
     public function bag() {
         $this->assertInstanceOf(Transporter::class, $this->entity->getBag());
-    }
-
-    /** @test */
-    public function create() {
-        $data = [
-            "phone" => "1234567890",
-            "email" => "test@email.com"
-        ];
-        $entityAction = $this->getMockBuilder(EntityAction::class)
-            ->onlyMethods(['saveValue'])
-            ->getMock();
-        $entityAction->expects($this->exactly(2))
-            ->method('saveValue')
-            ->with($this->callback(fn($arg) => in_array($arg, array_values($data))));
-        $container = $this->getMockBuilder(AttributeContainer::class)
-            ->onlyMethods(['getEntityAction'])
-            ->getMock();
-        $container->expects($this->exactly(2))
-            ->method('getEntityAction')
-            ->willReturn($entityAction);
-        $attrSet = $this->getMockBuilder(AttributeSet::class)
-            ->onlyMethods(['fetchContainers', 'getContainer'])
-            ->getMock();
-        $attrSet->expects($this->once())
-            ->method('fetchContainers');
-        $attrSet->expects($this->exactly(2))
-            ->method('getContainer')
-            ->with($this->callback(fn($arg) => key_exists($arg, $data)))
-            ->willReturn($container);
-        $entity = $this->getMockBuilder(Entity::class)
-            ->onlyMethods(['getAttributeSet'])
-            ->getMock();
-        $entity->expects($this->once())
-            ->method('getAttributeSet')
-            ->willReturn($attrSet);
-        $result = $entity->create($data);
-        $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::CREATED->code(), $result->getCode());
-        $this->assertEquals(_RESULT::CREATED->message(), $result->getMessage());
     }
 
     /** @test */
@@ -383,7 +345,7 @@ class EntityTest extends TestCase
 
         $this->entity->setDomainKey($domain->getKey());
         $this->entity->getAttributeSet()->setKey($attrSet->getKey());
-        $this->entity->getBag()->setData($testData);
+        $this->entity->getBag()->setFields($testData);
 
         $result = $this->entity->save();
 
@@ -416,6 +378,93 @@ class EntityTest extends TestCase
         $this->assertInstanceOf(Result::class, $data);
         $this->assertEquals(_RESULT::CREATED->code(), $data->getCode());
         $this->assertEquals(_RESULT::CREATED->message(), $data->getMessage());
+    }
+
+    /** @test */
+    public function validate_with_errors() {
+        $attribute = $this->getMockBuilder(Attribute::class)
+            ->onlyMethods(['getName'])
+            ->getMock();
+        $attribute->expects($this->exactly(2))
+            ->method('getName')
+            ->willReturn('email', 'phone');
+        $action = $this->getMockBuilder(EntityAction::class)
+            ->onlyMethods(['validateField'])
+            ->getMock();
+        $emailErrors = ['value' => 'invalid'];
+        $phoneErrors = ['value' => 'not valid'];
+        $action->expects($this->exactly(2))
+            ->method('validateField')
+            ->willReturn($emailErrors, $phoneErrors);
+        $container = $this->getMockBuilder(AttributeContainer::class)
+            ->onlyMethods(['getEntityAction', 'getAttribute'])
+            ->getMock();
+        $container->expects($this->exactly(2))
+            ->method('getEntityAction')
+            ->willReturn($action);
+        $container->expects($this->exactly(2))
+            ->method('getAttribute')
+            ->willReturn($attribute);
+        $set = $this->getMockBuilder(AttributeSet::class)
+            ->onlyMethods(['fetchContainers', 'getContainers'])
+            ->getMock();
+        $set->expects($this->once())
+            ->method('fetchContainers');
+        $set->expects($this->once())
+            ->method('getContainers')
+            ->willReturn([$container, $container]);
+        $entity = $this->getMockBuilder(Entity::class)
+            ->onlyMethods(['getAttributeSet'])
+            ->getMock();
+        $entity->expects($this->once())
+            ->method('getAttributeSet')
+            ->willReturn($set);
+
+        $result = $entity->validate();
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::VALIDATION_FAILS->code(), $result->getCode());
+        $this->assertEquals(_RESULT::VALIDATION_FAILS->message(), $result->getMessage());
+        $this->assertEquals(['email' => $emailErrors, 'phone' => $phoneErrors], $result->getData());
+    }
+
+    /** @test */
+    public function validate_passed() {
+        $action = $this->getMockBuilder(EntityAction::class)
+            ->onlyMethods(['validateField'])
+            ->getMock();
+        $emailErrors = null;
+        $phoneErrors = null;
+        $action->expects($this->exactly(2))
+            ->method('validateField')
+            ->willReturn($emailErrors, $phoneErrors);
+        $container = $this->getMockBuilder(AttributeContainer::class)
+            ->onlyMethods(['getEntityAction', 'getAttribute'])
+            ->getMock();
+        $container->expects($this->exactly(2))
+            ->method('getEntityAction')
+            ->willReturn($action);
+        $container->expects($this->never())
+            ->method('getAttribute');
+        $set = $this->getMockBuilder(AttributeSet::class)
+            ->onlyMethods(['fetchContainers', 'getContainers'])
+            ->getMock();
+        $set->expects($this->once())
+            ->method('fetchContainers');
+        $set->expects($this->once())
+            ->method('getContainers')
+            ->willReturn([$container, $container]);
+        $entity = $this->getMockBuilder(Entity::class)
+            ->onlyMethods(['getAttributeSet'])
+            ->getMock();
+        $entity->expects($this->once())
+            ->method('getAttributeSet')
+            ->willReturn($set);
+
+        $result = $entity->validate();
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::VALIDATION_PASSED->code(), $result->getCode());
+        $this->assertEquals(_RESULT::VALIDATION_PASSED->message(), $result->getMessage());
+        $this->assertNull($result->getData());
     }
 
 }

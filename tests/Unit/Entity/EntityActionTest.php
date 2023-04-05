@@ -45,4 +45,53 @@ class EntityActionTest extends TestCase
         $this->assertSame($result, $action->saveValue($value));
     }
 
+    /** @test */
+    public function validate_field_fails() {
+        $result = (new Result())->validationFails();
+        $result->setData(['email' => 'email is invalid']);
+        $strategy = $this->getMockBuilder(Strategy::class)
+            ->onlyMethods(['validate'])
+            ->getMock();
+        $strategy->expects($this->once())
+            ->method('validate')
+            ->willReturn($result);
+        $container = $this->getMockBuilder(AttributeContainer::class)
+            ->onlyMethods(['getStrategy'])
+            ->getMock();
+        $container->expects($this->once())
+            ->method('getStrategy')
+            ->willReturn($strategy);
+        $action = $this->getMockBuilder(EntityAction::class)
+            ->onlyMethods(['getAttributeContainer'])
+            ->getMock();
+        $action->expects($this->once())
+            ->method('getAttributeContainer')
+            ->willReturn($container);
+        $this->assertSame($result->getData(), $action->validateField());
+    }
+
+    /** @test */
+    public function validate_field_ok() {
+        $result = (new Result())->validationPassed();
+        $strategy = $this->getMockBuilder(Strategy::class)
+            ->onlyMethods(['validate'])
+            ->getMock();
+        $strategy->expects($this->once())
+            ->method('validate')
+            ->willReturn($result);
+        $container = $this->getMockBuilder(AttributeContainer::class)
+            ->onlyMethods(['getStrategy'])
+            ->getMock();
+        $container->expects($this->once())
+            ->method('getStrategy')
+            ->willReturn($strategy);
+        $action = $this->getMockBuilder(EntityAction::class)
+            ->onlyMethods(['getAttributeContainer'])
+            ->getMock();
+        $action->expects($this->once())
+            ->method('getAttributeContainer')
+            ->willReturn($container);
+        $this->assertNull($action->validateField());
+    }
+
 }

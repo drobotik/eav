@@ -25,10 +25,10 @@ class Entity
 
     public function __construct()
     {
-        $attrSet = $this->makeAttributeSet();
-        $attrSet->setEntity($this);
-        $this->attributeSet = $attrSet;
-        $this->bag = new Transporter();
+        $this->setAttributeSet($this->makeAttributeSet());
+        $bag = new EntityBag();
+        $bag->setEntity($this);
+        $this->bag = $bag;
     }
 
     public function getKey(): int
@@ -70,29 +70,15 @@ class Entity
 
     public function setAttributeSet(AttributeSet $attributeSet): self
     {
+        $attributeSet->setEntity($this);
         $this->attributeSet = $attributeSet;
         return $this;
     }
 
-    public function getBag() : Transporter
+    public function getBag() : EntityBag
     {
         return $this->bag;
     }
-
-    public function create(array $data) : Result
-    {
-        $result = new Result();
-        $attrSet = $this->getAttributeSet();
-        $attrSet->fetchContainers();
-        foreach($data as $name => $value) {
-            $container = $attrSet->getContainer($name);
-            if(is_null($container)) continue;
-            $action = $container->getEntityAction();
-            $action->saveValue($value);
-        }
-        return $result->created();
-    }
-
     public function find() : Result
     {
         $result = new Result();
@@ -209,6 +195,19 @@ class Entity
     public function validate() : Result
     {
         $result = new Result();
+        $result->validationPassed();
+        $set = $this->getAttributeSet();
+        $set->fetchContainers();
+        $errors = [];
+        foreach ($set->getContainers() as $container) {
+            $validationResult = $container->getEntityAction()->validateField();
+            if(!is_null($validationResult))
+                $errors[$container->getAttribute()->getName()] = $validationResult;
+        }
+        if(count($errors) > 0) {
+            $result->validationFails();
+            $result->setData($errors);
+        }
         return $result;
     }
 
