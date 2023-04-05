@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Transporter;
 
-use Kuperwood\Dev\Transporter;
+use Kuperwood\Eav\Transporter;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 

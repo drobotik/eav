@@ -6,12 +6,16 @@ use Kuperwood\Eav\AttributeContainer;
 use Kuperwood\Eav\AttributeSet;
 use Kuperwood\Eav\Entity;
 use Kuperwood\Eav\EntityAction;
+use Kuperwood\Eav\Enum\_ATTR;
 use Kuperwood\Eav\Enum\_ENTITY;
 use Kuperwood\Eav\Enum\_RESULT;
+use Kuperwood\Eav\Enum\_VALUE;
 use Kuperwood\Eav\Exception\EntityException;
 use Kuperwood\Eav\Model\EntityModel;
+use Kuperwood\Eav\Model\ValueStringModel;
 use Kuperwood\Eav\Result\Result;
 
+use Kuperwood\Eav\Transporter;
 use Tests\TestCase;
 
 class EntityTest extends TestCase
@@ -38,11 +42,18 @@ class EntityTest extends TestCase
         $this->assertTrue($this->entity->hasDomainKey());
     }
 
+    /** @test */
     public function attribute_set() {
         $this->assertInstanceOf(AttributeSet::class, $this->entity->getAttributeSet());
         $attributeSet = new AttributeSet();
         $this->entity->setAttributeSet($attributeSet);
         $this->assertSame($attributeSet, $this->entity->getAttributeSet());
+        $this->assertSame($this->entity, $attributeSet->getEntity());
+    }
+
+    /** @test */
+    public function bag() {
+        $this->assertInstanceOf(Transporter::class, $this->entity->getBag());
     }
 
     /** @test */
@@ -240,4 +251,171 @@ class EntityTest extends TestCase
         $this->assertEquals($record->getDomainKey(), $this->entity->getDomainKey());
         $this->assertEquals($record->getAttrSetKey(), $this->entity->getAttributeSet()->getKey());
     }
+
+    /** @test */
+    public function save_fetch_containers() {
+        $set = $this->getMockBuilder(AttributeSet::class)
+            ->onlyMethods(['fetchContainers'])
+            ->getMock();
+        $set->expects($this->once())->method('fetchContainers');
+        $entity = $this->getMockBuilder(Entity::class)
+            ->onlyMethods(['getAttributeSet','beforeSave'])
+            ->getMock();
+        $entity->expects($this->once())
+            ->method('getAttributeSet')
+            ->willReturn($set);
+        $entity->save();
+    }
+
+    /** @test */
+    public function save_values() {
+        $data = [
+            "phone" => "1234567890",
+            "email" => "test@email.com"
+        ];
+        $bag = $this->getMockBuilder(Transporter::class)
+            ->onlyMethods(['getData', 'clear'])
+            ->getMock();
+        $bag->expects($this->once())
+            ->method('getData')
+            ->willReturn($data);
+        $bag->expects($this->once())
+            ->method('clear');
+        $entityAction = $this->getMockBuilder(EntityAction::class)
+            ->onlyMethods(['saveValue'])
+            ->getMock();
+        $entityAction->expects($this->exactly(2))
+            ->method('saveValue')
+            ->with($this->callback(fn($arg) => in_array($arg, array_values($data))));
+        $container = $this->getMockBuilder(AttributeContainer::class)
+            ->onlyMethods(['getEntityAction'])
+            ->getMock();
+        $container->expects($this->exactly(2))
+            ->method('getEntityAction')
+            ->willReturn($entityAction);
+        $attrSet = $this->getMockBuilder(AttributeSet::class)
+            ->onlyMethods(['fetchContainers', 'getContainer'])
+            ->getMock();
+        $attrSet->expects($this->once())
+            ->method('fetchContainers');
+        $attrSet->expects($this->exactly(2))
+            ->method('getContainer')
+            ->with($this->callback(fn($arg) => key_exists($arg, $data)))
+            ->willReturn($container);
+        $entity = $this->getMockBuilder(Entity::class)
+            ->onlyMethods(['getAttributeSet', 'getBag', 'beforeSave'])
+            ->getMock();
+        $entity->expects($this->once())
+            ->method('getAttributeSet')
+            ->willReturn($attrSet);
+        $entity->expects($this->once())
+            ->method('getBag')
+            ->willReturn($bag);
+        $entity->save();
+    }
+
+    /** @test */
+    public function save_result_created() {
+        $attrSet = $this->getMockBuilder(AttributeSet::class)
+            ->onlyMethods(['fetchContainers'])
+            ->getMock();
+        $attrSet->expects($this->once())
+            ->method('fetchContainers');
+        $entity = $this->getMockBuilder(Entity::class)
+            ->onlyMethods(['getAttributeSet','beforeSave'])
+            ->getMock();
+        $entity->expects($this->once())
+            ->method('beforeSave')
+            ->willReturn(1);
+        $entity->expects($this->once())
+            ->method('getAttributeSet')
+            ->willReturn($attrSet);
+        $result = $entity->save();
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::CREATED->code(), $result->getCode());
+        $this->assertEquals(_RESULT::CREATED->message(), $result->getMessage());
+    }
+
+    /** @test */
+    public function save_result_updated() {
+        $attrSet = $this->getMockBuilder(AttributeSet::class)
+            ->onlyMethods(['fetchContainers'])
+            ->getMock();
+        $attrSet->expects($this->once())
+            ->method('fetchContainers');
+        $entity = $this->getMockBuilder(Entity::class)
+            ->onlyMethods(['getAttributeSet','beforeSave'])
+            ->getMock();
+        $entity->expects($this->once())
+            ->method('beforeSave')
+            ->willReturn(2);
+        $entity->expects($this->once())
+            ->method('getAttributeSet')
+            ->willReturn($attrSet);
+        $result = $entity->save();
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::UPDATED->code(), $result->getCode());
+        $this->assertEquals(_RESULT::UPDATED->message(), $result->getMessage());
+    }
+
+    /** @test */
+    public function save_results() {
+        $testData = [
+            "email" => "test@email.net",
+            'phone' => '1234567890',
+        ];
+
+        $domain = $this->eavFactory->createDomain();
+        $attrSet = $this->eavFactory->createAttributeSet($domain);
+        $group = $this->eavFactory->createGroup($attrSet);
+        $attrEmail = $this->eavFactory->createAttribute($domain, [
+            _ATTR::NAME->column() => "email"
+        ]);
+        $attrPhone = $this->eavFactory->createAttribute($domain, [
+            _ATTR::NAME->column() => "phone"
+        ]);
+        $attrNote = $this->eavFactory->createAttribute($domain, [
+            _ATTR::NAME->column() => "note"
+        ]);
+        $this->eavFactory->createPivot($domain, $attrSet, $group, $attrEmail);
+        $this->eavFactory->createPivot($domain, $attrSet, $group, $attrPhone);
+        $this->eavFactory->createPivot($domain, $attrSet, $group, $attrNote);
+
+        $this->entity->setDomainKey($domain->getKey());
+        $this->entity->getAttributeSet()->setKey($attrSet->getKey());
+        $this->entity->getBag()->setData($testData);
+
+        $result = $this->entity->save();
+
+        $emailRecord = ValueStringModel::where(_VALUE::ATTRIBUTE_ID->column(), $attrEmail->getKey())
+            ->firstOrFail();
+        $this->assertEquals($testData["email"], $emailRecord->getValue());
+        $phoneRecord = ValueStringModel::where(_VALUE::ATTRIBUTE_ID->column(), $attrPhone->getKey())
+            ->firstOrFail();
+        $this->assertEquals($testData["phone"], $phoneRecord->getValue());
+
+        $this->assertNull(ValueStringModel::where(_VALUE::ATTRIBUTE_ID->column(), $attrNote->getKey())->first());
+
+        $this->assertEquals([], $this->entity->getBag()->getData());
+
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::CREATED->code(), $result->getCode());
+        $this->assertEquals(_RESULT::CREATED->message(), $result->getMessage());
+
+        $resultData = $result->getData();
+        $this->assertCount(2, $resultData);
+
+        $this->assertArrayHasKey('email', $resultData);
+        $data = $resultData['email'];
+        $this->assertInstanceOf(Result::class, $data);
+        $this->assertEquals(_RESULT::CREATED->code(), $data->getCode());
+        $this->assertEquals(_RESULT::CREATED->message(), $data->getMessage());
+
+        $this->assertArrayHasKey('phone', $resultData);
+        $data = $resultData['phone'];
+        $this->assertInstanceOf(Result::class, $data);
+        $this->assertEquals(_RESULT::CREATED->code(), $data->getCode());
+        $this->assertEquals(_RESULT::CREATED->message(), $data->getMessage());
+    }
+
 }

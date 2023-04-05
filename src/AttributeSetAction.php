@@ -34,6 +34,8 @@ class AttributeSetAction
         $attribute = $this->initializeAttribute($attributeModel);
         $strategy = $this->initializeStrategy($attribute);
         $container->makeValueManager();
+        $container->makeValueAction();
+        $container->makeEntityAction();
         $strategy->find();
         return $this;
     }

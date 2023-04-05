@@ -89,10 +89,11 @@ class AttributeSetActionTest extends TestCase
     public function initialize_calls() {
         $attributeModel = $this->eavFactory->createAttribute();
         $container = $this->getMockBuilder(AttributeContainer::class)
-            ->onlyMethods(['makeValueManager'])
+            ->onlyMethods(['makeValueManager', 'makeValueAction', 'makeEntityAction'])
             ->getMock();
-        $container->expects($this->once())
-            ->method('makeValueManager');
+        $container->expects($this->once())->method('makeValueManager');
+        $container->expects($this->once())->method('makeValueAction');
+        $container->expects($this->once())->method('makeEntityAction');
         $action = $this->getMockBuilder(AttributeSetAction::class)
             ->onlyMethods([
                 'initializeAttribute',

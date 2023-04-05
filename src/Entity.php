@@ -21,10 +21,14 @@ class Entity
     private int $key;
     private int $domainKey;
     private AttributeSet $attributeSet;
+    private Transporter $bag;
 
     public function __construct()
     {
-        $this->attributeSet = $this->makeAttributeSet();
+        $attrSet = $this->makeAttributeSet();
+        $attrSet->setEntity($this);
+        $this->attributeSet = $attrSet;
+        $this->bag = new Transporter();
     }
 
     public function getKey(): int
@@ -68,6 +72,11 @@ class Entity
     {
         $this->attributeSet = $attributeSet;
         return $this;
+    }
+
+    public function getBag() : Transporter
+    {
+        return $this->bag;
     }
 
     public function create(array $data) : Result
@@ -138,7 +147,7 @@ class Entity
         }
     }
 
-    private function beforeSave(): int
+    public function beforeSave(): int
     {
         $set = $this->getAttributeSet();
         if (!$this->hasKey()) {
@@ -169,8 +178,26 @@ class Entity
         }
     }
 
-    public function save() {
-        $this->beforeSave();
+    public function save(): Result
+    {
+        $result = new Result();
+        $operationType = $this->beforeSave();
+        $set = $this->getAttributeSet();
+        $set->fetchContainers();
+        $bag = $this->getBag();
+        $data = $bag->getData();
+        $valueResults = [];
+        foreach($data as $name => $value) {
+            $container = $set->getContainer($name);
+            if(is_null($container)) continue;
+            $valueResults[$name] = $container->getEntityAction()->saveValue($value);
+        }
+        $operationType == 1
+            ? $result->created()
+            : $result->updated();
+        $result->setData($valueResults);
+        $bag->clear();
+        return $result;
     }
 
     public function delete() : Result
@@ -190,13 +217,4 @@ class Entity
         return [];
     }
 
-    public function setField(string $name, mixed $value) : self
-    {
-        return $this;
-    }
-
-    public function getField(string $name) : mixed
-    {
-        return null;
-    }
 }
