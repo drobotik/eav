@@ -5,4 +5,5 @@
 .phpunit.cache
 .phpunit.result.cache
 /tests/test.sqlite
+/tests/test.sqlite-journal
 
