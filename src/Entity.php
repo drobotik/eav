@@ -189,6 +189,20 @@ class Entity
     public function delete() : Result
     {
         $result = new Result();
+
+        $set = $this->getAttributeSet();
+        $set->fetchContainers();
+        $deleteResults = [];
+        foreach ($set->getContainers() as $container) {
+            $attribute = $container->getAttribute();
+            $deleteResults[$attribute->getName()] = $container->getStrategy()->delete();
+        }
+        $recordResult = $this->makeEntityModel()->findAndDelete($this->getKey());
+        if(!$recordResult) {
+            return $result->notDeleted();
+        }
+        $result->deleted();
+        $result->setData($deleteResults);
         return $result;
     }
 

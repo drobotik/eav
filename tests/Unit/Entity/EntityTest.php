@@ -17,6 +17,7 @@ use Kuperwood\Eav\Model\EntityModel;
 use Kuperwood\Eav\Model\ValueStringModel;
 use Kuperwood\Eav\Result\Result;
 
+use Kuperwood\Eav\Strategy;
 use Kuperwood\Eav\Transporter;
 use Kuperwood\Eav\ValueManager;
 use Tests\TestCase;
@@ -467,6 +468,96 @@ class EntityTest extends TestCase
         $this->assertEquals(_RESULT::VALIDATION_PASSED->code(), $result->getCode());
         $this->assertEquals(_RESULT::VALIDATION_PASSED->message(), $result->getMessage());
         $this->assertNull($result->getData());
+    }
+
+    /** @test */
+    public function delete() {
+        $attribute = $this->getMockBuilder(Attribute::class)
+            ->onlyMethods(['getName'])
+            ->getMock();
+        $attribute->expects($this->exactly(2))
+            ->method('getName')
+            ->willReturn('email', 'phone');
+        $strategy = $this->getMockBuilder(Strategy::class)
+            ->onlyMethods(['delete'])
+            ->getMock();
+        $strategyResult = (new Result())->deleted();
+        $strategy->expects($this->exactly(2))
+            ->method('delete')
+            ->willReturn($strategyResult, $strategyResult);
+        $container = $this->getMockBuilder(AttributeContainer::class)
+            ->onlyMethods(['getStrategy', 'getAttribute'])
+            ->getMock();
+        $container->expects($this->exactly(2))
+            ->method('getStrategy')
+            ->willReturn($strategy);
+        $container->expects($this->exactly(2))
+            ->method('getAttribute')
+            ->willReturn($attribute);
+        $set = $this->getMockBuilder(AttributeSet::class)
+            ->onlyMethods(['fetchContainers', 'getContainers'])
+            ->getMock();
+        $set->expects($this->once())
+            ->method('fetchContainers');
+        $set->expects($this->once())
+            ->method('getContainers')
+            ->willReturn([$container, $container]);
+        $record = $this->getMockBuilder(EntityModel::class)
+            ->onlyMethods(['findAndDelete'])
+            ->getMock();
+        $record->expects($this->once())
+            ->method('findAndDelete')
+            ->willReturn(true);
+        $entity = $this->getMockBuilder(Entity::class)
+            ->onlyMethods(['getAttributeSet', 'makeEntityModel', 'getKey'])
+            ->getMock();
+        $entity->expects($this->once())
+            ->method('getKey')
+            ->willReturn(1);
+        $entity->expects($this->once())
+            ->method('makeEntityModel')
+            ->willReturn($record);
+        $entity->expects($this->once())
+            ->method('getAttributeSet')
+            ->willReturn($set);
+        $result = $entity->delete();
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::DELETED->code(), $result->getCode());
+        $this->assertEquals(_RESULT::DELETED->message(), $result->getMessage());
+        $this->assertSame([
+            "email" => $strategyResult,
+            "phone" => $strategyResult
+        ], $result->getData());
+    }
+
+    /** @test */
+    public function not_deleted() {
+        $record = $this->getMockBuilder(EntityModel::class)
+            ->onlyMethods(['findAndDelete'])
+            ->getMock();
+        $record->expects($this->once())
+            ->method('findAndDelete')
+            ->willReturn(false);
+        $entity = $this->getMockBuilder(Entity::class)
+            ->onlyMethods(['getAttributeSet', 'makeEntityModel', 'getKey'])
+            ->getMock();
+        $entity->expects($this->once())
+            ->method('getKey')
+            ->willReturn(1);
+        $entity->expects($this->once())
+            ->method('makeEntityModel')
+            ->willReturn($record);
+        $set = $this->getMockBuilder(AttributeSet::class)
+            ->onlyMethods(['fetchContainers', 'getContainers'])
+            ->getMock();
+        $set->method('getContainers')->willReturn([]);
+        $entity->expects($this->once())
+            ->method('getAttributeSet')
+            ->willReturn($set);
+        $result = $entity->delete();
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::NOT_DELETED->code(), $result->getCode());
+        $this->assertEquals(_RESULT::NOT_DELETED->message(), $result->getMessage());
     }
 
     /** @test */

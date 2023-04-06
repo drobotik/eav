@@ -42,4 +42,9 @@ class EntityModel extends Model
     {
         return $this->{_ENTITY::ATTR_SET_ID->column()};
     }
+
+    public function findAndDelete(int $key) : bool
+    {
+        return (bool) $this->query()->whereKey($key)->delete();
+    }
 }
