@@ -8,6 +8,7 @@ use Kuperwood\Eav\AttributeSet;
 use Kuperwood\Eav\Entity;
 use Kuperwood\Eav\Enum\_VALUE;
 use Kuperwood\Eav\Enum\ATTR_TYPE;
+use Kuperwood\Eav\Result\Result;
 use Kuperwood\Eav\Strategy;
 use Kuperwood\Eav\Value\ValueValidator;
 use Kuperwood\Eav\ValueManager;
@@ -130,6 +131,55 @@ class ValueValidatorTest extends TestCase
         $validator = $this->validator->getValidator();
         $this->assertEquals($this->validator->getRules(), $validator->getRules());
         $this->assertEquals($this->validator->getValidatedData(), $validator->getData());
+    }
+
+    /** @test */
+    public function validate_field_fails() {
+        $result = (new Result())->validationFails();
+        $result->setData(['email' => 'email is invalid']);
+        $strategy = $this->getMockBuilder(Strategy::class)
+            ->onlyMethods(['validate'])
+            ->getMock();
+        $strategy->expects($this->once())
+            ->method('validate')
+            ->willReturn($result);
+        $container = $this->getMockBuilder(AttributeContainer::class)
+            ->onlyMethods(['getStrategy'])
+            ->getMock();
+        $container->expects($this->once())
+            ->method('getStrategy')
+            ->willReturn($strategy);
+        $validator = $this->getMockBuilder(ValueValidator::class)
+            ->onlyMethods(['getAttributeContainer'])
+            ->getMock();
+        $validator->expects($this->once())
+            ->method('getAttributeContainer')
+            ->willReturn($container);
+        $this->assertSame($result->getData(), $validator->validateField());
+    }
+
+    /** @test */
+    public function validate_field_ok() {
+        $result = (new Result())->validationPassed();
+        $strategy = $this->getMockBuilder(Strategy::class)
+            ->onlyMethods(['validate'])
+            ->getMock();
+        $strategy->expects($this->once())
+            ->method('validate')
+            ->willReturn($result);
+        $container = $this->getMockBuilder(AttributeContainer::class)
+            ->onlyMethods(['getStrategy'])
+            ->getMock();
+        $container->expects($this->once())
+            ->method('getStrategy')
+            ->willReturn($strategy);
+        $validator = $this->getMockBuilder(ValueValidator::class)
+            ->onlyMethods(['getAttributeContainer'])
+            ->getMock();
+        $validator->expects($this->once())
+            ->method('getAttributeContainer')
+            ->willReturn($container);
+        $this->assertNull($validator->validateField());
     }
 
 }

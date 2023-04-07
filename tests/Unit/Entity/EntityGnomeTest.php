@@ -6,7 +6,6 @@ use Kuperwood\Eav\Attribute;
 use Kuperwood\Eav\AttributeContainer;
 use Kuperwood\Eav\AttributeSet;
 use Kuperwood\Eav\Entity;
-use Kuperwood\Eav\EntityAction;
 use Kuperwood\Eav\EntityBag;
 use Kuperwood\Eav\EntityGnome;
 use Kuperwood\Eav\Enum\_ATTR;
@@ -19,6 +18,7 @@ use Kuperwood\Eav\Model\ValueStringModel;
 use Kuperwood\Eav\Result\Result;
 
 use Kuperwood\Eav\Strategy;
+use Kuperwood\Eav\Value\ValueValidator;
 use Kuperwood\Eav\ValueManager;
 use Tests\TestCase;
 
@@ -218,39 +218,39 @@ class EntityGnomeTest extends TestCase
 
     /** @test */
     public function save_values() {
-        $data = [
-            "phone" => "1234567890",
-            "email" => "test@email.com"
-        ];
         $bag = $this->getMockBuilder(EntityBag::class)
-            ->onlyMethods(['getData', 'clear'])
+            ->onlyMethods(['clear'])
             ->getMock();
-        $bag->expects($this->once())
-            ->method('getData')
-            ->willReturn($data);
         $bag->expects($this->once())
             ->method('clear');
-        $entityAction = $this->getMockBuilder(EntityAction::class)
-            ->onlyMethods(['saveValue'])
+        $attribute = $this->getMockBuilder(Attribute::class)
+            ->onlyMethods(['getName'])
             ->getMock();
-        $entityAction->expects($this->exactly(2))
-            ->method('saveValue')
-            ->with($this->callback(fn($arg) => in_array($arg, array_values($data))));
+        $attribute->expects($this->exactly(2))
+            ->method('getName')
+            ->willReturn('phone', 'email');
+        $strategy = $this->getMockBuilder(Strategy::class)
+            ->onlyMethods(['save'])
+            ->getMock();
+        $strategy->expects($this->exactly(2))
+            ->method('save');
         $container = $this->getMockBuilder(AttributeContainer::class)
-            ->onlyMethods(['getEntityAction'])
+            ->onlyMethods(['getAttribute', 'getStrategy'])
             ->getMock();
         $container->expects($this->exactly(2))
-            ->method('getEntityAction')
-            ->willReturn($entityAction);
+            ->method('getAttribute')
+            ->willReturn($attribute);
+        $container->expects($this->exactly(2))
+            ->method('getStrategy')
+            ->willReturn($strategy);
         $attrSet = $this->getMockBuilder(AttributeSet::class)
-            ->onlyMethods(['fetchContainers', 'getContainer'])
+            ->onlyMethods(['fetchContainers', 'getContainers'])
             ->getMock();
         $attrSet->expects($this->once())
             ->method('fetchContainers');
-        $attrSet->expects($this->exactly(2))
-            ->method('getContainer')
-            ->with($this->callback(fn($arg) => key_exists($arg, $data)))
-            ->willReturn($container);
+        $attrSet->expects($this->once())
+            ->method('getContainers')
+            ->willReturn([$container, $container]);
         $entity = $this->getMockBuilder(Entity::class)
             ->onlyMethods(['getAttributeSet', 'getBag'])
             ->getMock();
@@ -345,8 +345,10 @@ class EntityGnomeTest extends TestCase
 
         $entity = $this->gnome->getEntity();
         $entity->setDomainKey($domain->getKey());
-        $entity->getAttributeSet()->setKey($attrSet->getKey());
-        $entity->getBag()->setFields($testData);
+        $set = $entity->getAttributeSet();
+        $set->setKey($attrSet->getKey());
+        $bag = $entity->getBag();
+        $bag->setFields($testData);
 
         $result = $this->gnome->save();
 
@@ -389,20 +391,20 @@ class EntityGnomeTest extends TestCase
         $attribute->expects($this->exactly(2))
             ->method('getName')
             ->willReturn('email', 'phone');
-        $action = $this->getMockBuilder(EntityAction::class)
+        $validator = $this->getMockBuilder(ValueValidator::class)
             ->onlyMethods(['validateField'])
             ->getMock();
         $emailErrors = ['value' => 'invalid'];
         $phoneErrors = ['value' => 'not valid'];
-        $action->expects($this->exactly(2))
+        $validator->expects($this->exactly(2))
             ->method('validateField')
             ->willReturn($emailErrors, $phoneErrors);
         $container = $this->getMockBuilder(AttributeContainer::class)
-            ->onlyMethods(['getEntityAction', 'getAttribute'])
+            ->onlyMethods(['getValueValidator', 'getAttribute'])
             ->getMock();
         $container->expects($this->exactly(2))
-            ->method('getEntityAction')
-            ->willReturn($action);
+            ->method('getValueValidator')
+            ->willReturn($validator);
         $container->expects($this->exactly(2))
             ->method('getAttribute')
             ->willReturn($attribute);
@@ -430,20 +432,20 @@ class EntityGnomeTest extends TestCase
 
     /** @test */
     public function validate_passed() {
-        $action = $this->getMockBuilder(EntityAction::class)
+        $validator = $this->getMockBuilder(ValueValidator::class)
             ->onlyMethods(['validateField'])
             ->getMock();
         $emailErrors = null;
         $phoneErrors = null;
-        $action->expects($this->exactly(2))
+        $validator->expects($this->exactly(2))
             ->method('validateField')
             ->willReturn($emailErrors, $phoneErrors);
         $container = $this->getMockBuilder(AttributeContainer::class)
-            ->onlyMethods(['getEntityAction', 'getAttribute'])
+            ->onlyMethods(['getValueValidator', 'getAttribute'])
             ->getMock();
         $container->expects($this->exactly(2))
-            ->method('getEntityAction')
-            ->willReturn($action);
+            ->method('getValueValidator')
+            ->willReturn($validator);
         $container->expects($this->never())
             ->method('getAttribute');
         $set = $this->getMockBuilder(AttributeSet::class)

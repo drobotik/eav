@@ -64,6 +64,33 @@ class EntityBagTest extends TestCase
     }
 
     /** @test */
+    public function set_field_result() {
+
+        $valueManager = new ValueManager;
+        $container = $this->getMockBuilder(AttributeContainer::class)
+            ->onlyMethods(['getValueManager'])
+            ->getMock();
+        $container->method('getValueManager')->willReturn($valueManager);
+        $set = $this->getMockBuilder(AttributeSet::class)
+            ->onlyMethods(['getContainer', 'hasContainer'])
+            ->getMock();
+        $set->method('hasContainer')->willReturn(true);
+        $set->method('getContainer')->willReturn($container);
+        $entity = $this->getMockBuilder(Entity::class)
+            ->onlyMethods(['getAttributeSet'])
+            ->getMock();
+        $entity->method('getAttributeSet')->willReturn($set);
+        $bag = $this->getMockBuilder(EntityBag::class)
+            ->onlyMethods(['getEntity'])
+            ->getMock();
+        $bag->method('getEntity')->willReturn($entity);
+        $bag->setField('email', 'test');
+
+        $this->assertEquals('test', $valueManager->getRuntime());
+
+    }
+
+    /** @test */
     public function remove_field() {
         $attrName = 'email';
         $valueManager = $this->getMockBuilder(ValueManager::class)

@@ -4,6 +4,7 @@ namespace Kuperwood\Eav\Value;
 
 use Illuminate\Validation\Validator;
 use Kuperwood\Eav\Container;
+use Kuperwood\Eav\Enum\_RESULT;
 use Kuperwood\Eav\Enum\_VALUE;
 use Kuperwood\Eav\Trait\ContainerTrait;
 
@@ -49,5 +50,16 @@ class ValueValidator
             $this->getValidatedData(),
             $this->getRules()
         );
+    }
+
+    public function validateField() : null|array
+    {
+        $output = null;
+        $container = $this->getAttributeContainer();
+        $strategy = $container->getStrategy();
+        $result = $strategy->validate();
+        if($result->getCode() == _RESULT::VALIDATION_FAILS->code())
+            $output = $result->getData();
+        return $output;
     }
 }

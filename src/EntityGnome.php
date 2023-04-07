@@ -120,18 +120,16 @@ class EntityGnome
         $operationType = $this->beforeSave();
         $set = $entity->getAttributeSet();
         $set->fetchContainers();
-        $bag = $entity->getBag();
-        $data = $bag->getData();
         $valueResults = [];
-        foreach($data as $name => $value) {
-            $container = $set->getContainer($name);
-            if(is_null($container)) continue;
-            $valueResults[$name] = $container->getEntityAction()->saveValue($value);
+        foreach($set->getContainers() as $container) {
+            $attribute = $container->getAttribute();
+            $valueResults[$attribute->getName()] = $container->getStrategy()->save();
         }
         $operationType == 1
             ? $result->created()
             : $result->updated();
         $result->setData($valueResults);
+        $bag = $entity->getBag();
         $bag->clear();
         return $result;
     }
@@ -166,7 +164,7 @@ class EntityGnome
         $set->fetchContainers();
         $errors = [];
         foreach ($set->getContainers() as $container) {
-            $validationResult = $container->getEntityAction()->validateField();
+            $validationResult = $container->getValueValidator()->validateField();
             if(!is_null($validationResult))
                 $errors[$container->getAttribute()->getName()] = $validationResult;
         }

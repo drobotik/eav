@@ -46,7 +46,6 @@ class ValueAction
         $attributeKey = $attribute->getKey();
         $entity = $container->getAttributeSet()->getEntity();
 
-
         $valueManager = $container->getValueManager();
         $model = $attribute->getValueModel();
 

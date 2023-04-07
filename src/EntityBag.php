@@ -25,9 +25,9 @@ class EntityBag extends Transporter
     {
         $set =  $this->getEntity()->getAttributeSet();
         if($set->hasContainer($field)) {
-            $set->getContainer($field)
-                ->getValueManager()
-                ->setValue($value);
+            $container = $set->getContainer($field);
+            $valueManager = $container->getValueManager();
+            $valueManager->setValue($value);
         }
         return parent::setField($field, $value);
     }

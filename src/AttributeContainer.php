@@ -14,8 +14,7 @@ class AttributeContainer
         Strategy::class,
         ValueManager::class,
         ValueValidator::class,
-        ValueAction::class,
-        EntityAction::class,
+        ValueAction::class
     ];
 
     protected Attribute $attribute;
@@ -25,7 +24,6 @@ class AttributeContainer
     protected ValueManager $valueManager;
     protected ValueValidator $valueValidator;
     protected ValueAction $valueAction;
-    protected EntityAction $entityAction;
 
     public function make(string $className) {
         if(!in_array($className, $this->supported)) {
@@ -75,12 +73,6 @@ class AttributeContainer
     public function makeValueAction() : self
     {
         $this->setValueAction($this->make(ValueAction::class));
-        return $this;
-    }
-
-    public function makeEntityAction() : self
-    {
-        $this->setEntityAction($this->make(EntityAction::class));
         return $this;
     }
 
@@ -167,17 +159,4 @@ class AttributeContainer
     {
         return $this->attributeSetAction;
     }
-
-    public function setEntityAction(EntityAction $entityAction) : self
-    {
-        $entityAction->setAttributeContainer($this);
-        $this->entityAction = $entityAction;
-        return $this;
-    }
-
-    public function getEntityAction(): EntityAction
-    {
-        return $this->entityAction;
-    }
-
 }
