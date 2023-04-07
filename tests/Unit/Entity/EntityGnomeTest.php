@@ -354,6 +354,7 @@ class EntityGnomeTest extends TestCase
 
         $emailRecord = ValueStringModel::where(_VALUE::ATTRIBUTE_ID->column(), $attrEmail->getKey())
             ->firstOrFail();
+
         $this->assertEquals($testData["email"], $emailRecord->getValue());
         $phoneRecord = ValueStringModel::where(_VALUE::ATTRIBUTE_ID->column(), $attrPhone->getKey())
             ->firstOrFail();
@@ -368,7 +369,7 @@ class EntityGnomeTest extends TestCase
         $this->assertEquals(_RESULT::CREATED->message(), $result->getMessage());
 
         $resultData = $result->getData();
-        $this->assertCount(2, $resultData);
+        $this->assertCount(3, $resultData);
 
         $this->assertArrayHasKey('email', $resultData);
         $data = $resultData['email'];
@@ -381,6 +382,12 @@ class EntityGnomeTest extends TestCase
         $this->assertInstanceOf(Result::class, $data);
         $this->assertEquals(_RESULT::CREATED->code(), $data->getCode());
         $this->assertEquals(_RESULT::CREATED->message(), $data->getMessage());
+
+        $this->assertArrayHasKey('note', $resultData);
+        $data = $resultData['note'];
+        $this->assertInstanceOf(Result::class, $data);
+        $this->assertEquals(_RESULT::EMPTY->code(), $data->getCode());
+        $this->assertEquals(_RESULT::EMPTY->message(), $data->getMessage());
     }
 
     /** @test */

@@ -66,8 +66,7 @@ class ValueAction
 
         $valueManager
             ->setKey($record->getKey())
-            ->setStored($record->getValue())
-            ->clearRuntime();
+            ->setStored($record->getValue());
 
         return $result->found();
     }
