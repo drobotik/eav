@@ -30,7 +30,7 @@ class EntityBag extends Transporter
         return parent::setField($field, $value);
     }
 
-    public function removeField(string $field): void
+    public function removeField($field): void
     {
         $set = $this->getEntity()->getAttributeSet();
         if($set->hasContainer($field)) {

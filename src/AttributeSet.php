@@ -61,7 +61,7 @@ class AttributeSet
     {
         if(!$this->hasKey()) return $this;
         $model = $this->makeAttributeSetModel();
-        foreach ($model->getAttrs($this->getKey()) as $attribute) {
+        foreach ($model->findAttributes($this->getKey()) as $attribute) {
             $container = $this->makeAttributeContainer();
             $container->setAttributeSet($this);
             $container->makeAttributeSetAction();

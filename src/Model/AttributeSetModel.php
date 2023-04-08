@@ -63,7 +63,7 @@ class AttributeSetModel extends Model
             ->firstOrFail();
     }
 
-    public function getAttrs(int $key) : Collection
+    public function findAttributes(int $key) : Collection
     {
         return $this->firstOrFail($key)->attributes()->get();
     }

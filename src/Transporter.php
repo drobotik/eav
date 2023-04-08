@@ -19,7 +19,7 @@ class Transporter
     /**
      * @throws Exception
      */
-    public function getField(string $field)
+    public function getField($field)
     {
         if(!$this->hasField($field))
             return null;
@@ -38,12 +38,12 @@ class Transporter
         return $this;
     }
 
-    public function hasField(string $field) : bool
+    public function hasField($field) : bool
     {
         return array_key_exists($field, $this->data);
     }
 
-    public function removeField(string $field) : void
+    public function removeField($field) : void
     {
         unset($this->data[$field]);
     }
