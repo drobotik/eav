@@ -1,6 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kuperwood\Eav\Enum;
+
 use Kuperwood\Eav\Interface\DefineTableInterface;
 
 enum _PIVOT implements DefineTableInterface

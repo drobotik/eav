@@ -6,7 +6,7 @@ use Kuperwood\Eav\AttributeContainer;
 use Kuperwood\Eav\AttributeSet;
 use Kuperwood\Eav\Entity;
 use Kuperwood\Eav\EntityBag;
-use Kuperwood\Eav\ValueManager;
+use Kuperwood\Eav\Value\ValueManager;
 use Tests\TestCase;
 
 class EntityBagTest extends TestCase

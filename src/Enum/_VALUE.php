@@ -1,9 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kuperwood\Eav\Enum;
-use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping\Builder\ClassMetadataBuilder;
-use Doctrine\ORM\Mapping\ClassMetadata;
+
 use Kuperwood\Eav\Interface\DefineTableInterface;
 
 enum _VALUE implements DefineTableInterface

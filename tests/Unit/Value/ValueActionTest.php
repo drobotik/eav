@@ -11,7 +11,7 @@ use Kuperwood\Eav\Enum\ATTR_TYPE;
 use Kuperwood\Eav\Model\ValueStringModel;
 use Kuperwood\Eav\Result\Result;
 use Kuperwood\Eav\Value\ValueAction;
-use Kuperwood\Eav\ValueManager;
+use Kuperwood\Eav\Value\ValueManager;
 use Tests\TestCase;
 
 
@@ -159,7 +159,7 @@ class ValueActionTest extends TestCase
 
         $result = $this->action->find();
 
-        $this->assertNull($valueManager->getKey());
+        $this->assertFalse($valueManager->hasKey());
         $this->assertNull($valueManager->getRuntime());
         $this->assertNull($valueManager->getStored());
         $this->assertInstanceOf(Result::class, $result);
@@ -239,7 +239,7 @@ class ValueActionTest extends TestCase
 
         $this->assertNull($value->getRuntime());
         $this->assertNull($value->getStored());
-        $this->assertNull($value->getKey());
+        $this->assertFalse($value->hasKey());
 
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::DELETED->code(), $result->getCode());

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kuperwood\Eav\Value;
 
 use Kuperwood\Eav\Enum\_VALUE;
@@ -101,13 +103,12 @@ class ValueAction
         $attribute = $container->getAttribute();
         $valueManager = $container->getValueManager();
         $model = $attribute->getValueModel();
-        $key = $valueManager->getKey();
 
-        if(is_null($key)) {
+        if(!$valueManager->hasKey()) {
             return $result->empty();
         }
 
-        $record = $model->findOrFail($key);
+        $record = $model->findOrFail($valueManager->getKey());
 
         $deleted = $record->delete();
         if(!$deleted) {
@@ -116,7 +117,7 @@ class ValueAction
 
         $valueManager->clearStored()
             ->clearRuntime()
-            ->setKey(null);
+            ->setKey(0);
 
         return $result->deleted();
     }

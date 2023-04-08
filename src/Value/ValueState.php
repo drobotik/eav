@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kuperwood\Eav\Value;
 
 /**
@@ -28,11 +30,11 @@ class ValueState
 
     public function isChanged() : bool
     {
-        return !$this->value instanceof EmptyValue;
+        return !$this->value instanceof ValueEmpty;
     }
 
     public function clear() : void
     {
-        $this->value = new EmptyValue();
+        $this->value = new ValueEmpty();
     }
 }

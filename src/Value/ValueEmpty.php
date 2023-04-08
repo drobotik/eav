@@ -1,7 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kuperwood\Eav\Value;
 
-class EmptyValue
+class ValueEmpty
 {
 }

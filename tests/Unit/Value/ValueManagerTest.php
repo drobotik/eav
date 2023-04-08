@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Value;
 
-use Kuperwood\Eav\ValueManager;
+use Kuperwood\Eav\Value\ValueManager;
 use PHPUnit\Framework\TestCase;
 
 class ValueManagerTest extends TestCase
@@ -17,9 +17,17 @@ class ValueManagerTest extends TestCase
 
     /** @test  */
     public function key() {
-        $this->assertEquals(null, $this->value->getKey());
+        $this->assertFalse($this->value->hasKey());
         $this->value->setKey(1);
         $this->assertEquals(1, $this->value->getKey());
+        $this->assertTrue($this->value->hasKey());
+    }
+
+    /** @test  */
+    public function zero_key() {
+        $this->value->setKey(0);
+        $this->assertFalse($this->value->hasKey());
+        $this->assertEquals(0, $this->value->getKey());
     }
 
     /** @test  */

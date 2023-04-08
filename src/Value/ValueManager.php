@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Kuperwood\Eav;
+namespace Kuperwood\Eav\Value;
 
 use Kuperwood\Eav\Trait\ContainerTrait;
-use Kuperwood\Eav\Value\ValueState;
 
 class ValueManager
 {
@@ -13,7 +12,7 @@ class ValueManager
     private ValueState $runtime;
     private ValueState $stored;
 
-    private ?int $key = null;
+    private int $key;
 
     public function __construct()
     {
@@ -21,12 +20,17 @@ class ValueManager
         $this->stored = new ValueState();
     }
 
-    public function getKey() : ?int
+    public function hasKey() : bool
+    {
+        return isset($this->key) && $this->key > 0;
+    }
+
+    public function getKey() : int
     {
         return $this->key;
     }
 
-    public function setKey(?int $key) : self
+    public function setKey(int $key) : self
     {
         $this->key = $key;
         return $this;

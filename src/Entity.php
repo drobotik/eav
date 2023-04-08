@@ -6,7 +6,6 @@ namespace Kuperwood\Eav;
 
 use Kuperwood\Eav\Result\Result;
 
-
 class Entity
 {
     private int $key;

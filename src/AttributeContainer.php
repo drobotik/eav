@@ -3,6 +3,7 @@
 namespace Kuperwood\Eav;
 
 use Kuperwood\Eav\Value\ValueAction;
+use Kuperwood\Eav\Value\ValueManager;
 use Kuperwood\Eav\Value\ValueValidator;
 
 class AttributeContainer

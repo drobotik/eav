@@ -8,7 +8,7 @@ trait ContainerTrait
 {
     protected AttributeContainer $attributeContainer;
 
-    public function setAttributeContainer(AttributeContainer $attributeContainer)
+    public function setAttributeContainer(AttributeContainer $attributeContainer): void
     {
         $this->attributeContainer = $attributeContainer;
     }

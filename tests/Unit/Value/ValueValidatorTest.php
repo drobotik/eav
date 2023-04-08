@@ -10,8 +10,8 @@ use Kuperwood\Eav\Enum\_VALUE;
 use Kuperwood\Eav\Enum\ATTR_TYPE;
 use Kuperwood\Eav\Result\Result;
 use Kuperwood\Eav\Strategy;
+use Kuperwood\Eav\Value\ValueManager;
 use Kuperwood\Eav\Value\ValueValidator;
-use Kuperwood\Eav\ValueManager;
 use PHPUnit\Framework\TestCase;
 
 class ValueValidatorTest extends TestCase

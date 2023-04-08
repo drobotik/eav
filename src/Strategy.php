@@ -44,7 +44,7 @@ class Strategy implements StrategyInterface, EavStrategyInterface
         }
 
         $this->beforeUpdate();
-        $result = $valueManager->getKey()
+        $result = $valueManager->hasKey()
             ? $valueAction->update()
             : $valueAction->create();
         $this->afterUpdate();

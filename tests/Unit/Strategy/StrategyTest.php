@@ -11,8 +11,8 @@ use Kuperwood\Eav\Enum\_RESULT;
 use Kuperwood\Eav\Result\Result;
 use Kuperwood\Eav\Strategy;
 use Kuperwood\Eav\Value\ValueAction;
+use Kuperwood\Eav\Value\ValueManager;
 use Kuperwood\Eav\Value\ValueValidator;
-use Kuperwood\Eav\ValueManager;
 use Tests\Fixtures\StrategyFixture;
 use Tests\Fixtures\ValueActionFixture;
 use Tests\TestCase;
@@ -109,11 +109,11 @@ class StrategyTest extends TestCase
             ->method('update')
             ->willReturn((new Result())->updated());
         $valueManager = $this->getMockBuilder(ValueManager::class)
-            ->onlyMethods(['getKey'])
+            ->onlyMethods(['hasKey'])
             ->getMock();
         $valueManager->expects($this->once())
-            ->method('getKey')
-            ->willReturn(1);
+            ->method('hasKey')
+            ->willReturn(true);
         $container = new AttributeContainer();
         $container->setValueAction($valueAction)
             ->setValueManager($valueManager);

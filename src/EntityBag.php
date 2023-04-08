@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Kuperwood\Eav;
 
-use Exception;
-
 class EntityBag extends Transporter
 {
     private Entity $entity;

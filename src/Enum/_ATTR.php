@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
+
 namespace Kuperwood\Eav\Enum;
+
 use Kuperwood\Eav\Interface\DefineTableInterface;
 use Kuperwood\Eav\Strategy;
 

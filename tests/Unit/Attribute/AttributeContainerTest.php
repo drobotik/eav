@@ -7,8 +7,8 @@ use Kuperwood\Eav\AttributeContainer;
 use Kuperwood\Eav\AttributeSet;
 use Kuperwood\Eav\AttributeSetAction;
 use Kuperwood\Eav\Strategy;
+use Kuperwood\Eav\Value\ValueManager;
 use Kuperwood\Eav\Value\ValueValidator;
-use Kuperwood\Eav\ValueManager;
 use Tests\TestCase;
 
 class AttributeContainerTest extends TestCase

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kuperwood\Eav\Value;
 
 use Illuminate\Validation\Validator;

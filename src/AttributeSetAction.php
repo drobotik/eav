@@ -4,6 +4,7 @@ namespace Kuperwood\Eav;
 
 use Kuperwood\Eav\Model\AttributeModel;
 use Kuperwood\Eav\Trait\ContainerTrait;
+use Kuperwood\Eav\Value\ValueManager;
 
 class AttributeSetAction
 {
@@ -28,28 +29,29 @@ class AttributeSetAction
         return $strategy;
     }
 
-    public function initializeRuntimeValue() : void
+    public function initializeValueManager() : ValueManager
     {
         $container = $this->getAttributeContainer();
+        $container->makeValueManager();
+        $container->makeValueAction();
+        $valueManager = $container->getValueManager();
         $attribute = $container->getAttribute();
         $entity = $container->getAttributeSet()->getEntity();
         $bag = $entity->getBag();
         $name = $attribute->getName();
         if($bag->hasField($name)) {
-            $valueManager = $container->getValueManager();
             $valueManager->setRuntime($bag->getField($name));
         }
+        $strategy = $container->getStrategy();
+        $strategy->find();
+        return $valueManager;
     }
 
     public function initialize(AttributeModel $attributeModel) : self
     {
-        $container = $this->getAttributeContainer();
         $attribute = $this->initializeAttribute($attributeModel);
-        $strategy = $this->initializeStrategy($attribute);
-        $container->makeValueManager();
-        $this->initializeRuntimeValue();
-        $container->makeValueAction();
-        $strategy->find();
+        $this->initializeStrategy($attribute);
+        $this->initializeValueManager();
         return $this;
     }
 }

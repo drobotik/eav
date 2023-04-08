@@ -10,7 +10,7 @@ use Kuperwood\Eav\Entity;
 use Kuperwood\Eav\EntityBag;
 use Kuperwood\Eav\Enum\ATTR_TYPE;
 use Kuperwood\Eav\Strategy;
-use Kuperwood\Eav\ValueManager;
+use Kuperwood\Eav\Value\ValueManager;
 use Tests\TestCase;
 
 class AttributeSetActionTest extends TestCase
@@ -72,9 +72,7 @@ class AttributeSetActionTest extends TestCase
         $attrSet = new AttributeSet();
         $attrSet->setEntity($entity);
 
-        $this->container
-            ->setAttributeSet($attrSet)
-            ->makeValueAction();
+        $this->container->setAttributeSet($attrSet);
         $this->action->initialize($attributeModel);
 
         // attribute
@@ -88,7 +86,7 @@ class AttributeSetActionTest extends TestCase
     }
 
     /** @test */
-    public function initialize_runtime_value() {
+    public function initialize_value_manager() {
         $value = 'test';
         $bag = $this->getMockBuilder(EntityBag::class)
             ->onlyMethods(['hasField', 'getField'])
@@ -115,53 +113,36 @@ class AttributeSetActionTest extends TestCase
             ->onlyMethods(['setRuntime'])
             ->getMock();
         $valueManager->expects($this->once())->method('setRuntime')->with($value);
+        $strategy = $this->getMockBuilder(Strategy::class)
+            ->onlyMethods(['find'])
+            ->getMock();
+        $strategy->expects($this->once())->method('find');
         $container = $this->getMockBuilder(AttributeContainer::class)
-            ->onlyMethods(['getAttributeSet', 'getAttribute', 'getValueManager'])
+            ->onlyMethods(['getAttributeSet', 'getAttribute', 'getStrategy', 'getValueManager'])
             ->getMock();
         $container->expects($this->once())->method('getAttributeSet')->willReturn($attrSet);
         $container->expects($this->once())->method('getAttribute')->willReturn($attribute);
+        $container->expects($this->once())->method('getStrategy')->willReturn($strategy);
         $container->expects($this->once())->method('getValueManager')->willReturn($valueManager);
         $action = $this->getMockBuilder(AttributeSetAction::class)
             ->onlyMethods(['getAttributeContainer'])
             ->getMock();
         $action->expects($this->once())->method('getAttributeContainer')->willReturn($container);
-        $action->initializeRuntimeValue();
+        $action->initializeValueManager();
     }
 
     /** @test */
     public function initialize_calls() {
         $attributeModel = $this->eavFactory->createAttribute();
-        $container = $this->getMockBuilder(AttributeContainer::class)
-            ->onlyMethods(['makeValueManager', 'makeValueAction'])
-            ->getMock();
-        $container->expects($this->once())->method('makeValueManager');
-        $container->expects($this->once())->method('makeValueAction');
         $action = $this->getMockBuilder(AttributeSetAction::class)
-            ->onlyMethods([
-                'initializeAttribute',
-                'initializeStrategy',
-                'getAttributeContainer',
-                'initializeRuntimeValue'
-            ])
+            ->onlyMethods(['initializeAttribute','initializeStrategy','initializeValueManager'])
             ->getMock();
-        $action->expects($this->once())->method('initializeRuntimeValue');
-        $action->expects($this->once())
-            ->method('getAttributeContainer')
-            ->willReturn($container);
+        $action->expects($this->once())->method('initializeValueManager');
         $attribute = new Attribute();
-        $action->expects($this->once())
-            ->method('initializeAttribute')
-            ->with($attributeModel)
-            ->willReturn($attribute);
-        $strategy = $this->getMockBuilder(Strategy::class)
-            ->onlyMethods(['find'])
-            ->getMock();
-        $strategy->expects($this->once())
-            ->method('find');
-        $action->expects($this->once())
-            ->method('initializeStrategy')
-            ->with($attribute)
-            ->willReturn($strategy);
+        $action->expects($this->once())->method('initializeAttribute')
+            ->with($attributeModel)->willReturn($attribute);
+        $action->expects($this->once())->method('initializeStrategy')
+            ->with($attribute);
         $action->initialize($attributeModel);
     }
 
