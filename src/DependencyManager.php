@@ -7,23 +7,28 @@ namespace Kuperwood\Eav;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Translation\FileLoader;
 
-class Container
+class DependencyManager
 {
-    private static ?Dependency $instance = null;
+    private static ?DependencyContainer $instance = null;
 
-    public static function getInstance()
+    public static function getContainer()
     {
         if (self::$instance === null) {
             self::$instance = is_null(self::$instance)
-                ? self::instance()
+                ? self::getDefaultContainer()
                 : self::$instance;
         }
         return self::$instance;
     }
 
-    private static function instance(): Dependency
+    public static function setContainer(DependencyContainer $dependency)
     {
-        $dependency = new Dependency();
+        self::$instance = $dependency;
+    }
+
+    public static function getDefaultContainer(): DependencyContainer
+    {
+        $dependency = new DependencyContainer();
         $filesystem = new Filesystem();
         $ns = 'lang';
         $group = 'validation';
@@ -34,10 +39,5 @@ class Container
         $loader->load($locale, $group, $ns);
         $dependency->setValidator($loader, $locale);
         return $dependency;
-    }
-
-    public static function setInstance(Dependency $dependency)
-    {
-        self::$instance = $dependency;
     }
 }

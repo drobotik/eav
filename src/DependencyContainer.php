@@ -7,7 +7,7 @@ namespace Kuperwood\Eav;
 use Illuminate\Translation\Translator;
 use Illuminate\Validation\Factory as ValidatorFactory;
 use Illuminate\Contracts\Translation\Loader;
-class Dependency
+class DependencyContainer
 {
     private ValidatorFactory $validator;
 

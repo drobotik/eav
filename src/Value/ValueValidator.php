@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kuperwood\Eav\Value;
 
 use Illuminate\Validation\Validator;
-use Kuperwood\Eav\Container;
+use Kuperwood\Eav\DependencyManager;
 use Kuperwood\Eav\Enum\_RESULT;
 use Kuperwood\Eav\Enum\_VALUE;
 use Kuperwood\Eav\Trait\ContainerTrait;
@@ -48,7 +48,7 @@ class ValueValidator
 
     public function getValidator() : Validator
     {
-        return Container::getInstance()->getValidator()->make(
+        return DependencyManager::getContainer()->getValidator()->make(
             $this->getValidatedData(),
             $this->getRules()
         );
