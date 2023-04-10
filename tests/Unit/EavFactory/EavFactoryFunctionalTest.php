@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\EavFactory;
 
 use DateTime;
 use Kuperwood\Dev\EavFactory;
@@ -23,9 +23,13 @@ use Kuperwood\Eav\Model\ValueStringModel;
 use Kuperwood\Eav\Model\ValueTextModel;
 use Tests\TestCase;
 
-class EavFactoryTest extends TestCase
+class EavFactoryFunctionalTest extends TestCase
 {
-    /** @test  */
+    /**
+     * @test
+     * @group functional
+     * @covers EavFactory::createDomain
+     */
     public function domain_default() {
         $result = $this->eavFactory->createDomain();
         $this->assertInstanceOf(DomainModel::class, $result);
@@ -35,8 +39,11 @@ class EavFactoryTest extends TestCase
         $this->assertArrayHasKey(_DOMAIN::NAME->column(), $data);
         $this->assertNotEmpty($data[_DOMAIN::NAME->column()]);
     }
-
-    /** @test  */
+    /**
+     * @test
+     * @group functional
+     * @covers EavFactory::createDomain
+     */
     public function domain_input_data() {
         $input = [
             _DOMAIN::NAME->column() => 'test'
@@ -46,8 +53,11 @@ class EavFactoryTest extends TestCase
         $input[_DOMAIN::ID->column()] = 1;
         $this->assertEquals($input, $result->toArray());
     }
-
-    /** @test  */
+    /**
+     * @test
+     * @group functional
+     * @covers EavFactory::createEntity
+     */
     public function entity_default() {
         $result = $this->eavFactory->createEntity();
         $this->assertInstanceOf(EntityModel::class, $result);
@@ -65,31 +75,11 @@ class EavFactoryTest extends TestCase
         // attribute set created
         $this->assertEquals(1, AttributeSetModel::query()->count());
     }
-
-    /** @test */
-    public function entity_domain() {
-        $factory = $this->getMockBuilder(EavFactory::class)
-            ->onlyMethods(['createDomain'])
-            ->getMock();
-        $factory->expects($this->never())
-            ->method('createDomain');
-        $domain = $this->eavFactory->createDomain();
-        $factory->createEntity($domain);
-    }
-
-    /** @test */
-    public function entity_attr_set() {
-        $factory = $this->getMockBuilder(EavFactory::class)
-            ->onlyMethods(['createAttributeSet'])
-            ->getMock();
-        $factory->expects($this->never())
-            ->method('createAttributeSet');
-        $domain = $this->eavFactory->createDomain();
-        $attrSet = $this->eavFactory->createAttributeSet($domain);
-        $factory->createEntity($domain, $attrSet);
-    }
-
-    /** @test */
+    /**
+     * @test
+     * @group functional
+     * @covers EavFactory::createAttributeSet
+     */
     public function attribute_set() {
         $result = $this->eavFactory->createAttributeSet();
         $this->assertInstanceOf(AttributeSetModel::class, $result);
@@ -98,8 +88,11 @@ class EavFactoryTest extends TestCase
         $data = $result->toArray();
         $this->assertArrayHasKey(_SET::NAME->column(), $data);
     }
-
-    /** @test */
+    /**
+     * @test
+     * @group functional
+     * @covers EavFactory::createAttributeSet
+     */
     public function attribute_set_input() {
         $input = [
             _SET::NAME->column() => 'test'
@@ -110,19 +103,11 @@ class EavFactoryTest extends TestCase
         $this->assertEquals(1, $result->getDomainKey());
         $this->assertEquals( $input[_SET::NAME->column()], $result->getName());
     }
-
-    /** @test */
-    public function attribute_set_domain() {
-        $factory = $this->getMockBuilder(EavFactory::class)
-            ->onlyMethods(['createDomain'])
-            ->getMock();
-        $factory->expects($this->never())
-            ->method('createDomain');
-        $domain = $this->eavFactory->createDomain();
-        $factory->createAttributeSet($domain);
-    }
-
-    /** @test */
+    /**
+     * @test
+     * @group functional
+     * @covers EavFactory::createGroup
+     */
     public function attribute_group() {
         $result = $this->eavFactory->createGroup();
         $this->assertInstanceOf(AttributeGroupModel::class, $result);
@@ -131,8 +116,11 @@ class EavFactoryTest extends TestCase
         $data = $result->toArray();
         $this->assertArrayHasKey(_GROUP::NAME->column(), $data);
     }
-
-    /** @test */
+    /**
+     * @test
+     * @group functional
+     * @covers EavFactory::createGroup
+     */
     public function attribute_group_input() {
         $input = [
             _GROUP::NAME->column() => 'test'
@@ -143,19 +131,11 @@ class EavFactoryTest extends TestCase
         $this->assertEquals(1, $result->getAttrSetKey());
         $this->assertEquals($input[_GROUP::NAME->column()], $result->getName());
     }
-
-    /** @test */
-    public function attribute_group_attribute_set() {
-        $factory = $this->getMockBuilder(EavFactory::class)
-            ->onlyMethods(['createAttributeSet'])
-            ->getMock();
-        $factory->expects($this->never())
-            ->method('createAttributeSet');
-        $set = $this->eavFactory->createAttributeSet();
-        $factory->createGroup($set);
-    }
-
-    /** @test */
+    /**
+     * @test
+     * @group functional
+     * @covers EavFactory::createAttribute
+     */
     public function attribute() {
         $result = $this->eavFactory->createAttribute();
         $this->assertInstanceOf(AttributeModel::class, $result);
@@ -169,8 +149,11 @@ class EavFactoryTest extends TestCase
         $data = $result->toArray();
         $this->assertArrayHasKey(_ATTR::NAME->column(), $data);
     }
-
-    /** @test */
+    /**
+     * @test
+     * @group functional
+     * @covers EavFactory::createAttribute
+     */
     public function attribute_input() {
         $input = [
             _ATTR::NAME->column() => 'test',
@@ -191,19 +174,11 @@ class EavFactoryTest extends TestCase
         $this->assertEquals($input[_ATTR::DEFAULT_VALUE->column()], $result->getDefaultValue());
         $this->assertEquals($input[_ATTR::DESCRIPTION->column()], $result->getDescription());
     }
-
-    /** @test */
-    public function attribute_domain() {
-        $factory = $this->getMockBuilder(EavFactory::class)
-            ->onlyMethods(['createDomain'])
-            ->getMock();
-        $factory->expects($this->never())
-            ->method('createDomain');
-        $domain = $this->eavFactory->createDomain();
-        $factory->createAttribute($domain);
-    }
-
-    /** @test */
+    /**
+     * @test
+     * @group functional
+     * @covers EavFactory::createPivot
+     */
     public function pivot() {
         $this->eavFactory->createDomain();
         $domain = $this->eavFactory->createDomain();
@@ -221,8 +196,11 @@ class EavFactoryTest extends TestCase
         $this->assertEquals(2, $result->getAttrKey());
         $this->assertEquals(2, $result->getGroupKey());
     }
-
-    /** @test */
+    /**
+     * @test
+     * @group functional
+     * @covers EavFactory::createValue
+     */
     public function value_string() {
         $domain = $this->eavFactory->createDomain();
         $entity = $this->eavFactory->createEntity($domain);
@@ -241,8 +219,11 @@ class EavFactoryTest extends TestCase
         $this->assertEquals(1, $result->getAttrKey());
         $this->assertEquals('test', $result->getValue());
     }
-
-    /** @test */
+    /**
+     * @test
+     * @group functional
+     * @covers EavFactory::createValue
+     */
     public function value_text() {
         $domain = $this->eavFactory->createDomain();
         $entity = $this->eavFactory->createEntity($domain);
@@ -261,8 +242,11 @@ class EavFactoryTest extends TestCase
         $this->assertEquals(1, $result->getAttrKey());
         $this->assertEquals('test', $result->getValue());
     }
-
-    /** @test */
+    /**
+     * @test
+     * @group functional
+     * @covers EavFactory::createValue
+     */
     public function value_integer() {
         $domain = $this->eavFactory->createDomain();
         $entity = $this->eavFactory->createEntity($domain);
@@ -281,8 +265,11 @@ class EavFactoryTest extends TestCase
         $this->assertEquals(1, $result->getAttrKey());
         $this->assertEquals(123, $result->getValue());
     }
-
-    /** @test */
+    /**
+     * @test
+     * @group functional
+     * @covers EavFactory::createValue
+     */
     public function value_decimal() {
         $domain = $this->eavFactory->createDomain();
         $entity = $this->eavFactory->createEntity($domain);
@@ -301,8 +288,11 @@ class EavFactoryTest extends TestCase
         $this->assertEquals(1, $result->getAttrKey());
         $this->assertEquals(123.123, $result->getValue());
     }
-
-    /** @test */
+    /**
+     * @test
+     * @group functional
+     * @covers EavFactory::createValue
+     */
     public function value_datetime() {
         $domain = $this->eavFactory->createDomain();
         $entity = $this->eavFactory->createEntity($domain);
