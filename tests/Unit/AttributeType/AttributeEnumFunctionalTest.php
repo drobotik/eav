@@ -12,7 +12,7 @@ use Kuperwood\Eav\Model\ValueDecimalModel;
 use Kuperwood\Eav\Model\ValueIntegerModel;
 use Kuperwood\Eav\Model\ValueStringModel;
 use Kuperwood\Eav\Model\ValueTextModel;
-use Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class AttributeEnumFunctionalTest extends TestCase
 {

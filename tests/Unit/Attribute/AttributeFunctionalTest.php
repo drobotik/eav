@@ -10,7 +10,6 @@ use Kuperwood\Eav\Enum\ATTR_TYPE;
 use Kuperwood\Eav\Exception\AttributeException;
 use Kuperwood\Eav\Model\ValueDecimalModel;
 use Kuperwood\Eav\Model\ValueStringModel;
-
 use PHPUnit\Framework\TestCase;
 
 class AttributeFunctionalTest extends TestCase
@@ -60,7 +59,7 @@ class AttributeFunctionalTest extends TestCase
      * @group functional
      * @covers Attribute::getName, Attribute::setName,
      */
-    public function name() {
+    public function name_accessor() {
         $this->attribute->setName('test');
         $this->assertEquals('test', $this->attribute->getName());
         $this->attribute->setName(null);

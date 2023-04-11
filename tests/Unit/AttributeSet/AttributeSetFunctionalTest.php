@@ -32,7 +32,7 @@ class AttributeSetFunctionalTest extends TestCase
      * @group functional
      * @covers AttributeSet::setName, AttributeSet::getName
      */
-    public function name() {
+    public function name_accessor() {
         $this->instance->setName('test');
         $this->assertEquals('test', $this->instance->getName());
     }

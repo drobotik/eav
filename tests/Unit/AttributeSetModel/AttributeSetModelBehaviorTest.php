@@ -7,7 +7,7 @@ namespace Tests\Unit\AttributeSetModel;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Kuperwood\Eav\Model\AttributeSetModel;
-use Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class AttributeSetModelBehaviorTest extends TestCase
 {

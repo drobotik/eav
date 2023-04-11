@@ -14,7 +14,7 @@ class DomainModelFunctionalTest extends TestCase
      * @group functional
      * @covers DomainModel::setName, DomainModel::getName,
      */
-    public function name() {
+    public function name_accessor() {
         $model = new DomainModel();
         $model->setName('test');
         $this->assertEquals('test', $model->getName());

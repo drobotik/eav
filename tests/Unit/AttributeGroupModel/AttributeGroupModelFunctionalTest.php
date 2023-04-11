@@ -25,7 +25,7 @@ class AttributeGroupModelFunctionalTest extends TestCase
      * @group functional
      * @covers AttributeGroupModel::setName, AttributeGroupModel::getName,
      */
-    public function name() {
+    public function name_accessor() {
         $model = new AttributeGroupModel();
         $model->setName('test');
         $this->assertEquals('test', $model->getName());

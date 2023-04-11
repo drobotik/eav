@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit\AttributeModel;
 
 use Kuperwood\Eav\Model\AttributeModel;
-use Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class AttributeModelFunctionalTest extends TestCase
 {
@@ -20,7 +20,7 @@ class AttributeModelFunctionalTest extends TestCase
      * @group functional
      * @covers AttributeModel::setName, AttributeModel::getName
      */
-    public function name() {
+    public function name_accessor() {
         $this->model->setName('test');
         $this->assertEquals('test', $this->model->getName());
     }

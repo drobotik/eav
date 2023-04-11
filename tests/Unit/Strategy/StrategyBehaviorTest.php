@@ -15,7 +15,7 @@ use Kuperwood\Eav\Strategy;
 use Kuperwood\Eav\Value\ValueAction;
 use Kuperwood\Eav\Value\ValueManager;
 use Kuperwood\Eav\Value\ValueValidator;
-use Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class StrategyBehaviorTest extends TestCase
 {

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\AttributeType\Enum;
+namespace Tests\Unit\AttributeEnum;
 
 use Kuperwood\Eav\Enum\_ATTR;
 use Kuperwood\Eav\Enum\ATTR_TYPE;
 use Kuperwood\Eav\Strategy;
-use Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
-class EnumFunctionalTest extends TestCase
+class AttributeEnumFunctionalTest extends TestCase
 {
     /**
      * @test
