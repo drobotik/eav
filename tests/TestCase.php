@@ -3,7 +3,7 @@ namespace Tests;
 
 use Faker\Generator;
 use Illuminate\Database\Capsule\Manager as Capsule;
-use Kuperwood\Dev\EavFactory;
+use Drobotik\Dev\EavFactory;
 
 class TestCase extends \PHPUnit\Framework\TestCase
 {

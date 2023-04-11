@@ -1,12 +1,12 @@
 <?php
 
-namespace Kuperwood\Eav\Trait;
+namespace Drobotik\Eav\Trait;
 
-use Kuperwood\Eav\AttributeContainer;
-use Kuperwood\Eav\AttributeSet;
-use Kuperwood\Eav\Model\AttributeSetModel;
-use Kuperwood\Eav\Model\DomainModel;
-use Kuperwood\Eav\Model\EntityModel;
+use Drobotik\Eav\AttributeContainer;
+use Drobotik\Eav\AttributeSet;
+use Drobotik\Eav\Model\AttributeSetModel;
+use Drobotik\Eav\Model\DomainModel;
+use Drobotik\Eav\Model\EntityModel;
 
 trait SingletonsTrait
 {

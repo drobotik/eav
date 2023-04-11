@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Unit\AttributeBag;
 
-use Kuperwood\Eav\AttributeBag;
-use Kuperwood\Eav\Enum\_ATTR;
-use Kuperwood\Eav\Strategy;
+use Drobotik\Eav\AttributeBag;
+use Drobotik\Eav\Enum\_ATTR;
+use Drobotik\Eav\Strategy;
 use PHPUnit\Framework\TestCase;
 
 class AttributeBagFunctionalTest extends TestCase

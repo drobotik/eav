@@ -2,7 +2,7 @@
 
 namespace Tests;
 
-use Kuperwood\Dev\Connection;
+use Drobotik\Dev\Connection;
 use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
 use Doctrine\Migrations\Configuration\Migration\PhpFile;
 use Doctrine\Migrations\DependencyFactory;

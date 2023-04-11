@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Unit\AttributeEnum;
 
-use Kuperwood\Eav\Enum\_ATTR;
-use Kuperwood\Eav\Enum\ATTR_TYPE;
-use Kuperwood\Eav\Strategy;
+use Drobotik\Eav\Enum\_ATTR;
+use Drobotik\Eav\Enum\ATTR_TYPE;
+use Drobotik\Eav\Strategy;
 use PHPUnit\Framework\TestCase;
 
 class AttributeEnumFunctionalTest extends TestCase

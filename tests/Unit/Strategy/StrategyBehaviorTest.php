@@ -6,15 +6,15 @@ namespace Tests\Unit\Strategy;
 
 use Illuminate\Support\MessageBag;
 use Illuminate\Validation\Validator;
-use Kuperwood\Eav\AttributeContainer;
-use Kuperwood\Eav\AttributeSet;
-use Kuperwood\Eav\Entity;
-use Kuperwood\Eav\Enum\_RESULT;
-use Kuperwood\Eav\Result\Result;
-use Kuperwood\Eav\Strategy;
-use Kuperwood\Eav\Value\ValueAction;
-use Kuperwood\Eav\Value\ValueManager;
-use Kuperwood\Eav\Value\ValueValidator;
+use Drobotik\Eav\AttributeContainer;
+use Drobotik\Eav\AttributeSet;
+use Drobotik\Eav\Entity;
+use Drobotik\Eav\Enum\_RESULT;
+use Drobotik\Eav\Result\Result;
+use Drobotik\Eav\Strategy;
+use Drobotik\Eav\Value\ValueAction;
+use Drobotik\Eav\Value\ValueManager;
+use Drobotik\Eav\Value\ValueValidator;
 use PHPUnit\Framework\TestCase;
 
 class StrategyBehaviorTest extends TestCase

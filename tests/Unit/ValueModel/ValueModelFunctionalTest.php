@@ -2,13 +2,13 @@
 
 namespace Tests\Unit\ValueModel;
 
-use Kuperwood\Eav\Enum\ATTR_TYPE;
-use Kuperwood\Eav\Model\ValueBase;
-use Kuperwood\Eav\Model\ValueDatetimeModel;
-use Kuperwood\Eav\Model\ValueDecimalModel;
-use Kuperwood\Eav\Model\ValueIntegerModel;
-use Kuperwood\Eav\Model\ValueStringModel;
-use Kuperwood\Eav\Model\ValueTextModel;
+use Drobotik\Eav\Enum\ATTR_TYPE;
+use Drobotik\Eav\Model\ValueBase;
+use Drobotik\Eav\Model\ValueDatetimeModel;
+use Drobotik\Eav\Model\ValueDecimalModel;
+use Drobotik\Eav\Model\ValueIntegerModel;
+use Drobotik\Eav\Model\ValueStringModel;
+use Drobotik\Eav\Model\ValueTextModel;
 use PHPUnit\Framework\TestCase;
 
 class ValueModelFunctionalTest extends TestCase

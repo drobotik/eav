@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Entity;
 
-use Kuperwood\Eav\AttributeSet;
-use Kuperwood\Eav\Entity;
-use Kuperwood\Eav\EntityBag;
-use Kuperwood\Eav\EntityGnome;
+use Drobotik\Eav\AttributeSet;
+use Drobotik\Eav\Entity;
+use Drobotik\Eav\EntityBag;
+use Drobotik\Eav\EntityGnome;
 use PHPUnit\Framework\TestCase;
 
 class EntityFunctionalTest extends TestCase

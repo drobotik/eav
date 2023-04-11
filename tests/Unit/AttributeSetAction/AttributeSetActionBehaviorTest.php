@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Tests\Unit\AttributeSetAction;
 
-use Kuperwood\Eav\Attribute;
-use Kuperwood\Eav\AttributeContainer;
-use Kuperwood\Eav\AttributeSet;
-use Kuperwood\Eav\AttributeSetAction;
-use Kuperwood\Eav\Entity;
-use Kuperwood\Eav\EntityBag;
-use Kuperwood\Eav\Model\AttributeModel;
-use Kuperwood\Eav\Strategy;
-use Kuperwood\Eav\Value\ValueManager;
+use Drobotik\Eav\Attribute;
+use Drobotik\Eav\AttributeContainer;
+use Drobotik\Eav\AttributeSet;
+use Drobotik\Eav\AttributeSetAction;
+use Drobotik\Eav\Entity;
+use Drobotik\Eav\EntityBag;
+use Drobotik\Eav\Model\AttributeModel;
+use Drobotik\Eav\Strategy;
+use Drobotik\Eav\Value\ValueManager;
 use PHPUnit\Framework\TestCase;
 
 class AttributeSetActionBehaviorTest extends TestCase

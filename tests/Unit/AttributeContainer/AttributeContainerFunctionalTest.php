@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Tests\Unit\AttributeContainer;
 
-use Kuperwood\Eav\Attribute;
-use Kuperwood\Eav\AttributeContainer;
-use Kuperwood\Eav\AttributeSet;
-use Kuperwood\Eav\AttributeSetAction;
-use Kuperwood\Eav\Strategy;
-use Kuperwood\Eav\Value\ValueManager;
-use Kuperwood\Eav\Value\ValueValidator;
+use Drobotik\Eav\Attribute;
+use Drobotik\Eav\AttributeContainer;
+use Drobotik\Eav\AttributeSet;
+use Drobotik\Eav\AttributeSetAction;
+use Drobotik\Eav\Strategy;
+use Drobotik\Eav\Value\ValueManager;
+use Drobotik\Eav\Value\ValueValidator;
 use PHPUnit\Framework\TestCase;
 
 class AttributeContainerFunctionalTest extends TestCase

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Entity;
 
-use Kuperwood\Eav\Entity;
-use Kuperwood\Eav\EntityGnome;
-use Kuperwood\Eav\Result\Result;
+use Drobotik\Eav\Entity;
+use Drobotik\Eav\EntityGnome;
+use Drobotik\Eav\Result\Result;
 use PHPUnit\Framework\TestCase;
 
 class EntityBehaviorTest extends TestCase

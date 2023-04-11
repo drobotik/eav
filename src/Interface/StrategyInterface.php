@@ -1,8 +1,8 @@
 <?php
 
-namespace Kuperwood\Eav\Interface;
+namespace Drobotik\Eav\Interface;
 
-use Kuperwood\Eav\Result\Result;
+use Drobotik\Eav\Result\Result;
 
 interface StrategyInterface
 {

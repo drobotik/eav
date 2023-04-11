@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\PivotModel;
 
-use Kuperwood\Eav\Model\PivotModel;
+use Drobotik\Eav\Model\PivotModel;
 use PHPUnit\Framework\TestCase;
 
 class PivotModelFunctionalTest extends TestCase

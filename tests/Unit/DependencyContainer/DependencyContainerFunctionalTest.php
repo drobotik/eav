@@ -4,7 +4,7 @@ namespace Tests\Unit\DependencyContainer;
 
 use Illuminate\Translation\ArrayLoader;
 use Illuminate\Validation\Factory;
-use Kuperwood\Eav\DependencyContainer;
+use Drobotik\Eav\DependencyContainer;
 use PHPUnit\Framework\TestCase;
 
 class DependencyContainerFunctionalTest extends TestCase

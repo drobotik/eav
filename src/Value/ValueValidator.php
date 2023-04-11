@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Kuperwood\Eav\Value;
+namespace Drobotik\Eav\Value;
 
 use Illuminate\Validation\Validator;
-use Kuperwood\Eav\DependencyManager;
-use Kuperwood\Eav\Enum\_RESULT;
-use Kuperwood\Eav\Enum\_VALUE;
-use Kuperwood\Eav\Trait\ContainerTrait;
+use Drobotik\Eav\DependencyManager;
+use Drobotik\Eav\Enum\_RESULT;
+use Drobotik\Eav\Enum\_VALUE;
+use Drobotik\Eav\Trait\ContainerTrait;
 
 class ValueValidator
 {

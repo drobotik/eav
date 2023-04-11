@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Kuperwood\Dev\Migration;
+namespace Drobotik\Dev\Migration;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\Migrations\AbstractMigration;
-use Kuperwood\Eav\Enum\_SET;
+use Drobotik\Eav\Enum\_SET;
 
 final class AttributeSetMigration extends AbstractMigration
 {

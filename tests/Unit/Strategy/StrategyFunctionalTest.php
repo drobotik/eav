@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Strategy;
 
-use Kuperwood\Eav\AttributeContainer;
-use Kuperwood\Eav\Enum\_RESULT;
-use Kuperwood\Eav\Result\Result;
-use Kuperwood\Eav\Strategy;
-use Kuperwood\Eav\Value\ValueAction;
-use Kuperwood\Eav\Value\ValueManager;
+use Drobotik\Eav\AttributeContainer;
+use Drobotik\Eav\Enum\_RESULT;
+use Drobotik\Eav\Result\Result;
+use Drobotik\Eav\Strategy;
+use Drobotik\Eav\Value\ValueAction;
+use Drobotik\Eav\Value\ValueManager;
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\StrategyFixture;
 use Tests\Fixtures\ValueActionFixture;

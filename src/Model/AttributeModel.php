@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Kuperwood\Eav\Model;
+namespace Drobotik\Eav\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Kuperwood\Eav\Enum\_ATTR;
-use Kuperwood\Eav\Enum\_DOMAIN;
+use Drobotik\Eav\Enum\_ATTR;
+use Drobotik\Eav\Enum\_DOMAIN;
 
 class AttributeModel extends Model
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kuperwood\Eav\Value;
+namespace Drobotik\Eav\Value;
 
 class ValueEmpty
 {

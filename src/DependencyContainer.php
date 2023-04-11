@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kuperwood\Eav;
+namespace Drobotik\Eav;
 
 use Illuminate\Translation\Translator;
 use Illuminate\Validation\Factory as ValidatorFactory;

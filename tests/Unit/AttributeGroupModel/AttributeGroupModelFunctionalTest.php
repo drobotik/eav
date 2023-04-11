@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\AttributeGroupModel;
 
-use Kuperwood\Eav\Model\AttributeGroupModel;
+use Drobotik\Eav\Model\AttributeGroupModel;
 use PHPUnit\Framework\TestCase;
 
 class AttributeGroupModelFunctionalTest extends TestCase

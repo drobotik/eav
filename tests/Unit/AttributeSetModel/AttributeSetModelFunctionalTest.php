@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Unit\AttributeSetModel;
 
-use Kuperwood\Eav\Model\AttributeSetModel;
-use Kuperwood\Eav\Trait\SingletonsTrait;
+use Drobotik\Eav\Model\AttributeSetModel;
+use Drobotik\Eav\Trait\SingletonsTrait;
 use Tests\TestCase;
 use Throwable;
 

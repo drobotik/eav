@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace Tests\Unit\Entity;
 
 use Carbon\Carbon;
-use Kuperwood\Eav\Entity;
-use Kuperwood\Eav\Enum\_ATTR;
-use Kuperwood\Eav\Enum\_VALUE;
-use Kuperwood\Eav\Enum\ATTR_TYPE;
-use Kuperwood\Eav\Model\ValueDatetimeModel;
-use Kuperwood\Eav\Model\ValueDecimalModel;
-use Kuperwood\Eav\Model\ValueIntegerModel;
-use Kuperwood\Eav\Model\ValueStringModel;
-use Kuperwood\Eav\Model\ValueTextModel;
+use Drobotik\Eav\Entity;
+use Drobotik\Eav\Enum\_ATTR;
+use Drobotik\Eav\Enum\_VALUE;
+use Drobotik\Eav\Enum\ATTR_TYPE;
+use Drobotik\Eav\Model\ValueDatetimeModel;
+use Drobotik\Eav\Model\ValueDecimalModel;
+use Drobotik\Eav\Model\ValueIntegerModel;
+use Drobotik\Eav\Model\ValueStringModel;
+use Drobotik\Eav\Model\ValueTextModel;
 use Tests\TestCase;
 
 

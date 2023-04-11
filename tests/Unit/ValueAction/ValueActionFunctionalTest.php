@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Tests\Unit\ValueAction;
 
-use Kuperwood\Eav\Attribute;
-use Kuperwood\Eav\AttributeContainer;
-use Kuperwood\Eav\AttributeSet;
-use Kuperwood\Eav\Entity;
-use Kuperwood\Eav\Enum\_RESULT;
-use Kuperwood\Eav\Enum\ATTR_TYPE;
-use Kuperwood\Eav\Model\ValueStringModel;
-use Kuperwood\Eav\Result\Result;
-use Kuperwood\Eav\Value\ValueAction;
-use Kuperwood\Eav\Value\ValueManager;
+use Drobotik\Eav\Attribute;
+use Drobotik\Eav\AttributeContainer;
+use Drobotik\Eav\AttributeSet;
+use Drobotik\Eav\Entity;
+use Drobotik\Eav\Enum\_RESULT;
+use Drobotik\Eav\Enum\ATTR_TYPE;
+use Drobotik\Eav\Model\ValueStringModel;
+use Drobotik\Eav\Result\Result;
+use Drobotik\Eav\Value\ValueAction;
+use Drobotik\Eav\Value\ValueManager;
 use Tests\TestCase;
 
 

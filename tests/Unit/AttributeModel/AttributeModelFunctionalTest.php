@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\AttributeModel;
 
-use Kuperwood\Eav\Model\AttributeModel;
+use Drobotik\Eav\Model\AttributeModel;
 use PHPUnit\Framework\TestCase;
 
 class AttributeModelFunctionalTest extends TestCase

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Kuperwood\Eav;
+namespace Drobotik\Eav;
 
-use Kuperwood\Eav\Enum\_ATTR;
-use Kuperwood\Eav\Enum\ATTR_TYPE;
-use Kuperwood\Eav\Exception\AttributeException;
-use Kuperwood\Eav\Interface\StrategyInterface;
-use Kuperwood\Eav\Model\ValueBase;
-use Kuperwood\Eav\Trait\ContainerTrait;
+use Drobotik\Eav\Enum\_ATTR;
+use Drobotik\Eav\Enum\ATTR_TYPE;
+use Drobotik\Eav\Exception\AttributeException;
+use Drobotik\Eav\Interface\StrategyInterface;
+use Drobotik\Eav\Model\ValueBase;
+use Drobotik\Eav\Trait\ContainerTrait;
 
 class Attribute
 {

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Kuperwood\Eav;
+namespace Drobotik\Eav;
 
-use Kuperwood\Eav\Enum\_ATTR;
+use Drobotik\Eav\Enum\_ATTR;
 
 class AttributeBag
 {

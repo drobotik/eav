@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Kuperwood\Eav\Model;
+namespace Drobotik\Eav\Model;
 
 use Illuminate\Database\Eloquent\Model;
-use Kuperwood\Eav\Enum\_ENTITY;
+use Drobotik\Eav\Enum\_ENTITY;
 
 class EntityModel extends Model
 {

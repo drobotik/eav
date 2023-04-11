@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\DomainModel;
 
-use Kuperwood\Eav\Model\DomainModel;
+use Drobotik\Eav\Model\DomainModel;
 use PHPUnit\Framework\TestCase;
 
 class DomainModelFunctionalTest extends TestCase

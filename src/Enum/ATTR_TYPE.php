@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Kuperwood\Eav\Enum;
+namespace Drobotik\Eav\Enum;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Builder\ClassMetadataBuilder;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Kuperwood\Eav\Model\ValueBase;
-use Kuperwood\Eav\Model\ValueDatetimeModel;
-use Kuperwood\Eav\Model\ValueDecimalModel;
-use Kuperwood\Eav\Model\ValueIntegerModel;
-use Kuperwood\Eav\Model\ValueStringModel;
-use Kuperwood\Eav\Model\ValueTextModel;
+use Drobotik\Eav\Model\ValueBase;
+use Drobotik\Eav\Model\ValueDatetimeModel;
+use Drobotik\Eav\Model\ValueDecimalModel;
+use Drobotik\Eav\Model\ValueIntegerModel;
+use Drobotik\Eav\Model\ValueStringModel;
+use Drobotik\Eav\Model\ValueTextModel;
 
 enum ATTR_TYPE
 {

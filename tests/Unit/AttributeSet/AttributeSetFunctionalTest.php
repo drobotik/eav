@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Unit\AttributeSet;
 
-use Kuperwood\Eav\Attribute;
-use Kuperwood\Eav\AttributeContainer;
-use Kuperwood\Eav\AttributeSet;
+use Drobotik\Eav\Attribute;
+use Drobotik\Eav\AttributeContainer;
+use Drobotik\Eav\AttributeSet;
 use PHPUnit\Framework\TestCase;
 
 class AttributeSetFunctionalTest extends TestCase

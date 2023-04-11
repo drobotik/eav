@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Result;
 
-use Kuperwood\Eav\Enum\_RESULT;
-use Kuperwood\Eav\Result\Result;
+use Drobotik\Eav\Enum\_RESULT;
+use Drobotik\Eav\Result\Result;
 use PHPUnit\Framework\TestCase;
 
 class ResultFunctionalTest extends TestCase

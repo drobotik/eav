@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Attribute;
 
-use Kuperwood\Eav\Attribute;
-use Kuperwood\Eav\AttributeBag;
-use Kuperwood\Eav\Enum\ATTR_TYPE;
-use Kuperwood\Eav\Exception\AttributeException;
-use Kuperwood\Eav\Model\ValueDecimalModel;
-use Kuperwood\Eav\Model\ValueStringModel;
+use Drobotik\Eav\Attribute;
+use Drobotik\Eav\AttributeBag;
+use Drobotik\Eav\Enum\ATTR_TYPE;
+use Drobotik\Eav\Exception\AttributeException;
+use Drobotik\Eav\Model\ValueDecimalModel;
+use Drobotik\Eav\Model\ValueStringModel;
 use PHPUnit\Framework\TestCase;
 
 class AttributeFunctionalTest extends TestCase

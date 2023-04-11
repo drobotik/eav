@@ -1,11 +1,11 @@
 <?php
 
-namespace Kuperwood\Eav\Result;
+namespace Drobotik\Eav\Result;
 
-use Kuperwood\Eav\Model\AttributeModel;
-use Kuperwood\Eav\Model\EntityModel;
-use Kuperwood\Eav\Model\PivotModel;
-use Kuperwood\Eav\Model\ValueBase;
+use Drobotik\Eav\Model\AttributeModel;
+use Drobotik\Eav\Model\EntityModel;
+use Drobotik\Eav\Model\PivotModel;
+use Drobotik\Eav\Model\ValueBase;
 
 class EntityFactoryResult
 {

@@ -2,8 +2,8 @@
 
 namespace Tests\Fixtures;
 
-use Kuperwood\Eav\Result\Result;
-use Kuperwood\Eav\Value\ValueAction;
+use Drobotik\Eav\Result\Result;
+use Drobotik\Eav\Value\ValueAction;
 
 class ValueActionFixture extends ValueAction
 {

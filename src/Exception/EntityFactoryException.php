@@ -1,6 +1,6 @@
 <?php
 
-namespace Kuperwood\Eav\Exception;
+namespace Drobotik\Eav\Exception;
 
 use Exception;
 

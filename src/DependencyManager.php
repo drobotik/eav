@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kuperwood\Eav;
+namespace Drobotik\Eav;
 
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Translation\FileLoader;

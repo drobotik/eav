@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Transporter;
 
-use Kuperwood\Eav\Transporter;
+use Drobotik\Eav\Transporter;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 

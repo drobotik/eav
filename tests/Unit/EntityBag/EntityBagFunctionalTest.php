@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Unit\EntityBag;
 
-use Kuperwood\Eav\Entity;
-use Kuperwood\Eav\EntityBag;
+use Drobotik\Eav\Entity;
+use Drobotik\Eav\EntityBag;
 use PHPUnit\Framework\TestCase;
 
 class EntityBagFunctionalTest extends TestCase

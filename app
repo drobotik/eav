@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-use Kuperwood\Dev\ModelsManager;
+use Drobotik\Dev\ModelsManager;
 use Doctrine\Migrations\Configuration\EntityManager\ExistingEntityManager;
 use Doctrine\Migrations\Configuration\Migration\PhpFile;
 use Doctrine\Migrations\DependencyFactory;

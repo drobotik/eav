@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\EntityModel;
 
-use Kuperwood\Eav\Model\EntityModel;
+use Drobotik\Eav\Model\EntityModel;
 use Tests\TestCase;
 
 class EntityModelFunctionalTest extends TestCase

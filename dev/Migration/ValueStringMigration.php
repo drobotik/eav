@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Kuperwood\Dev\Migration;
+namespace Drobotik\Dev\Migration;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
-use Kuperwood\Eav\Enum\ATTR_TYPE;
+use Drobotik\Eav\Enum\ATTR_TYPE;
 
 final class ValueStringMigration extends AbstractMigration
 {

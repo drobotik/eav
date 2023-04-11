@@ -1,12 +1,12 @@
 <?php
 
-namespace Kuperwood\Dev\Migration;
+namespace Drobotik\Dev\Migration;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Types;
-use Kuperwood\Eav\Enum\_VALUE;
-use Kuperwood\Eav\Enum\ATTR_TYPE;
+use Drobotik\Eav\Enum\_VALUE;
+use Drobotik\Eav\Enum\ATTR_TYPE;
 
 class ValueMigration
 {

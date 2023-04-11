@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\ValueState;
 
-use Kuperwood\Eav\Value\ValueState;
+use Drobotik\Eav\Value\ValueState;
 use PHPUnit\Framework\TestCase;
 
 class ValueStateFunctionalTest extends TestCase

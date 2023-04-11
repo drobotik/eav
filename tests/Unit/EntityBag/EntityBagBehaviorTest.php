@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Unit\EntityBag;
 
-use Kuperwood\Eav\AttributeContainer;
-use Kuperwood\Eav\AttributeSet;
-use Kuperwood\Eav\Entity;
-use Kuperwood\Eav\EntityBag;
-use Kuperwood\Eav\Value\ValueManager;
+use Drobotik\Eav\AttributeContainer;
+use Drobotik\Eav\AttributeSet;
+use Drobotik\Eav\Entity;
+use Drobotik\Eav\EntityBag;
+use Drobotik\Eav\Value\ValueManager;
 use PHPUnit\Framework\TestCase;
 
 class EntityBagBehaviorTest extends TestCase

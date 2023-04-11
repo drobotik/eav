@@ -1,10 +1,10 @@
 <?php
 
-namespace Kuperwood\Eav;
+namespace Drobotik\Eav;
 
-use Kuperwood\Eav\Model\AttributeModel;
-use Kuperwood\Eav\Trait\ContainerTrait;
-use Kuperwood\Eav\Value\ValueManager;
+use Drobotik\Eav\Model\AttributeModel;
+use Drobotik\Eav\Trait\ContainerTrait;
+use Drobotik\Eav\Value\ValueManager;
 
 class AttributeSetAction
 {

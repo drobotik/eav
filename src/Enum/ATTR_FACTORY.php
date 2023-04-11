@@ -1,6 +1,6 @@
 <?php
 
-namespace Kuperwood\Eav\Enum;
+namespace Drobotik\Eav\Enum;
 
 enum ATTR_FACTORY
 {

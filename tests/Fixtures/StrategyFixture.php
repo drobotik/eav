@@ -2,8 +2,8 @@
 
 namespace Tests\Fixtures;
 
-use Kuperwood\Eav\Result\Result;
-use Kuperwood\Eav\Strategy;
+use Drobotik\Eav\Result\Result;
+use Drobotik\Eav\Strategy;
 
 class StrategyFixture extends Strategy
 {

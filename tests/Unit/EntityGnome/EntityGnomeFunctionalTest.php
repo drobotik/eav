@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Tests\Unit\EntityGnome;
 
-use Kuperwood\Eav\Entity;
-use Kuperwood\Eav\EntityGnome;
-use Kuperwood\Eav\Enum\_ATTR;
-use Kuperwood\Eav\Enum\_ENTITY;
-use Kuperwood\Eav\Enum\_RESULT;
-use Kuperwood\Eav\Enum\_VALUE;
-use Kuperwood\Eav\Exception\EntityException;
-use Kuperwood\Eav\Model\EntityModel;
-use Kuperwood\Eav\Model\ValueStringModel;
-use Kuperwood\Eav\Result\Result;
+use Drobotik\Eav\Entity;
+use Drobotik\Eav\EntityGnome;
+use Drobotik\Eav\Enum\_ATTR;
+use Drobotik\Eav\Enum\_ENTITY;
+use Drobotik\Eav\Enum\_RESULT;
+use Drobotik\Eav\Enum\_VALUE;
+use Drobotik\Eav\Exception\EntityException;
+use Drobotik\Eav\Model\EntityModel;
+use Drobotik\Eav\Model\ValueStringModel;
+use Drobotik\Eav\Result\Result;
 use Tests\TestCase;
 
 class EntityGnomeFunctionalTest extends TestCase

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Kuperwood\Eav\Value;
+namespace Drobotik\Eav\Value;
 
-use Kuperwood\Eav\Enum\_VALUE;
-use Kuperwood\Eav\Result\Result;
-use Kuperwood\Eav\Trait\ContainerTrait;
+use Drobotik\Eav\Enum\_VALUE;
+use Drobotik\Eav\Result\Result;
+use Drobotik\Eav\Trait\ContainerTrait;
 
 class ValueAction
 {

@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Tests\Unit\AttributeSet;
 
 use Illuminate\Database\Eloquent\Collection;
-use Kuperwood\Eav\AttributeContainer;
-use Kuperwood\Eav\AttributeSet;
-use Kuperwood\Eav\AttributeSetAction;
-use Kuperwood\Eav\Model\AttributeModel;
-use Kuperwood\Eav\Model\AttributeSetModel;
+use Drobotik\Eav\AttributeContainer;
+use Drobotik\Eav\AttributeSet;
+use Drobotik\Eav\AttributeSetAction;
+use Drobotik\Eav\Model\AttributeModel;
+use Drobotik\Eav\Model\AttributeSetModel;
 use PHPUnit\Framework\TestCase;
 
 class AttributeSetBehaviorTest extends TestCase

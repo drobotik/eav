@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Kuperwood\Eav\Result;
+namespace Drobotik\Eav\Result;
 
-use Kuperwood\Eav\Enum\_RESULT;
+use Drobotik\Eav\Enum\_RESULT;
 
 class Result
 {

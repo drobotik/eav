@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Kuperwood\Eav\Enum;
+namespace Drobotik\Eav\Enum;
 
-use Kuperwood\Eav\Interface\DefineTableInterface;
-use Kuperwood\Eav\Strategy;
+use Drobotik\Eav\Interface\DefineTableInterface;
+use Drobotik\Eav\Strategy;
 
 enum _ATTR implements DefineTableInterface
 {

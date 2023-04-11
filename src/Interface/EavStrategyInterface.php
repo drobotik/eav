@@ -1,6 +1,6 @@
 <?php
 
-namespace Kuperwood\Eav\Interface;
+namespace Drobotik\Eav\Interface;
 
 interface EavStrategyInterface
 {

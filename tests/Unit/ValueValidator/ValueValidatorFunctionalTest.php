@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Tests\Unit\ValueValidator;
 
-use Kuperwood\Eav\Attribute;
-use Kuperwood\Eav\AttributeContainer;
-use Kuperwood\Eav\AttributeSet;
-use Kuperwood\Eav\Entity;
-use Kuperwood\Eav\Enum\_VALUE;
-use Kuperwood\Eav\Enum\ATTR_TYPE;
-use Kuperwood\Eav\Strategy;
-use Kuperwood\Eav\Value\ValueManager;
-use Kuperwood\Eav\Value\ValueValidator;
+use Drobotik\Eav\Attribute;
+use Drobotik\Eav\AttributeContainer;
+use Drobotik\Eav\AttributeSet;
+use Drobotik\Eav\Entity;
+use Drobotik\Eav\Enum\_VALUE;
+use Drobotik\Eav\Enum\ATTR_TYPE;
+use Drobotik\Eav\Strategy;
+use Drobotik\Eav\Value\ValueManager;
+use Drobotik\Eav\Value\ValueValidator;
 use PHPUnit\Framework\TestCase;
 
 class ValueValidatorFunctionalTest extends TestCase

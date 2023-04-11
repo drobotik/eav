@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Kuperwood\Eav\Model;
+namespace Drobotik\Eav\Model;
 
-use Kuperwood\Eav\Enum\_VALUE;
-use Kuperwood\Eav\Enum\ATTR_TYPE;
+use Drobotik\Eav\Enum\_VALUE;
+use Drobotik\Eav\Enum\ATTR_TYPE;
 
 class ValueIntegerModel extends ValueBase
 {

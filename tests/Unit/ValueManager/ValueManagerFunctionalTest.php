@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\ValueManager;
 
-use Kuperwood\Eav\Value\ValueManager;
+use Drobotik\Eav\Value\ValueManager;
 use PHPUnit\Framework\TestCase;
 
 class ValueManagerFunctionalTest extends TestCase

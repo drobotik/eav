@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\DependencyManager;
 
-use Kuperwood\Eav\DependencyContainer;
-use Kuperwood\Eav\DependencyManager;
+use Drobotik\Eav\DependencyContainer;
+use Drobotik\Eav\DependencyManager;
 use PHPUnit\Framework\TestCase;
 
 class DependencyManagerFunctionalTest extends TestCase

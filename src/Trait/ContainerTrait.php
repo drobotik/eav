@@ -1,8 +1,8 @@
 <?php
 
-namespace Kuperwood\Eav\Trait;
+namespace Drobotik\Eav\Trait;
 
-use Kuperwood\Eav\AttributeContainer;
+use Drobotik\Eav\AttributeContainer;
 
 trait ContainerTrait
 {

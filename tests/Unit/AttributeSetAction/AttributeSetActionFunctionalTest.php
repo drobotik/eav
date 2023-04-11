@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Tests\Unit\AttributeSetAction;
 
-use Kuperwood\Eav\Attribute;
-use Kuperwood\Eav\AttributeContainer;
-use Kuperwood\Eav\AttributeSet;
-use Kuperwood\Eav\AttributeSetAction;
-use Kuperwood\Eav\Entity;
-use Kuperwood\Eav\Enum\ATTR_TYPE;
-use Kuperwood\Eav\Strategy;
+use Drobotik\Eav\Attribute;
+use Drobotik\Eav\AttributeContainer;
+use Drobotik\Eav\AttributeSet;
+use Drobotik\Eav\AttributeSetAction;
+use Drobotik\Eav\Entity;
+use Drobotik\Eav\Enum\ATTR_TYPE;
+use Drobotik\Eav\Strategy;
 use Tests\TestCase;
 
 class AttributeSetActionFunctionalTest extends TestCase

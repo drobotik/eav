@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Kuperwood\Eav\Model;
+namespace Drobotik\Eav\Model;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Kuperwood\Eav\Enum\_PIVOT;
-use Kuperwood\Eav\Enum\_SET;
+use Drobotik\Eav\Enum\_PIVOT;
+use Drobotik\Eav\Enum\_SET;
 
 class AttributeSetModel extends Model
 {

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Kuperwood\Eav;
+namespace Drobotik\Eav;
 
-use Kuperwood\Eav\Exception\EntityException;
-use Kuperwood\Eav\Model\AttributeSetModel;
-use Kuperwood\Eav\Model\DomainModel;
-use Kuperwood\Eav\Model\EntityModel;
-use Kuperwood\Eav\Result\Result;
-use Kuperwood\Eav\Trait\SingletonsTrait;
+use Drobotik\Eav\Exception\EntityException;
+use Drobotik\Eav\Model\AttributeSetModel;
+use Drobotik\Eav\Model\DomainModel;
+use Drobotik\Eav\Model\EntityModel;
+use Drobotik\Eav\Result\Result;
+use Drobotik\Eav\Trait\SingletonsTrait;
 use Throwable;
 
 class EntityGnome

@@ -2,12 +2,12 @@
 
 namespace Tests\Unit\EavFactoryResult;
 
-use Kuperwood\Eav\Model\AttributeModel;
-use Kuperwood\Eav\Model\EntityModel;
-use Kuperwood\Eav\Model\PivotModel;
-use Kuperwood\Eav\Model\ValueStringModel;
+use Drobotik\Eav\Model\AttributeModel;
+use Drobotik\Eav\Model\EntityModel;
+use Drobotik\Eav\Model\PivotModel;
+use Drobotik\Eav\Model\ValueStringModel;
 use PHPUnit\Framework\TestCase;
-use Kuperwood\Eav\Result\EntityFactoryResult;
+use Drobotik\Eav\Result\EntityFactoryResult;
 
 class EavFactoryResultFunctionalTest extends TestCase
 {

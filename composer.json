@@ -1,23 +1,23 @@
 {
-    "name": "kuperwood/eav",
+    "name": "drobotik/eav",
     "description": "multi domain EAV package",
     "type": "library",
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Kuperwood\\Eav\\": "src/"
+            "Drobotik\\Eav\\": "src/"
         }
     },
     "autoload-dev": {
         "files": [],
         "psr-4": {
             "Tests\\": "tests/",
-            "Kuperwood\\Dev\\": "dev/"
+            "Drobotik\\Dev\\": "dev/"
         }
     },
     "authors": [
         {
-            "name": "Alex Kuperwood"
+            "name": "Aleksandr Drobotik"
         }
     ],
     "minimum-stability": "dev",

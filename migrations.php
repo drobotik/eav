@@ -9,21 +9,21 @@ return [
     ],
 
     'migrations' => [
-        'Kuperwood\Dev\Migration\DomainMigration',
-        'Kuperwood\Dev\Migration\EntityMigration',
-        'Kuperwood\Dev\Migration\AttributeMigration',
-        'Kuperwood\Dev\Migration\AttributeSetMigration',
-        'Kuperwood\Dev\Migration\GroupMigration',
-        'Kuperwood\Dev\Migration\PivotMigration',
-        'Kuperwood\Dev\Migration\ValueDatetimeMigration',
-        'Kuperwood\Dev\Migration\ValueDecimalMigration',
-        'Kuperwood\Dev\Migration\ValueIntegerMigration',
-        'Kuperwood\Dev\Migration\ValueStringMigration',
-        'Kuperwood\Dev\Migration\ValueTextMigration',
+        'Drobotik\Dev\Migration\DomainMigration',
+        'Drobotik\Dev\Migration\EntityMigration',
+        'Drobotik\Dev\Migration\AttributeMigration',
+        'Drobotik\Dev\Migration\AttributeSetMigration',
+        'Drobotik\Dev\Migration\GroupMigration',
+        'Drobotik\Dev\Migration\PivotMigration',
+        'Drobotik\Dev\Migration\ValueDatetimeMigration',
+        'Drobotik\Dev\Migration\ValueDecimalMigration',
+        'Drobotik\Dev\Migration\ValueIntegerMigration',
+        'Drobotik\Dev\Migration\ValueStringMigration',
+        'Drobotik\Dev\Migration\ValueTextMigration',
     ],
 
     'migrations_paths' => [
-        'Kuperwood\Eav\Migration' => './dev/Migration',
+        'Drobotik\Eav\Migration' => './dev/Migration',
     ],
 
     'all_or_nothing' => true,

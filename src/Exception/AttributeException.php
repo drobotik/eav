@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kuperwood\Eav\Exception;
+namespace Drobotik\Eav\Exception;
 
 use Exception;
 

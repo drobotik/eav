@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Kuperwood\Eav;
+namespace Drobotik\Eav;
 
-use Kuperwood\Eav\Enum\_RESULT;
-use Kuperwood\Eav\Interface\EavStrategyInterface;
-use Kuperwood\Eav\Interface\StrategyInterface;
-use Kuperwood\Eav\Result\Result;
-use Kuperwood\Eav\Trait\ContainerTrait;
+use Drobotik\Eav\Enum\_RESULT;
+use Drobotik\Eav\Interface\EavStrategyInterface;
+use Drobotik\Eav\Interface\StrategyInterface;
+use Drobotik\Eav\Result\Result;
+use Drobotik\Eav\Trait\ContainerTrait;
 
 class Strategy implements StrategyInterface, EavStrategyInterface
 {

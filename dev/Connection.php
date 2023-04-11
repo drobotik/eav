@@ -1,6 +1,6 @@
 <?php
 
-namespace Kuperwood\Dev;
+namespace Drobotik\Dev;
 use Doctrine\DBAL\Connection as DBALConnection;
 use Doctrine\DBAL\DriverManager;
 

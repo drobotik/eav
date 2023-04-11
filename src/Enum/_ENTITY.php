@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Kuperwood\Eav\Enum;
+namespace Drobotik\Eav\Enum;
 
-use Kuperwood\Eav\Interface\DefineTableInterface;
+use Drobotik\Eav\Interface\DefineTableInterface;
 
 enum _ENTITY implements DefineTableInterface
 {

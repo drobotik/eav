@@ -1,10 +1,10 @@
 <?php
 
-namespace Kuperwood\Eav;
+namespace Drobotik\Eav;
 
-use Kuperwood\Eav\Value\ValueAction;
-use Kuperwood\Eav\Value\ValueManager;
-use Kuperwood\Eav\Value\ValueValidator;
+use Drobotik\Eav\Value\ValueAction;
+use Drobotik\Eav\Value\ValueManager;
+use Drobotik\Eav\Value\ValueValidator;
 
 class AttributeContainer
 {

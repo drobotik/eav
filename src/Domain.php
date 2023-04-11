@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kuperwood\Eav;
+namespace Drobotik\Eav;
 
 class Domain
 {}
