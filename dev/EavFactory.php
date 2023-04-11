@@ -3,6 +3,7 @@
 namespace Kuperwood\Dev;
 
 use Faker\Generator;
+use Kuperwood\Eav\EntityFactory;
 use Kuperwood\Eav\Enum\_ATTR;
 use Kuperwood\Eav\Enum\_DOMAIN;
 use Kuperwood\Eav\Enum\_GROUP;
@@ -15,6 +16,7 @@ use Kuperwood\Eav\Model\DomainModel;
 use Kuperwood\Eav\Model\EntityModel;
 use Kuperwood\Eav\Model\PivotModel;
 use Kuperwood\Eav\Model\ValueBase;
+use Kuperwood\Eav\Result\Result;
 
 class EavFactory
 {
@@ -141,4 +143,12 @@ class EavFactory
         return $model;
     }
 
+    public function createEavEntity(array $fields, DomainModel $domain, AttributeSetModel $set) : Result
+    {
+        $result = new Result();
+        $result->created();
+        $factory = new EntityFactory($this);
+        $result->setData($factory->create($fields, $domain, $set));
+        return $result;
+    }
 }

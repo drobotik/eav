@@ -2,13 +2,18 @@
 
 namespace Tests\Unit\EavFactory;
 
+use Carbon\Carbon;
 use DateTime;
 use Kuperwood\Dev\EavFactory;
 use Kuperwood\Eav\Enum\_ATTR;
 use Kuperwood\Eav\Enum\_DOMAIN;
 use Kuperwood\Eav\Enum\_ENTITY;
 use Kuperwood\Eav\Enum\_GROUP;
+use Kuperwood\Eav\Enum\_PIVOT;
+use Kuperwood\Eav\Enum\_RESULT;
 use Kuperwood\Eav\Enum\_SET;
+use Kuperwood\Eav\Enum\_VALUE;
+use Kuperwood\Eav\Enum\ATTR_FACTORY;
 use Kuperwood\Eav\Enum\ATTR_TYPE;
 use Kuperwood\Eav\Model\AttributeGroupModel;
 use Kuperwood\Eav\Model\AttributeModel;
@@ -21,6 +26,8 @@ use Kuperwood\Eav\Model\ValueDecimalModel;
 use Kuperwood\Eav\Model\ValueIntegerModel;
 use Kuperwood\Eav\Model\ValueStringModel;
 use Kuperwood\Eav\Model\ValueTextModel;
+use Kuperwood\Eav\Result\EntityFactoryResult;
+use Kuperwood\Eav\Result\Result;
 use Tests\TestCase;
 
 class EavFactoryFunctionalTest extends TestCase
@@ -311,5 +318,225 @@ class EavFactoryFunctionalTest extends TestCase
         $this->assertEquals(1, $result->getEntityKey());
         $this->assertEquals(1, $result->getAttrKey());
         $this->assertEquals($datetime, $result->getValue());
+    }
+
+    /**
+     * @test
+     * @group functional
+     * @covers EavFactory::createEavEntity
+     */
+    public function create_eav_entity() {
+        $domain = $this->eavFactory->createDomain();
+        $set = $this->eavFactory->createAttributeSet($domain);
+        $groupOne = $this->eavFactory->createGroup($set);
+        $groupTwo = $this->eavFactory->createGroup($set);
+        $nameString = "string";
+        $nameInteger = "integer";
+        $nameDecimal = "decimal";
+        $nameDatetime = "datetime";
+        $nameText = "text";
+        $fields = [
+            $nameString => [
+                ATTR_FACTORY::ATTRIBUTE->field() => [
+                    _ATTR::NAME->column() => $nameString,
+                    _ATTR::TYPE->column() => ATTR_TYPE::STRING->value(),
+                    _ATTR::DEFAULT_VALUE->column() => 'string default'
+                ],
+                ATTR_FACTORY::GROUP->field() => $groupOne->getKey(),
+                ATTR_FACTORY::VALUE->field() => $this->faker->word
+            ],
+            $nameInteger => [
+                ATTR_FACTORY::ATTRIBUTE->field() => [
+                    _ATTR::NAME->column() => $nameInteger,
+                    _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value(),
+                    _ATTR::DEFAULT_VALUE->column() => 'integer default'
+                ],
+                ATTR_FACTORY::GROUP->field() => $groupOne->getKey(),
+                ATTR_FACTORY::VALUE->field() => $this->faker->randomNumber()
+            ],
+            $nameDecimal => [
+                ATTR_FACTORY::ATTRIBUTE->field() => [
+                    _ATTR::NAME->column() => $nameDecimal,
+                    _ATTR::TYPE->column() => ATTR_TYPE::DECIMAL->value(),
+                    _ATTR::DEFAULT_VALUE->column() => 'decimal default'
+                ],
+                ATTR_FACTORY::GROUP->field() => $groupOne->getKey(),
+                ATTR_FACTORY::VALUE->field() => $this->faker->randomFloat()
+            ],
+            $nameDatetime => [
+                ATTR_FACTORY::ATTRIBUTE->field() => [
+                    _ATTR::NAME->column() => $nameDatetime,
+                    _ATTR::TYPE->column() => ATTR_TYPE::DATETIME->value(),
+                    _ATTR::DEFAULT_VALUE->column() => 'datetime default'
+                ],
+                ATTR_FACTORY::GROUP->field() => $groupTwo->getKey(),
+                ATTR_FACTORY::VALUE->field() => Carbon::now()->format('Y-m-d H:i:s')
+            ],
+            $nameText => [
+                ATTR_FACTORY::ATTRIBUTE->field() => [
+                    _ATTR::NAME->column() => $nameText,
+                    _ATTR::TYPE->column() => ATTR_TYPE::TEXT->value(),
+                    _ATTR::DEFAULT_VALUE->column() => 'type default'
+                ],
+                ATTR_FACTORY::GROUP->field() => $groupTwo->getKey(),
+                ATTR_FACTORY::VALUE->field() => $this->faker->text
+            ],
+        ];
+
+        $this->eavFactory->createGroup($set);
+        $result = $this->eavFactory->createEavEntity($fields, $domain, $set);
+
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::CREATED->code(), $result->getCode());
+        $this->assertEquals(_RESULT::CREATED->message(), $result->getMessage());
+        // check result is entity result
+        $factoryResult = $result->getData();
+        $this->assertInstanceOf(EntityFactoryResult::class, $factoryResult);
+
+        // check entity record created
+        /** @var EntityModel $entityModel */
+        $entityModel = EntityModel
+            ::where(_ENTITY::DOMAIN_ID->column(), $domain->getKey())
+            ->where(_ENTITY::ATTR_SET_ID->column(), $set->getKey())
+            ->first();
+        $this->assertNotNull($entityModel);
+        $this->assertEquals($entityModel->toArray(), $factoryResult->getEntityModel()->toArray());
+
+        // check attributes created
+        /** @var AttributeModel $stringAttribute */
+        /** @var AttributeModel $integerAttribute */
+        /** @var AttributeModel $decimalAttribute */
+        /** @var AttributeModel $datetimeAttribute */
+        /** @var AttributeModel $textAttribute */
+
+        $stringAttribute = AttributeModel
+            ::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
+            ->where(_ATTR::TYPE->column(), ATTR_TYPE::STRING->value())
+            ->where(_ATTR::NAME->column(), $nameString)->first();
+        $integerAttribute = AttributeModel
+            ::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
+            ->where(_ATTR::TYPE->column(), ATTR_TYPE::INTEGER->value())
+            ->where(_ATTR::NAME->column(), $nameInteger)->first();
+        $decimalAttribute = AttributeModel
+            ::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
+            ->where(_ATTR::TYPE->column(), ATTR_TYPE::DECIMAL->value())
+            ->where(_ATTR::NAME->column(), $nameDecimal)->first();
+        $datetimeAttribute = AttributeModel
+            ::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
+            ->where(_ATTR::TYPE->column(), ATTR_TYPE::DATETIME->value())
+            ->where(_ATTR::NAME->column(), $nameDatetime)->first();
+        $textAttribute = AttributeModel
+            ::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
+            ->where(_ATTR::TYPE->column(), ATTR_TYPE::TEXT->value())
+            ->where(_ATTR::NAME->column(), $nameText)->first();
+
+        $this->assertNotNull($stringAttribute);
+        $this->assertNotNull($integerAttribute);
+        $this->assertNotNull($decimalAttribute);
+        $this->assertNotNull($datetimeAttribute);
+        $this->assertNotNull($textAttribute);
+
+        $this->assertEquals($fields[$nameString][ATTR_FACTORY::ATTRIBUTE->field()][_ATTR::DEFAULT_VALUE->column()], $stringAttribute->getDefaultValue());
+        $this->assertEquals($fields[$nameInteger][ATTR_FACTORY::ATTRIBUTE->field()][_ATTR::DEFAULT_VALUE->column()], $integerAttribute->getDefaultValue());
+        $this->assertEquals($fields[$nameDecimal][ATTR_FACTORY::ATTRIBUTE->field()][_ATTR::DEFAULT_VALUE->column()], $decimalAttribute->getDefaultValue());
+        $this->assertEquals($fields[$nameDatetime][ATTR_FACTORY::ATTRIBUTE->field()][_ATTR::DEFAULT_VALUE->column()], $datetimeAttribute->getDefaultValue());
+        $this->assertEquals($fields[$nameText][ATTR_FACTORY::ATTRIBUTE->field()][_ATTR::DEFAULT_VALUE->column()], $textAttribute->getDefaultValue());
+
+        // check attributes in returned result
+        $attributes = $factoryResult->getAttributes();
+        $this->assertArrayHasKey($stringAttribute->getName(), $attributes);
+        $this->assertArrayHasKey($integerAttribute->getName(), $attributes);
+        $this->assertArrayHasKey($decimalAttribute->getName(), $attributes);
+        $this->assertArrayHasKey($datetimeAttribute->getName(), $attributes);
+        $this->assertArrayHasKey($textAttribute->getName(), $attributes);
+        $this->assertEquals($stringAttribute->toArray(), $attributes[$stringAttribute->getName()]->toArray());
+        $this->assertEquals($integerAttribute->toArray(), $attributes[$integerAttribute->getName()]->toArray());
+        $this->assertEquals($decimalAttribute->toArray(), $attributes[$decimalAttribute->getName()]->toArray());
+        $this->assertEquals($datetimeAttribute->toArray(), $attributes[$datetimeAttribute->getName()]->toArray());
+        $this->assertEquals($textAttribute->toArray(), $attributes[$textAttribute->getName()]->toArray());
+
+        // check attributes linked in pivot table
+        /** @var PivotModel $stringPivot */
+        /** @var PivotModel $integerPivot */
+        /** @var PivotModel $decimalPivot */
+        /** @var PivotModel $datetimePivot */
+        /** @var PivotModel $textPivot */
+
+        $stringPivot = PivotModel
+            ::where(_PIVOT::DOMAIN_ID->column(), $domain->getKey())
+            ->where(_PIVOT::SET_ID->column(), $set->getKey())
+            ->where(_PIVOT::GROUP_ID->column(), $groupOne->getKey()) // group one
+            ->where(_PIVOT::ATTR_ID->column(), $stringAttribute->getKey())->first();
+        $integerPivot = PivotModel
+            ::where(_PIVOT::DOMAIN_ID->column(), $domain->getKey())
+            ->where(_PIVOT::SET_ID->column(), $set->getKey())
+            ->where(_PIVOT::GROUP_ID->column(), $groupOne->getKey()) // group one
+            ->where(_PIVOT::ATTR_ID->column(), $integerAttribute->getKey())->first();
+        $decimalPivot = PivotModel
+            ::where(_PIVOT::DOMAIN_ID->column(), $domain->getKey())
+            ->where(_PIVOT::SET_ID->column(), $set->getKey())
+            ->where(_PIVOT::GROUP_ID->column(), $groupOne->getKey()) // group one
+            ->where(_PIVOT::ATTR_ID->column(), $decimalAttribute->getKey())->first();
+        $datetimePivot = PivotModel
+            ::where(_PIVOT::DOMAIN_ID->column(), $domain->getKey())
+            ->where(_PIVOT::SET_ID->column(), $set->getKey())
+            ->where(_PIVOT::GROUP_ID->column(), $groupTwo->getKey()) // group two
+            ->where(_PIVOT::ATTR_ID->column(), $datetimeAttribute->getKey())->first();
+        $textPivot = PivotModel
+            ::where(_PIVOT::DOMAIN_ID->column(), $domain->getKey())
+            ->where(_PIVOT::SET_ID->column(), $set->getKey())
+            ->where(_PIVOT::GROUP_ID->column(), $groupTwo->getKey()) // group two
+            ->where(_PIVOT::ATTR_ID->column(), $textAttribute->getKey())->first();
+
+        $this->assertNotNull($stringPivot);
+        $this->assertNotNull($integerPivot);
+        $this->assertNotNull($decimalPivot);
+        $this->assertNotNull($datetimePivot);
+        $this->assertNotNull($textPivot);
+
+        // check values created
+        /** @var ValueStringModel $stringValue */
+        /** @var ValueIntegerModel $integerValue */
+        /** @var ValueDecimalModel $decimalValue */
+        /** @var ValueDatetimeModel $datetimeValue */
+        /** @var ValueTextModel $textValue */
+
+        $stringValue = ValueStringModel
+            ::where(_VALUE::DOMAIN_ID->column(), $domain->getKey())
+            ->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())
+            ->where(_VALUE::ATTRIBUTE_ID->column(), $stringAttribute->getKey())
+            ->first();
+        $integerValue = ValueIntegerModel
+            ::where(_VALUE::DOMAIN_ID->column(), $domain->getKey())
+            ->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())
+            ->where(_VALUE::ATTRIBUTE_ID->column(), $integerAttribute->getKey())
+            ->first();
+        $decimalValue = ValueDecimalModel
+            ::where(_VALUE::DOMAIN_ID->column(), $domain->getKey())
+            ->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())
+            ->where(_VALUE::ATTRIBUTE_ID->column(), $decimalAttribute->getKey())
+            ->first();
+        $datetimeValue = ValueDatetimeModel
+            ::where(_VALUE::DOMAIN_ID->column(), $domain->getKey())
+            ->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())
+            ->where(_VALUE::ATTRIBUTE_ID->column(), $datetimeAttribute->getKey())
+            ->first();
+        $textValue = ValueTextModel
+            ::where(_VALUE::DOMAIN_ID->column(), $domain->getKey())
+            ->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())
+            ->where(_VALUE::ATTRIBUTE_ID->column(), $textAttribute->getKey())
+            ->first();
+
+        $this->assertNotNull($stringValue);
+        $this->assertNotNull($integerValue);
+        $this->assertNotNull($decimalValue);
+        $this->assertNotNull($datetimeValue);
+        $this->assertNotNull($textValue);
+
+        $this->assertEquals($stringValue->getValue(), $fields[$nameString][ATTR_FACTORY::VALUE->field()]);
+        $this->assertEquals($integerValue->getValue(), $fields[$nameInteger][ATTR_FACTORY::VALUE->field()]);
+        $this->assertEquals($decimalValue->getValue(), $fields[$nameDecimal][ATTR_FACTORY::VALUE->field()]);
+        $this->assertEquals($datetimeValue->getValue(), $fields[$nameDatetime][ATTR_FACTORY::VALUE->field()]);
+        $this->assertEquals($textValue->getValue(), $fields[$nameText][ATTR_FACTORY::VALUE->field()]);
     }
 }
