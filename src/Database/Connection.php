@@ -30,16 +30,16 @@ class Connection
         }
         else {
             $config = [
-                'driver' => $_ENV['DB_DRIVER'],
-                'host' => $_ENV['DB_HOST'],
-                'port' => $_ENV['DB_PORT'],
-                'dbname' => $_ENV['DB_DATABASE'],
-                'user' => $_ENV['DB_USERNAME'],
-                'password' => $_ENV['DB_PASSWORD']
+                'driver' => "pdo_mysql",
+                'host' => "mysql",
+                'port' => "3306",
+                'dbname' => "eav",
+                'user' => "eav",
+                'password' => "eav"
             ];
             $params = is_null($params)
                 ? $config
-                : array_merge($config, $params);
+                : $params;
         }
         self::$conn = DriverManager::getConnection($params);
         return self::$conn;
