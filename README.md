@@ -1,6 +1,6 @@
 # EAV package
 
-This package is tool to manage and maintain EAV master data across multiple domains. 
+This package is tool to manage and maintain EAV master data across multiple domains.
 
 ## Requirements
 - PHP >=8.1
@@ -13,9 +13,8 @@ $ git clone git@github.com:drobotik/eav.git
 $ cd eav
 ```
 
-Eav package relies on a database connection. It uses [Doctrine DBAL](https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#configuration) to perform connections.
-
-There isn't any pre-configured connection information. You may set up a connection by providing credentials in an array.
+Eav package relies on a database connection.<br> It uses [Doctrine DBAL](https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#configuration) to perform connections.<br />
+There isn't any pre-configured connection information. You may set up a connection by providing credentials in an array:
 
 ```php
 use Drobotik\Eav\Database\Connection;
@@ -34,7 +33,7 @@ $connection = Connection::getConnection($config)
 
 ...
 
-## Planed features 
+## Planned features 
 
 ...
 
