@@ -31,11 +31,51 @@ $connection = Connection::getConnection($config)
 
 ## Docs 
 
-...
+Documentation in progress..
+
+## Example
+
+
+```php
+// make data
+$domain = $this->eavFactory->createDomain();
+$attrSet = $this->eavFactory->createAttributeSet($domain);
+$group = $this->eavFactory->createGroup($attrSet);
+$stringAttribute = $this->eavFactory->createAttribute($domain, [
+    _ATTR::NAME->column() => "string",
+    _ATTR::TYPE->column() => ATTR_TYPE::STRING->value()
+]);
+$integerAttribute = $this->eavFactory->createAttribute($domain, [
+    _ATTR::NAME->column() => "integer",
+    _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value()
+]);
+$this->eavFactory->createPivot($domain, $attrSet, $group, $stringAttribute);
+$this->eavFactory->createPivot($domain, $attrSet, $group, $integerAttribute);
+$data = [
+    "string" => $this->faker->word,
+    "integer" => $this->faker->randomNumber(),
+];
+// create new 
+$entity = new Entity();
+$entity->setDomainKey($domain->getKey());
+$entity->getAttributeSet()->setKey($attrSet->getKey());
+$entity->getBag()->setFields($data);
+$result = $entity->save();
+$id = $entity->getKey()
+// find
+$entity = new Entity();
+$entity->find($id);
+$data = $entity->toArray();
+// update
+$entity->getBag()->setField("string", "newValue")
+$result = $entity->save();
+// delete
+$entity->delete();
+```
 
 ## Planned features 
 
-...
+* Domain import/export (csv/excel)
 
 ## Contributing!
 
