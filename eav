@@ -1,5 +1,12 @@
 #!/usr/bin/env php
 <?php
+/**
+ * This file is part of the eav package.
+ * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
+ * @copyright 2023 Aleksandr Drobotik
+ * @license   https://opensource.org/license/mit  The MIT License
+ */
+declare(strict_types=1);
 
 use Drobotik\Eav\Database\DatabaseManager;
 use Doctrine\Migrations\Configuration\EntityManager\ExistingEntityManager;
@@ -46,7 +53,7 @@ $migrationCommands = [
     new DiffCommand($dependencyFactory)
 ];
 
-$app = new Application('eav', 1);
+$app = new Application('eav', '1');
 ConsoleRunner::addCommands($app, new SingleManagerProvider($entityManager));
 $app->addCommands($migrationCommands);
 $app->run();
