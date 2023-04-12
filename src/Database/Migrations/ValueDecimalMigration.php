@@ -2,26 +2,26 @@
 
 declare(strict_types=1);
 
-namespace Drobotik\Dev\Migration;
+namespace Drobotik\Eav\Database\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 
-final class ValueStringMigration extends AbstractMigration
+final class ValueDecimalMigration extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Attribute string value table';
+        return 'Attribute decimal value table';
     }
 
     public function up(Schema $schema): void
     {
-        ValueMigration::runUp($schema, ATTR_TYPE::STRING);
+        ValueMigration::runUp($schema, ATTR_TYPE::DECIMAL);
     }
 
     public function down(Schema $schema): void
     {
-        ValueMigration::runDown($schema, ATTR_TYPE::STRING);
+        ValueMigration::runDown($schema, ATTR_TYPE::DECIMAL);
     }
 }

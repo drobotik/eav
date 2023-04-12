@@ -1,7 +1,7 @@
 <?php
 return [
     'table_storage' => [
-        'table_name' => 'migrations',
+        'table_name' => 'eav_migrations',
         'version_column_name' => 'versionfaf',
         'version_column_length' => 191,
         'executed_at_column_name' => 'executed_at',
@@ -9,21 +9,21 @@ return [
     ],
 
     'migrations' => [
-        'Drobotik\Dev\Migration\DomainMigration',
-        'Drobotik\Dev\Migration\EntityMigration',
-        'Drobotik\Dev\Migration\AttributeMigration',
-        'Drobotik\Dev\Migration\AttributeSetMigration',
-        'Drobotik\Dev\Migration\GroupMigration',
-        'Drobotik\Dev\Migration\PivotMigration',
-        'Drobotik\Dev\Migration\ValueDatetimeMigration',
-        'Drobotik\Dev\Migration\ValueDecimalMigration',
-        'Drobotik\Dev\Migration\ValueIntegerMigration',
-        'Drobotik\Dev\Migration\ValueStringMigration',
-        'Drobotik\Dev\Migration\ValueTextMigration',
+        'Drobotik\Eav\Database\Migrations\DomainMigration',
+        'Drobotik\Eav\Database\Migrations\EntityMigration',
+        'Drobotik\Eav\Database\Migrations\AttributeMigration',
+        'Drobotik\Eav\Database\Migrations\AttributeSetMigration',
+        'Drobotik\Eav\Database\Migrations\GroupMigration',
+        'Drobotik\Eav\Database\Migrations\PivotMigration',
+        'Drobotik\Eav\Database\Migrations\ValueDatetimeMigration',
+        'Drobotik\Eav\Database\Migrations\ValueDecimalMigration',
+        'Drobotik\Eav\Database\Migrations\ValueIntegerMigration',
+        'Drobotik\Eav\Database\Migrations\ValueStringMigration',
+        'Drobotik\Eav\Database\Migrations\ValueTextMigration',
     ],
 
     'migrations_paths' => [
-        'Drobotik\Eav\Migration' => './dev/Migration',
+        'Drobotik\Eav\Database\Migrations' => './src/Database/Migrations',
     ],
 
     'all_or_nothing' => true,

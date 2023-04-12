@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-use Drobotik\Dev\ModelsManager;
+use Drobotik\Eav\Database\DatabaseManager;
 use Doctrine\Migrations\Configuration\EntityManager\ExistingEntityManager;
 use Doctrine\Migrations\Configuration\Migration\PhpFile;
 use Doctrine\Migrations\DependencyFactory;
@@ -24,7 +24,10 @@ use Symfony\Component\Console\Application;
 
 require_once "vendor/autoload.php";
 
-$entityManager = ModelsManager::getMe();
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+$dotenv->required(['DB_DRIVER', 'DB_HOST', 'DB_PORT', 'DB_DATABASE', 'DB_USERNAME', 'DB_PASSWORD']);
+$entityManager = DatabaseManager::initialize();
 $migrationsConfig = new PhpFile('migrations.php');
 $dependencyFactory = DependencyFactory::fromEntityManager($migrationsConfig, new ExistingEntityManager($entityManager));
 $migrationCommands = [
@@ -43,7 +46,7 @@ $migrationCommands = [
     new DiffCommand($dependencyFactory)
 ];
 
-$app = new Application('Kuperwood EAV', 1);
+$app = new Application('eav', 1);
 ConsoleRunner::addCommands($app, new SingleManagerProvider($entityManager));
 $app->addCommands($migrationCommands);
 $app->run();

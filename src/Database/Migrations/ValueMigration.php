@@ -1,6 +1,6 @@
 <?php
 
-namespace Drobotik\Dev\Migration;
+namespace Drobotik\Eav\Database\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Table;

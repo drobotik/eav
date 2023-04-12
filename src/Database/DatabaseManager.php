@@ -1,15 +1,18 @@
 <?php
 
-namespace Drobotik\Dev;
+namespace Drobotik\Eav\Database;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Exception\MissingMappingDriverImplementation;
 use Doctrine\ORM\ORMSetup;
 use Doctrine\Persistence\Mapping\Driver\StaticPHPDriver;
 
-class ModelsManager
+class DatabaseManager
 {
     private static ?EntityManager $entityManager = null;
-
-    public static function getMe() : EntityManager
+    /**
+     * @throws MissingMappingDriverImplementation
+     */
+    public static function initialize() : EntityManager
     {
         if(is_null(static::$entityManager)) {
             $conn = Connection::getConnection();

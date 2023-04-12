@@ -4,7 +4,6 @@ namespace Tests\Unit\EavFactory;
 
 use Carbon\Carbon;
 use DateTime;
-use Drobotik\Dev\EavFactory;
 use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\_DOMAIN;
 use Drobotik\Eav\Enum\_ENTITY;
@@ -15,6 +14,7 @@ use Drobotik\Eav\Enum\_SET;
 use Drobotik\Eav\Enum\_VALUE;
 use Drobotik\Eav\Enum\ATTR_FACTORY;
 use Drobotik\Eav\Enum\ATTR_TYPE;
+use Drobotik\Eav\Factory\EavFactory;
 use Drobotik\Eav\Model\AttributeGroupModel;
 use Drobotik\Eav\Model\AttributeModel;
 use Drobotik\Eav\Model\AttributeSetModel;

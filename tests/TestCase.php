@@ -1,9 +1,9 @@
 <?php
 namespace Tests;
 
+use Drobotik\Eav\Factory\EavFactory;
 use Faker\Generator;
 use Illuminate\Database\Capsule\Manager as Capsule;
-use Drobotik\Dev\EavFactory;
 
 class TestCase extends \PHPUnit\Framework\TestCase
 {

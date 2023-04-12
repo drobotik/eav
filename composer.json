@@ -11,8 +11,7 @@
     "autoload-dev": {
         "files": [],
         "psr-4": {
-            "Tests\\": "tests/",
-            "Drobotik\\Dev\\": "dev/"
+            "Tests\\": "tests/"
         }
     },
     "authors": [
@@ -26,7 +25,8 @@
         "illuminate/database": "10.x-dev",
         "illuminate/validation": "10.x-dev",
         "illuminate/translation": "10.x-dev",
-        "psr/container": "^2.0@dev"
+        "psr/container": "^2.0@dev",
+        "vlucas/phpdotenv": "^5.5@dev"
     },
     "require-dev": {
         "fakerphp/faker": "^1.21",

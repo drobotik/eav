@@ -2,10 +2,10 @@
 
 namespace Tests;
 
-use Drobotik\Dev\Connection;
 use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
 use Doctrine\Migrations\Configuration\Migration\PhpFile;
 use Doctrine\Migrations\DependencyFactory;
+use Drobotik\Eav\Database\Connection;
 use Symfony\Component\Console\Input\ArrayInput;
 
 class Migrator

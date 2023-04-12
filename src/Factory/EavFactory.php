@@ -1,9 +1,7 @@
 <?php
 
-namespace Drobotik\Dev;
+namespace Drobotik\Eav\Factory;
 
-use Faker\Generator;
-use Drobotik\Eav\EntityFactory;
 use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\_DOMAIN;
 use Drobotik\Eav\Enum\_GROUP;
@@ -17,6 +15,7 @@ use Drobotik\Eav\Model\EntityModel;
 use Drobotik\Eav\Model\PivotModel;
 use Drobotik\Eav\Model\ValueBase;
 use Drobotik\Eav\Result\Result;
+use Faker\Generator;
 
 class EavFactory
 {

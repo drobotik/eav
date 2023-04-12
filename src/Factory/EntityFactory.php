@@ -1,8 +1,7 @@
 <?php
 
-namespace Drobotik\Eav;
+namespace Drobotik\Eav\Factory;
 
-use Drobotik\Dev\EavFactory;
 use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\_GROUP;
 use Drobotik\Eav\Enum\_PIVOT;

@@ -2,26 +2,26 @@
 
 declare(strict_types=1);
 
-namespace Drobotik\Dev\Migration;
+namespace Drobotik\Eav\Database\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 
-final class ValueIntegerMigration extends AbstractMigration
+final class ValueDatetimeMigration extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Attribute integer value table';
+        return 'Attribute datetime value table';
     }
 
     public function up(Schema $schema): void
     {
-        ValueMigration::runUp($schema, ATTR_TYPE::INTEGER);
+        ValueMigration::runUp($schema, ATTR_TYPE::DATETIME);
     }
 
     public function down(Schema $schema): void
     {
-        ValueMigration::runDown($schema, ATTR_TYPE::INTEGER);
+        ValueMigration::runDown($schema, ATTR_TYPE::DATETIME);
     }
 }

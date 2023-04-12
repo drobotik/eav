@@ -2,25 +2,7 @@
 
 namespace Tests\Unit\EavFactory;
 
-use DateTime;
-use Drobotik\Dev\EavFactory;
-use Drobotik\Eav\Enum\_ATTR;
-use Drobotik\Eav\Enum\_DOMAIN;
-use Drobotik\Eav\Enum\_ENTITY;
-use Drobotik\Eav\Enum\_GROUP;
-use Drobotik\Eav\Enum\_SET;
-use Drobotik\Eav\Enum\ATTR_TYPE;
-use Drobotik\Eav\Model\AttributeGroupModel;
-use Drobotik\Eav\Model\AttributeModel;
-use Drobotik\Eav\Model\AttributeSetModel;
-use Drobotik\Eav\Model\DomainModel;
-use Drobotik\Eav\Model\EntityModel;
-use Drobotik\Eav\Model\PivotModel;
-use Drobotik\Eav\Model\ValueDatetimeModel;
-use Drobotik\Eav\Model\ValueDecimalModel;
-use Drobotik\Eav\Model\ValueIntegerModel;
-use Drobotik\Eav\Model\ValueStringModel;
-use Drobotik\Eav\Model\ValueTextModel;
+use Drobotik\Eav\Factory\EavFactory;
 use Tests\TestCase;
 
 class EavFactoryBehaviorTest extends TestCase
