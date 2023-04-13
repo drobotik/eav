@@ -1,6 +1,6 @@
 # EAV package
 
-This package is tool to manage and maintain EAV master data across multiple domains.
+A tool to manage and maintain EAV master data across multiple domains.
 
 ## Requirements
 - PHP >=8.1
@@ -16,8 +16,8 @@ $ php eav
 ```
 
 ### Database connection
-This tool uses Laravel Capsule for connections.
-For Laravel apps, package can be used as is, it's trying to use default connection.
+EAV uses Laravel Capsule for connections.
+For Laravel apps, it's trying to use default connection and can be used as is.
 For other cases, initialize a Capsule instance:
 ```php
 $capsule = new Capsule;
@@ -30,9 +30,9 @@ $capsule->bootEloquent();
 ```
 
 ### Work with migrations, cli-application
-Eav package CLI app relies on a database connection. It uses [Doctrine DBAL](https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#configuration) to perform connections.<br />
-There isn't any pre-configured connection information. For non-docker envs required to set up a connection. 
-As option, make a file connection.php, it automatically check this file on CLI app, also it added connection.php added to gitignore.
+CLI app relies on a database connection. It uses [Doctrine DBAL](https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#configuration) to perform connections.<br />
+There isn't any pre-configured connection information. For non-docker environments is required to set up a connection. 
+As an option, make a new file connection.php in root folder. This file will be automatically included.
 ```php
 #connection.php
 use Drobotik\Eav\Database\DoctrineConnection;
@@ -48,7 +48,7 @@ Migrate:
 $ php eav migrations:migrate latest
 ```
 ### Database schema using sql dump
-As alternative, on the root of the project there is a file dump.sql.
+Use dump.sql placed on root folder.
 
 ## Docs 
 
@@ -97,6 +97,8 @@ $entity->delete();
 ## Planned features 
 
 * Domain import/export (csv/excel)
+* Option to use separated tables for ValueModels 
+* Attribute props 
 
 ## Contributing
 
