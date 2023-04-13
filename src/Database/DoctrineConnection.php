@@ -12,7 +12,7 @@ namespace Drobotik\Eav\Database;
 use Doctrine\DBAL\Connection as DBALConnection;
 use Doctrine\DBAL\DriverManager;
 
-class Connection
+class DoctrineConnection
 {
     protected static DBALConnection|null $conn = null;
 

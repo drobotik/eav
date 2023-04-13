@@ -23,7 +23,7 @@ class DatabaseManager
     public static function initialize() : EntityManager
     {
         if(is_null(static::$entityManager)) {
-            $conn = Connection::getConnection();
+            $conn = DoctrineConnection::getConnection();
             $config = ORMSetup::createConfiguration(true);
             $config->setMetadataDriverImpl(new StaticPHPDriver(__DIR__."/Model"));
             static::$entityManager = new EntityManager($conn, $config);

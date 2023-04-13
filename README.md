@@ -7,7 +7,6 @@ This package is tool to manage and maintain EAV master data across multiple doma
 
 ## Getting started
 
-Clone repository.
 ```bash
 $ git clone git@github.com:drobotik/eav.git 
 $ cd eav
@@ -15,33 +14,41 @@ $ composer install
 # check console output
 $ php eav 
 ```
-Eav package relies on a database connection. It uses [Doctrine DBAL](https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#configuration) to perform connections.<br />
-There isn't any pre-configured connection information. You may set up a connection by providing credentials in an array.
 
+### Database connection
+This tool uses Laravel Capsule for connections.
+For Laravel apps, package can be used as is, it's trying to use default connection.
+For other cases, initialize a Capsule instance:
+```php
+$capsule = new Capsule;
+$capsule->addConnection([
+    // connection settings
+]);
+$this->capsule = $capsule;
+$capsule->setAsGlobal();
+$capsule->bootEloquent();
+```
+
+### Work with migrations, cli-application
+Eav package CLI app relies on a database connection. It uses [Doctrine DBAL](https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#configuration) to perform connections.<br />
+There isn't any pre-configured connection information. For non-docker envs required to set up a connection. 
+As option, make a file connection.php, it automatically check this file on CLI app, also it added connection.php added to gitignore.
 ```php
 #connection.php
-use Drobotik\Eav\Database\Connection;
+use Drobotik\Eav\Database\DoctrineConnection;
 $config = [
-    'driver' => "pdo_mysql",
-    'host' => "mysql",
-    'port' => "3306",
-    'dbname' => "eav",
-    'user' => "eav",
-    'password' => "eav"
+    // connection settings
 ]
-$connection = Connection::getConnection($config)
+$connection = DoctrineConnection::getConnection($config)
 ```
 Note use a [driver](https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#driver) that suits your needs.
 
-### Database schema using migrations
-If you want to use migrations
-Make a file connection.php(it will be automatically included) and set up a connection to the database same way.
 Migrate:
 ```bash
 $ php eav migrations:migrate latest
 ```
 ### Database schema using sql dump
-On the root of the project there is a file dump.sql.
+As alternative, on the root of the project there is a file dump.sql.
 
 ## Docs 
 
