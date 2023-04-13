@@ -11,12 +11,15 @@ Clone repository.
 ```bash
 $ git clone git@github.com:drobotik/eav.git 
 $ cd eav
+$ composer install
+# check console output
+$ php eav 
 ```
-
-Eav package relies on a database connection.<br> It uses [Doctrine DBAL](https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#configuration) to perform connections.<br />
-There isn't any pre-configured connection information. You may set up a connection by providing credentials in an array:
+Eav package relies on a database connection. It uses [Doctrine DBAL](https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#configuration) to perform connections.<br />
+There isn't any pre-configured connection information. You may set up a connection by providing credentials in an array.
 
 ```php
+#connection.php
 use Drobotik\Eav\Database\Connection;
 $config = [
     'driver' => "pdo_mysql",
@@ -28,6 +31,17 @@ $config = [
 ]
 $connection = Connection::getConnection($config)
 ```
+Note use a [driver](https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#driver) that suits your needs.
+
+### Database schema using migrations
+If you want to use migrations
+Make a file connection.php(it will be automatically included) and set up a connection to the database same way.
+Migrate:
+```bash
+$ php eav migrations:migrate latest
+```
+### Database schema using sql dump
+On the root of the project there is a file dump.sql.
 
 ## Docs 
 
@@ -77,15 +91,15 @@ $entity->delete();
 
 * Domain import/export (csv/excel)
 
-## Contributing!
+## Contributing
 
 Contributions are welcome. 
 Please note the following guidelines before submitting your pull request.
 
-- Follow [PSR-2](http://www.php-fig.org/psr/psr-2/) coding standards.
+- Follow [PSR-2](http://www.php-fig.org/psr/psr-2/) coding standards
 - Create feature branches, one pull request per feature
-- Implement your change and add tests for it.
-- Ensure the test suite passes.
+- Implement your change and add tests for it
+- Ensure the test suite passes
 
 ## License
 

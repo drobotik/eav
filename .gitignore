@@ -7,3 +7,4 @@
 /tests/test.sqlite
 /tests/test.sqlite-journal
 .env
+connection.php
