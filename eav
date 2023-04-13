@@ -31,6 +31,10 @@ use Symfony\Component\Console\Application;
 
 require_once "vendor/autoload.php";
 
+if (file_exists('./connection.php')) {
+    require_once './connection.php';
+}
+
 $entityManager = DatabaseManager::initialize();
 $migrationsConfig = new PhpFile('migrations.php');
 $dependencyFactory = DependencyFactory::fromEntityManager($migrationsConfig, new ExistingEntityManager($entityManager));
