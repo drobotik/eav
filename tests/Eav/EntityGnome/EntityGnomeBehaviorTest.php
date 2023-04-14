@@ -37,33 +37,71 @@ class EntityGnomeBehaviorTest extends TestCase
      * @covers EntityGnome::find
      */
     public function find() {
-        $domainModel = $this->eavFactory->createDomain();
-        $setModel = $this->eavFactory->createAttributeSet();
-        $entityModel = $this->eavFactory->createEntity($domainModel, $setModel);
+        $domainModelKey = 2;
+        $setModelKey = 3;
+        $entityKey = 4;
 
         $set = $this->getMockBuilder(AttributeSet::class)
             ->onlyMethods(['fetchContainers', 'setKey', 'setEntity'])
             ->getMock();
-        $set->expects($this->once())->method('setKey')->with($setModel->getKey());
+        $set->expects($this->once())->method('setKey')
+            ->with($setModelKey);
         $set->expects($this->once())->method('fetchContainers');
-        $set->expects($this->once())->method('setEntity');
-        $entity = $this->getMockBuilder(Entity::class)
-            ->onlyMethods(['setAttributeSet', 'setDomainKey'])
+        $set->expects($this->never())->method('setEntity');
+
+        $entityRecord = $this->getMockBuilder(EntityModel::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getDomainKey', 'getAttrSetKey'])
             ->getMock();
+        $entityRecord->expects($this->once())
+            ->method('getDomainKey')
+            ->willReturn($domainModelKey);
+        $entityRecord->expects($this->once())
+            ->method('getAttrSetKey')
+            ->willReturn($setModelKey);
+
+        $entityModel = $this->getMockBuilder(EntityModel::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['find'])
+            ->getMock();
+        $entityModel->expects($this->once())
+            ->method('find')
+            ->with($entityKey)
+            ->willReturn($entityRecord);
+
+        $entity = $this->getMockBuilder(Entity::class)
+            ->onlyMethods([
+                'hasKey',
+                'getKey',
+                'setKey',
+                'getAttributeSet',
+                'setAttributeSet',
+                'setDomainKey'
+            ])
+            ->getMock();
+        $entity->expects($this->never())->method('setKey');
+        $entity->expects($this->once())
+            ->method('hasKey')
+            ->willReturn(true);
+        $entity->expects($this->once())
+            ->method('getKey')
+            ->willReturn($entityKey);
+        $entity->expects($this->never())->method('setAttributeSet');
+        $entity->expects($this->once())
+            ->method('getAttributeSet')
+            ->willReturn($set);
         $entity->expects($this->once())
             ->method('setDomainKey')
-            ->with($domainModel->getKey());
-        $entity->expects($this->once())
-            ->method('setAttributeSet')
-            ->with($set);
-        $entity->setKey($entityModel->getKey());
+            ->with($domainModelKey);
+        $entity->expects($this->never())->method('setAttributeSet');
+
         $gnome = $this->getMockBuilder(EntityGnome::class)
-            ->onlyMethods(['makeAttributeSet'])
             ->setConstructorArgs([$entity])
+            ->onlyMethods(['makeEntityModel'])
             ->getMock();
         $gnome->expects($this->once())
-            ->method('makeAttributeSet')
-            ->willReturn($set);
+            ->method('makeEntityModel')
+            ->willReturn($entityModel);
 
         $result = $gnome->find();
 

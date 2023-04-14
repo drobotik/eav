@@ -127,7 +127,7 @@ class EntityAcceptanceTest extends TestCase
      * @group acceptance
      * @covers Entity::save()
      */
-    public function update() {
+    public function find_and_update() {
         $domain = $this->eavFactory->createDomain();
         $attrSet = $this->eavFactory->createAttributeSet($domain);
         $group = $this->eavFactory->createGroup($attrSet);
@@ -182,6 +182,7 @@ class EntityAcceptanceTest extends TestCase
             ->setKey($entityModel->getKey())
             ->setDomainKey($domain->getKey())
             ->getAttributeSet()->setKey($attrSet->getKey());
+        $entity->find();
 
         $stringValue = "new string value";
         $integerValue = 321;

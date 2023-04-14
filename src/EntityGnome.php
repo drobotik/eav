@@ -110,11 +110,9 @@ class EntityGnome
         }
 
         $entity->setDomainKey($record->getDomainKey());
-        $set = $this->makeAttributeSet();
+        $set = $entity->getAttributeSet();
         $set->setKey($record->getAttrSetKey());
         $set->fetchContainers();
-        $set->setEntity($entity);
-        $entity->setAttributeSet($set);
 
         $result->found();
         return $result;
