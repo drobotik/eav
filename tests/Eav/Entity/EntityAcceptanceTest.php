@@ -13,12 +13,14 @@ use Carbon\Carbon;
 use Drobotik\Eav\Entity;
 use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\_VALUE;
+use Drobotik\Eav\Enum\ATTR_FACTORY;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Model\ValueDatetimeModel;
 use Drobotik\Eav\Model\ValueDecimalModel;
 use Drobotik\Eav\Model\ValueIntegerModel;
 use Drobotik\Eav\Model\ValueStringModel;
 use Drobotik\Eav\Model\ValueTextModel;
+use Drobotik\Eav\Result\EntityFactoryResult;
 use Tests\TestCase;
 
 
@@ -27,7 +29,7 @@ class EntityAcceptanceTest extends TestCase
     /**
      * @test
      * @group acceptance
-     * @covers
+     * @covers Entity::save()
      */
     public function creating_entities() {
         $domain = $this->eavFactory->createDomain();
@@ -118,5 +120,105 @@ class EntityAcceptanceTest extends TestCase
             }
             $this->assertEquals($data, $entity->toArray());
         }
+    }
+
+    /**
+     * @test
+     * @group acceptance
+     * @covers Entity::save()
+     */
+    public function update() {
+        $domain = $this->eavFactory->createDomain();
+        $attrSet = $this->eavFactory->createAttributeSet($domain);
+        $group = $this->eavFactory->createGroup($attrSet);
+        $fields = [
+            [
+                ATTR_FACTORY::ATTRIBUTE->field() => [
+                    _ATTR::NAME->column() => "string",
+                    _ATTR::TYPE->column() => ATTR_TYPE::STRING->value()
+                ],
+                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::VALUE->field() => "string value"
+            ],
+            [
+                ATTR_FACTORY::ATTRIBUTE->field() => [
+                    _ATTR::NAME->column() => "integer",
+                    _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value()
+                ],
+                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::VALUE->field() => 123
+            ],
+            [
+                ATTR_FACTORY::ATTRIBUTE->field() => [
+                    _ATTR::NAME->column() => "decimal",
+                    _ATTR::TYPE->column() => ATTR_TYPE::DECIMAL->value()
+                ],
+                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::VALUE->field() => 3.14
+            ],
+            [
+                ATTR_FACTORY::ATTRIBUTE->field() => [
+                    _ATTR::NAME->column() => "datetime",
+                    _ATTR::TYPE->column() => ATTR_TYPE::DATETIME->value()
+                ],
+                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::VALUE->field() => Carbon::now()->format('Y-m-d H:i:s')
+            ],
+            [
+                ATTR_FACTORY::ATTRIBUTE->field() => [
+                    _ATTR::NAME->column() => "text",
+                    _ATTR::TYPE->column() => ATTR_TYPE::TEXT->value()
+                ],
+                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::VALUE->field() => "text value"
+            ]
+        ];
+        /** @var EntityFactoryResult $result */
+        $result = $this->eavFactory->createEavEntity($fields, $domain, $attrSet)->getData();
+        $entityModel = $result->getEntityModel();
+
+        $entity = new Entity();
+        $entity
+            ->setKey($entityModel->getKey())
+            ->setDomainKey($domain->getKey())
+            ->getAttributeSet()->setKey($attrSet->getKey());
+
+        $stringValue = "new string value";
+        $integerValue = 321;
+        $decimalValue = 3.05;
+        $datetimeValue = Carbon::yesterday()->format('Y-m-d H:i:s');
+        $textValue = "new text value";
+
+        $bag = $entity->getBag();
+
+        $bag->setField("string", $stringValue);
+        $bag->setField("integer", $integerValue);
+        $bag->setField("decimal", $decimalValue);
+        $bag->setField("datetime", $datetimeValue);
+        $bag->setField("text", $textValue);
+
+        $entity->save();
+        $attrSet = $entity->getAttributeSet();
+
+        // check string
+        $stringRecord = ValueStringModel::query()->where(_VALUE::ENTITY_ID->column(), $entity->getKey())->firstOrFail();
+        $this->assertEquals($stringValue, $stringRecord->getValue());
+        $this->assertEquals($stringValue, $attrSet->getContainer("string")->getValueManager()->getStored());
+        // check integer
+        $integerRecord = ValueIntegerModel::query()->where(_VALUE::ENTITY_ID->column(), $entity->getKey())->firstOrFail();
+        $this->assertEquals($integerValue, $integerRecord->getValue());
+        $this->assertEquals($integerValue, $attrSet->getContainer("integer")->getValueManager()->getStored());
+        // check decimal
+        $decimalRecord = ValueDecimalModel::query()->where(_VALUE::ENTITY_ID->column(), $entity->getKey())->firstOrFail();
+        $this->assertEquals($decimalValue, $decimalRecord->getValue());
+        $this->assertEquals($decimalValue, $attrSet->getContainer("decimal")->getValueManager()->getStored());
+        // check datetime
+        $datetimeRecord = ValueDatetimeModel::query()->where(_VALUE::ENTITY_ID->column(), $entity->getKey())->firstOrFail();
+        $this->assertEquals($datetimeValue, $datetimeRecord->getValue());
+        $this->assertEquals($datetimeValue, $attrSet->getContainer("datetime")->getValueManager()->getStored());
+        // check text
+        $textRecord = ValueTextModel::query()->where(_VALUE::ENTITY_ID->column(), $entity->getKey())->firstOrFail();
+        $this->assertEquals($textValue, $textRecord->getValue());
+        $this->assertEquals($textValue, $attrSet->getContainer("text")->getValueManager()->getStored());
     }
 }
