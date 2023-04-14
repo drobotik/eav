@@ -84,4 +84,40 @@ class AttributeSetBehaviorTest extends TestCase
         $result = $instance->fetchContainers();
         $this->assertEquals($instance, $result);
     }
+
+    /**
+     * @test
+     * @group behavior
+     * @covers AttributeSet::fetchContainers
+     */
+    public function fetch_containers_no_force() {
+        $instance = $this->getMockBuilder(AttributeSet::class)
+            ->onlyMethods(['hasKey', 'getKey', 'hasContainers'])
+            ->getMock();
+        $instance->expects($this->once())->method('hasKey')->willReturn(true);
+        $instance->expects($this->once())->method('hasContainers')->willReturn(true);
+        $instance->expects($this->never())->method('getKey');
+        $instance->fetchContainers();
+    }
+
+    /**
+     * @test
+     * @group behavior
+     * @covers AttributeSet::fetchContainers
+     */
+    public function fetch_containers_force() {
+        $model = $this->getMockBuilder(AttributeSetModel::class)
+            ->onlyMethods(['findAttributes'])
+            ->getMock();
+        $model->expects($this->once())->method('findAttributes')
+            ->willReturn(new Collection());
+        $instance = $this->getMockBuilder(AttributeSet::class)
+            ->onlyMethods(['makeAttributeSetModel', 'hasContainers', 'hasKey', 'getKey'])
+            ->getMock();
+        $instance->expects($this->once())->method('hasKey')->willReturn(true);
+        $instance->expects($this->once())->method('getKey')->willReturn(1);
+        $instance->expects($this->never())->method('hasContainers')->willReturn(true);
+        $instance->expects($this->once())->method('makeAttributeSetModel')->willReturn($model);
+        $instance->fetchContainers(true);
+    }
 }

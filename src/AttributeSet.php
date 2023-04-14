@@ -23,7 +23,6 @@ class AttributeSet
     private array $containers = [];
     private Entity $entity;
 
-
     public function getKey(): int
     {
         return $this->key;
@@ -62,9 +61,10 @@ class AttributeSet
         return $this;
     }
 
-    public function fetchContainers() : self
+    public function fetchContainers(bool $force = false) : self
     {
         if(!$this->hasKey()) return $this;
+        if(!$force && $this->hasContainers()) return $this;
         $model = $this->makeAttributeSetModel();
         foreach ($model->findAttributes($this->getKey()) as $attribute) {
             $container = $this->makeAttributeContainer();
@@ -103,6 +103,11 @@ class AttributeSet
     public function hasContainer(string $name) : bool
     {
         return array_key_exists($name, $this->containers);
+    }
+
+    public function hasContainers() : bool
+    {
+        return !empty($this->containers);
     }
 
 }

@@ -97,4 +97,18 @@ class AttributeSetFunctionalTest extends TestCase
         $this->instance->pushContainer($container);
         $this->assertTrue($this->instance->hasContainer('test'));
     }
+    /**
+     * @test
+     * @group functional
+     * @covers AttributeSet::hasContainers
+     */
+    public function has_containers() {
+        $this->assertFalse($this->instance->hasContainers());
+        $attribute = new Attribute();
+        $attribute->setName('test');
+        $container = new AttributeContainer();
+        $container->setAttribute($attribute);
+        $this->instance->pushContainer($container);
+        $this->assertTrue($this->instance->hasContainers());
+    }
 }
