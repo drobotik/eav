@@ -4,14 +4,21 @@ A tool to manage and maintain EAV master data across multiple domains.
 
 ## Requirements
 - PHP >=8.1
+- Illuminate\database ^9.0|^10.0
+- Illuminate\validator ^9.0|^10.0
+- Illuminate\translation ^9.0|^10.0
 
 ## Getting started
-
+Composer
+```bash
+composer require drobotik/eav
+```
+If you would like to work with lib.
 ```bash
 $ git clone git@github.com:drobotik/eav.git 
 $ cd eav
 $ composer install
-# check console output
+# check cli app output
 $ php eav 
 ```
 
@@ -47,7 +54,16 @@ Migrate:
 ```bash
 $ php eav migrations:migrate latest
 ```
-### Database schema using sql dump
+
+
+### Laravel migrations support
+It also contains laravel migrations for publishing on Laravel app. Add EavServiceProvider to
+providers config array. 
+```php
+\Drobotik\Eav\Database\Support\Laravel\EavServiceProvider::class
+```
+Publish migrations by vendor:publish.
+### Raw schema dump
 Use dump.sql placed on root folder.
 
 ## Docs 
