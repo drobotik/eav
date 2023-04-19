@@ -17,6 +17,7 @@ class EntityException extends Exception
     public const UNDEFINED_ATTRIBUTE_SET_KEY = 'Undefined attribute set key';
     public const DOMAIN_NOT_FOUND = 'Domain not found';
     public const ATTR_SET_NOT_FOUND = 'Attribute set not found';
+    public const UNDEFINED_ENTITY_KEY = "Undefined entity key";
     public const ENTITY_NOT_FOUND = 'Entity not found';
 
     /**
@@ -49,6 +50,14 @@ class EntityException extends Exception
      */
     public static function attrSetNotFound() {
         throw new static(self::ATTR_SET_NOT_FOUND);
+    }
+
+    /**
+     *
+     * @throws EntityException
+     */
+    public static function undefinedEntityKey() {
+        throw new static(self::UNDEFINED_ENTITY_KEY);
     }
 
     /**

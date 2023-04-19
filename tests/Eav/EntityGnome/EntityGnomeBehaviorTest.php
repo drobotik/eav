@@ -367,13 +367,15 @@ class EntityGnomeBehaviorTest extends TestCase
             ->method('getAttribute')
             ->willReturn($attribute);
         $set = $this->getMockBuilder(AttributeSet::class)
-            ->onlyMethods(['fetchContainers', 'getContainers'])
+            ->onlyMethods(['fetchContainers', 'getContainers', 'hasKey', 'setKey', 'resetContainers'])
             ->getMock();
-        $set->expects($this->once())
-            ->method('fetchContainers');
+        $set->expects($this->once())->method('hasKey')->willReturn(true);
+        $set->expects($this->once())->method('fetchContainers');
         $set->expects($this->once())
             ->method('getContainers')
             ->willReturn([$container, $container]);
+        $set->expects($this->once())->method('resetContainers');
+        $set->expects($this->once())->method('setKey')->with(0);
         $record = $this->getMockBuilder(EntityModel::class)
             ->onlyMethods(['findAndDelete'])
             ->getMock();
@@ -381,11 +383,14 @@ class EntityGnomeBehaviorTest extends TestCase
             ->method('findAndDelete')
             ->willReturn(true);
         $entity = $this->getMockBuilder(Entity::class)
-            ->onlyMethods(['getAttributeSet', 'getKey'])
+            ->onlyMethods(['getAttributeSet', 'getKey', 'hasKey', 'setKey', 'setDomainKey'])
             ->getMock();
+        $entity->method('hasKey')->willReturn(true);
         $entity->expects($this->once())
             ->method('getKey')
             ->willReturn(1);
+        $entity->expects($this->once())->method('setKey')->with(0);
+        $entity->expects($this->once())->method('setDomainKey')->with(0);
         $entity->expects($this->once())
             ->method('getAttributeSet')
             ->willReturn($set);
@@ -418,14 +423,16 @@ class EntityGnomeBehaviorTest extends TestCase
             ->method('findAndDelete')
             ->willReturn(false);
         $entity = $this->getMockBuilder(Entity::class)
-            ->onlyMethods(['getAttributeSet', 'getKey'])
+            ->onlyMethods(['getAttributeSet', 'getKey', 'hasKey'])
             ->getMock();
+        $entity->expects($this->once())->method('hasKey')->willReturn(true);
         $entity->expects($this->once())
             ->method('getKey')
             ->willReturn(1);
         $set = $this->getMockBuilder(AttributeSet::class)
-            ->onlyMethods(['fetchContainers', 'getContainers'])
+            ->onlyMethods(['fetchContainers', 'getContainers', 'hasKey'])
             ->getMock();
+        $set->expects($this->once())->method('hasKey')->willReturn(true);
         $set->method('getContainers')->willReturn([]);
         $entity->expects($this->once())
             ->method('getAttributeSet')

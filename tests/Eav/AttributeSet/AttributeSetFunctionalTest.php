@@ -24,13 +24,23 @@ class AttributeSetFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers AttributeSet::setKey, AttributeSet::getKey
+     * @covers AttributeSet::setKey, AttributeSet::getKey, AttributeSet::hasKey
      */
     public function key() {
         $this->assertFalse($this->instance->hasKey());
         $this->instance->setKey(1);
         $this->assertEquals(1, $this->instance->getKey());
         $this->assertTrue($this->instance->hasKey());
+    }
+    /**
+     * @test
+     * @group functional
+     * @covers AttributeSet::setKey, AttributeSet::getKey, AttributeSet::hasKey
+     */
+    public function key_zero() {
+        $this->instance->setKey(0);
+        $this->assertEquals(0, $this->instance->getKey());
+        $this->assertFalse($this->instance->hasKey());
     }
     /**
      * @test

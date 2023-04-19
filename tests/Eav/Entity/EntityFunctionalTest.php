@@ -36,13 +36,32 @@ class EntityFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
+     * @covers Entity::hasKey, Entity::getKey, Entity::setKey
+     */
+    public function key_zero() {
+        $this->entity->setKey(0);
+        $this->assertFalse($this->entity->hasKey());
+        $this->assertEquals(0, $this->entity->getKey());
+    }
+    /**
+     * @test
+     * @group functional
      * @covers Entity::hasDomainKey, Entity::getDomainKey, Entity::setDomainKey
      */
     public function domain_key() {
+        $this->entity->setDomainKey(0);
         $this->assertFalse($this->entity->hasDomainKey());
-        $this->entity->setDomainKey(1);
-        $this->assertEquals(1, $this->entity->getDomainKey());
-        $this->assertTrue($this->entity->hasDomainKey());
+        $this->assertEquals(0, $this->entity->getDomainKey());
+    }
+    /**
+     * @test
+     * @group functional
+     * @covers Entity::hasDomainKey, Entity::getDomainKey, Entity::setDomainKey
+     */
+    public function domain_key_zero() {
+        $this->entity->setDomainKey(0);
+        $this->assertFalse($this->entity->hasDomainKey());
+        $this->assertEquals(0, $this->entity->getDomainKey());
     }
     /**
      * @test

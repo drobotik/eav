@@ -40,7 +40,7 @@ class Entity
 
     public function hasKey(): bool
     {
-        return isset($this->key);
+        return isset($this->key) && $this->key !== 0;
     }
 
     public function setDomainKey(int $key): self
@@ -56,7 +56,7 @@ class Entity
 
     public function hasDomainKey(): bool
     {
-        return isset($this->domainKey);
+        return isset($this->domainKey) && $this->domainKey !== 0;
     }
 
     public function getGnome() : EntityGnome

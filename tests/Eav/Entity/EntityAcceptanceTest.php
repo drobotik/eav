@@ -15,6 +15,7 @@ use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\_VALUE;
 use Drobotik\Eav\Enum\ATTR_FACTORY;
 use Drobotik\Eav\Enum\ATTR_TYPE;
+use Drobotik\Eav\Model\EntityModel;
 use Drobotik\Eav\Model\ValueDatetimeModel;
 use Drobotik\Eav\Model\ValueDecimalModel;
 use Drobotik\Eav\Model\ValueIntegerModel;
@@ -221,5 +222,170 @@ class EntityAcceptanceTest extends TestCase
         $textRecord = ValueTextModel::query()->where(_VALUE::ENTITY_ID->column(), $entity->getKey())->firstOrFail();
         $this->assertEquals($textValue, $textRecord->getValue());
         $this->assertEquals($textValue, $attrSet->getContainer("text")->getValueManager()->getStored());
+    }
+
+    /**
+     * @test
+     * @group acceptance
+     * @covers Entity::delete()
+     */
+    public function delete() {
+        $domain = $this->eavFactory->createDomain();
+        $attrSet = $this->eavFactory->createAttributeSet($domain);
+        $group = $this->eavFactory->createGroup($attrSet);
+        $fields = [
+            [
+                ATTR_FACTORY::ATTRIBUTE->field() => [
+                    _ATTR::NAME->column() => "string",
+                    _ATTR::TYPE->column() => ATTR_TYPE::STRING->value()
+                ],
+                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::VALUE->field() => "string value"
+            ],
+            [
+                ATTR_FACTORY::ATTRIBUTE->field() => [
+                    _ATTR::NAME->column() => "integer",
+                    _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value()
+                ],
+                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::VALUE->field() => 123
+            ],
+            [
+                ATTR_FACTORY::ATTRIBUTE->field() => [
+                    _ATTR::NAME->column() => "decimal",
+                    _ATTR::TYPE->column() => ATTR_TYPE::DECIMAL->value()
+                ],
+                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::VALUE->field() => 3.14
+            ],
+            [
+                ATTR_FACTORY::ATTRIBUTE->field() => [
+                    _ATTR::NAME->column() => "datetime",
+                    _ATTR::TYPE->column() => ATTR_TYPE::DATETIME->value()
+                ],
+                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::VALUE->field() => Carbon::now()->format('Y-m-d H:i:s')
+            ],
+            [
+                ATTR_FACTORY::ATTRIBUTE->field() => [
+                    _ATTR::NAME->column() => "text",
+                    _ATTR::TYPE->column() => ATTR_TYPE::TEXT->value()
+                ],
+                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::VALUE->field() => "text value"
+            ]
+        ];
+        /** @var EntityFactoryResult $result */
+        $result = $this->eavFactory->createEavEntity($fields, $domain, $attrSet)->getData();
+        $entityModel = $result->getEntityModel();
+
+        $entity = new Entity();
+        $entity
+            ->setKey($entityModel->getKey())
+            ->setDomainKey($domain->getKey());
+        $entity->getAttributeSet()->setKey($attrSet->getKey());
+
+        $entity->delete();
+
+        $this->assertEquals(0, EntityModel::query()->whereKey($entityModel->getKey())->count());
+        $this->assertEquals(0, ValueStringModel::query()->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())->count());
+        $this->assertEquals(0, ValueIntegerModel::query()->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())->count());
+        $this->assertEquals(0, ValueDecimalModel::query()->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())->count());
+        $this->assertEquals(0, ValueDatetimeModel::query()->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())->count());
+        $this->assertEquals(0, ValueTextModel::query()->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())->count());
+
+        $this->assertFalse($entity->hasKey());
+        $this->assertEquals(0, $entity->getKey());
+        $this->assertFalse($entity->hasDomainKey());
+        $this->assertEquals(0, $entity->getKey());
+        $this->assertEquals([], $entity->getBag()->getData());
+
+        $attrSet = $entity->getAttributeSet();
+        $this->assertFalse($attrSet->hasKey());
+        $this->assertEquals([], $attrSet->getContainers());
+    }
+
+    /**
+     * @test
+     * @group acceptance
+     * @covers Entity::delete()
+     */
+    public function find_and_delete() {
+        $domain = $this->eavFactory->createDomain();
+        $attrSet = $this->eavFactory->createAttributeSet($domain);
+        $group = $this->eavFactory->createGroup($attrSet);
+        $fields = [
+            [
+                ATTR_FACTORY::ATTRIBUTE->field() => [
+                    _ATTR::NAME->column() => "string",
+                    _ATTR::TYPE->column() => ATTR_TYPE::STRING->value()
+                ],
+                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::VALUE->field() => "string value"
+            ],
+            [
+                ATTR_FACTORY::ATTRIBUTE->field() => [
+                    _ATTR::NAME->column() => "integer",
+                    _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value()
+                ],
+                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::VALUE->field() => 123
+            ],
+            [
+                ATTR_FACTORY::ATTRIBUTE->field() => [
+                    _ATTR::NAME->column() => "decimal",
+                    _ATTR::TYPE->column() => ATTR_TYPE::DECIMAL->value()
+                ],
+                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::VALUE->field() => 3.14
+            ],
+            [
+                ATTR_FACTORY::ATTRIBUTE->field() => [
+                    _ATTR::NAME->column() => "datetime",
+                    _ATTR::TYPE->column() => ATTR_TYPE::DATETIME->value()
+                ],
+                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::VALUE->field() => Carbon::now()->format('Y-m-d H:i:s')
+            ],
+            [
+                ATTR_FACTORY::ATTRIBUTE->field() => [
+                    _ATTR::NAME->column() => "text",
+                    _ATTR::TYPE->column() => ATTR_TYPE::TEXT->value()
+                ],
+                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::VALUE->field() => "text value"
+            ]
+        ];
+        /** @var EntityFactoryResult $result */
+        $result = $this->eavFactory->createEavEntity($fields, $domain, $attrSet)->getData();
+        $entityModel = $result->getEntityModel();
+
+        $entity = new Entity();
+        $entity
+            ->setKey($entityModel->getKey())
+            ->setDomainKey($domain->getKey())
+            ->getAttributeSet()->setKey($attrSet->getKey());
+        $entity->find();
+
+        $this->assertSameSize($fields, $entity->toArray());
+
+        $entity->delete();
+
+        $this->assertEquals(0, EntityModel::query()->whereKey($entityModel->getKey())->count());
+        $this->assertEquals(0, ValueStringModel::query()->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())->count());
+        $this->assertEquals(0, ValueIntegerModel::query()->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())->count());
+        $this->assertEquals(0, ValueDecimalModel::query()->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())->count());
+        $this->assertEquals(0, ValueDatetimeModel::query()->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())->count());
+        $this->assertEquals(0, ValueTextModel::query()->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())->count());
+
+        $this->assertFalse($entity->hasKey());
+        $this->assertEquals(0, $entity->getKey());
+        $this->assertFalse($entity->hasDomainKey());
+        $this->assertEquals(0, $entity->getKey());
+        $this->assertEquals([], $entity->getBag()->getData());
+
+        $attrSet = $entity->getAttributeSet();
+        $this->assertFalse($attrSet->hasKey());
+        $this->assertEquals([], $attrSet->getContainers());
     }
 }

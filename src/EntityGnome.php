@@ -140,11 +140,17 @@ class EntityGnome
     }
 
     public function delete() {
-        $result = new Result();
-
         $entity = $this->getEntity();
-
         $set = $entity->getAttributeSet();
+
+        if(!$entity->hasKey()) {
+            EntityException::undefinedEntityKey();
+        }
+        if(!$set->hasKey()) {
+            EntityException::undefinedAttributeSetKey();
+        }
+
+        $result = new Result();
         $set->fetchContainers();
         $deleteResults = [];
         foreach ($set->getContainers() as $container) {
@@ -155,6 +161,12 @@ class EntityGnome
         if(!$recordResult) {
             return $result->notDeleted();
         }
+
+        $entity->setKey(0);
+        $entity->setDomainKey(0);
+        $set->setKey(0);
+        $set->resetContainers();
+
         $result->deleted();
         $result->setData($deleteResults);
         return $result;

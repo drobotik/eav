@@ -263,4 +263,30 @@ class EntityGnomeFunctionalTest extends TestCase
         $this->assertEquals(_RESULT::EMPTY->code(), $data->getCode());
         $this->assertEquals(_RESULT::EMPTY->message(), $data->getMessage());
     }
+
+    /**
+     * @test
+     * @group functional
+     * @covers EntityGnome::delete
+     */
+    public function delete_exception_if_not_set_key_provided() {
+        $this->expectException(EntityException::class);
+        $this->expectExceptionMessage(EntityException::UNDEFINED_ATTRIBUTE_SET_KEY);
+        $entity = $this->gnome->getEntity();
+        $entity->setKey(1);
+        $this->gnome->delete();
+    }
+
+    /**
+     * @test
+     * @group functional
+     * @covers EntityGnome::delete
+     */
+    public function delete_exception_if_not_entity_key_provided() {
+        $this->expectException(EntityException::class);
+        $this->expectExceptionMessage(EntityException::UNDEFINED_ENTITY_KEY);
+        $entity = $this->gnome->getEntity();
+        $entity->getAttributeSet()->setKey(1);
+        $this->gnome->delete();
+    }
 }

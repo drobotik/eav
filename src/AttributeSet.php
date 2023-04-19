@@ -36,7 +36,7 @@ class AttributeSet
 
     public function hasKey() : bool
     {
-        return isset($this->key);
+        return isset($this->key) && $this->key !== 0;
     }
 
     public function getName(): string
