@@ -1,0 +1,36 @@
+version: '3.7'
+networks:
+    app-network:
+        driver: bridge
+volumes:
+    mysql:
+        driver: 'local'
+services:
+  mysql:
+    build:
+      context: mysql
+      args:
+        - MYSQL_VERSION=${MYSQL_VERSION}
+        - MYSQL_PORT=${MYSQL_PORT}
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_PORT=${MYSQL_PORT}
+      - TZ=${WORKSPACE_TIMEZONE}
+    volumes:
+      - ${DATA_PATH_HOST}/mysql:/var/lib/mysql
+      - ${MYSQL_ENTRYPOINT_INITDB}:/docker-entrypoint-initdb.d
+    ports:
+      - "${MYSQL_PORT}:3306"
+    networks:
+      - app-network
+  app:
+    build:
+      context: app
+    tty: true
+    volumes:
+      - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
+    networks:
+      - app-network

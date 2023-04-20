@@ -1,7 +1,7 @@
 /vendor
 /.idea
 /.vscode
-/Docker
+/Docker/.env
 .phpunit.cache
 .phpunit.result.cache
 /tests/test.sqlite
