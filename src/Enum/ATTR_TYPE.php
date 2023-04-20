@@ -112,18 +112,4 @@ enum ATTR_TYPE
             self::TEXT->value() => self::TEXT
         };
     }
-
-    public function loadMetadata(ClassMetadata $metadata) {
-
-        $builder = new ClassMetadataBuilder($metadata);
-        $builder->setTable(sprintf(_VALUE::table(), $this->value()));
-        $builder->createField(_VALUE::ID->column(), Types::INTEGER)
-            ->makePrimaryKey()
-            ->generatedValue()
-            ->build();
-        $builder->addField( _VALUE::DOMAIN_ID->column(), Types::INTEGER);
-        $builder->addField( _VALUE::ENTITY_ID->column(), Types::INTEGER);
-        $builder->addField( _VALUE::ATTRIBUTE_ID->column(), Types::INTEGER);
-        $builder->addField( _VALUE::VALUE->column(), $this->doctrineType());
-    }
 }

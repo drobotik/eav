@@ -8,4 +8,4 @@
 /tests/test.sqlite-journal
 .env
 connection.php
-.coverage
+/coverage

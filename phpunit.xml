@@ -6,13 +6,17 @@
 >
   <testsuites>
     <testsuite name="Eav">
-      <directory suffix="Test.php">./tests/Eav</directory>
+      <directory>./tests/Eav</directory>
     </testsuite>
   </testsuites>
   <coverage>
     <include>
       <directory suffix=".php">./src</directory>
     </include>
+    <exclude>
+      <directory suffix=".php">./src/Database/Migrations</directory>
+      <directory suffix=".php">./src/Database/Support</directory>
+    </exclude>
   </coverage>
   <php>
   </php>

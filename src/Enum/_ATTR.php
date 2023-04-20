@@ -33,12 +33,12 @@ enum _ATTR implements DefineTableInterface
         return match ($this) {
             self::ID => 'attribute_id',
             self::DOMAIN_ID => _DOMAIN::ID->column(),
-            self::NAME => "name",
-            self::TYPE => "type",
-            self::STRATEGY => "strategy",
-            self::SOURCE => "source",
-            self::DEFAULT_VALUE => "default_value",
-            self::DESCRIPTION => "description",
+            self::NAME => 'name',
+            self::TYPE => 'type',
+            self::STRATEGY => 'strategy',
+            self::SOURCE => 'source',
+            self::DEFAULT_VALUE => 'default_value',
+            self::DESCRIPTION => 'description',
         };
     }
 

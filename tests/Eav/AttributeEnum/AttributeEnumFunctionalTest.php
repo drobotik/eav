@@ -10,12 +10,42 @@ declare(strict_types=1);
 namespace Tests\Eav\AttributeEnum;
 
 use Drobotik\Eav\Enum\_ATTR;
+use Drobotik\Eav\Enum\_DOMAIN;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Strategy;
 use PHPUnit\Framework\TestCase;
 
 class AttributeEnumFunctionalTest extends TestCase
 {
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\Enum\_ATTR::table
+     */
+    public function table() {
+        $this->assertEquals('eav_attributes', _ATTR::table());
+    }
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\Enum\_ATTR::column
+     */
+    public function columns() {
+        $cases = [];
+        foreach (_ATTR::cases() as $case) {
+            $cases[$case->column()] = $case->column();
+        }
+        $this->assertEquals([
+            _ATTR::ID->column() => 'attribute_id',
+            _ATTR::NAME->column() => 'name',
+            _ATTR::DOMAIN_ID->column() => _DOMAIN::ID->column(),
+            _ATTR::SOURCE->column() => 'source',
+            _ATTR::DEFAULT_VALUE->column() => 'default_value',
+            _ATTR::TYPE->column() => 'type',
+            _ATTR::STRATEGY->column() => 'strategy',
+            _ATTR::DESCRIPTION->column() => 'description',
+        ], $cases);
+    }
     /**
      * @test
      * @group functional
