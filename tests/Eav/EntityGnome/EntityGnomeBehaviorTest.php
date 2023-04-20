@@ -34,7 +34,7 @@ class EntityGnomeBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers EntityGnome::find
+     * @covers \Drobotik\Eav\EntityGnome::find
      */
     public function find() {
         $domainModelKey = 2;
@@ -112,7 +112,7 @@ class EntityGnomeBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers EntityGnome::save
+     * @covers \Drobotik\Eav\EntityGnome::save
      */
     public function save_fetch_containers() {
         $set = $this->getMockBuilder(AttributeSet::class)
@@ -135,7 +135,7 @@ class EntityGnomeBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers EntityGnome::save
+     * @covers \Drobotik\Eav\EntityGnome::save
      */
     public function save_values() {
         $bag = $this->getMockBuilder(EntityBag::class)
@@ -190,7 +190,7 @@ class EntityGnomeBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers EntityGnome::save
+     * @covers \Drobotik\Eav\EntityGnome::save
      */
     public function save_result_created() {
         $attrSet = $this->getMockBuilder(AttributeSet::class)
@@ -219,7 +219,7 @@ class EntityGnomeBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers EntityGnome::save
+     * @covers \Drobotik\Eav\EntityGnome::save
      */
     public function save_result_updated() {
         $attrSet = $this->getMockBuilder(AttributeSet::class)
@@ -248,7 +248,7 @@ class EntityGnomeBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers EntityGnome::validate
+     * @covers \Drobotik\Eav\EntityGnome::validate
      */
     public function validate_with_errors() {
         $attribute = $this->getMockBuilder(Attribute::class)
@@ -298,7 +298,7 @@ class EntityGnomeBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers EntityGnome::validate
+     * @covers \Drobotik\Eav\EntityGnome::validate
      */
     public function validate_passed() {
         $validator = $this->getMockBuilder(ValueValidator::class)
@@ -341,7 +341,7 @@ class EntityGnomeBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers EntityGnome::delete
+     * @covers \Drobotik\Eav\EntityGnome::delete
      */
     public function delete() {
         $attribute = $this->getMockBuilder(Attribute::class)
@@ -413,7 +413,7 @@ class EntityGnomeBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers EntityGnome::delete
+     * @covers \Drobotik\Eav\EntityGnome::delete
      */
     public function not_deleted() {
         $record = $this->getMockBuilder(EntityModel::class)
@@ -452,7 +452,7 @@ class EntityGnomeBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers EntityGnome::toArray
+     * @covers \Drobotik\Eav\EntityGnome::toArray
      */
     public function to_array() {
         $data = [

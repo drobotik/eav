@@ -19,7 +19,7 @@ class EntityBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers Entity::find
+     * @covers \Drobotik\Eav\Entity::find
      */
     public function find() {
         $entity = $this->getMockBuilder(Entity::class)
@@ -41,7 +41,7 @@ class EntityBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers Entity::save
+     * @covers \Drobotik\Eav\Entity::save
      */
     public function save() {
         $entity = $this->getMockBuilder(Entity::class)
@@ -63,7 +63,7 @@ class EntityBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers Entity::delete
+     * @covers \Drobotik\Eav\Entity::delete
      */
     public function delete() {
         $entity = $this->getMockBuilder(Entity::class)
@@ -85,7 +85,7 @@ class EntityBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers Entity::validate
+     * @covers \Drobotik\Eav\Entity::validate
      */
     public function validate() {
         $entity = $this->getMockBuilder(Entity::class)
@@ -107,7 +107,7 @@ class EntityBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers Entity::toArray
+     * @covers \Drobotik\Eav\Entity::toArray
      */
     public function to_array() {
         $entity = $this->getMockBuilder(Entity::class)

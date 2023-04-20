@@ -23,7 +23,7 @@ class ValueModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueBase::setDomainKey, ValueBase::getDomainKey
+     * @covers \Drobotik\Eav\Model\ValueBase::setDomainKey, \Drobotik\Eav\Model\ValueBase::getDomainKey
      */
     public function domainKey() {
         $model = new ValueBase();
@@ -34,7 +34,7 @@ class ValueModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueBase::setEntityKey, ValueBase::getEntityKey
+     * @covers \Drobotik\Eav\Model\ValueBase::setEntityKey, \Drobotik\Eav\Model\ValueBase::getEntityKey
      */
     public function valueEntityKey() {
         $model = new ValueBase();
@@ -44,7 +44,7 @@ class ValueModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueBase::setAttrKey,ValueBase::getAttrKey
+     * @covers \Drobotik\Eav\Model\ValueBase::setAttrKey, \Drobotik\Eav\Model\ValueBase::getAttrKey
      */
     public function attrKey() {
         $model = new ValueBase();
@@ -54,7 +54,7 @@ class ValueModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueBase::getValue, ValueBase::getValue
+     * @covers \Drobotik\Eav\Model\ValueBase::getValue, \Drobotik\Eav\Model\ValueBase::getValue
      */
     public function value() {
         $model = new ValueBase();
@@ -64,7 +64,7 @@ class ValueModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueStringModel::getTable
+     * @covers \Drobotik\Eav\Model\ValueStringModel::getTable
      */
     public function value_string() {
         $model = new ValueStringModel();
@@ -73,7 +73,7 @@ class ValueModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueTextModel::getTable
+     * @covers \Drobotik\Eav\Model\ValueTextModel::getTable
      */
     public function value_text() {
         $model = new ValueTextModel();
@@ -82,7 +82,7 @@ class ValueModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueIntegerModel::getTable
+     * @covers \Drobotik\Eav\Model\ValueIntegerModel::getTable
      */
     public function value_integer() {
         $model = new ValueIntegerModel();
@@ -91,7 +91,7 @@ class ValueModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueDatetimeModel::getTable
+     * @covers \Drobotik\Eav\Model\ValueDatetimeModel::getTable
      */
     public function value_datetime() {
         $model = new ValueDatetimeModel();
@@ -100,7 +100,7 @@ class ValueModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueDecimalModel::getTable
+     * @covers \Drobotik\Eav\Model\ValueDecimalModel::getTable
      */
     public function value_decimal() {
         $model = new ValueDecimalModel();

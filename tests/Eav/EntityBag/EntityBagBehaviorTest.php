@@ -21,7 +21,7 @@ class EntityBagBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers EntityBag::setField
+     * @covers \Drobotik\Eav\EntityBag::setField
      */
     public function set_field() {
         $attrName = 'email';
@@ -66,7 +66,7 @@ class EntityBagBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers EntityBag::setField
+     * @covers \Drobotik\Eav\EntityBag::setField
      */
     public function set_field_result() {
 
@@ -96,7 +96,7 @@ class EntityBagBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers EntityBag::removeField
+     * @covers \Drobotik\Eav\EntityBag::removeField
      */
     public function remove_field() {
         $attrName = 'email';
@@ -139,7 +139,7 @@ class EntityBagBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers EntityBag::setFields
+     * @covers \Drobotik\Eav\EntityBag::setFields
      */
     public function set_fields() {
         $data = ['one' => 1, 'two' => 2, 'three' => 3];

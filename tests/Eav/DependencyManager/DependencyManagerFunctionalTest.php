@@ -18,7 +18,7 @@ class DependencyManagerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers DependencyManager::getContainer
+     * @covers \Drobotik\Eav\DependencyManager::getContainer
      */
     public function get_container() {
         $container = DependencyManager::getContainer();
@@ -27,7 +27,7 @@ class DependencyManagerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers DependencyManager::getDefaultContainer
+     * @covers \Drobotik\Eav\DependencyManager::getDefaultContainer
      */
     public function get_default_container() {
         $container = DependencyManager::getDefaultContainer();
@@ -36,7 +36,7 @@ class DependencyManagerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers DependencyManager::setContainer
+     * @covers \Drobotik\Eav\DependencyManager::setContainer
      */
     public function set_container() {
         $container = DependencyManager::getDefaultContainer();

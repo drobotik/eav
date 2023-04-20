@@ -30,7 +30,7 @@ class StrategyFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Strategy::create
+     * @covers \Drobotik\Eav\Strategy::create
      */
     public function create_action_order() {
         $strategy = new StrategyFixture;
@@ -44,7 +44,7 @@ class StrategyFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Strategy::isCreate
+     * @covers \Drobotik\Eav\Strategy::isCreate
      */
     public function is_create() {
         $this->assertTrue($this->strategy->isCreate());
@@ -54,7 +54,7 @@ class StrategyFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Strategy::create
+     * @covers \Drobotik\Eav\Strategy::create
      */
     public function no_create() {
         $this->strategy->create = false;
@@ -75,7 +75,7 @@ class StrategyFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Strategy::update
+     * @covers \Drobotik\Eav\Strategy::update
      */
     public function update_action_order() {
         $strategy = new StrategyFixture();
@@ -90,7 +90,7 @@ class StrategyFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Strategy::update
+     * @covers \Drobotik\Eav\Strategy::update
      */
     public function update_action_order_when_existing_value_key() {
         $strategy = new StrategyFixture();
@@ -109,7 +109,7 @@ class StrategyFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Strategy::isUpdate
+     * @covers \Drobotik\Eav\Strategy::isUpdate
      */
     public function is_update() {
         $this->assertTrue($this->strategy->isUpdate());
@@ -119,7 +119,7 @@ class StrategyFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Strategy::update
+     * @covers \Drobotik\Eav\Strategy::update
      */
     public function no_update() {
         $this->strategy->update = false;
@@ -140,7 +140,7 @@ class StrategyFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Strategy::delete
+     * @covers \Drobotik\Eav\Strategy::delete
      */
     public function delete_action() {
         $strategy = $this->getMockBuilder(ValueAction::class)
@@ -162,7 +162,7 @@ class StrategyFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Strategy::delete
+     * @covers \Drobotik\Eav\Strategy::delete
      */
     public function delete_action_order() {
         $strategy = new StrategyFixture;

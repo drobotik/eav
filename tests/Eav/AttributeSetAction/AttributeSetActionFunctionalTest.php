@@ -32,7 +32,7 @@ class AttributeSetActionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers AttributeSetAction::initializeAttribute
+     * @covers \Drobotik\Eav\AttributeSetAction::initializeAttribute
      */
     public function initialize_attribute() {
         $attribute = $this->eavFactory->createAttribute();
@@ -44,7 +44,7 @@ class AttributeSetActionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers AttributeSetAction::initializeAttribute
+     * @covers \Drobotik\Eav\AttributeSetAction::initializeAttribute
      */
     public function initialized_attribute_without_pivot() {
         $domainModel = $this->eavFactory->createDomain();
@@ -60,7 +60,7 @@ class AttributeSetActionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers AttributeSetAction::initializeStrategy
+     * @covers \Drobotik\Eav\AttributeSetAction::initializeStrategy
      */
     public function initialized_strategy() {
         $attribute = new Attribute();

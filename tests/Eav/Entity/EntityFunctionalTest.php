@@ -25,7 +25,7 @@ class EntityFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Entity::hasKey, Entity::getKey, Entity::setKey
+     * @covers \Drobotik\Eav\Entity::hasKey, \Drobotik\Eav\Entity::getKey, \Drobotik\Eav\Entity::setKey
      */
     public function key() {
         $this->assertFalse($this->entity->hasKey());
@@ -36,7 +36,7 @@ class EntityFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Entity::hasKey, Entity::getKey, Entity::setKey
+     * @covers \Drobotik\Eav\Entity::hasKey, \Drobotik\Eav\Entity::getKey, \Drobotik\Eav\Entity::setKey
      */
     public function key_zero() {
         $this->entity->setKey(0);
@@ -46,7 +46,7 @@ class EntityFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Entity::hasDomainKey, Entity::getDomainKey, Entity::setDomainKey
+     * @covers \Drobotik\Eav\Entity::hasDomainKey, \Drobotik\Eav\Entity::getDomainKey, \Drobotik\Eav\Entity::setDomainKey
      */
     public function domain_key() {
         $this->entity->setDomainKey(0);
@@ -56,7 +56,7 @@ class EntityFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Entity::hasDomainKey, Entity::getDomainKey, Entity::setDomainKey
+     * @covers \Drobotik\Eav\Entity::hasDomainKey, \Drobotik\Eav\Entity::getDomainKey, \Drobotik\Eav\Entity::setDomainKey
      */
     public function domain_key_zero() {
         $this->entity->setDomainKey(0);
@@ -66,7 +66,7 @@ class EntityFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Entity::setAttributeSet, Entity::getAttributeSet
+     * @covers \Drobotik\Eav\Entity::setAttributeSet, \Drobotik\Eav\Entity::getAttributeSet
      */
     public function attribute_set() {
         $this->assertInstanceOf(AttributeSet::class, $this->entity->getAttributeSet());
@@ -78,7 +78,7 @@ class EntityFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Entity::getBag
+     * @covers \Drobotik\Eav\Entity::getBag
      */
     public function bag() {
         $this->assertInstanceOf(EntityBag::class, $this->entity->getBag());
@@ -86,7 +86,7 @@ class EntityFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Entity::getGnome
+     * @covers \Drobotik\Eav\Entity::getGnome
      */
     public function gnome() {
         $gnome = $this->entity->getGnome();

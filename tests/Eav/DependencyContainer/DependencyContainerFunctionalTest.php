@@ -19,7 +19,7 @@ class DependencyContainerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers DependencyContainer::getValidator
+     * @covers \Drobotik\Eav\DependencyContainer::getValidator
      */
     public function validator() {
         $dependency = new DependencyContainer();

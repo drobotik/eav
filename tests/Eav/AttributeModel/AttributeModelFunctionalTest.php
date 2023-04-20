@@ -23,7 +23,7 @@ class AttributeModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers AttributeModel::setName, AttributeModel::getName
+     * @covers \Drobotik\Eav\Model\AttributeModel::setName, \Drobotik\Eav\Model\AttributeModel::getName
      */
     public function name_accessor() {
         $this->model->setName('test');
@@ -32,7 +32,7 @@ class AttributeModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers AttributeModel::setDomainKey, AttributeModel::getDomainKey
+     * @covers \Drobotik\Eav\Model\AttributeModel::setDomainKey, \Drobotik\Eav\Model\AttributeModel::getDomainKey
      */
     public function domain_key() {
         $this->model->setDomainKey(123);
@@ -41,7 +41,7 @@ class AttributeModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers AttributeModel::setType, AttributeModel::getType
+     * @covers \Drobotik\Eav\Model\AttributeModel::setType, \Drobotik\Eav\Model\AttributeModel::getType
      */
     public function type() {
         $this->model->setType('test');
@@ -50,7 +50,7 @@ class AttributeModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers AttributeModel::setDescription, AttributeModel::getDescription
+     * @covers \Drobotik\Eav\Model\AttributeModel::setDescription, \Drobotik\Eav\Model\AttributeModel::getDescription
      */
     public function description() {
         $this->model->setDescription('test');
@@ -59,7 +59,7 @@ class AttributeModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers AttributeModel::setDefaultValue, AttributeModel::getDefaultValue
+     * @covers \Drobotik\Eav\Model\AttributeModel::setDefaultValue, \Drobotik\Eav\Model\AttributeModel::getDefaultValue
      */
     public function default_value() {
         $this->model->setDefaultValue('test');
@@ -68,7 +68,7 @@ class AttributeModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers AttributeModel::setSource, AttributeModel::getSource
+     * @covers \Drobotik\Eav\Model\AttributeModel::setSource, \Drobotik\Eav\Model\AttributeModel::getSource
      */
     public function source() {
         $this->model->setSource('test');
@@ -77,12 +77,10 @@ class AttributeModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers AttributeModel::setStrategy, AttributeModel::getStrategy
+     * @covers \Drobotik\Eav\Model\AttributeModel::setStrategy, \Drobotik\Eav\Model\AttributeModel::getStrategy
      */
     public function strategy() {
         $this->model->setStrategy('test');
         $this->assertEquals('test', $this->model->getStrategy());
     }
-
-
 }

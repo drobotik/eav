@@ -30,7 +30,7 @@ class EntityAcceptanceTest extends TestCase
     /**
      * @test
      * @group acceptance
-     * @covers Entity::save()
+     * @covers \Drobotik\Eav\Entity::save()
      */
     public function creating_entities() {
         $domain = $this->eavFactory->createDomain();
@@ -126,7 +126,7 @@ class EntityAcceptanceTest extends TestCase
     /**
      * @test
      * @group acceptance
-     * @covers Entity::save()
+     * @covers \Drobotik\Eav\Entity::save()
      */
     public function find_and_update() {
         $domain = $this->eavFactory->createDomain();
@@ -227,7 +227,7 @@ class EntityAcceptanceTest extends TestCase
     /**
      * @test
      * @group acceptance
-     * @covers Entity::delete()
+     * @covers \Drobotik\Eav\Entity::delete()
      */
     public function delete() {
         $domain = $this->eavFactory->createDomain();
@@ -308,7 +308,7 @@ class EntityAcceptanceTest extends TestCase
     /**
      * @test
      * @group acceptance
-     * @covers Entity::delete()
+     * @covers \Drobotik\Eav\Entity::delete()
      */
     public function find_and_delete() {
         $domain = $this->eavFactory->createDomain();

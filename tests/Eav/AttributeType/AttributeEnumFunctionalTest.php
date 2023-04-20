@@ -24,7 +24,7 @@ class AttributeEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ATTR_TYPE::value
+     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::value
      */
     public function value() {
         $this->assertEquals("int", ATTR_TYPE::INTEGER->value());
@@ -37,7 +37,7 @@ class AttributeEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ATTR_TYPE::isValid
+     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::isValid
      */
     public function is_valid() {
         $this->assertTrue(ATTR_TYPE::isValid("int"));
@@ -51,7 +51,7 @@ class AttributeEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ATTR_TYPE::valueTable
+     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::valueTable
      */
     public function value_table() {
         $this->assertEquals(sprintf(_VALUE::table(), ATTR_TYPE::INTEGER->value()), ATTR_TYPE::INTEGER->valueTable());
@@ -63,7 +63,7 @@ class AttributeEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ATTR_TYPE::model
+     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::model
      */
     public function model() {
         $this->assertInstanceOf(ValueIntegerModel::class, ATTR_TYPE::INTEGER->model());
@@ -75,7 +75,7 @@ class AttributeEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ATTR_TYPE::doctrineType
+     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::doctrineType
      */
     public function doctrine_type() {
         $this->assertEquals(Types::INTEGER, ATTR_TYPE::INTEGER->doctrineType());
@@ -87,7 +87,7 @@ class AttributeEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ATTR_TYPE::validationRule
+     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::validationRule
      */
     public function validation_rule() {
         $this->assertEquals(["integer"], ATTR_TYPE::INTEGER->validationRule());
@@ -99,7 +99,7 @@ class AttributeEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ATTR_TYPE::getCase
+     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::getCase
      */
     public function get_case() {
         $this->assertEquals(ATTR_TYPE::INTEGER, ATTR_TYPE::getCase(ATTR_TYPE::INTEGER->value()));

@@ -20,7 +20,7 @@ class AttributeSetModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers AttributeSetModel::getName, AttributeSetModel::setName
+     * @covers \Drobotik\Eav\Model\AttributeSetModel::getName, \Drobotik\Eav\Model\AttributeSetModel::setName
      */
     public function name_accessor() {
         $model = new AttributeSetModel();
@@ -30,7 +30,7 @@ class AttributeSetModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers AttributeSetModel::getDomainKey, AttributeSetModel::setDomainKey
+     * @covers \Drobotik\Eav\Model\AttributeSetModel::getDomainKey, \Drobotik\Eav\Model\AttributeSetModel::setDomainKey
      */
     public function domainKey() {
         $model = new AttributeSetModel();
@@ -40,7 +40,7 @@ class AttributeSetModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers AttributeSetModel::firstOrFail
+     * @covers \Drobotik\Eav\Model\AttributeSetModel::firstOrFail
      */
     public function first_or_fail() {
         $record = $this->eavFactory->createAttributeSet();
@@ -52,7 +52,7 @@ class AttributeSetModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers AttributeSetModel::firstOrFail
+     * @covers \Drobotik\Eav\Model\AttributeSetModel::firstOrFail
      */
     public function first_or_fail_exception() {
         $this->expectException(Throwable::class);

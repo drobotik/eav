@@ -19,7 +19,7 @@ class AttributeEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers _ATTR::default
+     * @covers \Drobotik\Eav\Enum\_ATTR::default
      */
     public function default() {
         $cases = [];
@@ -40,7 +40,7 @@ class AttributeEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers _ATTR::bag
+     * @covers \Drobotik\Eav\Enum\_ATTR::bag
      */
     public function bag() {
         $cases = [];

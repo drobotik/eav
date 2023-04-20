@@ -25,7 +25,7 @@ class AttributeSetActionBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers AttributeSetAction::initializeValueManager
+     * @covers \Drobotik\Eav\AttributeSetAction::initializeValueManager
      */
     public function initialize_value_manager() {
         $value = 'test';
@@ -74,7 +74,7 @@ class AttributeSetActionBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers AttributeSetAction::initialize
+     * @covers \Drobotik\Eav\AttributeSetAction::initialize
      */
     public function initialize() {
         $attributeModel = new AttributeModel;

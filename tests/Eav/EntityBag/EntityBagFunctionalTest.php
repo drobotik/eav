@@ -18,7 +18,7 @@ class EntityBagFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers EntityBag::getEntity
+     * @covers \Drobotik\Eav\EntityBag::getEntity
      */
     public function entity() {
         $entity = new Entity();

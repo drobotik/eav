@@ -33,7 +33,7 @@ class StrategyBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers Strategy::create
+     * @covers \Drobotik\Eav\Strategy::create
      */
     public function create_action() {
         $valueAction = $this->getMockBuilder(ValueAction::class)
@@ -55,7 +55,7 @@ class StrategyBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers Strategy::find
+     * @covers \Drobotik\Eav\Strategy::find
      */
     public function find_action() {
         $valueAction = $this->getMockBuilder(ValueAction::class)
@@ -77,7 +77,7 @@ class StrategyBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers Strategy::update
+     * @covers \Drobotik\Eav\Strategy::update
      */
     public function update_action_updated() {
         $valueAction = $this->getMockBuilder(ValueAction::class)
@@ -104,7 +104,7 @@ class StrategyBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers Strategy::update
+     * @covers \Drobotik\Eav\Strategy::update
      */
     public function update_action_created() {
         $valueAction = $this->getMockBuilder(ValueAction::class)
@@ -125,7 +125,7 @@ class StrategyBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers Strategy::delete
+     * @covers \Drobotik\Eav\Strategy::delete
      */
     public function delete_action() {
         $strategy = $this->getMockBuilder(ValueAction::class)
@@ -147,7 +147,7 @@ class StrategyBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers Strategy::save
+     * @covers \Drobotik\Eav\Strategy::save
      */
     public function save_action_create()
     {
@@ -181,7 +181,7 @@ class StrategyBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers Strategy::save
+     * @covers \Drobotik\Eav\Strategy::save
      */
     public function save_action_update()
     {
@@ -218,7 +218,7 @@ class StrategyBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers Strategy::validate
+     * @covers \Drobotik\Eav\Strategy::validate
      */
     public function validate_fails_action() {
         $validator = $this->getMockBuilder(Validator::class)
@@ -256,7 +256,7 @@ class StrategyBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers Strategy::validate
+     * @covers \Drobotik\Eav\Strategy::validate
      */
     public function validate_passed_action() {
         $validator = $this->getMockBuilder(Validator::class)

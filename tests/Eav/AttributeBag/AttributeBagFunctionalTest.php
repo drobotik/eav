@@ -24,7 +24,11 @@ class AttributeBagFunctionalTest extends TestCase
         $this->bag = new AttributeBag();
     }
 
-    /** @test */
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\AttributeBag::setField, \Drobotik\Eav\AttributeBag::getField, \Drobotik\Eav\AttributeBag::resetField
+     */
     public function field() {
         $this->bag->setField(_ATTR::STRATEGY, 'test');
         $this->assertEquals('test', $this->bag->getField(_ATTR::STRATEGY));
@@ -32,12 +36,20 @@ class AttributeBagFunctionalTest extends TestCase
         $this->assertEquals(Strategy::class, $this->bag->getField(_ATTR::STRATEGY));
     }
 
-    /** @test */
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\AttributeBag::getFields
+     */
     public function get_fields() {
         $this->assertSame(_ATTR::bag(), $this->bag->getFields());
     }
 
-    /** @test */
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\AttributeBag::setFields, \Drobotik\Eav\AttributeBag::getFields
+     */
     public function set_fields() {
         $input = [
             _ATTR::ID->column() => 123,

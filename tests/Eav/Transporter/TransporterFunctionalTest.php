@@ -25,7 +25,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Transporter::setField
+     * @covers \Drobotik\Eav\Transporter::setField
      */
     public function setField()
     {
@@ -54,7 +54,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Transporter::getField
+     * @covers \Drobotik\Eav\Transporter::getField
      */
     public function getField()
     {
@@ -70,7 +70,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Transporter::getData
+     * @covers \Drobotik\Eav\Transporter::getData
      */
     public function getData()
     {
@@ -100,7 +100,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Transporter::setData
+     * @covers \Drobotik\Eav\Transporter::setData
      */
     public function test_setData()
     {
@@ -131,7 +131,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Transporter::hasField
+     * @covers \Drobotik\Eav\Transporter::hasField
      */
     public function hasField()
     {
@@ -148,7 +148,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Transporter::removeField
+     * @covers \Drobotik\Eav\Transporter::removeField
      */
     public function removeField()
     {
@@ -168,7 +168,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Transporter::clear
+     * @covers \Drobotik\Eav\Transporter::clear
      */
     public function clear()
     {
@@ -189,7 +189,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Transporter::__get
+     * @covers \Drobotik\Eav\Transporter::__get
      */
     public function magicGet()
     {
@@ -200,7 +200,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Transporter::__set
+     * @covers \Drobotik\Eav\Transporter::__set
      */
     public function magicSet()
     {
@@ -230,7 +230,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Transporter::__isset
+     * @covers \Drobotik\Eav\Transporter::__isset
      */
     public function test__isset()
     {
@@ -243,7 +243,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Transporter::setField
+     * @covers \Drobotik\Eav\Transporter::setField
      */
     public function unsetRemovesFieldFromDataArray(): void
     {
@@ -261,7 +261,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Transporter::__toArray
+     * @covers \Drobotik\Eav\Transporter::__toArray
      */
     public function toStringReturnsJsonEncodedDataArray(): void
     {
@@ -283,7 +283,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Transporter::__toArray
+     * @covers \Drobotik\Eav\Transporter::__toArray
      */
     public function toArrayReturnsArrayRepresentationOfDataArray(): void
     {
@@ -305,7 +305,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Transporter::__toJson
+     * @covers \Drobotik\Eav\Transporter::__toJson
      */
     public function toJsonReturnsJsonEncodedStringRepresentationOfDataArray(): void
     {
@@ -327,7 +327,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Transporter::__toObject
+     * @covers \Drobotik\Eav\Transporter::__toObject
      */
     public function toObjectReturnsObject()
     {

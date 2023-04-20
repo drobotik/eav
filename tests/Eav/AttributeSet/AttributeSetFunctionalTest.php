@@ -24,7 +24,7 @@ class AttributeSetFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers AttributeSet::setKey, AttributeSet::getKey, AttributeSet::hasKey
+     * @covers \Drobotik\Eav\AttributeSet::setKey, \Drobotik\Eav\AttributeSet::getKey, \Drobotik\Eav\AttributeSet::hasKey
      */
     public function key() {
         $this->assertFalse($this->instance->hasKey());
@@ -35,7 +35,7 @@ class AttributeSetFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers AttributeSet::setKey, AttributeSet::getKey, AttributeSet::hasKey
+     * @covers \Drobotik\Eav\AttributeSet::setKey, \Drobotik\Eav\AttributeSet::getKey, \Drobotik\Eav\AttributeSet::hasKey
      */
     public function key_zero() {
         $this->instance->setKey(0);
@@ -45,7 +45,7 @@ class AttributeSetFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers AttributeSet::setName, AttributeSet::getName
+     * @covers \Drobotik\Eav\AttributeSet::setName, \Drobotik\Eav\AttributeSet::getName
      */
     public function name_accessor() {
         $this->instance->setName('test');
@@ -54,7 +54,7 @@ class AttributeSetFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers AttributeSet::getContainers
+     * @covers \Drobotik\Eav\AttributeSet::getContainers
      */
     public function get_containers() {
         $this->assertEquals([], $this->instance->getContainers());
@@ -62,7 +62,7 @@ class AttributeSetFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers AttributeSet::pushContainer
+     * @covers \Drobotik\Eav\AttributeSet::pushContainer
      */
     public function push_container() {
         $attribute = new Attribute();
@@ -75,7 +75,7 @@ class AttributeSetFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers AttributeSet::getContainer
+     * @covers \Drobotik\Eav\AttributeSet::getContainer
      */
     public function get_container() {
         $attribute = new Attribute();
@@ -88,7 +88,7 @@ class AttributeSetFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers AttributeSet::getContainer
+     * @covers \Drobotik\Eav\AttributeSet::getContainer
      */
     public function get_container_return_null() {
         $this->assertNull($this->instance->getContainer('test'));
@@ -96,7 +96,7 @@ class AttributeSetFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers AttributeSet::hasContainer
+     * @covers \Drobotik\Eav\AttributeSet::hasContainer
      */
     public function has_container() {
         $this->assertFalse($this->instance->hasContainer('test'));
@@ -110,7 +110,7 @@ class AttributeSetFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers AttributeSet::hasContainers
+     * @covers \Drobotik\Eav\AttributeSet::hasContainers
      */
     public function has_containers() {
         $this->assertFalse($this->instance->hasContainers());

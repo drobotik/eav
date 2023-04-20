@@ -34,7 +34,7 @@ class ValueActionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueAction::create
+     * @covers \Drobotik\Eav\Value\ValueAction::create
      */
     public function create_value() {
         $entityKey = 1;
@@ -77,7 +77,7 @@ class ValueActionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueAction::create
+     * @covers \Drobotik\Eav\Value\ValueAction::create
      */
     public function create_value_no_runtime() {
         $entity = new Entity();
@@ -100,7 +100,7 @@ class ValueActionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueAction::find
+     * @covers \Drobotik\Eav\Value\ValueAction::find
      */
     public function find() {
         $domainModel = $this->eavFactory->createDomain();
@@ -141,7 +141,7 @@ class ValueActionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueAction::find
+     * @covers \Drobotik\Eav\Value\ValueAction::find
      */
     public function find_no_keys() {
         $entity = new Entity();
@@ -161,7 +161,7 @@ class ValueActionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueAction::find
+     * @covers \Drobotik\Eav\Value\ValueAction::find
      */
     public function find_not_found() {
         $entity = new Entity();
@@ -191,7 +191,7 @@ class ValueActionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueAction::update
+     * @covers \Drobotik\Eav\Value\ValueAction::update
      */
     public function update_value() {
         $valueToSave = 'new';
@@ -228,7 +228,7 @@ class ValueActionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueAction::update
+     * @covers \Drobotik\Eav\Value\ValueAction::update
      */
     public function update_value_no_runtime() {
         $container = new AttributeContainer();
@@ -246,7 +246,7 @@ class ValueActionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueAction::delete
+     * @covers \Drobotik\Eav\Value\ValueAction::delete
      */
     public function delete_value() {
         $record = new ValueStringModel();
@@ -279,7 +279,7 @@ class ValueActionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueAction::delete
+     * @covers \Drobotik\Eav\Value\ValueAction::delete
      */
     public function delete_value_no_key() {
         $valueManager = new ValueManager();

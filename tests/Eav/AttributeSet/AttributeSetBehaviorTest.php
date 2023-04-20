@@ -22,7 +22,7 @@ class AttributeSetBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers AttributeSet::fetchContainers
+     * @covers \Drobotik\Eav\AttributeSet::fetchContainers
      */
     public function fetch_containers() {
         $key = 321;
@@ -69,11 +69,10 @@ class AttributeSetBehaviorTest extends TestCase
         $result = $instance->fetchContainers();
         $this->assertEquals($instance, $result);
     }
-
     /**
      * @test
      * @group behavior
-     * @covers AttributeSet::fetchContainers
+     * @covers \Drobotik\Eav\AttributeSet::fetchContainers
      */
     public function fetch_containers_no_key() {
         $instance = $this->getMockBuilder(AttributeSet::class)
@@ -84,11 +83,10 @@ class AttributeSetBehaviorTest extends TestCase
         $result = $instance->fetchContainers();
         $this->assertEquals($instance, $result);
     }
-
     /**
      * @test
      * @group behavior
-     * @covers AttributeSet::fetchContainers
+     * @covers \Drobotik\Eav\AttributeSet::fetchContainers
      */
     public function fetch_containers_no_force() {
         $instance = $this->getMockBuilder(AttributeSet::class)
@@ -99,11 +97,10 @@ class AttributeSetBehaviorTest extends TestCase
         $instance->expects($this->never())->method('getKey');
         $instance->fetchContainers();
     }
-
     /**
      * @test
      * @group behavior
-     * @covers AttributeSet::fetchContainers
+     * @covers \Drobotik\Eav\AttributeSet::fetchContainers
      */
     public function fetch_containers_force() {
         $model = $this->getMockBuilder(AttributeSetModel::class)

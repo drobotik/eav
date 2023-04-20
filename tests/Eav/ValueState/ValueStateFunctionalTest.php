@@ -24,7 +24,7 @@ class ValueStateFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueState::get
+     * @covers \Drobotik\Eav\Value\ValueState::get
      */
     public function getter() {
         $this->assertEquals(null, $this->state->get());
@@ -32,7 +32,7 @@ class ValueStateFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueState::set
+     * @covers \Drobotik\Eav\Value\ValueState::set
      */
     public function setter() {
         $this->state->set(1);
@@ -41,7 +41,7 @@ class ValueStateFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueState::isChanged
+     * @covers \Drobotik\Eav\Value\ValueState::isChanged
      */
     public function isChanged() {
         $this->assertFalse($this->state->isChanged());
@@ -51,7 +51,7 @@ class ValueStateFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueState::clear
+     * @covers \Drobotik\Eav\Value\ValueState::clear
      */
     public function clear() {
         $this->state->set(1);
@@ -62,7 +62,7 @@ class ValueStateFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueState::set
+     * @covers \Drobotik\Eav\Value\ValueState::set
      */
     public function setter_null() {
         $this->state->set(null);

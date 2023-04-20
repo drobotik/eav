@@ -32,7 +32,7 @@ class ValueValidatorFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueValidator::getDefaultValueRule
+     * @covers \Drobotik\Eav\Value\ValueValidator::getDefaultValueRule
      */
     public function default_value_rule() {
         $attribute = new Attribute();
@@ -47,7 +47,7 @@ class ValueValidatorFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueValidator::getRules
+     * @covers \Drobotik\Eav\Value\ValueValidator::getRules
      */
     public function validation_rules() {
         $attribute = new Attribute();
@@ -69,7 +69,7 @@ class ValueValidatorFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueValidator::getRules
+     * @covers \Drobotik\Eav\Value\ValueValidator::getRules
      */
     public function validation_rules_with_custom_rule() {
         $attribute = new Attribute();
@@ -90,7 +90,7 @@ class ValueValidatorFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueValidator::getValidatedData
+     * @covers \Drobotik\Eav\Value\ValueValidator::getValidatedData
      */
     public function validation_data() {
         $entity = new Entity();
@@ -122,7 +122,7 @@ class ValueValidatorFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueValidator::getValidator
+     * @covers \Drobotik\Eav\Value\ValueValidator::getValidator
      */
     public function validator() {
         $entity = new Entity();

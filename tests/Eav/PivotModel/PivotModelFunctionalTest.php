@@ -17,7 +17,7 @@ class PivotModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers PivotModel::setDomainKey, PivotModel::getDomainKey
+     * @covers \Drobotik\Eav\Model\PivotModel::setDomainKey, \Drobotik\Eav\Model\PivotModel::getDomainKey
      */
     public function domain_key() {
         $model = new PivotModel();
@@ -28,7 +28,7 @@ class PivotModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers PivotModel::setAttrSetKey, PivotModel::getAttrSetKey
+     * @covers \Drobotik\Eav\Model\PivotModel::setAttrSetKey, \Drobotik\Eav\Model\PivotModel::getAttrSetKey
      */
     public function attr_set_key() {
         $model = new PivotModel();
@@ -39,7 +39,7 @@ class PivotModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers PivotModel::setGroupKey, PivotModel::getGroupKey
+     * @covers \Drobotik\Eav\Model\PivotModel::setGroupKey, \Drobotik\Eav\Model\PivotModel::getGroupKey
      */
     public function group_key() {
         $model = new PivotModel();
@@ -50,7 +50,7 @@ class PivotModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers PivotModel::setAttrKey, PivotModel::getAttrKey
+     * @covers \Drobotik\Eav\Model\PivotModel::setAttrKey, \Drobotik\Eav\Model\PivotModel::getAttrKey
      */
     public function attr_key() {
         $model = new PivotModel();

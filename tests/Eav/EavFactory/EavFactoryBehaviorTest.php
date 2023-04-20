@@ -17,7 +17,7 @@ class EavFactoryBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers EavFactory::createDomain
+     * @covers \Drobotik\Eav\Factory\EavFactory::createDomain
      */
     public function entity_domain() {
         $factory = $this->getMockBuilder(EavFactory::class)
@@ -31,7 +31,7 @@ class EavFactoryBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers EavFactory::createEntity
+     * @covers \Drobotik\Eav\Factory\EavFactory::createEntity
      */
     public function entity_attr_set() {
         $factory = $this->getMockBuilder(EavFactory::class)
@@ -46,7 +46,7 @@ class EavFactoryBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers EavFactory::createAttributeSet
+     * @covers \Drobotik\Eav\Factory\EavFactory::createAttributeSet
      */
     public function attribute_set_domain() {
         $factory = $this->getMockBuilder(EavFactory::class)
@@ -60,7 +60,7 @@ class EavFactoryBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers EavFactory::createGroup
+     * @covers \Drobotik\Eav\Factory\EavFactory::createGroup
      */
     public function attribute_group_attribute_set() {
         $factory = $this->getMockBuilder(EavFactory::class)
@@ -74,7 +74,7 @@ class EavFactoryBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers EavFactory::createAttribute
+     * @covers \Drobotik\Eav\Factory\EavFactory::createAttribute
      */
     public function attribute_domain() {
         $factory = $this->getMockBuilder(EavFactory::class)

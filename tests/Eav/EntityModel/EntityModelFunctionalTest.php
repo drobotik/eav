@@ -17,7 +17,7 @@ class EntityModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers EntityModel::setAttrSetKey, EntityModel::getAttrSetKey
+     * @covers \Drobotik\Eav\Model\EntityModel::setAttrSetKey, \Drobotik\Eav\Model\EntityModel::getAttrSetKey
      */
     public function domain_key() {
         $model = new EntityModel();
@@ -27,7 +27,7 @@ class EntityModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers EntityModel::setAttrSetKey, EntityModel::getAttrSetKey
+     * @covers \Drobotik\Eav\Model\EntityModel::setAttrSetKey, \Drobotik\Eav\Model\EntityModel::getAttrSetKey
      */
     public function attr_set_key() {
         $model = new EntityModel();
@@ -37,7 +37,7 @@ class EntityModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers EntityModel::findAndDelete
+     * @covers \Drobotik\Eav\Model\EntityModel::findAndDelete
      */
     public function find_and_delete() {
         $model = new EntityModel();

@@ -24,7 +24,7 @@ class ValueManagerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueManager::hasKey, ValueManager::getKey, ValueManager::setKey
+     * @covers \Drobotik\Eav\Value\ValueManager::hasKey, \Drobotik\Eav\Value\ValueManager::getKey, \Drobotik\Eav\Value\ValueManager::setKey
      */
     public function key() {
         $this->assertFalse($this->value->hasKey());
@@ -35,7 +35,7 @@ class ValueManagerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueManager::hasKey, ValueManager::getKey, ValueManager::setKey
+     * @covers \Drobotik\Eav\Value\ValueManager::hasKey, \Drobotik\Eav\Value\ValueManager::getKey, \Drobotik\Eav\Value\ValueManager::setKey
      */
     public function zero_key() {
         $this->value->setKey(0);
@@ -45,7 +45,7 @@ class ValueManagerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueManager::getRuntime
+     * @covers \Drobotik\Eav\Value\ValueManager::getRuntime
      */
     public function get_runtime_value() {
         $this->assertEquals(null, $this->value->getRuntime());
@@ -53,7 +53,7 @@ class ValueManagerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueManager::setRuntime
+     * @covers \Drobotik\Eav\Value\ValueManager::setRuntime
      */
     public function set_runtime_value() {
         $this->value->setRuntime(1);
@@ -64,7 +64,7 @@ class ValueManagerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueManager::isRuntime
+     * @covers \Drobotik\Eav\Value\ValueManager::isRuntime
      */
     public function is_runtime_value() {
         $this->assertFalse($this->value->isRuntime());
@@ -74,7 +74,7 @@ class ValueManagerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueManager::clearValue
+     * @covers \Drobotik\Eav\Value\ValueManager::clearValue
      */
     public function clear_runtime_value() {
         $this->value->setRuntime(1);
@@ -84,7 +84,7 @@ class ValueManagerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueManager::getStored
+     * @covers \Drobotik\Eav\Value\ValueManager::getStored
      */
     public function get_stored_value() {
         $this->assertEquals(null, $this->value->getStored());
@@ -92,7 +92,7 @@ class ValueManagerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueManager::setStored
+     * @covers \Drobotik\Eav\Value\ValueManager::setStored
      */
     public function set_stored_value() {
         $this->value->setStored(1);
@@ -103,7 +103,7 @@ class ValueManagerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueManager::isStored
+     * @covers \Drobotik\Eav\Value\ValueManager::isStored
      */
     public function is_stored_value() {
         $this->assertFalse($this->value->isStored());
@@ -113,7 +113,7 @@ class ValueManagerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueManager::isRuntime
+     * @covers \Drobotik\Eav\Value\ValueManager::isRuntime
      */
     public function clear_stored_value() {
         $this->value->setStored(1);
@@ -123,7 +123,7 @@ class ValueManagerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueManager::getValue
+     * @covers \Drobotik\Eav\Value\ValueManager::getValue
      */
     public function get_value() {
         $this->assertEquals(null, $this->value->getValue());
@@ -131,7 +131,7 @@ class ValueManagerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueManager::setValue
+     * @covers \Drobotik\Eav\Value\ValueManager::setValue
      */
     public function set_value() {
         $this->value->setValue(1);
@@ -168,7 +168,7 @@ class ValueManagerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers ValueManager::isClean
+     * @covers \Drobotik\Eav\Value\ValueManager::isClean
      */
     public function is_clean() {
         $this->assertTrue($this->value->isClean());

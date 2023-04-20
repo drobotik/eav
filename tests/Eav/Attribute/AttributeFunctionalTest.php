@@ -29,7 +29,7 @@ class AttributeFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Attribute::getBag, Attribute::setBag,
+     * @covers \Drobotik\Eav\Attribute::getBag, \Drobotik\Eav\Attribute::setBag,
      */
     public function bag() {
         $this->assertInstanceOf(AttributeBag::class, $this->attribute->getBag());
@@ -40,7 +40,7 @@ class AttributeFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Attribute::getKey, Attribute::setKey,
+     * @covers \Drobotik\Eav\Attribute::getKey, \Drobotik\Eav\Attribute::setKey,
      */
     public function key() {
         $this->attribute->setKey(123);
@@ -51,7 +51,7 @@ class AttributeFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Attribute::getDomainKey, Attribute::setDomainKey,
+     * @covers \Drobotik\Eav\Attribute::getDomainKey, \Drobotik\Eav\Attribute::setDomainKey,
      */
     public function domain_key() {
         $this->attribute->setDomainKey(123);
@@ -62,7 +62,7 @@ class AttributeFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Attribute::getName, Attribute::setName,
+     * @covers \Drobotik\Eav\Attribute::getName, \Drobotik\Eav\Attribute::setName,
      */
     public function name_accessor() {
         $this->attribute->setName('test');
@@ -73,7 +73,7 @@ class AttributeFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Attribute::getType, Attribute::setType,
+     * @covers \Drobotik\Eav\Attribute::getType, \Drobotik\Eav\Attribute::setType,
      */
     public function get_type() {
         $this->attribute->setType(ATTR_TYPE::STRING->value());
@@ -82,7 +82,7 @@ class AttributeFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Attribute::getType
+     * @covers \Drobotik\Eav\Attribute::getType
      */
     public function get_type_throws_unexpected_type() {
         $this->expectException(AttributeException::class);
@@ -93,7 +93,7 @@ class AttributeFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Attribute::setStrategy, Attribute::getStrategy
+     * @covers \Drobotik\Eav\Attribute::setStrategy, \Drobotik\Eav\Attribute::getStrategy
      */
     public function strategy() {
         $this->attribute->setStrategy('test');
@@ -102,7 +102,7 @@ class AttributeFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Attribute::setSource, Attribute::getSource
+     * @covers \Drobotik\Eav\Attribute::setSource, \Drobotik\Eav\Attribute::getSource
      */
     public function source() {
         $this->attribute->setSource('test');
@@ -111,7 +111,7 @@ class AttributeFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Attribute::setDefaultValue, Attribute::getDefaultValue
+     * @covers \Drobotik\Eav\Attribute::setDefaultValue, \Drobotik\Eav\Attribute::getDefaultValue
      */
     public function default_value() {
         $this->attribute->setDefaultValue('test');
@@ -120,7 +120,7 @@ class AttributeFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Attribute::setDescription, Attribute::getDescription
+     * @covers \Drobotik\Eav\Attribute::setDescription, \Drobotik\Eav\Attribute::getDescription
      */
     public function get_description() {
         $this->attribute->setDescription('test');
@@ -129,7 +129,7 @@ class AttributeFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Attribute::getValueModel
+     * @covers \Drobotik\Eav\Attribute::getValueModel
      */
     public function get_value_model() {
         $this->assertInstanceOf(ValueStringModel::class, $this->attribute->getValueModel());

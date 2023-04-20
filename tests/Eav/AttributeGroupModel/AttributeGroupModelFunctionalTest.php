@@ -17,18 +17,17 @@ class AttributeGroupModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers AttributeGroupModel::setAttrSetKey, AttributeGroupModel::getAttrSetKey,
+     * @covers \Drobotik\Eav\Model\AttributeGroupModel::setAttrSetKey, \Drobotik\Eav\Model\AttributeGroupModel::getAttrSetKey,
      */
     public function attr_set_key() {
         $model = new AttributeGroupModel();
         $model->setAttrSetKey(123);
         $this->assertEquals(123, $model->getAttrSetKey());
     }
-
     /**
      * @test
      * @group functional
-     * @covers AttributeGroupModel::setName, AttributeGroupModel::getName,
+     * @covers \Drobotik\Eav\Model\AttributeGroupModel::setName, \Drobotik\Eav\Model\AttributeGroupModel::getName,
      */
     public function name_accessor() {
         $model = new AttributeGroupModel();

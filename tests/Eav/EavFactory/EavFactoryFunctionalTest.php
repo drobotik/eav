@@ -42,7 +42,7 @@ class EavFactoryFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers EavFactory::createDomain
+     * @covers \Drobotik\Eav\Factory\EavFactory::createDomain
      */
     public function domain_default() {
         $result = $this->eavFactory->createDomain();
@@ -56,7 +56,7 @@ class EavFactoryFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers EavFactory::createDomain
+     * @covers \Drobotik\Eav\Factory\EavFactory::createDomain
      */
     public function domain_input_data() {
         $input = [
@@ -70,7 +70,7 @@ class EavFactoryFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers EavFactory::createEntity
+     * @covers \Drobotik\Eav\Factory\EavFactory::createEntity
      */
     public function entity_default() {
         $result = $this->eavFactory->createEntity();
@@ -92,7 +92,7 @@ class EavFactoryFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers EavFactory::createAttributeSet
+     * @covers \Drobotik\Eav\Factory\EavFactory::createAttributeSet
      */
     public function attribute_set() {
         $result = $this->eavFactory->createAttributeSet();
@@ -105,7 +105,7 @@ class EavFactoryFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers EavFactory::createAttributeSet
+     * @covers \Drobotik\Eav\Factory\EavFactory::createAttributeSet
      */
     public function attribute_set_input() {
         $input = [
@@ -120,7 +120,7 @@ class EavFactoryFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers EavFactory::createGroup
+     * @covers \Drobotik\Eav\Factory\EavFactory::createGroup
      */
     public function attribute_group() {
         $result = $this->eavFactory->createGroup();
@@ -133,7 +133,7 @@ class EavFactoryFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers EavFactory::createGroup
+     * @covers \Drobotik\Eav\Factory\EavFactory::createGroup
      */
     public function attribute_group_input() {
         $input = [
@@ -148,7 +148,7 @@ class EavFactoryFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers EavFactory::createAttribute
+     * @covers \Drobotik\Eav\Factory\EavFactory::createAttribute
      */
     public function attribute() {
         $result = $this->eavFactory->createAttribute();
@@ -166,7 +166,7 @@ class EavFactoryFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers EavFactory::createAttribute
+     * @covers \Drobotik\Eav\Factory\EavFactory::createAttribute
      */
     public function attribute_input() {
         $input = [
@@ -191,7 +191,7 @@ class EavFactoryFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers EavFactory::createPivot
+     * @covers \Drobotik\Eav\Factory\EavFactory::createPivot
      */
     public function pivot() {
         $this->eavFactory->createDomain();
@@ -213,7 +213,7 @@ class EavFactoryFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers EavFactory::createValue
+     * @covers \Drobotik\Eav\Factory\EavFactory::createValue
      */
     public function value_string() {
         $domain = $this->eavFactory->createDomain();
@@ -236,7 +236,7 @@ class EavFactoryFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers EavFactory::createValue
+     * @covers \Drobotik\Eav\Factory\EavFactory::createValue
      */
     public function value_text() {
         $domain = $this->eavFactory->createDomain();
@@ -259,7 +259,7 @@ class EavFactoryFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers EavFactory::createValue
+     * @covers \Drobotik\Eav\Factory\EavFactory::createValue
      */
     public function value_integer() {
         $domain = $this->eavFactory->createDomain();
@@ -282,7 +282,7 @@ class EavFactoryFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers EavFactory::createValue
+     * @covers \Drobotik\Eav\Factory\EavFactory::createValue
      */
     public function value_decimal() {
         $domain = $this->eavFactory->createDomain();
@@ -305,7 +305,7 @@ class EavFactoryFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers EavFactory::createValue
+     * @covers \Drobotik\Eav\Factory\EavFactory::createValue
      */
     public function value_datetime() {
         $domain = $this->eavFactory->createDomain();
@@ -330,7 +330,7 @@ class EavFactoryFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers EavFactory::createEavEntity
+     * @covers \Drobotik\Eav\Factory\EavFactory::createEavEntity
      */
     public function create_eav_entity() {
         $domain = $this->eavFactory->createDomain();

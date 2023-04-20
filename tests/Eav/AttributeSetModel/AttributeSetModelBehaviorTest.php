@@ -19,7 +19,7 @@ class AttributeSetModelBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers AttributeSetModel::findAttributes
+     * @covers \Drobotik\Eav\Model\AttributeSetModel::findAttributes
      */
     public function find_attributes() {
         $collection = new Collection(123);

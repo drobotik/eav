@@ -24,7 +24,7 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Result::getCode, Result::setCode
+     * @covers \Drobotik\Eav\Result\Result::getCode, \Drobotik\Eav\Result\Result::setCode
      */
     public function code()
     {
@@ -35,7 +35,7 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Result::getMessage, Result::setMessage
+     * @covers \Drobotik\Eav\Result\Result::getMessage, \Drobotik\Eav\Result\Result::setMessage
      */
     public function message()
     {
@@ -46,7 +46,7 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Result::getData, Result::setData
+     * @covers \Drobotik\Eav\Result\Result::getData, \Drobotik\Eav\Result\Result::setData
      */
     public function data()
     {
@@ -58,7 +58,7 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Result::created
+     * @covers \Drobotik\Eav\Result\Result::created
      */
     public function created()
     {
@@ -69,7 +69,7 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Result::updated
+     * @covers \Drobotik\Eav\Result\Result::updated
      */
     public function updated()
     {
@@ -80,7 +80,7 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Result::deleted
+     * @covers \Drobotik\Eav\Result\Result::deleted
      */
     public function deleted()
     {
@@ -91,7 +91,7 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Result::notDeleted
+     * @covers \Drobotik\Eav\Result\Result::notDeleted
      */
     public function not_deleted()
     {
@@ -102,7 +102,7 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Result::found
+     * @covers \Drobotik\Eav\Result\Result::found
      */
     public function found()
     {
@@ -113,7 +113,7 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Result::notFound
+     * @covers \Drobotik\Eav\Result\Result::notFound
      */
     public function not_found()
     {
@@ -124,7 +124,7 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Result::notEnoughArgs
+     * @covers \Drobotik\Eav\Result\Result::notEnoughArgs
      */
     public function not_enough_args()
     {
@@ -135,7 +135,7 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Result::notAllowed
+     * @covers \Drobotik\Eav\Result\Result::notAllowed
      */
     public function not_allowed()
     {
@@ -146,7 +146,7 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Result::empty
+     * @covers \Drobotik\Eav\Result\Result::empty
      */
     public function empty()
     {
@@ -157,7 +157,7 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Result::validationFails
+     * @covers \Drobotik\Eav\Result\Result::validationFails
      */
     public function validation_fails()
     {
@@ -168,7 +168,7 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers Result::validationPassed
+     * @covers \Drobotik\Eav\Result\Result::validationPassed
      */
     public function validation_passed()
     {
