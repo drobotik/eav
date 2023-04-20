@@ -23,7 +23,8 @@ class ValueModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\ValueBase::setDomainKey, \Drobotik\Eav\Model\ValueBase::getDomainKey
+     * @covers \Drobotik\Eav\Model\ValueBase::setDomainKey
+     * @covers \Drobotik\Eav\Model\ValueBase::getDomainKey
      */
     public function domainKey() {
         $model = new ValueBase();
@@ -34,7 +35,8 @@ class ValueModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\ValueBase::setEntityKey, \Drobotik\Eav\Model\ValueBase::getEntityKey
+     * @covers \Drobotik\Eav\Model\ValueBase::setEntityKey
+     * @covers \Drobotik\Eav\Model\ValueBase::getEntityKey
      */
     public function valueEntityKey() {
         $model = new ValueBase();
@@ -44,7 +46,8 @@ class ValueModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\ValueBase::setAttrKey, \Drobotik\Eav\Model\ValueBase::getAttrKey
+     * @covers \Drobotik\Eav\Model\ValueBase::setAttrKey
+     * @covers \Drobotik\Eav\Model\ValueBase::getAttrKey
      */
     public function attrKey() {
         $model = new ValueBase();
@@ -54,7 +57,8 @@ class ValueModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\ValueBase::getValue, \Drobotik\Eav\Model\ValueBase::getValue
+     * @covers \Drobotik\Eav\Model\ValueBase::getValue
+     * @covers \Drobotik\Eav\Model\ValueBase::getValue
      */
     public function value() {
         $model = new ValueBase();

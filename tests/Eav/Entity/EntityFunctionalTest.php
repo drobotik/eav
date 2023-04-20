@@ -25,7 +25,9 @@ class EntityFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Entity::hasKey, \Drobotik\Eav\Entity::getKey, \Drobotik\Eav\Entity::setKey
+     * @covers \Drobotik\Eav\Entity::hasKey
+     * @covers \Drobotik\Eav\Entity::getKey
+     * @covers \Drobotik\Eav\Entity::setKey
      */
     public function key() {
         $this->assertFalse($this->entity->hasKey());
@@ -36,7 +38,9 @@ class EntityFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Entity::hasKey, \Drobotik\Eav\Entity::getKey, \Drobotik\Eav\Entity::setKey
+     * @covers \Drobotik\Eav\Entity::hasKey
+     * @covers \Drobotik\Eav\Entity::getKey
+     * @covers \Drobotik\Eav\Entity::setKey
      */
     public function key_zero() {
         $this->entity->setKey(0);
@@ -46,7 +50,9 @@ class EntityFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Entity::hasDomainKey, \Drobotik\Eav\Entity::getDomainKey, \Drobotik\Eav\Entity::setDomainKey
+     * @covers \Drobotik\Eav\Entity::hasDomainKey
+     * @covers \Drobotik\Eav\Entity::getDomainKey
+     * @covers \Drobotik\Eav\Entity::setDomainKey
      */
     public function domain_key() {
         $this->entity->setDomainKey(0);
@@ -56,7 +62,9 @@ class EntityFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Entity::hasDomainKey, \Drobotik\Eav\Entity::getDomainKey, \Drobotik\Eav\Entity::setDomainKey
+     * @covers \Drobotik\Eav\Entity::hasDomainKey
+     * @covers \Drobotik\Eav\Entity::getDomainKey
+     * @covers \Drobotik\Eav\Entity::setDomainKey
      */
     public function domain_key_zero() {
         $this->entity->setDomainKey(0);
@@ -66,7 +74,8 @@ class EntityFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Entity::setAttributeSet, \Drobotik\Eav\Entity::getAttributeSet
+     * @covers \Drobotik\Eav\Entity::setAttributeSet
+     * @covers \Drobotik\Eav\Entity::getAttributeSet
      */
     public function attribute_set() {
         $this->assertInstanceOf(AttributeSet::class, $this->entity->getAttributeSet());

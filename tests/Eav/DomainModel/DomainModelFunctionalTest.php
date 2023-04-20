@@ -17,7 +17,8 @@ class DomainModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\DomainModel::setName, \Drobotik\Eav\Model\DomainModel::getName,
+     * @covers \Drobotik\Eav\Model\DomainModel::setName
+     * @covers \Drobotik\Eav\Model\DomainModel::getName
      */
     public function name_accessor() {
         $model = new DomainModel();

@@ -24,7 +24,9 @@ class ValueManagerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueManager::hasKey, \Drobotik\Eav\Value\ValueManager::getKey, \Drobotik\Eav\Value\ValueManager::setKey
+     * @covers \Drobotik\Eav\Value\ValueManager::hasKey
+     * @covers \Drobotik\Eav\Value\ValueManager::getKey
+     * @covers \Drobotik\Eav\Value\ValueManager::setKey
      */
     public function key() {
         $this->assertFalse($this->value->hasKey());
@@ -35,7 +37,9 @@ class ValueManagerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueManager::hasKey, \Drobotik\Eav\Value\ValueManager::getKey, \Drobotik\Eav\Value\ValueManager::setKey
+     * @covers \Drobotik\Eav\Value\ValueManager::hasKey
+     * @covers \Drobotik\Eav\Value\ValueManager::getKey
+     * @covers \Drobotik\Eav\Value\ValueManager::setKey
      */
     public function zero_key() {
         $this->value->setKey(0);

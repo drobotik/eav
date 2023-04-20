@@ -27,7 +27,9 @@ class AttributeBagFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\AttributeBag::setField, \Drobotik\Eav\AttributeBag::getField, \Drobotik\Eav\AttributeBag::resetField
+     * @covers \Drobotik\Eav\AttributeBag::setField
+     * @covers \Drobotik\Eav\AttributeBag::getField
+     * @covers \Drobotik\Eav\AttributeBag::resetField
      */
     public function field() {
         $this->bag->setField(_ATTR::STRATEGY, 'test');
@@ -48,7 +50,8 @@ class AttributeBagFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\AttributeBag::setFields, \Drobotik\Eav\AttributeBag::getFields
+     * @covers \Drobotik\Eav\AttributeBag::setFields
+     * @covers \Drobotik\Eav\AttributeBag::getFields
      */
     public function set_fields() {
         $input = [

@@ -24,7 +24,8 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\Result::getCode, \Drobotik\Eav\Result\Result::setCode
+     * @covers \Drobotik\Eav\Result\Result::getCode
+     * @covers \Drobotik\Eav\Result\Result::setCode
      */
     public function code()
     {
@@ -35,7 +36,8 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\Result::getMessage, \Drobotik\Eav\Result\Result::setMessage
+     * @covers \Drobotik\Eav\Result\Result::getMessage
+     * @covers \Drobotik\Eav\Result\Result::setMessage
      */
     public function message()
     {
@@ -46,7 +48,8 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\Result::getData, \Drobotik\Eav\Result\Result::setData
+     * @covers \Drobotik\Eav\Result\Result::getData
+     * @covers \Drobotik\Eav\Result\Result::setData
      */
     public function data()
     {

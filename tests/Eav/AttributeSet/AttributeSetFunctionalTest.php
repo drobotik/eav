@@ -24,7 +24,9 @@ class AttributeSetFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\AttributeSet::setKey, \Drobotik\Eav\AttributeSet::getKey, \Drobotik\Eav\AttributeSet::hasKey
+     * @covers \Drobotik\Eav\AttributeSet::setKey
+     * @covers \Drobotik\Eav\AttributeSet::getKey
+     * @covers \Drobotik\Eav\AttributeSet::hasKey
      */
     public function key() {
         $this->assertFalse($this->instance->hasKey());
@@ -35,7 +37,9 @@ class AttributeSetFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\AttributeSet::setKey, \Drobotik\Eav\AttributeSet::getKey, \Drobotik\Eav\AttributeSet::hasKey
+     * @covers \Drobotik\Eav\AttributeSet::setKey
+     * @covers \Drobotik\Eav\AttributeSet::getKey
+     * @covers \Drobotik\Eav\AttributeSet::hasKey
      */
     public function key_zero() {
         $this->instance->setKey(0);
@@ -45,7 +49,8 @@ class AttributeSetFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\AttributeSet::setName, \Drobotik\Eav\AttributeSet::getName
+     * @covers \Drobotik\Eav\AttributeSet::setName
+     * @covers \Drobotik\Eav\AttributeSet::getName
      */
     public function name_accessor() {
         $this->instance->setName('test');

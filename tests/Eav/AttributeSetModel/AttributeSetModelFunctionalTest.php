@@ -20,7 +20,8 @@ class AttributeSetModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\AttributeSetModel::getName, \Drobotik\Eav\Model\AttributeSetModel::setName
+     * @covers \Drobotik\Eav\Model\AttributeSetModel::getName
+     * @covers \Drobotik\Eav\Model\AttributeSetModel::setName
      */
     public function name_accessor() {
         $model = new AttributeSetModel();
@@ -30,7 +31,8 @@ class AttributeSetModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\AttributeSetModel::getDomainKey, \Drobotik\Eav\Model\AttributeSetModel::setDomainKey
+     * @covers \Drobotik\Eav\Model\AttributeSetModel::getDomainKey
+     * @covers \Drobotik\Eav\Model\AttributeSetModel::setDomainKey
      */
     public function domainKey() {
         $model = new AttributeSetModel();

@@ -17,7 +17,8 @@ class AttributeGroupModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\AttributeGroupModel::setAttrSetKey, \Drobotik\Eav\Model\AttributeGroupModel::getAttrSetKey,
+     * @covers \Drobotik\Eav\Model\AttributeGroupModel::setAttrSetKey
+     * @covers \Drobotik\Eav\Model\AttributeGroupModel::getAttrSetKey
      */
     public function attr_set_key() {
         $model = new AttributeGroupModel();
@@ -27,7 +28,8 @@ class AttributeGroupModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\AttributeGroupModel::setName, \Drobotik\Eav\Model\AttributeGroupModel::getName,
+     * @covers \Drobotik\Eav\Model\AttributeGroupModel::setName
+     * @covers \Drobotik\Eav\Model\AttributeGroupModel::getName
      */
     public function name_accessor() {
         $model = new AttributeGroupModel();

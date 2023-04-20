@@ -26,7 +26,8 @@ class EavFactoryResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\EntityFactoryResult::getEntityModel, \Drobotik\Eav\Result\EntityFactoryResult::setEntityModel
+     * @covers \Drobotik\Eav\Result\EntityFactoryResult::getEntityModel
+     * @covers \Drobotik\Eav\Result\EntityFactoryResult::setEntityModel
      */
     public function entity_model() {
         $record = new EntityModel();
@@ -36,7 +37,8 @@ class EavFactoryResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\EntityFactoryResult::addAttribute, \Drobotik\Eav\Result\EntityFactoryResult::getAttributes
+     * @covers \Drobotik\Eav\Result\EntityFactoryResult::addAttribute
+     * @covers \Drobotik\Eav\Result\EntityFactoryResult::getAttributes
      */
     public function attributes() {
         $this->assertEquals([], $this->result->getAttributes());
@@ -47,7 +49,8 @@ class EavFactoryResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\EntityFactoryResult::addValue, \Drobotik\Eav\Result\EntityFactoryResult::getValues
+     * @covers \Drobotik\Eav\Result\EntityFactoryResult::addValue
+     * @covers \Drobotik\Eav\Result\EntityFactoryResult::getValues
      */
     public function values() {
         $this->assertEquals([], $this->result->getValues());
@@ -58,7 +61,8 @@ class EavFactoryResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\EntityFactoryResult::addPivot, \Drobotik\Eav\Result\EntityFactoryResult::getPivots
+     * @covers \Drobotik\Eav\Result\EntityFactoryResult::addPivot
+     * @covers \Drobotik\Eav\Result\EntityFactoryResult::getPivots
      */
     public function pivots() {
         $this->assertEquals([], $this->result->getPivots());

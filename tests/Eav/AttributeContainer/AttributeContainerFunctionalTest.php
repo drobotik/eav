@@ -30,7 +30,8 @@ class AttributeContainerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\AttributeContainer::setAttributeSet, \Drobotik\Eav\AttributeContainer::getAttributeSet
+     * @covers \Drobotik\Eav\AttributeContainer::setAttributeSet
+     * @covers \Drobotik\Eav\AttributeContainer::getAttributeSet
      */
     public function attribute_set() {
         $attributeSet = new AttributeSet();
@@ -62,7 +63,8 @@ class AttributeContainerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\AttributeContainer::setAttributeSetAction, \Drobotik\Eav\AttributeContainer::getAttributeSetAction
+     * @covers \Drobotik\Eav\AttributeContainer::setAttributeSetAction
+     * @covers \Drobotik\Eav\AttributeContainer::getAttributeSetAction
      */
     public function attribute_set_action() {
         $attrSetAction = new AttributeSetAction();
@@ -89,12 +91,13 @@ class AttributeContainerFunctionalTest extends TestCase
     public function makeAttributeSetActionAlias() {
         $result = $this->container->makeAttributeSetAction();
         $this->assertSame($result, $this->container);
-        $this->assertInstanceOf(AttributeSet::class, $this->container->getAttributeSetAction());
+        $this->assertInstanceOf(AttributeSetAction::class, $this->container->getAttributeSetAction());
     }
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\AttributeContainer::setAttribute, \Drobotik\Eav\AttributeContainer::getAttribute
+     * @covers \Drobotik\Eav\AttributeContainer::setAttribute
+     * @covers \Drobotik\Eav\AttributeContainer::getAttribute
      */
     public function attribute() {
         $attribute = new Attribute();
@@ -126,7 +129,8 @@ class AttributeContainerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\AttributeContainer::setStrategy, \Drobotik\Eav\AttributeContainer::getStrategy
+     * @covers \Drobotik\Eav\AttributeContainer::setStrategy
+     * @covers \Drobotik\Eav\AttributeContainer::getStrategy
      */
     public function strategy() {
         $strategy = new Strategy();
@@ -158,7 +162,8 @@ class AttributeContainerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\AttributeContainer::setValueManager, \Drobotik\Eav\AttributeContainer::getValueManager
+     * @covers \Drobotik\Eav\AttributeContainer::setValueManager
+     * @covers \Drobotik\Eav\AttributeContainer::getValueManager
      */
     public function value_manager() {
         $valueManager = new ValueManager();
@@ -190,7 +195,8 @@ class AttributeContainerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\AttributeContainer::setValueValidator, \Drobotik\Eav\AttributeContainer::getValueValidator
+     * @covers \Drobotik\Eav\AttributeContainer::setValueValidator
+     * @covers \Drobotik\Eav\AttributeContainer::getValueValidator
      */
     public function value_validator() {
         $valueValidator = new ValueValidator();

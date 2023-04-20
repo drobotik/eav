@@ -71,7 +71,7 @@ class AttributeSetActionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers AttributeSetAction::initialize
+     * @covers \Drobotik\Eav\AttributeSetAction::initialize
      */
     public function initialize() {
         $domainModel = $this->eavFactory->createDomain();
