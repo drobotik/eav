@@ -1,6 +1,7 @@
 <?php
 /**
  * This file is part of the eav package.
+ *
  * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
  * @copyright 2023 Aleksandr Drobotik
  * @license   https://opensource.org/license/mit  The MIT License
@@ -17,26 +18,28 @@ class AttributeSetAction
 {
     use ContainerTrait;
 
-    public function initializeAttribute(AttributeModel $record) : Attribute
+    public function initializeAttribute(AttributeModel $record): Attribute
     {
         $container = $this->getAttributeContainer();
         $attribute = new Attribute();
         $data = $record->makeHidden('pivot')->toArray();
         $attribute->getBag()->setFields($data);
         $container->setAttribute($attribute);
+
         return $attribute;
     }
 
-    public function initializeStrategy(Attribute $attribute) : Strategy
+    public function initializeStrategy(Attribute $attribute): Strategy
     {
         $container = $this->getAttributeContainer();
         $className = $attribute->getStrategy();
-        $strategy = new $className;
+        $strategy = new $className();
         $container->setStrategy($strategy);
+
         return $strategy;
     }
 
-    public function initializeValueManager() : ValueManager
+    public function initializeValueManager(): ValueManager
     {
         $container = $this->getAttributeContainer();
         $container->makeValueManager();
@@ -46,19 +49,21 @@ class AttributeSetAction
         $entity = $container->getAttributeSet()->getEntity();
         $bag = $entity->getBag();
         $name = $attribute->getName();
-        if($bag->hasField($name)) {
+        if ($bag->hasField($name)) {
             $valueManager->setRuntime($bag->getField($name));
         }
         $strategy = $container->getStrategy();
         $strategy->find();
+
         return $valueManager;
     }
 
-    public function initialize(AttributeModel $attributeModel) : self
+    public function initialize(AttributeModel $attributeModel): self
     {
         $attribute = $this->initializeAttribute($attributeModel);
         $this->initializeStrategy($attribute);
         $this->initializeValueManager();
+
         return $this;
     }
 }

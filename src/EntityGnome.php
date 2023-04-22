@@ -1,6 +1,7 @@
 <?php
 /**
  * This file is part of the eav package.
+ *
  * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
  * @copyright 2023 Aleksandr Drobotik
  * @license   https://opensource.org/license/mit  The MIT License
@@ -28,35 +29,9 @@ class EntityGnome
         $this->entity = $entity;
     }
 
-    public function getEntity() : Entity {
+    public function getEntity(): Entity
+    {
         return $this->entity;
-    }
-
-    private function checkEntityExists(int $key) : EntityModel
-    {
-        try {
-            return $this->makeEntityModel()->findOrFail($key);
-        } catch(Throwable $e) {
-            EntityException::entityNotFound();
-        }
-    }
-
-    private function checkDomainExists(int $key) : DomainModel
-    {
-        try {
-            return $this->makeDomainModel()->findOrFail($key);
-        } catch(Throwable $e) {
-            EntityException::domainNotFound();
-        }
-    }
-
-    private function checkAttrSetExist(int $key) : AttributeSetModel
-    {
-        try {
-            return $this->makeAttributeSetModel()->findOrFail($key);
-        } catch(Throwable $e) {
-            EntityException::attrSetNotFound();
-        }
     }
 
     public function beforeSave(): int
@@ -64,10 +39,10 @@ class EntityGnome
         $entity = $this->getEntity();
         $set = $entity->getAttributeSet();
         if (!$entity->hasKey()) {
-            if(!$entity->hasDomainKey()) {
+            if (!$entity->hasDomainKey()) {
                 EntityException::undefinedDomainKey();
             }
-            if(!$set->hasKey()) {
+            if (!$set->hasKey()) {
                 EntityException::undefinedAttributeSetKey();
             }
             $domainKey = $entity->getDomainKey();
@@ -79,25 +54,26 @@ class EntityGnome
             $model->setAttrSetKey($setKey);
             $model->save();
             $entity->setKey($model->getKey());
+
             return 1;
-        } else {
-            $key = $entity->getKey();
-            $record = $this->checkEntityExists($key);
-            $this->checkDomainExists($record->getDomainKey());
-            $this->checkAttrSetExist($record->getAttrSetKey());
-            $set->setKey($record->getAttrSetKey());
-            $entity->setDomainKey($record->getDomainKey());
-            return 2;
         }
+        $key = $entity->getKey();
+        $record = $this->checkEntityExists($key);
+        $this->checkDomainExists($record->getDomainKey());
+        $this->checkAttrSetExist($record->getAttrSetKey());
+        $set->setKey($record->getAttrSetKey());
+        $entity->setDomainKey($record->getDomainKey());
+
+        return 2;
     }
 
-    public function find() : Result
+    public function find(): Result
     {
         $result = new Result();
 
         $entity = $this->getEntity();
 
-        if(!$entity->hasKey()) {
+        if (!$entity->hasKey()) {
             return $result->empty();
         }
         $key = $entity->getKey();
@@ -105,7 +81,7 @@ class EntityGnome
         $model = $this->makeEntityModel();
         $record = $model->find($key);
 
-        if(is_null($record)) {
+        if (is_null($record)) {
             return $result->notFound();
         }
 
@@ -115,10 +91,11 @@ class EntityGnome
         $set->fetchContainers();
 
         $result->found();
+
         return $result;
     }
 
-    public function save() : Result
+    public function save(): Result
     {
         $entity = $this->getEntity();
         $result = new Result();
@@ -126,27 +103,29 @@ class EntityGnome
         $set = $entity->getAttributeSet();
         $set->fetchContainers();
         $valueResults = [];
-        foreach($set->getContainers() as $container) {
+        foreach ($set->getContainers() as $container) {
             $attribute = $container->getAttribute();
             $valueResults[$attribute->getName()] = $container->getStrategy()->save();
         }
-        $operationType == 1
+        1 == $operationType
             ? $result->created()
             : $result->updated();
         $result->setData($valueResults);
         $bag = $entity->getBag();
         $bag->clear();
+
         return $result;
     }
 
-    public function delete() {
+    public function delete()
+    {
         $entity = $this->getEntity();
         $set = $entity->getAttributeSet();
 
-        if(!$entity->hasKey()) {
+        if (!$entity->hasKey()) {
             EntityException::undefinedEntityKey();
         }
-        if(!$set->hasKey()) {
+        if (!$set->hasKey()) {
             EntityException::undefinedAttributeSetKey();
         }
 
@@ -158,7 +137,7 @@ class EntityGnome
             $deleteResults[$attribute->getName()] = $container->getStrategy()->delete();
         }
         $recordResult = $this->makeEntityModel()->findAndDelete($entity->getKey());
-        if(!$recordResult) {
+        if (!$recordResult) {
             return $result->notDeleted();
         }
 
@@ -169,10 +148,11 @@ class EntityGnome
 
         $result->deleted();
         $result->setData($deleteResults);
+
         return $result;
     }
 
-    public function validate() : Result
+    public function validate(): Result
     {
         $result = new Result();
         $result->validationPassed();
@@ -182,23 +162,53 @@ class EntityGnome
         $errors = [];
         foreach ($set->getContainers() as $container) {
             $validationResult = $container->getValueValidator()->validateField();
-            if(!is_null($validationResult))
+            if (!is_null($validationResult)) {
                 $errors[$container->getAttribute()->getName()] = $validationResult;
+            }
         }
-        if(count($errors) > 0) {
+        if (count($errors) > 0) {
             $result->validationFails();
             $result->setData($errors);
         }
+
         return $result;
     }
 
-    public function toArray() : array
+    public function toArray(): array
     {
         $result = [];
         $entity = $this->getEntity();
         foreach ($entity->getAttributeSet()->getContainers() as $container) {
             $result[$container->getAttribute()->getName()] = $container->getValueManager()->getValue();
         }
+
         return $result;
+    }
+
+    private function checkEntityExists(int $key): EntityModel
+    {
+        try {
+            return $this->makeEntityModel()->findOrFail($key);
+        } catch (Throwable) {
+            EntityException::entityNotFound();
+        }
+    }
+
+    private function checkDomainExists(int $key): DomainModel
+    {
+        try {
+            return $this->makeDomainModel()->findOrFail($key);
+        } catch (Throwable) {
+            EntityException::domainNotFound();
+        }
+    }
+
+    private function checkAttrSetExist(int $key): AttributeSetModel
+    {
+        try {
+            return $this->makeAttributeSetModel()->findOrFail($key);
+        } catch (Throwable) {
+            EntityException::attrSetNotFound();
+        }
     }
 }

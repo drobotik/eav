@@ -1,6 +1,7 @@
 <?php
 /**
  * This file is part of the eav package.
+ *
  * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
  * @copyright 2023 Aleksandr Drobotik
  * @license   https://opensource.org/license/mit  The MIT License
@@ -25,23 +26,24 @@ class ValueManager
         $this->stored = new ValueState();
     }
 
-    public function hasKey() : bool
+    public function hasKey(): bool
     {
         return isset($this->key) && $this->key > 0;
     }
 
-    public function getKey() : int
+    public function getKey(): int
     {
         return $this->key;
     }
 
-    public function setKey(int $key) : self
+    public function setKey(int $key): self
     {
         $this->key = $key;
+
         return $this;
     }
 
-    public function isClean() : bool
+    public function isClean(): bool
     {
         return $this->IsEquivalent();
     }
@@ -52,32 +54,36 @@ class ValueManager
         $runtime = $this->getRuntime();
         if ($orig === $runtime) {
             return true;
-        } elseif (!$this->isRuntime()) {
+        }
+        if (!$this->isRuntime()) {
             return true;
         }
-        return is_numeric($orig) && is_numeric($runtime )
-            && strcmp((string) $orig, (string) $runtime) === 0;
+
+        return is_numeric($orig) && is_numeric($runtime)
+            && 0 === strcmp((string) $orig, (string) $runtime);
     }
 
-    public function isStored() : bool
+    public function isStored(): bool
     {
         return $this->stored->isChanged();
     }
 
-    public function getStored() : mixed
+    public function getStored(): mixed
     {
         return $this->stored->get();
     }
 
-    public function setStored(mixed $value) : self
+    public function setStored(mixed $value): self
     {
         $this->stored->set($value);
+
         return $this;
     }
 
-    public function clearStored() : self
+    public function clearStored(): self
     {
         $this->stored->clear();
+
         return $this;
     }
 
@@ -86,38 +92,45 @@ class ValueManager
         return $this->runtime->isChanged();
     }
 
-    public function getRuntime() : mixed
+    public function getRuntime(): mixed
     {
         return $this->runtime->get();
     }
 
-    public function setRuntime(mixed $value) : self
+    public function setRuntime(mixed $value): self
     {
         $this->runtime->set($value);
+
         return $this;
     }
 
-    public function clearRuntime() : self
+    public function clearRuntime(): self
     {
         $this->runtime->clear();
+
         return $this;
     }
 
-    public function getValue() {
-        if($this->isRuntime())
+    public function getValue()
+    {
+        if ($this->isRuntime()) {
             return $this->getRuntime();
+        }
+
         return $this->getStored();
     }
 
-    public function setValue(mixed $value) : self
+    public function setValue(mixed $value): self
     {
         $this->setRuntime($value);
+
         return $this;
     }
 
-    public function clearValue() : self
+    public function clearValue(): self
     {
         $this->clearRuntime();
+
         return $this;
     }
 }

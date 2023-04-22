@@ -1,6 +1,7 @@
 <?php
 /**
  * This file is part of the eav package.
+ *
  * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
  * @copyright 2023 Aleksandr Drobotik
  * @license   https://opensource.org/license/mit  The MIT License
@@ -20,9 +21,10 @@ class AttributeBag
         $this->data = _ATTR::bag();
     }
 
-    public function setField(_ATTR $field, $value) : self
+    public function setField(_ATTR $field, $value): self
     {
         $this->data[$field->column()] = $value;
+
         return $this;
     }
 
@@ -31,20 +33,22 @@ class AttributeBag
         return $this->data[$field->column()];
     }
 
-    public function resetField(_ATTR $field) : self
+    public function resetField(_ATTR $field): self
     {
         $this->data[$field->column()] = $field->default();
+
         return $this;
     }
 
-    public function getFields() : array
+    public function getFields(): array
     {
         return $this->data;
     }
 
-    public function setFields(array $fields) : self
+    public function setFields(array $fields): self
     {
         $this->data = $fields;
+
         return $this;
     }
 }

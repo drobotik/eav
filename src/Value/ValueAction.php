@@ -1,6 +1,7 @@
 <?php
 /**
  * This file is part of the eav package.
+ *
  * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
  * @copyright 2023 Aleksandr Drobotik
  * @license   https://opensource.org/license/mit  The MIT License
@@ -17,7 +18,7 @@ class ValueAction
 {
     use ContainerTrait;
 
-    public function create() : Result
+    public function create(): Result
     {
         $result = new Result();
 
@@ -27,7 +28,7 @@ class ValueAction
         $valueManager = $container->getValueManager();
         $model = $attribute->getValueModel();
 
-        if(!$valueManager->isRuntime()) {
+        if (!$valueManager->isRuntime()) {
             return $result->empty();
         }
 
@@ -35,12 +36,14 @@ class ValueAction
             ->setEntityKey($entity->getKey())
             ->setAttrKey($attribute->getKey())
             ->setValue($valueManager->getRuntime())
-            ->save();
+            ->save()
+        ;
 
         $model->refresh();
         $valueManager->setStored($model->getValue())
             ->setKey($model->getKey())
-            ->clearRuntime();
+            ->clearRuntime()
+        ;
 
         return $result->created();
     }
@@ -56,7 +59,7 @@ class ValueAction
         $valueManager = $container->getValueManager();
         $model = $attribute->getValueModel();
 
-        if(is_null($attributeKey) || !$entity->hasKey()) {
+        if (is_null($attributeKey) || !$entity->hasKey()) {
             return $result->empty();
         }
 
@@ -65,20 +68,22 @@ class ValueAction
         $record = $model
             ->where(_VALUE::ENTITY_ID->column(), $entityKey)
             ->where(_VALUE::ATTRIBUTE_ID->column(), $attributeKey)
-            ->first();
+            ->first()
+        ;
 
-        if(is_null($record)) {
+        if (is_null($record)) {
             return $result->notFound();
         }
 
         $valueManager
             ->setKey($record->getKey())
-            ->setStored($record->getValue());
+            ->setStored($record->getValue())
+        ;
 
         return $result->found();
     }
 
-    public function update() : Result
+    public function update(): Result
     {
         $result = new Result();
         $container = $this->getAttributeContainer();
@@ -86,20 +91,21 @@ class ValueAction
         $valueManager = $container->getValueManager();
         $model = $attribute->getValueModel();
 
-        if(!$valueManager->isRuntime()) {
+        if (!$valueManager->isRuntime()) {
             return $result->empty();
         }
 
         $record = $model->findOrFail($valueManager->getKey());
         $record->setValue($valueManager->getRuntime())
-            ->save();
+            ->save()
+        ;
         $record->refresh();
         $valueManager->setStored($record->getValue())
-            ->clearRuntime();
+            ->clearRuntime()
+        ;
 
         return $result->updated();
     }
-
 
     public function delete(): Result
     {
@@ -109,20 +115,21 @@ class ValueAction
         $valueManager = $container->getValueManager();
         $model = $attribute->getValueModel();
 
-        if(!$valueManager->hasKey()) {
+        if (!$valueManager->hasKey()) {
             return $result->empty();
         }
 
         $record = $model->findOrFail($valueManager->getKey());
 
         $deleted = $record->delete();
-        if(!$deleted) {
+        if (!$deleted) {
             return $result->notDeleted();
         }
 
         $valueManager->clearStored()
             ->clearRuntime()
-            ->setKey(0);
+            ->setKey(0)
+        ;
 
         return $result->deleted();
     }

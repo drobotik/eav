@@ -1,6 +1,7 @@
 <?php
 /**
  * This file is part of the eav package.
+ *
  * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
  * @copyright 2023 Aleksandr Drobotik
  * @license   https://opensource.org/license/mit  The MIT License
@@ -19,11 +20,13 @@ use Drobotik\Eav\Trait\ContainerTrait;
 class Attribute
 {
     use ContainerTrait;
-    private AttributeBag $bag;
-    private AttributeSet $attributeSet;
+
+    private AttributeBag      $bag;
+    private AttributeSet      $attributeSet;
     private StrategyInterface $strategy;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->setBag(new AttributeBag());
     }
 
@@ -35,104 +38,115 @@ class Attribute
     public function setBag(AttributeBag $bag): self
     {
         $this->bag = $bag;
+
         return $this;
     }
 
-    public function getKey() : ?int
+    public function getKey(): ?int
     {
         return $this->getBag()->getField(_ATTR::ID);
     }
 
-    public function setKey(?int $key) : self
+    public function setKey(?int $key): self
     {
         $this->getBag()->setField(_ATTR::ID, $key);
+
         return $this;
     }
 
-    public function getDomainKey() : ?int
+    public function getDomainKey(): ?int
     {
         return $this->getBag()->getField(_ATTR::DOMAIN_ID);
     }
 
-    public function setDomainKey(?int $key) : self
+    public function setDomainKey(?int $key): self
     {
         $this->getBag()->setField(_ATTR::DOMAIN_ID, $key);
+
         return $this;
     }
 
-    public function getName() : ?string
+    public function getName(): ?string
     {
         return $this->getBag()->getField(_ATTR::NAME);
     }
 
-    public function setName(?string $name) : self
+    public function setName(?string $name): self
     {
         $this->getBag()->setField(_ATTR::NAME, $name);
+
         return $this;
     }
 
     /**
      * @throws AttributeException
      */
-    public function getType() : ATTR_TYPE
+    public function getType(): ATTR_TYPE
     {
-        $type =  $this->getBag()->getField(_ATTR::TYPE);
+        $type = $this->getBag()->getField(_ATTR::TYPE);
         if (!ATTR_TYPE::isValid($type)) {
             AttributeException::unexpectedType($type);
         }
+
         return ATTR_TYPE::getCase($type);
     }
 
-    public function setType(string $type) : self
+    public function setType(string $type): self
     {
         $this->getBag()->setField(_ATTR::TYPE, $type);
+
         return $this;
     }
 
-    public function getStrategy() : string
+    public function getStrategy(): string
     {
-        return  $this->getBag()->getField(_ATTR::STRATEGY);
+        return $this->getBag()->getField(_ATTR::STRATEGY);
     }
 
-    public function setStrategy(string $strategy) : self
+    public function setStrategy(string $strategy): self
     {
         $this->getBag()->setField(_ATTR::STRATEGY, $strategy);
+
         return $this;
     }
 
-    public function getSource() : ?string
+    public function getSource(): ?string
     {
         return $this->getBag()->getField(_ATTR::SOURCE);
     }
 
-    public function setSource(?string $source) : self
+    public function setSource(?string $source): self
     {
         $this->getBag()->setField(_ATTR::SOURCE, $source);
+
         return $this;
     }
 
-    public function getDefaultValue() : ?string
+    public function getDefaultValue(): ?string
     {
         return $this->getBag()->getField(_ATTR::DEFAULT_VALUE);
     }
-    public function setDefaultValue($value) : self
+
+    public function setDefaultValue($value): self
     {
         $this->getBag()->setField(_ATTR::DEFAULT_VALUE, $value);
+
         return $this;
     }
 
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return $this->getBag()->getField(_ATTR::DESCRIPTION);
     }
 
-    public function setDescription($value) : self
+    public function setDescription($value): self
     {
         $this->getBag()->setField(_ATTR::DESCRIPTION, $value);
+
         return $this;
     }
 
-    public function getValueModel() : ValueBase
+    public function getValueModel(): ValueBase
     {
         return $this->getType()->model();
     }

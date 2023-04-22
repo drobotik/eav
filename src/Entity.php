@@ -1,6 +1,7 @@
 <?php
 /**
  * This file is part of the eav package.
+ *
  * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
  * @copyright 2023 Aleksandr Drobotik
  * @license   https://opensource.org/license/mit  The MIT License
@@ -35,17 +36,19 @@ class Entity
     public function setKey(int $key): self
     {
         $this->key = $key;
+
         return $this;
     }
 
     public function hasKey(): bool
     {
-        return isset($this->key) && $this->key !== 0;
+        return isset($this->key) && 0 !== $this->key;
     }
 
     public function setDomainKey(int $key): self
     {
         $this->domainKey = $key;
+
         return $this;
     }
 
@@ -56,10 +59,10 @@ class Entity
 
     public function hasDomainKey(): bool
     {
-        return isset($this->domainKey) && $this->domainKey !== 0;
+        return isset($this->domainKey) && 0 !== $this->domainKey;
     }
 
-    public function getGnome() : EntityGnome
+    public function getGnome(): EntityGnome
     {
         return $this->manager;
     }
@@ -73,15 +76,16 @@ class Entity
     {
         $attributeSet->setEntity($this);
         $this->attributeSet = $attributeSet;
+
         return $this;
     }
 
-    public function getBag() : EntityBag
+    public function getBag(): EntityBag
     {
         return $this->bag;
     }
 
-    public function find() : Result
+    public function find(): Result
     {
         return $this->getGnome()->find();
     }
@@ -91,19 +95,18 @@ class Entity
         return $this->getGnome()->save();
     }
 
-    public function delete() : Result
+    public function delete(): Result
     {
         return $this->getGnome()->delete();
     }
 
-    public function validate() : Result
+    public function validate(): Result
     {
         return $this->getGnome()->validate();
     }
 
-    public function toArray() : array
+    public function toArray(): array
     {
         return $this->getGnome()->toArray();
     }
-
 }

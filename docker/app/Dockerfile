@@ -17,8 +17,10 @@ RUN wget https://phar.phpunit.de/phpunit-9.phar && \
     chmod +x phpunit-9.phar && \
     mv phpunit-9.phar /usr/bin/phpunit
 
+RUN wget https://cs.symfony.com/download/php-cs-fixer-v3.phar -O php-cs-fixer && \
+    chmod a+x php-cs-fixer && \
+    mv php-cs-fixer /usr/local/bin/php-cs-fixer
+
 COPY . /var/www/
 
 WORKDIR /var/www
-
-CMD ["tail -f /dev/null"]

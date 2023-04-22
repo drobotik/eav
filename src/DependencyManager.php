@@ -1,6 +1,7 @@
 <?php
 /**
  * This file is part of the eav package.
+ *
  * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
  * @copyright 2023 Aleksandr Drobotik
  * @license   https://opensource.org/license/mit  The MIT License
@@ -18,11 +19,12 @@ class DependencyManager
 
     public static function getContainer()
     {
-        if (self::$instance === null) {
+        if (null === self::$instance) {
             self::$instance = is_null(self::$instance)
                 ? self::getDefaultContainer()
                 : self::$instance;
         }
+
         return self::$instance;
     }
 
@@ -38,11 +40,12 @@ class DependencyManager
         $ns = 'lang';
         $group = 'validation';
         $locale = 'en';
-        $path = dirname(__DIR__) . '/vendor/illuminate/translation/lang';
+        $path = dirname(__DIR__).'/vendor/illuminate/translation/lang';
         $loader = new FileLoader($filesystem, $path);
         $loader->addNamespace($ns, $path);
         $loader->load($locale, $group, $ns);
         $dependency->setValidator($loader, $locale);
+
         return $dependency;
     }
 }
