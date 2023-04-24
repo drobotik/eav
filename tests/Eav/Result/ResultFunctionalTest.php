@@ -179,4 +179,51 @@ class ResultFunctionalTest extends TestCase
         $this->assertEquals(_RESULT::VALIDATION_PASSED->code(), $this->result->getCode());
         $this->assertEquals(_RESULT::VALIDATION_PASSED->message(), $this->result->getMessage());
     }
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\Result\Result::exportSuccess
+     */
+    public function export_success()
+    {
+        $this->result->exportSuccess();
+        $this->assertEquals(_RESULT::EXPORT_SUCCESS->code(), $this->result->getCode());
+        $this->assertEquals(_RESULT::EXPORT_SUCCESS->message(), $this->result->getMessage());
+    }
+
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\Result\Result::exportFailed
+     */
+    public function export_failed()
+    {
+        $this->result->exportFailed();
+        $this->assertEquals(_RESULT::EXPORT_FAILED->code(), $this->result->getCode());
+        $this->assertEquals(_RESULT::EXPORT_FAILED->message(), $this->result->getMessage());
+    }
+
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\Result\Result::importSuccess
+     */
+    public function import_success()
+    {
+        $this->result->importSuccess();
+        $this->assertEquals(_RESULT::IMPORT_SUCCESS->code(), $this->result->getCode());
+        $this->assertEquals(_RESULT::IMPORT_SUCCESS->message(), $this->result->getMessage());
+    }
+
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\Result\Result::importFailed
+     */
+    public function import_failed()
+    {
+        $this->result->importFailed();
+        $this->assertEquals(_RESULT::IMPORT_FAILED->code(), $this->result->getCode());
+        $this->assertEquals(_RESULT::IMPORT_FAILED->message(), $this->result->getMessage());
+    }
 }
