@@ -13,5 +13,5 @@ use Drobotik\Eav\Result\Result;
 
 interface ImportDriverInterface
 {
-    public function run(): Result;
+    public function run(array $data): Result;
 }

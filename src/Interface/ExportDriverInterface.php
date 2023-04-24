@@ -13,5 +13,5 @@ use Drobotik\Eav\Result\Result;
 
 interface ExportDriverInterface
 {
-    public function run(array $data): Result;
+    public function run(): Result;
 }
