@@ -9,9 +9,11 @@ declare(strict_types=1);
 
 namespace Tests\Eav\AttributeType;
 
+use Carbon\Carbon;
 use Doctrine\DBAL\Types\Types;
 use Drobotik\Eav\Enum\_VALUE;
 use Drobotik\Eav\Enum\ATTR_TYPE;
+use Drobotik\Eav\Exception\AttributeTypeException;
 use Drobotik\Eav\Model\ValueDatetimeModel;
 use Drobotik\Eav\Model\ValueDecimalModel;
 use Drobotik\Eav\Model\ValueIntegerModel;
@@ -19,7 +21,7 @@ use Drobotik\Eav\Model\ValueStringModel;
 use Drobotik\Eav\Model\ValueTextModel;
 use PHPUnit\Framework\TestCase;
 
-class AttributeEnumFunctionalTest extends TestCase
+class AttributeTypeEnumFunctionalTest extends TestCase
 {
     /**
      * @test
@@ -107,5 +109,28 @@ class AttributeEnumFunctionalTest extends TestCase
         $this->assertEquals(ATTR_TYPE::DECIMAL, ATTR_TYPE::getCase(ATTR_TYPE::DECIMAL->value()));
         $this->assertEquals(ATTR_TYPE::STRING, ATTR_TYPE::getCase(ATTR_TYPE::STRING->value()));
         $this->assertEquals(ATTR_TYPE::TEXT, ATTR_TYPE::getCase(ATTR_TYPE::TEXT->value()));
+    }
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::getCase
+     */
+    public function get_case_exception() {
+        $this->expectException(AttributeTypeException::class);
+        $this->expectExceptionMessage(AttributeTypeException::UNSUPPORTED_TYPE);
+        ATTR_TYPE::getCase("test");
+    }
+
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::randomValue
+     */
+    public function random_value() {
+        $this->assertTrue(is_string(ATTR_TYPE::STRING->randomValue()));
+        $this->assertTrue(is_int(ATTR_TYPE::INTEGER->randomValue()));
+        $this->assertTrue(is_float(ATTR_TYPE::DECIMAL->randomValue()));
+        $this->assertTrue(Carbon::createFromFormat('Y-m-d H:i:s', ATTR_TYPE::DATETIME->randomValue()) !== false);
+        $this->assertTrue(is_string(ATTR_TYPE::TEXT->randomValue()));
     }
 }

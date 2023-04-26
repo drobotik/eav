@@ -16,6 +16,7 @@ use Drobotik\Eav\Enum\_PIVOT;
 use Drobotik\Eav\Enum\_VALUE;
 use Drobotik\Eav\Enum\ATTR_FACTORY;
 use Drobotik\Eav\Enum\ATTR_TYPE;
+use Drobotik\Eav\Exception\AttributeTypeException;
 use Drobotik\Eav\Exception\EntityFactoryException;
 use Drobotik\Eav\Model\AttributeGroupModel;
 use Drobotik\Eav\Model\AttributeModel;
@@ -23,6 +24,7 @@ use Drobotik\Eav\Model\AttributeSetModel;
 use Drobotik\Eav\Model\DomainModel;
 use Drobotik\Eav\Model\EntityModel;
 use Drobotik\Eav\Model\PivotModel;
+use Drobotik\Eav\Model\ValueBase;
 use Drobotik\Eav\Result\EntityFactoryResult;
 
 class EntityFactory
@@ -46,7 +48,9 @@ class EntityFactory
             $pivotRecord = $this->initPivot($domain, $set, $attributeRecord, $field[ATTR_FACTORY::GROUP->field()]);
             $result->addPivot($attributeRecord->getName(), $pivotRecord);
             $valueRecord = $this->initValue($domain, $entityRecord, $attributeRecord, $field);
-            $result->addValue($attributeRecord->getName(), $valueRecord);
+            if(!is_null($valueRecord)) {
+                $result->addValue($attributeRecord->getName(), $valueRecord);
+            }
         }
 
         return $result;
@@ -54,40 +58,48 @@ class EntityFactory
 
     private function checkGroups(AttributeSetModel $set, array $fields)
     {
+        foreach($fields as $field) {
+            if (!key_exists(ATTR_FACTORY::GROUP->field(), $field)) {
+                throw new EntityFactoryException("Group key must be provided!");
+            }
+        }
+
         $groupIds = array_flip(array_unique(array_column($fields, ATTR_FACTORY::GROUP->field())));
         $groupKeys = AttributeGroupModel::query()
             ->where(_GROUP::SET_ID->column(), $set->getKey())
-            ->pluck(_GROUP::NAME->column(), _GROUP::ID->column())
-        ;
+            ->pluck(_GROUP::NAME->column(), _GROUP::ID->column());
+
         $groupDiff = array_diff_key($groupIds, $groupKeys->toArray());
         if (count($groupDiff) > 0) {
-            $output = [];
-            foreach ($groupDiff as $key => $value) {
-                $output[] = $key.' => '.$value;
-            }
-
-            throw new EntityFactoryException('Groups not found: '.implode(', ', $output));
+            throw new EntityFactoryException('Groups not found');
         }
     }
 
+    /**
+     * @throws EntityFactoryException
+     * @throws AttributeTypeException
+     */
     private function initAttribute(array $field, DomainModel $domain)
     {
         if (!key_exists(ATTR_FACTORY::ATTRIBUTE->field(), $field)) {
-            throw new EntityFactoryException('Attribute not found');
+            EntityFactoryException::undefinedAttributeArray();
         }
         $data = $field[ATTR_FACTORY::ATTRIBUTE->field()];
         if (!key_exists(_ATTR::NAME->column(), $data)) {
-            throw new EntityFactoryException('Attribute name not found');
+            EntityFactoryException::undefinedAttributeName();
         }
         if (!key_exists(_ATTR::TYPE->column(), $data)) {
-            throw new EntityFactoryException('Attribute type not found');
+            EntityFactoryException::undefinedAttributeType();
         }
+        // check type is supported
+        ATTR_TYPE::getCase($data[_ATTR::TYPE->column()]);
+
         $name = $data[_ATTR::NAME->column()];
         $attribute = AttributeModel::query()
             ->where(_ATTR::NAME->column(), $name)
             ->where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
-            ->first()
-        ;
+            ->first();
+
         if (is_null($attribute)) {
             $attribute = $this->eavFactory->createAttribute($domain, $data);
         }
@@ -111,26 +123,28 @@ class EntityFactory
         return $pivot;
     }
 
-    private function initValue(DomainModel $domain, EntityModel $entity, AttributeModel $attribute, array $field)
+    private function initValue(DomainModel $domain, EntityModel $entity, AttributeModel $attribute, array $field) : ?ValueBase
     {
-        if (!key_exists(ATTR_FACTORY::VALUE->field(), $field)) {
-            throw new EntityFactoryException('Value not found');
+        $value = key_exists(ATTR_FACTORY::VALUE->field(), $field)
+            ? $field[ATTR_FACTORY::VALUE->field()]
+            : null;
+        if(is_null($value)) {
+            return null;
         }
-        $valueType = ATTR_TYPE::getCase($attribute->getType());
-        $value = $field[ATTR_FACTORY::VALUE->field()];
-        $model = $valueType->model();
-        $valueRecord = $model::query()
+        $type = ATTR_TYPE::getCase($attribute->getType());
+        $model = $type->model();
+        $record = $model::query()
             ->where(_VALUE::DOMAIN_ID->column(), $domain->getKey())
             ->where(_VALUE::ENTITY_ID->column(), $entity->getKey())
             ->where(_VALUE::ATTRIBUTE_ID->column(), $attribute->getKey())
             ->first();
-        if (is_null($valueRecord)) {
-            $valueRecord = $this->eavFactory->createValue($valueType, $domain, $entity, $attribute, $value);
+        if (is_null($record)) {
+            $record = $this->eavFactory->createValue($type, $domain, $entity, $attribute, $value);
         } else {
-            $valueRecord->setVaue($field[ATTR_FACTORY::VALUE->field()]);
-            $valueRecord->save();
+            $record->setVaue($field[ATTR_FACTORY::VALUE->field()]);
+            $record->save();
         }
 
-        return $valueRecord;
+        return $record;
     }
 }

@@ -9,9 +9,9 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\Enum;
 
+use Carbon\Carbon;
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping\Builder\ClassMetadataBuilder;
-use Doctrine\ORM\Mapping\ClassMetadata;
+use Drobotik\Eav\Exception\AttributeTypeException;
 use Drobotik\Eav\Model\ValueBase;
 use Drobotik\Eav\Model\ValueDatetimeModel;
 use Drobotik\Eav\Model\ValueDecimalModel;
@@ -103,13 +103,29 @@ enum ATTR_TYPE
         };
     }
 
-    public static function getCase(string $type) {
+    public function randomValue($iterator = null) {
+        $faker = \Faker\Factory::create();
+        return match ($this) {
+            self::STRING =>  $faker->words(2, true),
+            self::INTEGER => $faker->randomNumber(),
+            self::DECIMAL => $faker->randomFloat(3),
+            self::DATETIME => Carbon::now()->subDays($iterator)->format('Y-m-d H:i:s'),
+            self::TEXT => $faker->text(150),
+        };
+    }
+
+    /**
+     * @throws AttributeTypeException
+     */
+    public static function getCase(string $type): ATTR_TYPE
+    {
         return match ($type) {
             self::INTEGER->value() => self::INTEGER,
             self::DATETIME->value() => self::DATETIME,
             self::DECIMAL->value() => self::DECIMAL,
             self::STRING->value() => self::STRING,
-            self::TEXT->value() => self::TEXT
+            self::TEXT->value() => self::TEXT,
+            default => AttributeTypeException::unsupportedType()
         };
     }
 }

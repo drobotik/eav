@@ -1,6 +1,7 @@
 <?php
 /**
  * This file is part of the eav package.
+ *
  * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
  * @copyright 2023 Aleksandr Drobotik
  * @license   https://opensource.org/license/mit  The MIT License
@@ -9,19 +10,14 @@ declare(strict_types=1);
 
 namespace Tests\Eav\EavFactory;
 
-use Carbon\Carbon;
-use DateTime;
 use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\_DOMAIN;
 use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Enum\_GROUP;
-use Drobotik\Eav\Enum\_PIVOT;
 use Drobotik\Eav\Enum\_RESULT;
 use Drobotik\Eav\Enum\_SET;
-use Drobotik\Eav\Enum\_VALUE;
 use Drobotik\Eav\Enum\ATTR_FACTORY;
 use Drobotik\Eav\Enum\ATTR_TYPE;
-use Drobotik\Eav\Factory\EavFactory;
 use Drobotik\Eav\Model\AttributeGroupModel;
 use Drobotik\Eav\Model\AttributeModel;
 use Drobotik\Eav\Model\AttributeSetModel;
@@ -37,14 +33,22 @@ use Drobotik\Eav\Result\EntityFactoryResult;
 use Drobotik\Eav\Result\Result;
 use Tests\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class EavFactoryFunctionalTest extends TestCase
 {
     /**
      * @test
+     *
      * @group functional
+     *
      * @covers \Drobotik\Eav\Factory\EavFactory::createDomain
      */
-    public function domain_default() {
+    public function domainDefault()
+    {
         $result = $this->eavFactory->createDomain();
         $this->assertInstanceOf(DomainModel::class, $result);
         $this->assertEquals(1, $result->getKey());
@@ -53,26 +57,34 @@ class EavFactoryFunctionalTest extends TestCase
         $this->assertArrayHasKey(_DOMAIN::NAME->column(), $data);
         $this->assertNotEmpty($data[_DOMAIN::NAME->column()]);
     }
+
     /**
      * @test
+     *
      * @group functional
+     *
      * @covers \Drobotik\Eav\Factory\EavFactory::createDomain
      */
-    public function domain_input_data() {
+    public function domainInputData()
+    {
         $input = [
-            _DOMAIN::NAME->column() => 'test'
+            _DOMAIN::NAME->column() => 'test',
         ];
         $result = $this->eavFactory->createDomain($input);
         $this->assertInstanceOf(DomainModel::class, $result);
         $input[_DOMAIN::ID->column()] = 1;
         $this->assertEquals($input, $result->toArray());
     }
+
     /**
      * @test
+     *
      * @group functional
+     *
      * @covers \Drobotik\Eav\Factory\EavFactory::createEntity
      */
-    public function entity_default() {
+    public function entityDefault()
+    {
         $result = $this->eavFactory->createEntity();
         $this->assertInstanceOf(EntityModel::class, $result);
         $this->assertEquals(1, $result->getKey());
@@ -82,19 +94,23 @@ class EavFactoryFunctionalTest extends TestCase
         $this->assertEquals([
             _ENTITY::ID->column() => 1,
             _ENTITY::DOMAIN_ID->column() => 1,
-            _ENTITY::ATTR_SET_ID->column() => 1
+            _ENTITY::ATTR_SET_ID->column() => 1,
         ], $data);
         // domain created
         $this->assertEquals(1, DomainModel::query()->count());
         // attribute set created
         $this->assertEquals(1, AttributeSetModel::query()->count());
     }
+
     /**
      * @test
+     *
      * @group functional
+     *
      * @covers \Drobotik\Eav\Factory\EavFactory::createAttributeSet
      */
-    public function attribute_set() {
+    public function attributeSet()
+    {
         $result = $this->eavFactory->createAttributeSet();
         $this->assertInstanceOf(AttributeSetModel::class, $result);
         $this->assertEquals(1, $result->getKey());
@@ -102,27 +118,35 @@ class EavFactoryFunctionalTest extends TestCase
         $data = $result->toArray();
         $this->assertArrayHasKey(_SET::NAME->column(), $data);
     }
+
     /**
      * @test
+     *
      * @group functional
+     *
      * @covers \Drobotik\Eav\Factory\EavFactory::createAttributeSet
      */
-    public function attribute_set_input() {
+    public function attributeSetInput()
+    {
         $input = [
-            _SET::NAME->column() => 'test'
+            _SET::NAME->column() => 'test',
         ];
         $result = $this->eavFactory->createAttributeSet(null, $input);
         $this->assertInstanceOf(AttributeSetModel::class, $result);
         $this->assertEquals(1, $result->getKey());
         $this->assertEquals(1, $result->getDomainKey());
-        $this->assertEquals( $input[_SET::NAME->column()], $result->getName());
+        $this->assertEquals($input[_SET::NAME->column()], $result->getName());
     }
+
     /**
      * @test
+     *
      * @group functional
+     *
      * @covers \Drobotik\Eav\Factory\EavFactory::createGroup
      */
-    public function attribute_group() {
+    public function attributeGroup()
+    {
         $result = $this->eavFactory->createGroup();
         $this->assertInstanceOf(AttributeGroupModel::class, $result);
         $this->assertEquals(1, $result->getKey());
@@ -130,14 +154,18 @@ class EavFactoryFunctionalTest extends TestCase
         $data = $result->toArray();
         $this->assertArrayHasKey(_GROUP::NAME->column(), $data);
     }
+
     /**
      * @test
+     *
      * @group functional
+     *
      * @covers \Drobotik\Eav\Factory\EavFactory::createGroup
      */
-    public function attribute_group_input() {
+    public function attributeGroupInput()
+    {
         $input = [
-            _GROUP::NAME->column() => 'test'
+            _GROUP::NAME->column() => 'test',
         ];
         $result = $this->eavFactory->createGroup(null, $input);
         $this->assertInstanceOf(AttributeGroupModel::class, $result);
@@ -145,12 +173,16 @@ class EavFactoryFunctionalTest extends TestCase
         $this->assertEquals(1, $result->getAttrSetKey());
         $this->assertEquals($input[_GROUP::NAME->column()], $result->getName());
     }
+
     /**
      * @test
+     *
      * @group functional
+     *
      * @covers \Drobotik\Eav\Factory\EavFactory::createAttribute
      */
-    public function attribute() {
+    public function attribute()
+    {
         $result = $this->eavFactory->createAttribute();
         $this->assertInstanceOf(AttributeModel::class, $result);
         $this->assertEquals(1, $result->getKey());
@@ -163,12 +195,16 @@ class EavFactoryFunctionalTest extends TestCase
         $data = $result->toArray();
         $this->assertArrayHasKey(_ATTR::NAME->column(), $data);
     }
+
     /**
      * @test
+     *
      * @group functional
+     *
      * @covers \Drobotik\Eav\Factory\EavFactory::createAttribute
      */
-    public function attribute_input() {
+    public function attributeInput()
+    {
         $input = [
             _ATTR::NAME->column() => 'test',
             _ATTR::TYPE->column() => 'test',
@@ -188,12 +224,16 @@ class EavFactoryFunctionalTest extends TestCase
         $this->assertEquals($input[_ATTR::DEFAULT_VALUE->column()], $result->getDefaultValue());
         $this->assertEquals($input[_ATTR::DESCRIPTION->column()], $result->getDescription());
     }
+
     /**
      * @test
+     *
      * @group functional
+     *
      * @covers \Drobotik\Eav\Factory\EavFactory::createPivot
      */
-    public function pivot() {
+    public function pivot()
+    {
         $this->eavFactory->createDomain();
         $domain = $this->eavFactory->createDomain();
         $this->eavFactory->createAttributeSet($domain);
@@ -210,12 +250,16 @@ class EavFactoryFunctionalTest extends TestCase
         $this->assertEquals(2, $result->getAttrKey());
         $this->assertEquals(2, $result->getGroupKey());
     }
+
     /**
      * @test
+     *
      * @group functional
+     *
      * @covers \Drobotik\Eav\Factory\EavFactory::createValue
      */
-    public function value_string() {
+    public function valueString()
+    {
         $domain = $this->eavFactory->createDomain();
         $entity = $this->eavFactory->createEntity($domain);
         $attribute = $this->eavFactory->createAttribute($domain);
@@ -233,12 +277,16 @@ class EavFactoryFunctionalTest extends TestCase
         $this->assertEquals(1, $result->getAttrKey());
         $this->assertEquals('test', $result->getValue());
     }
+
     /**
      * @test
+     *
      * @group functional
+     *
      * @covers \Drobotik\Eav\Factory\EavFactory::createValue
      */
-    public function value_text() {
+    public function valueText()
+    {
         $domain = $this->eavFactory->createDomain();
         $entity = $this->eavFactory->createEntity($domain);
         $attribute = $this->eavFactory->createAttribute($domain);
@@ -256,12 +304,16 @@ class EavFactoryFunctionalTest extends TestCase
         $this->assertEquals(1, $result->getAttrKey());
         $this->assertEquals('test', $result->getValue());
     }
+
     /**
      * @test
+     *
      * @group functional
+     *
      * @covers \Drobotik\Eav\Factory\EavFactory::createValue
      */
-    public function value_integer() {
+    public function valueInteger()
+    {
         $domain = $this->eavFactory->createDomain();
         $entity = $this->eavFactory->createEntity($domain);
         $attribute = $this->eavFactory->createAttribute($domain);
@@ -279,12 +331,16 @@ class EavFactoryFunctionalTest extends TestCase
         $this->assertEquals(1, $result->getAttrKey());
         $this->assertEquals(123, $result->getValue());
     }
+
     /**
      * @test
+     *
      * @group functional
+     *
      * @covers \Drobotik\Eav\Factory\EavFactory::createValue
      */
-    public function value_decimal() {
+    public function valueDecimal()
+    {
         $domain = $this->eavFactory->createDomain();
         $entity = $this->eavFactory->createEntity($domain);
         $attribute = $this->eavFactory->createAttribute($domain);
@@ -302,16 +358,20 @@ class EavFactoryFunctionalTest extends TestCase
         $this->assertEquals(1, $result->getAttrKey());
         $this->assertEquals(123.123, $result->getValue());
     }
+
     /**
      * @test
+     *
      * @group functional
+     *
      * @covers \Drobotik\Eav\Factory\EavFactory::createValue
      */
-    public function value_datetime() {
+    public function valueDatetime()
+    {
         $domain = $this->eavFactory->createDomain();
         $entity = $this->eavFactory->createEntity($domain);
         $attribute = $this->eavFactory->createAttribute($domain);
-        $datetime = (new DateTime())->format('Y-m-d H:i:s');
+        $datetime = (new \DateTime())->format('Y-m-d H:i:s');
         $result = $this->eavFactory->createValue(
             ATTR_TYPE::DATETIME,
             $domain,
@@ -326,224 +386,32 @@ class EavFactoryFunctionalTest extends TestCase
         $this->assertEquals(1, $result->getAttrKey());
         $this->assertEquals($datetime, $result->getValue());
     }
-
     /**
      * @test
+     *
      * @group functional
+     *
      * @covers \Drobotik\Eav\Factory\EavFactory::createEavEntity
      */
-    public function create_eav_entity() {
+    public function createEavEntity()
+    {
         $domain = $this->eavFactory->createDomain();
         $set = $this->eavFactory->createAttributeSet($domain);
-        $groupOne = $this->eavFactory->createGroup($set);
-        $groupTwo = $this->eavFactory->createGroup($set);
-        $nameString = "string";
-        $nameInteger = "integer";
-        $nameDecimal = "decimal";
-        $nameDatetime = "datetime";
-        $nameText = "text";
-        $fields = [
-            $nameString => [
+        $group = $this->eavFactory->createGroup($set);
+        $config = [
+            [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
-                    _ATTR::NAME->column() => $nameString,
+                    _ATTR::NAME->column() => ATTR_TYPE::STRING->value(),
                     _ATTR::TYPE->column() => ATTR_TYPE::STRING->value(),
-                    _ATTR::DEFAULT_VALUE->column() => 'string default'
+                    _ATTR::DEFAULT_VALUE->column() => ATTR_TYPE::STRING->randomValue(),
                 ],
-                ATTR_FACTORY::GROUP->field() => $groupOne->getKey(),
-                ATTR_FACTORY::VALUE->field() => $this->faker->word
-            ],
-            $nameInteger => [
-                ATTR_FACTORY::ATTRIBUTE->field() => [
-                    _ATTR::NAME->column() => $nameInteger,
-                    _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value(),
-                    _ATTR::DEFAULT_VALUE->column() => 'integer default'
-                ],
-                ATTR_FACTORY::GROUP->field() => $groupOne->getKey(),
-                ATTR_FACTORY::VALUE->field() => $this->faker->randomNumber()
-            ],
-            $nameDecimal => [
-                ATTR_FACTORY::ATTRIBUTE->field() => [
-                    _ATTR::NAME->column() => $nameDecimal,
-                    _ATTR::TYPE->column() => ATTR_TYPE::DECIMAL->value(),
-                    _ATTR::DEFAULT_VALUE->column() => 'decimal default'
-                ],
-                ATTR_FACTORY::GROUP->field() => $groupOne->getKey(),
-                ATTR_FACTORY::VALUE->field() => $this->faker->randomFloat()
-            ],
-            $nameDatetime => [
-                ATTR_FACTORY::ATTRIBUTE->field() => [
-                    _ATTR::NAME->column() => $nameDatetime,
-                    _ATTR::TYPE->column() => ATTR_TYPE::DATETIME->value(),
-                    _ATTR::DEFAULT_VALUE->column() => 'datetime default'
-                ],
-                ATTR_FACTORY::GROUP->field() => $groupTwo->getKey(),
-                ATTR_FACTORY::VALUE->field() => Carbon::now()->format('Y-m-d H:i:s')
-            ],
-            $nameText => [
-                ATTR_FACTORY::ATTRIBUTE->field() => [
-                    _ATTR::NAME->column() => $nameText,
-                    _ATTR::TYPE->column() => ATTR_TYPE::TEXT->value(),
-                    _ATTR::DEFAULT_VALUE->column() => 'type default'
-                ],
-                ATTR_FACTORY::GROUP->field() => $groupTwo->getKey(),
-                ATTR_FACTORY::VALUE->field() => $this->faker->text
-            ],
+                ATTR_FACTORY::GROUP->field() => $group->getKey()
+            ]
         ];
-
-        $this->eavFactory->createGroup($set);
-        $result = $this->eavFactory->createEavEntity($fields, $domain, $set);
-
+        $result = $this->eavFactory->createEavEntity($config, $domain, $set);
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::CREATED->code(), $result->getCode());
         $this->assertEquals(_RESULT::CREATED->message(), $result->getMessage());
-        // check result is entity result
-        $factoryResult = $result->getData();
-        $this->assertInstanceOf(EntityFactoryResult::class, $factoryResult);
-
-        // check entity record created
-        /** @var EntityModel $entityModel */
-        $entityModel = EntityModel
-            ::where(_ENTITY::DOMAIN_ID->column(), $domain->getKey())
-            ->where(_ENTITY::ATTR_SET_ID->column(), $set->getKey())
-            ->first();
-        $this->assertNotNull($entityModel);
-        $this->assertEquals($entityModel->toArray(), $factoryResult->getEntityModel()->toArray());
-
-        // check attributes created
-        /** @var AttributeModel $stringAttribute */
-        /** @var AttributeModel $integerAttribute */
-        /** @var AttributeModel $decimalAttribute */
-        /** @var AttributeModel $datetimeAttribute */
-        /** @var AttributeModel $textAttribute */
-
-        $stringAttribute = AttributeModel
-            ::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
-            ->where(_ATTR::TYPE->column(), ATTR_TYPE::STRING->value())
-            ->where(_ATTR::NAME->column(), $nameString)->first();
-        $integerAttribute = AttributeModel
-            ::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
-            ->where(_ATTR::TYPE->column(), ATTR_TYPE::INTEGER->value())
-            ->where(_ATTR::NAME->column(), $nameInteger)->first();
-        $decimalAttribute = AttributeModel
-            ::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
-            ->where(_ATTR::TYPE->column(), ATTR_TYPE::DECIMAL->value())
-            ->where(_ATTR::NAME->column(), $nameDecimal)->first();
-        $datetimeAttribute = AttributeModel
-            ::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
-            ->where(_ATTR::TYPE->column(), ATTR_TYPE::DATETIME->value())
-            ->where(_ATTR::NAME->column(), $nameDatetime)->first();
-        $textAttribute = AttributeModel
-            ::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
-            ->where(_ATTR::TYPE->column(), ATTR_TYPE::TEXT->value())
-            ->where(_ATTR::NAME->column(), $nameText)->first();
-
-        $this->assertNotNull($stringAttribute);
-        $this->assertNotNull($integerAttribute);
-        $this->assertNotNull($decimalAttribute);
-        $this->assertNotNull($datetimeAttribute);
-        $this->assertNotNull($textAttribute);
-
-        $this->assertEquals($fields[$nameString][ATTR_FACTORY::ATTRIBUTE->field()][_ATTR::DEFAULT_VALUE->column()], $stringAttribute->getDefaultValue());
-        $this->assertEquals($fields[$nameInteger][ATTR_FACTORY::ATTRIBUTE->field()][_ATTR::DEFAULT_VALUE->column()], $integerAttribute->getDefaultValue());
-        $this->assertEquals($fields[$nameDecimal][ATTR_FACTORY::ATTRIBUTE->field()][_ATTR::DEFAULT_VALUE->column()], $decimalAttribute->getDefaultValue());
-        $this->assertEquals($fields[$nameDatetime][ATTR_FACTORY::ATTRIBUTE->field()][_ATTR::DEFAULT_VALUE->column()], $datetimeAttribute->getDefaultValue());
-        $this->assertEquals($fields[$nameText][ATTR_FACTORY::ATTRIBUTE->field()][_ATTR::DEFAULT_VALUE->column()], $textAttribute->getDefaultValue());
-
-        // check attributes in returned result
-        $attributes = $factoryResult->getAttributes();
-        $this->assertArrayHasKey($stringAttribute->getName(), $attributes);
-        $this->assertArrayHasKey($integerAttribute->getName(), $attributes);
-        $this->assertArrayHasKey($decimalAttribute->getName(), $attributes);
-        $this->assertArrayHasKey($datetimeAttribute->getName(), $attributes);
-        $this->assertArrayHasKey($textAttribute->getName(), $attributes);
-        $this->assertEquals($stringAttribute->toArray(), $attributes[$stringAttribute->getName()]->toArray());
-        $this->assertEquals($integerAttribute->toArray(), $attributes[$integerAttribute->getName()]->toArray());
-        $this->assertEquals($decimalAttribute->toArray(), $attributes[$decimalAttribute->getName()]->toArray());
-        $this->assertEquals($datetimeAttribute->toArray(), $attributes[$datetimeAttribute->getName()]->toArray());
-        $this->assertEquals($textAttribute->toArray(), $attributes[$textAttribute->getName()]->toArray());
-
-        // check attributes linked in pivot table
-        /** @var PivotModel $stringPivot */
-        /** @var PivotModel $integerPivot */
-        /** @var PivotModel $decimalPivot */
-        /** @var PivotModel $datetimePivot */
-        /** @var PivotModel $textPivot */
-
-        $stringPivot = PivotModel
-            ::where(_PIVOT::DOMAIN_ID->column(), $domain->getKey())
-            ->where(_PIVOT::SET_ID->column(), $set->getKey())
-            ->where(_PIVOT::GROUP_ID->column(), $groupOne->getKey()) // group one
-            ->where(_PIVOT::ATTR_ID->column(), $stringAttribute->getKey())->first();
-        $integerPivot = PivotModel
-            ::where(_PIVOT::DOMAIN_ID->column(), $domain->getKey())
-            ->where(_PIVOT::SET_ID->column(), $set->getKey())
-            ->where(_PIVOT::GROUP_ID->column(), $groupOne->getKey()) // group one
-            ->where(_PIVOT::ATTR_ID->column(), $integerAttribute->getKey())->first();
-        $decimalPivot = PivotModel
-            ::where(_PIVOT::DOMAIN_ID->column(), $domain->getKey())
-            ->where(_PIVOT::SET_ID->column(), $set->getKey())
-            ->where(_PIVOT::GROUP_ID->column(), $groupOne->getKey()) // group one
-            ->where(_PIVOT::ATTR_ID->column(), $decimalAttribute->getKey())->first();
-        $datetimePivot = PivotModel
-            ::where(_PIVOT::DOMAIN_ID->column(), $domain->getKey())
-            ->where(_PIVOT::SET_ID->column(), $set->getKey())
-            ->where(_PIVOT::GROUP_ID->column(), $groupTwo->getKey()) // group two
-            ->where(_PIVOT::ATTR_ID->column(), $datetimeAttribute->getKey())->first();
-        $textPivot = PivotModel
-            ::where(_PIVOT::DOMAIN_ID->column(), $domain->getKey())
-            ->where(_PIVOT::SET_ID->column(), $set->getKey())
-            ->where(_PIVOT::GROUP_ID->column(), $groupTwo->getKey()) // group two
-            ->where(_PIVOT::ATTR_ID->column(), $textAttribute->getKey())->first();
-
-        $this->assertNotNull($stringPivot);
-        $this->assertNotNull($integerPivot);
-        $this->assertNotNull($decimalPivot);
-        $this->assertNotNull($datetimePivot);
-        $this->assertNotNull($textPivot);
-
-        // check values created
-        /** @var ValueStringModel $stringValue */
-        /** @var ValueIntegerModel $integerValue */
-        /** @var ValueDecimalModel $decimalValue */
-        /** @var ValueDatetimeModel $datetimeValue */
-        /** @var ValueTextModel $textValue */
-
-        $stringValue = ValueStringModel
-            ::where(_VALUE::DOMAIN_ID->column(), $domain->getKey())
-            ->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())
-            ->where(_VALUE::ATTRIBUTE_ID->column(), $stringAttribute->getKey())
-            ->first();
-        $integerValue = ValueIntegerModel
-            ::where(_VALUE::DOMAIN_ID->column(), $domain->getKey())
-            ->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())
-            ->where(_VALUE::ATTRIBUTE_ID->column(), $integerAttribute->getKey())
-            ->first();
-        $decimalValue = ValueDecimalModel
-            ::where(_VALUE::DOMAIN_ID->column(), $domain->getKey())
-            ->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())
-            ->where(_VALUE::ATTRIBUTE_ID->column(), $decimalAttribute->getKey())
-            ->first();
-        $datetimeValue = ValueDatetimeModel
-            ::where(_VALUE::DOMAIN_ID->column(), $domain->getKey())
-            ->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())
-            ->where(_VALUE::ATTRIBUTE_ID->column(), $datetimeAttribute->getKey())
-            ->first();
-        $textValue = ValueTextModel
-            ::where(_VALUE::DOMAIN_ID->column(), $domain->getKey())
-            ->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())
-            ->where(_VALUE::ATTRIBUTE_ID->column(), $textAttribute->getKey())
-            ->first();
-
-        $this->assertNotNull($stringValue);
-        $this->assertNotNull($integerValue);
-        $this->assertNotNull($decimalValue);
-        $this->assertNotNull($datetimeValue);
-        $this->assertNotNull($textValue);
-
-        $this->assertEquals($stringValue->getValue(), $fields[$nameString][ATTR_FACTORY::VALUE->field()]);
-        $this->assertEquals($integerValue->getValue(), $fields[$nameInteger][ATTR_FACTORY::VALUE->field()]);
-        $this->assertEquals($decimalValue->getValue(), $fields[$nameDecimal][ATTR_FACTORY::VALUE->field()]);
-        $this->assertEquals($datetimeValue->getValue(), $fields[$nameDatetime][ATTR_FACTORY::VALUE->field()]);
-        $this->assertEquals($textValue->getValue(), $fields[$nameText][ATTR_FACTORY::VALUE->field()]);
+        $this->assertInstanceOf(EntityFactoryResult::class, $result->getData());
     }
 }
