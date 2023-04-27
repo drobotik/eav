@@ -63,8 +63,6 @@ class Transporter
 
     /**
      * @param mixed $field
-     *
-     * @throws \Exception
      */
     public function getField($field)
     {

@@ -77,6 +77,7 @@ class EavFactory
         $model = new AttributeSetModel();
         $model->setDomainKey($domain->getKey())
             ->setName($input[_SET::NAME->column()]);
+        
         $model->save();
         $model->refresh();
 
@@ -96,6 +97,7 @@ class EavFactory
         $model = new AttributeGroupModel();
         $model->setAttrSetKey($set->getKey())
             ->setName($input[_SET::NAME->column()]);
+        
         $model->save();
         $model->refresh();
 
@@ -125,6 +127,7 @@ class EavFactory
             ->setSource($input[_ATTR::SOURCE->column()])
             ->setDefaultValue($input[_ATTR::DEFAULT_VALUE->column()])
             ->setDescription($input[_ATTR::DESCRIPTION->column()]);
+        
         $model->save();
         $model->refresh();
 
@@ -138,6 +141,7 @@ class EavFactory
             ->setAttrSetKey($set->getKey())
             ->setGroupKey($group->getKey())
             ->setAttrKey($attribute->getKey());
+        
         $model->save();
         $model->refresh();
 
@@ -151,18 +155,19 @@ class EavFactory
             ->setEntityKey($entity->getKey())
             ->setAttrKey($attribute->getKey())
             ->setValue($value);
+        
         $model->save();
         $model->refresh();
 
         return $model;
     }
 
-    public function createEavEntity(array $fields, DomainModel $domain, AttributeSetModel $set): Result
+    public function createEavEntity(array $config, DomainModel $domain, AttributeSetModel $set): Result
     {
         $result = new Result();
         $result->created();
         $factory = new EntityFactory($this);
-        $result->setData($factory->create($fields, $domain, $set));
+        $result->setData($factory->create($config, $domain, $set));
 
         return $result;
     }

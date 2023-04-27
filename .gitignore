@@ -6,6 +6,7 @@
 .phpunit.result.cache
 /tests/test.sqlite
 /tests/test.sqlite-journal
+/tests/temp/*
 .env
 connection.php
 /coverage
