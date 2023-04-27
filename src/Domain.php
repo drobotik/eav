@@ -10,21 +10,19 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav;
 
-use Drobotik\Eav\Interface\ExportDriverInterface;
-use Drobotik\Eav\Interface\ImportDriverInterface;
 use Drobotik\Eav\Result\Result;
 
 class Domain
 {
-    private ExportDriverInterface $exportDriver;
-    private ImportDriverInterface $importDriver;
+    private DomainDataDriver $exportDriver;
+    private DomainDataDriver $importDriver;
 
-    public function setExportDriver(ExportDriverInterface $driver): void
+    public function setExportDriver(DomainDataDriver $driver): void
     {
         $this->exportDriver = $driver;
     }
 
-    public function getExportDriver(): ExportDriverInterface
+    public function getExportDriver(): DomainDataDriver
     {
         return $this->exportDriver;
     }
@@ -34,12 +32,12 @@ class Domain
         return isset($this->exportDriver);
     }
 
-    public function setImportDriver(ImportDriverInterface $driver): void
+    public function setImportDriver(DomainDataDriver $driver): void
     {
         $this->importDriver = $driver;
     }
 
-    public function getImportDriver(): ImportDriverInterface
+    public function getImportDriver(): DomainDataDriver
     {
         return $this->importDriver;
     }
@@ -49,9 +47,9 @@ class Domain
         return isset($this->importDriver);
     }
 
-    public function import(array $data): Result
+    public function import(): Result
     {
-        return $this->getImportDriver()->run($data);
+        return $this->getImportDriver()->run();
     }
 
     public function export(): Result

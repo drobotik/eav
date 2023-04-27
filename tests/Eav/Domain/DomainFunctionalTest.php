@@ -12,9 +12,9 @@ namespace Tests\Eav\Domain;
 
 use Drobotik\Eav\Domain;
 use Drobotik\Eav\Result\Result;
+use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\ExportDriverFixture;
-use Tests\Fixtures\ImportDriverFixture;
-use Tests\TestCase;
+use Tests\Fixtures\DomainDataDriverFixture;
 
 class DomainFunctionalTest extends TestCase
 {
@@ -55,7 +55,7 @@ class DomainFunctionalTest extends TestCase
      */
     public function importDriver()
     {
-        $driver = new ImportDriverFixture();
+        $driver = new DomainDataDriverFixture();
         $this->assertFalse($this->domain->hasImportDriver());
         $this->domain->setImportDriver($driver);
         $this->assertSAME($driver, $this->domain->getImportDriver());
@@ -71,7 +71,7 @@ class DomainFunctionalTest extends TestCase
      */
     public function importResult()
     {
-        $driver = new ImportDriverFixture();
+        $driver = new DomainDataDriverFixture();
         $result = (new Result())->importSuccess();
         $driver->setResult($result);
         $this->domain->setImportDriver($driver);

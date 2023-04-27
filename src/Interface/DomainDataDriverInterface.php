@@ -11,7 +11,7 @@ namespace Drobotik\Eav\Interface;
 
 use Drobotik\Eav\Result\Result;
 
-interface ImportDriverInterface
+interface DomainDataDriverInterface
 {
-    public function run(array $data): Result;
+    public function run(): Result;
 }

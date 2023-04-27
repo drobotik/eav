@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace Tests\Fixtures;
 
-use Drobotik\Eav\Interface\ExportDriverInterface;
+use Drobotik\Eav\DomainDataDriver;
 use Drobotik\Eav\Result\Result;
 
-class ExportDriverFixture implements ExportDriverInterface
+class ExportDriverFixture extends DomainDataDriver
 {
     private ?Result $result = null;
 

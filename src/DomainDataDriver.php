@@ -7,11 +7,11 @@
  */
 declare(strict_types=1);
 
-namespace Drobotik\Eav\Interface;
+namespace Drobotik\Eav;
 
-use Drobotik\Eav\Result\Result;
+use Drobotik\Eav\Interface\DomainDataDriverInterface;
 
-interface ExportDriverInterface
+abstract class DomainDataDriver extends Transporter implements DomainDataDriverInterface
 {
-    public function run(): Result;
+
 }
