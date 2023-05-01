@@ -9,6 +9,16 @@
       <directory>./tests/Eav</directory>
     </testsuite>
   </testsuites>
+  <groups>
+    <include>
+      <group>functional</group>
+      <group>behavior</group>
+      <group>acceptance</group>
+    </include>
+    <exclude>
+      <group>performance</group>
+    </exclude>
+  </groups>
   <coverage>
     <include>
       <directory suffix=".php">./src</directory>
