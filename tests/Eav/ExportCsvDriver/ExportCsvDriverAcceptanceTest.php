@@ -23,11 +23,11 @@ class ExportCsvDriverAcceptanceTest extends TestCase
     /**
      * @test
      *
-     * @group functional
+     * @group acceptance
      *
      * @covers \Drobotik\Eav\Export\ExportCsvDriver::run
      */
-    public function results_basic()
+    public function results()
     {
         $driver = new ExportCsvDriver();
         $domainRecord = $this->eavFactory->createDomain();
