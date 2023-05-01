@@ -65,9 +65,9 @@ class ResultEnumFunctionalTest extends TestCase
             _RESULT::NOT_DELETED->name => 'Not deleted',
             _RESULT::VALIDATION_FAILS->name => 'Validation fails',
             _RESULT::VALIDATION_PASSED->name => 'Validation passed',
-            _RESULT::EXPORT_SUCCESS->name => 'Export success',
+            _RESULT::EXPORT_SUCCESS->name => 'Successfully exported',
             _RESULT::EXPORT_FAILED->name => 'Export failed',
-            _RESULT::IMPORT_SUCCESS->name => 'Import success',
+            _RESULT::IMPORT_SUCCESS->name => 'Successfully imported',
             _RESULT::IMPORT_FAILED->name => 'Import failed',
         ], $cases);
     }
