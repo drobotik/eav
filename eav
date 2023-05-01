@@ -8,6 +8,7 @@
  */
 declare(strict_types=1);
 
+use Drobotik\Eav\Commands\GenerateDataset;
 use Drobotik\Eav\Database\DatabaseManager;
 use Doctrine\Migrations\Configuration\EntityManager\ExistingEntityManager;
 use Doctrine\Migrations\Configuration\Migration\PhpFile;
@@ -51,7 +52,8 @@ $migrationCommands = [
     new UpToDateCommand($dependencyFactory),
     new SyncMetadataCommand($dependencyFactory),
     new ListCommand($dependencyFactory),
-    new DiffCommand($dependencyFactory)
+    new DiffCommand($dependencyFactory),
+    new GenerateDataset($dependencyFactory)
 ];
 
 $app = new Application('eav', '1');
