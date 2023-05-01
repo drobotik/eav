@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Tests\Eav\DatabaseManager;
 
 use Doctrine\ORM\EntityManager;
+use Drobotik\Eav\Database\Connection;
 use Drobotik\Eav\Database\DatabaseManager;
 use PHPUnit\Framework\TestCase;
 
@@ -20,7 +21,13 @@ class DatabaseManagerFunctionalTest extends TestCase
      * @group functional
      * @covers \Drobotik\Eav\Database\DatabaseManager::initialize
      */
-    public function initialize() {
+    public function initialize()
+    {
+        $dbParams = [
+            'driver' => 'pdo_sqlite',
+            'path' => dirname(__DIR__, 2) . '/tests/test.sqlite'
+        ];
+        Connection::get($dbParams);
         $result = DatabaseManager::initialize();
         $this->assertInstanceOf(EntityManager::class, $result);
         $result2 = DatabaseManager::initialize();

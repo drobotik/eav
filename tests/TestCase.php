@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use Drobotik\Eav\Database\Connection;
 use Drobotik\Eav\Factory\EavFactory;
 use Faker\Generator;
 use Illuminate\Database\Capsule\Manager as Capsule;
@@ -20,6 +21,12 @@ class TestCase extends \PHPUnit\Framework\TestCase
     protected function setUp() : void
     {
         parent::setUp();
+        $dbParams = [
+            'driver' => 'pdo_sqlite',
+            'path' => dirname(__DIR__) . '/tests/test.sqlite'
+        ];
+        Connection::get($dbParams);
+
         $migrator = new Migrator();
         $migrator->rollback();
         $migrator->migrate();

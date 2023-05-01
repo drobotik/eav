@@ -12,7 +12,7 @@ namespace Tests;
 use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
 use Doctrine\Migrations\Configuration\Migration\PhpFile;
 use Doctrine\Migrations\DependencyFactory;
-use Drobotik\Eav\Database\DoctrineConnection;
+use Drobotik\Eav\Database\Connection;
 use Symfony\Component\Console\Input\ArrayInput;
 
 class Migrator
@@ -33,7 +33,7 @@ class Migrator
     private function run(string $type): void
     {
         $config = new PhpFile(__DIR__.'/../migrations.php');
-        $conn = DoctrineConnection::getConnection();
+        $conn = Connection::get();
         $di = DependencyFactory::fromConnection($config, new ExistingConnection($conn));
         $migrator = $di->getMigrator();
         $version = $di->getVersionAliasResolver()->resolveVersionAlias($type);
