@@ -46,6 +46,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
     {
         $migrator = new Migrator();
         $migrator->rollback();
+        Cleaner::run();
         parent::tearDown();
     }
 

@@ -27,12 +27,7 @@ class PerformanceTestCase extends \PHPUnit\Framework\TestCase
 
     public function tearDown(): void
     {
-        $paths = [
-            __DIR__.'/temp/csv.csv'
-        ];
-        foreach ($paths as $path)
-            if(file_exists($path))
-                unlink($path);
+        Cleaner::run();
         parent::tearDown();
     }
 }
