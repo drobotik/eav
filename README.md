@@ -42,11 +42,11 @@ There isn't any pre-configured connection information. For non-docker environmen
 As an option, make a new file connection.php in root folder. This file will be automatically included.
 ```php
 #connection.php
-use Drobotik\Eav\Database\DoctrineConnection;
+use Drobotik\Eav\Database\Connection;
 $config = [
     // connection settings
 ]
-$connection = DoctrineConnection::getConnection($config)
+$connection = Connection::get($config)
 ```
 Note use a [driver](https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#driver) that suits your needs.
 
