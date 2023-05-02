@@ -16,6 +16,7 @@ enum _ENTITY implements DefineTableInterface
     case ID;
     case DOMAIN_ID;
     case ATTR_SET_ID;
+    case BULK_INSERT_ID;
 
     public static function table() : string
     {
@@ -28,6 +29,7 @@ enum _ENTITY implements DefineTableInterface
             self::ID => 'entity_id',
             self::DOMAIN_ID => _DOMAIN::ID->column(),
             self::ATTR_SET_ID => _SET::ID->column(),
+            self::BULK_INSERT_ID => "bulk_insert_id"
         };
     }
 }

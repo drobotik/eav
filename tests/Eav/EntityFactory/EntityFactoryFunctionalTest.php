@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Tests\Eav\EntityFactory;
 
+use Drobotik\Eav\Entity;
 use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Enum\_PIVOT;
@@ -86,7 +87,7 @@ class EntityFactoryFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Factory\EavFactory::createEavEntity
+     * @covers \Drobotik\Eav\Factory\EntityFactory::create
      */
     public function create_entity() {
         $domain = $this->eavFactory->createDomain();
@@ -109,7 +110,7 @@ class EntityFactoryFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Factory\EavFactory::createEavEntity
+     * @covers \Drobotik\Eav\Factory\EntityFactory::create
      */
     public function create_attributes_no_group_exception() {
         $this->expectException(EntityFactoryException::class);
@@ -125,7 +126,7 @@ class EntityFactoryFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Factory\EavFactory::createEavEntity
+     * @covers \Drobotik\Eav\Factory\EntityFactory::create
      */
     public function create_attributes_not_existing_group_exception() {
         $this->expectException(EntityFactoryException::class);
@@ -147,7 +148,7 @@ class EntityFactoryFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Factory\EavFactory::createEavEntity
+     * @covers \Drobotik\Eav\Factory\EntityFactory::create
      */
     public function create_attributes() {
         $domain = $this->eavFactory->createDomain();
@@ -211,7 +212,7 @@ class EntityFactoryFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Factory\EavFactory::createEavEntity
+     * @covers \Drobotik\Eav\Factory\EntityFactory::create
      */
     public function create_attribute_array_not_provided() {
         $this->expectException(EntityFactoryException::class);
@@ -233,7 +234,7 @@ class EntityFactoryFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Factory\EavFactory::createEavEntity
+     * @covers \Drobotik\Eav\Factory\EntityFactory::create
      */
     public function create_attribute_name_not_provided() {
         $this->expectException(EntityFactoryException::class);
@@ -255,7 +256,7 @@ class EntityFactoryFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Factory\EavFactory::createEavEntity
+     * @covers \Drobotik\Eav\Factory\EntityFactory::create
      */
     public function create_attribute_type_not_provided() {
         $this->expectException(EntityFactoryException::class);
@@ -277,7 +278,7 @@ class EntityFactoryFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Factory\EavFactory::createEavEntity
+     * @covers \Drobotik\Eav\Factory\EntityFactory::create
      */
     public function create_attribute_type_not_supported() {
         $this->expectException(AttributeTypeException::class);
@@ -299,7 +300,7 @@ class EntityFactoryFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Factory\EavFactory::createEavEntity
+     * @covers \Drobotik\Eav\Factory\EntityFactory::create
      */
     public function create_pivot_table_rows() {
         $domain = $this->eavFactory->createDomain();
@@ -383,7 +384,7 @@ class EntityFactoryFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Factory\EavFactory::createEavEntity
+     * @covers \Drobotik\Eav\Factory\EntityFactory::create
      */
     public function create_values() {
         $domain = $this->eavFactory->createDomain();
@@ -467,7 +468,7 @@ class EntityFactoryFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Factory\EavFactory::createEavEntity
+     * @covers \Drobotik\Eav\Factory\EntityFactory::create
      */
     public function create_skip_creating_values() {
         $domain = $this->eavFactory->createDomain();
@@ -519,5 +520,142 @@ class EntityFactoryFunctionalTest extends TestCase
         $this->assertNull($text);
 
         $this->assertEquals([], $result->getValues());
+    }
+
+
+    /**
+     * @test
+     *
+     * @group functional
+     *
+     * @covers \Drobotik\Eav\Factory\EavFactory::bulkCreate
+     */
+    public function bulk_create()
+    {
+        $values = [];
+        $iterations = 100;
+        for($i=0;$i<$iterations;$i++) {
+            $values[] = [
+                [
+                    "attribute" => ATTR_TYPE::STRING->value(),
+                    "table" => ATTR_TYPE::STRING->valueTable(),
+                    "value" => ATTR_TYPE::STRING->randomValue()
+                ],
+                [
+                    "attribute" => ATTR_TYPE::INTEGER->value(),
+                    "table" => ATTR_TYPE::INTEGER->valueTable(),
+                    "value" => ATTR_TYPE::INTEGER->randomValue()
+                ],
+                [
+                    "attribute" => ATTR_TYPE::DECIMAL->value(),
+                    "table" => ATTR_TYPE::DECIMAL->valueTable(),
+                    "value" => ATTR_TYPE::DECIMAL->randomValue()
+                ],
+                [
+                    "attribute" => ATTR_TYPE::DATETIME->value(),
+                    "table" => ATTR_TYPE::DATETIME->valueTable(),
+                    "value" => ATTR_TYPE::DATETIME->randomValue()
+                ],
+                [
+                    "attribute" => ATTR_TYPE::TEXT->value(),
+                    "table" => ATTR_TYPE::TEXT->valueTable(),
+                    "value" => ATTR_TYPE::TEXT->randomValue(),
+                ]
+            ];
+        }
+        $domain = $this->eavFactory->createDomain();
+        $set = $this->eavFactory->createAttributeSet($domain);
+        $group = $this->eavFactory->createGroup($set);
+        $attributes = $this->getFactoryDefaultConfig();
+        $attributes[ATTR_TYPE::STRING->value()][ATTR_FACTORY::GROUP->field()] = $group->getKey();
+        $attributes[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::GROUP->field()] = $group->getKey();
+        $attributes[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::GROUP->field()] = $group->getKey();
+        $attributes[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::GROUP->field()] = $group->getKey();
+        $attributes[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::GROUP->field()] = $group->getKey();
+        $config = [
+            "attributes" => $attributes,
+            "values" => $values
+        ];
+        $this->factory->bulkCreate($config, $domain, $set);
+
+        $entities = EntityModel::get();
+        $this->assertEquals($iterations, $entities->count());
+
+        // check attributes created
+        /** @var AttributeModel $string */
+        /** @var AttributeModel $integer */
+        /** @var AttributeModel $decimal */
+        /** @var AttributeModel $datetime */
+        /** @var AttributeModel $text */
+        $string = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
+            ->where(_ATTR::TYPE->column(), ATTR_TYPE::STRING->value())
+            ->where(_ATTR::NAME->column(), ATTR_TYPE::STRING->value())->first();
+        $integer = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
+            ->where(_ATTR::TYPE->column(), ATTR_TYPE::INTEGER->value())
+            ->where(_ATTR::NAME->column(), ATTR_TYPE::INTEGER->value())->first();
+        $decimal = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
+            ->where(_ATTR::TYPE->column(), ATTR_TYPE::DECIMAL->value())
+            ->where(_ATTR::NAME->column(), ATTR_TYPE::DECIMAL->value())->first();
+        $datetime = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
+            ->where(_ATTR::TYPE->column(), ATTR_TYPE::DATETIME->value())
+            ->where(_ATTR::NAME->column(), ATTR_TYPE::DATETIME->value())->first();
+        $text = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
+            ->where(_ATTR::TYPE->column(), ATTR_TYPE::TEXT->value())
+            ->where(_ATTR::NAME->column(), ATTR_TYPE::TEXT->value())->first();
+
+        $this->assertNotNull($string);
+        $this->assertNotNull($integer);
+        $this->assertNotNull($decimal);
+        $this->assertNotNull($datetime);
+        $this->assertNotNull($text);
+
+        /** @var PivotModel $stringPivot */
+        /** @var PivotModel $integerPivot */
+        /** @var PivotModel $decimalPivot */
+        /** @var PivotModel $datetimePivot */
+        /** @var PivotModel $textPivot */
+        $stringPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domain->getKey())
+            ->where(_PIVOT::SET_ID->column(), $set->getKey())
+            ->where(_PIVOT::GROUP_ID->column(), $group->getKey())
+            ->where(_PIVOT::ATTR_ID->column(), $string->getKey())->first();
+        $integerPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domain->getKey())
+            ->where(_PIVOT::SET_ID->column(), $set->getKey())
+            ->where(_PIVOT::GROUP_ID->column(), $group->getKey())
+            ->where(_PIVOT::ATTR_ID->column(), $integer->getKey())->first();
+        $decimalPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domain->getKey())
+            ->where(_PIVOT::SET_ID->column(), $set->getKey())
+            ->where(_PIVOT::GROUP_ID->column(), $group->getKey())
+            ->where(_PIVOT::ATTR_ID->column(), $decimal->getKey())->first();
+        $datetimePivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domain->getKey())
+            ->where(_PIVOT::SET_ID->column(), $set->getKey())
+            ->where(_PIVOT::GROUP_ID->column(), $group->getKey())
+            ->where(_PIVOT::ATTR_ID->column(), $datetime->getKey())->first();
+        $textPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domain->getKey())
+            ->where(_PIVOT::SET_ID->column(), $set->getKey())
+            ->where(_PIVOT::GROUP_ID->column(), $group->getKey())
+            ->where(_PIVOT::ATTR_ID->column(), $text->getKey())->first();
+
+        $this->assertNotNull($stringPivot);
+        $this->assertNotNull($integerPivot);
+        $this->assertNotNull($decimalPivot);
+        $this->assertNotNull($datetimePivot);
+        $this->assertNotNull($textPivot);
+
+
+        foreach($entities as $index => $record) {
+            $entity = new Entity();
+            $entity->setDomainKey($domain->getKey());
+            $entity->setKey($record->getKey());
+            $entity->getAttributeSet()->setKey($set->getKey());
+            $entity->find();
+
+            $line = $values[$index];
+            $result = [];
+            foreach ($line as $data) {
+                ["value" => $value, "attribute" => $attribute] = $data;
+                $result[$attribute] = $value;
+            }
+            $this->assertEquals($result, $entity->toArray(), "Iteration:".$index);
+        }
     }
 }
