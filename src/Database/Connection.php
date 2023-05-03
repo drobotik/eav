@@ -12,14 +12,21 @@ namespace Drobotik\Eav\Database;
 use Doctrine\DBAL\Connection as DBALConnection;
 use Doctrine\DBAL\DriverManager;
 use Drobotik\Eav\Exception\ConnectionException;
+use PDO;
 
 class Connection
 {
     protected static DBALConnection|null $conn = null;
+    protected static PDO|null $pdo = null;
 
     public static function reset() : void
     {
         self::$conn = null;
+    }
+
+    public static function resetPdo() : void
+    {
+        self::$pdo = null;
     }
 
     public static function get(array $params = null) : DBALConnection
@@ -30,6 +37,18 @@ class Connection
         }
         if(!is_null(self::$conn)) {
             return self::$conn;
+        }
+        ConnectionException::undefined();
+    }
+
+    public static function pdo(string $dsn = null, $username = null, $password = null, $options = null) : PDO
+    {
+        if(!is_null($dsn)) {
+            self::$pdo = new PDO($dsn, $username, $password, $options);
+            return self::$pdo;
+        }
+        if(!is_null(self::$pdo)) {
+            return self::$pdo;
         }
         ConnectionException::undefined();
     }

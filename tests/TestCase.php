@@ -26,6 +26,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
             'path' => dirname(__DIR__) . '/tests/test.sqlite'
         ];
         Connection::get($dbParams);
+        Connection::pdo("sqlite:".$dbParams['path']);
 
         $migrator = new Migrator();
         $migrator->rollback();

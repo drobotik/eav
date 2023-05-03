@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\Factory;
 
+use Drobotik\Eav\Database\Connection;
 use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Enum\_GROUP;
@@ -70,18 +71,13 @@ class EntityFactory
             implode(',',$bulk)
         );
 
-        $path = dirname(__DIR__, 2) . '/tests/test.sqlite';
-        $pdo = new \PDO("sqlite:$path");
-
-        $pdo->exec($template);
+        Connection::pdo()->exec($template);
         return $time;
     }
 
     private function valuesBulk(array $entities, array $values, array $attributes, int $domainKey)
     {
-
-        $path = dirname(__DIR__, 2) . '/tests/test.sqlite';
-        $pdo = new \PDO("sqlite:$path");
+        $pdo = Connection::pdo();
 
         $template = "INSERT INTO %s ("._VALUE::DOMAIN_ID->column().","._VALUE::ENTITY_ID->column().","._VALUE::ATTRIBUTE_ID->column().","._VALUE::VALUE->column().")";
 
