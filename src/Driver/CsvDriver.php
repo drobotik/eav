@@ -7,12 +7,12 @@
  */
 declare(strict_types=1);
 
-namespace Drobotik\Eav\Export\Driver;
+namespace Drobotik\Eav\Driver;
 
-use Drobotik\Eav\ExportDriver;
 use Drobotik\Eav\Result\Result;
+use Drobotik\Eav\TransportDriver;
 
-class ExportCsvDriver extends ExportDriver
+class CsvDriver extends TransportDriver
 {
     private string $path;
 
@@ -21,12 +21,25 @@ class ExportCsvDriver extends ExportDriver
         $this->path = $path;
     }
 
-    public function getPath() : string
+    public function getPath()
     {
         return $this->path;
     }
 
-    public function run(array $data): Result
+    public function read() : Result
+    {
+        $result = new Result();
+        $fp = fopen($this->getPath(), 'r');
+        $output = [];
+        while (($row = fgetcsv($fp)) !== false) {
+            $output[] = $row;
+        }
+        fclose($fp);
+        $result->setData($output);
+        return $result;
+    }
+
+    public function write(array $data) : Result
     {
         $result = new Result();
         $fp = fopen($this->getPath(), 'w');
@@ -41,7 +54,6 @@ class ExportCsvDriver extends ExportDriver
         }
         fclose($fp);
         $result->exportSuccess();
-
         return $result;
     }
 }

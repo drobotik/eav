@@ -10,20 +10,12 @@ declare(strict_types=1);
 
 namespace Tests\Fixtures;
 
-use Drobotik\Eav\ExportDriver;
+use Drobotik\Eav\TransportDriver;
 use Drobotik\Eav\Result\Result;
 
-class ExportDriverFixture extends ExportDriver
+class TransportDriverFixture extends TransportDriver
 {
     private ?Result $result = null;
-
-    public function run(array $data): Result
-    {
-        return $this->hasResult()
-            ? $this->getResult()
-            : new Result();
-    }
-
     public function setResult(Result $result)
     {
         $this->result = $result;
@@ -37,5 +29,19 @@ class ExportDriverFixture extends ExportDriver
     public function hasResult(): bool
     {
         return !is_null($this->result);
+    }
+
+    public function read(): Result
+    {
+        return $this->hasResult()
+            ? $this->getResult()
+            : new Result();
+    }
+
+    public function write(array $data): Result
+    {
+        return $this->hasResult()
+            ? $this->getResult()
+            : new Result();
     }
 }

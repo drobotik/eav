@@ -7,11 +7,12 @@
  */
 declare(strict_types=1);
 
-namespace Drobotik\Eav;
+namespace Drobotik\Eav\Interface;
 
-use Drobotik\Eav\Interface\ExportDriverInterface;
+use Drobotik\Eav\Result\Result;
 
-abstract class ExportDriver extends Transporter implements ExportDriverInterface
+interface TransportDriverInterface
 {
-
+    public function read() : Result;
+    public function write(array $data): Result;
 }

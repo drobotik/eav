@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Tests\Eav\ExportManager;
 
-use Drobotik\Eav\Export\Driver\ExportCsvDriver;
+use Drobotik\Eav\Driver\CsvDriver;
 use Drobotik\Eav\Export\ExportManager;
 use Drobotik\Eav\QueryBuilder\QueryBuilderManager;
 use Drobotik\Eav\Result\Result;
@@ -48,9 +48,9 @@ class ExportManagerBehaviorTest extends TestCase
         $queryBuilderManager->expects($this->once())->method('run')
             ->willReturn($query);
 
-        $driver = $this->getMockBuilder(ExportCsvDriver::class)
-            ->onlyMethods(['run'])->getMock();
-        $driver->expects($this->once())->method('run')
+        $driver = $this->getMockBuilder(CsvDriver::class)
+            ->onlyMethods(['write'])->getMock();
+        $driver->expects($this->once())->method('write')
             ->with([123])
             ->willReturn($result);
 

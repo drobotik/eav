@@ -12,7 +12,6 @@ namespace Tests\Eav\AttributeSetAction;
 use Drobotik\Eav\Attribute;
 use Drobotik\Eav\AttributeContainer;
 use Drobotik\Eav\AttributeSet;
-use Drobotik\Eav\AttributeSetAction;
 use Drobotik\Eav\Entity;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Strategy;

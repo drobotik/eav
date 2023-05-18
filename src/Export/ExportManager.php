@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\Export;
 
-use Drobotik\Eav\ExportDriver;
+use Drobotik\Eav\TransportDriver;
 use Drobotik\Eav\QueryBuilder\QueryBuilderManager;
 use Drobotik\Eav\Result\Result;
 use Drobotik\Eav\Trait\DomainTrait;
@@ -18,7 +18,7 @@ class ExportManager
 {
     use DomainTrait;
 
-    private ExportDriver        $driver;
+    private TransportDriver     $driver;
     private QueryBuilderManager $queryBuilderManager;
 
     public function setQueryBuilderManager(QueryBuilderManager $manager): void
@@ -31,12 +31,12 @@ class ExportManager
         return $this->queryBuilderManager;
     }
 
-    public function setDriver(ExportDriver $driver): void
+    public function setDriver(TransportDriver $driver): void
     {
         $this->driver = $driver;
     }
 
-    public function getDriver(): ExportDriver
+    public function getDriver(): TransportDriver
     {
         return $this->driver;
     }
@@ -48,7 +48,7 @@ class ExportManager
 
     public function run(): Result
     {
-        return $this->getDriver()->run(
+        return $this->getDriver()->write(
             $this->getQueryBuilderManager()
                 ->run()
                 ->get()

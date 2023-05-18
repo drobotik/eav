@@ -8,23 +8,23 @@
  */
 declare(strict_types=1);
 
-namespace Tests\Eav\ExportCsvDriver;
+namespace Tests\Eav\DriverCsv;
 
-use Drobotik\Eav\Export\Driver\ExportCsvDriver;
+use Drobotik\Eav\Driver\CsvDriver;
 use Faker\Factory;
 use Tests\PerformanceTestCase;
 
-class ExportCsvDriverPerformanceTest extends PerformanceTestCase
+class CsvDriverPerformanceTest extends PerformanceTestCase
 {
     /**
      * @test
      *
      * @group performance
      *
-     * @covers \Drobotik\Eav\Export\Driver\ExportCsvDriver::run
+     * @covers \Drobotik\Eav\Driver\CsvDriver::write
      */
-    public function twenty_thousands_records() {
-        $driver = new ExportCsvDriver();
+    public function write_twenty_thousands_records() {
+        $driver = new CsvDriver();
         $path = dirname(__DIR__, 2) . '/temp/csv.csv';
         $driver->setPath($path);
 
@@ -41,7 +41,7 @@ class ExportCsvDriverPerformanceTest extends PerformanceTestCase
             ];
         }
         $start = microtime(true);
-        $driver->run($data);
+        $driver->write($data);
         $end = microtime(true);
         $this->assertLessThan(120, $end - $start);
     }
