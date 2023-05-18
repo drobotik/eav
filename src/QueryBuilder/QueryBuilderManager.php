@@ -110,6 +110,7 @@ class QueryBuilderManager
         $query->from(_ENTITY::table(), 'e');
         $query->where(_ENTITY::DOMAIN_ID->column(), '=', $this->getDomainKey());
         $query->where(_ENTITY::ATTR_SET_ID->column(), '=', $this->getSetKey());
+        $query->addSelect(_ENTITY::ID->column());
         return $query;
     }
 

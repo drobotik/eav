@@ -121,6 +121,7 @@ class QueryBuilderManagerFunctionalTest extends QueryBuilderTestCase
             ->from(_ENTITY::table(), 'e')
             ->where(_ENTITY::DOMAIN_ID->column(), '=', 3)
             ->where(_ENTITY::ATTR_SET_ID->column(), '=', 4);
+        $expected->addSelect(_ENTITY::ID->column());
         $query = $manager->makeQuery();
         $this->assertEquals($expected->toSql(), $query->toSql());
     }
