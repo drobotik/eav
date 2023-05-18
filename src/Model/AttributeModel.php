@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\Model;
 
+use Drobotik\Eav\Enum\ATTR_TYPE;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Drobotik\Eav\Enum\_ATTR;
@@ -69,6 +70,11 @@ class AttributeModel extends Model
     {
         $this->{_ATTR::TYPE->column()} = $type;
         return $this;
+    }
+
+    public function getTypeEnum() : ATTR_TYPE
+    {
+        return ATTR_TYPE::getCase($this->getType());
     }
 
     public function getDescription()

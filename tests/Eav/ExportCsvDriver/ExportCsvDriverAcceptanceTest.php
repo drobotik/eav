@@ -10,11 +10,9 @@ declare(strict_types=1);
 
 namespace Tests\Eav\ExportCsvDriver;
 
-use Drobotik\Eav\Enum\_ATTR;
-use Drobotik\Eav\Enum\ATTR_FACTORY;
+use Carbon\Carbon;
 use Drobotik\Eav\Enum\ATTR_TYPE;
-use Drobotik\Eav\Enum\EXPORT;
-use Drobotik\Eav\Export\ExportCsvDriver;
+use Drobotik\Eav\Export\Driver\ExportCsvDriver;
 use Drobotik\Eav\Result\Result;
 use Tests\TestCase;
 
@@ -25,87 +23,47 @@ class ExportCsvDriverAcceptanceTest extends TestCase
      *
      * @group acceptance
      *
-     * @covers \Drobotik\Eav\Export\ExportCsvDriver::run
+     * @covers \Drobotik\Eav\Export\Driver\ExportCsvDriver::run
      */
     public function results()
     {
         $driver = new ExportCsvDriver();
-        $domainRecord = $this->eavFactory->createDomain();
-        $set = $this->eavFactory->createAttributeSet();
-        $group1 = $this->eavFactory->createGroup($set);
-        $group2 = $this->eavFactory->createGroup($set);
-        $rows = [
-            [ATTR_TYPE::STRING->value(),ATTR_TYPE::INTEGER->value(),ATTR_TYPE::DECIMAL->value(),ATTR_TYPE::DATETIME->value(),ATTR_TYPE::TEXT->value()]
+        $input = [
+            ['test1', 1, 1.2, Carbon::now()->toISOString(), 'text text1'],
+            ['test2', 1, 1.2, Carbon::now()->subDays()->toISOString(), 'text text2'],
+            ['test3', 1, 1.2, Carbon::now()->subDays(2)->toISOString(), 'text text3']
         ];
-        for($i=0; $i < 3; $i++) {
-            $string = ATTR_TYPE::STRING->randomValue();
-            $integer = ATTR_TYPE::INTEGER->randomValue();
-            $decimal = ATTR_TYPE::DECIMAL->randomValue();
-            $datetime = ATTR_TYPE::DATETIME->randomValue($i);
-            $text = ATTR_TYPE::TEXT->randomValue();
-            $rows[] = [$string, $integer, $decimal, $datetime, $text];
-            $config = [
-                [
-                    ATTR_FACTORY::ATTRIBUTE->field() => [
-                        _ATTR::NAME->column() => ATTR_TYPE::STRING->value(),
-                        _ATTR::TYPE->column() => ATTR_TYPE::STRING->value()
-                    ],
-                    ATTR_FACTORY::GROUP->field() => $group1->getKey(),
-                    ATTR_FACTORY::VALUE->field() => $string
-                ],
-                [
-                    ATTR_FACTORY::ATTRIBUTE->field() => [
-                        _ATTR::NAME->column() => ATTR_TYPE::INTEGER->value(),
-                        _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value()
-                    ],
-                    ATTR_FACTORY::GROUP->field() => $group1->getKey(),
-                    ATTR_FACTORY::VALUE->field() => $integer
-                ],
-                [
-                    ATTR_FACTORY::ATTRIBUTE->field() => [
-                        _ATTR::NAME->column() => ATTR_TYPE::DECIMAL->value(),
-                        _ATTR::TYPE->column() => ATTR_TYPE::DECIMAL->value()
-                    ],
-                    ATTR_FACTORY::GROUP->field() => $group1->getKey(),
-                    ATTR_FACTORY::VALUE->field() => $decimal
-                ],
-                [
-                    ATTR_FACTORY::ATTRIBUTE->field() => [
-                        _ATTR::NAME->column() => ATTR_TYPE::DATETIME->value(),
-                        _ATTR::TYPE->column() => ATTR_TYPE::DATETIME->value()
-                    ],
-                    ATTR_FACTORY::GROUP->field() => $group2->getKey(),
-                    ATTR_FACTORY::VALUE->field() => $datetime
-                ],
-                [
-                    ATTR_FACTORY::ATTRIBUTE->field() => [
-                        _ATTR::NAME->column() => ATTR_TYPE::TEXT->value(),
-                        _ATTR::TYPE->column() => ATTR_TYPE::TEXT->value()
-                    ],
-                    ATTR_FACTORY::GROUP->field() => $group2->getKey(),
-                    ATTR_FACTORY::VALUE->field() => $text
-                ]
+        $header = [
+            ATTR_TYPE::STRING->value(),
+            ATTR_TYPE::INTEGER->value(),
+            ATTR_TYPE::DECIMAL->value(),
+            ATTR_TYPE::DATETIME->value(),
+            ATTR_TYPE::TEXT->value()
+        ];
+        $data = [];
+        foreach($input as $row)
+        {
+            $data[] = [
+                ATTR_TYPE::STRING->value() => $row[0],
+                ATTR_TYPE::INTEGER->value() => $row[1],
+                ATTR_TYPE::DECIMAL->value() => $row[2],
+                ATTR_TYPE::DATETIME->value() => $row[3],
+                ATTR_TYPE::TEXT->value() => $row[4]
             ];
-            $this->eavFactory->createEavEntity($config, $domainRecord, $set);
         }
-
         $path = dirname(__DIR__, 2) . '/temp/csv.csv';
-        $config = [
-            EXPORT::PATH->field() => $path,
-            EXPORT::DOMAIN_KEY->field() => $domainRecord->getKey(),
-            EXPORT::SET_KEY->field() => $set->getKey()
-        ];
-        $driver->setData($config);
-        $result = $driver->run();
+        $driver->setPath($path);
+        $result = $driver->run($data);
         $this->assertInstanceOf(Result::class, $result);
         $this->assertFileExists($path);
         $fp = fopen($path, 'r');
-        $data = array();
+        $output = [];
         while (($row = fgetcsv($fp)) !== false) {
-            $data[] = $row;
+            $output[] = $row;
         }
         fclose($fp);
-        $this->assertEquals($rows, $data);
+        $expected = array_merge([$header], $input);
+        $this->assertEquals($expected, $output);
     }
 
 }

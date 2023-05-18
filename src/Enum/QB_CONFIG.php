@@ -9,18 +9,12 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\Enum;
 
-enum EXPORT
+class QB_CONFIG
 {
-    case PATH;
-    case DOMAIN_KEY;
-    case SET_KEY;
-
-    public function field(): string
-    {
-        return match($this) {
-            self::PATH => "path",
-            self::DOMAIN_KEY => "domain_key",
-            self::SET_KEY => "set_key"
-        };
-    }
+    public const CONDITION = "condition";
+    public const RULES = "rules";
+    public const NAME = "name";
+    public const TYPE = "type";
+    public const VALUE = "value";
+    public const OPERATOR = "operator";
 }

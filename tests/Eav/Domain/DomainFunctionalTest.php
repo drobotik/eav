@@ -11,10 +11,9 @@ declare(strict_types=1);
 namespace Tests\Eav\Domain;
 
 use Drobotik\Eav\Domain;
-use Drobotik\Eav\Result\Result;
+use Drobotik\Eav\Export\ExportManager;
+use Drobotik\Eav\Import\ImportManager;
 use PHPUnit\Framework\TestCase;
-use Tests\Fixtures\ExportDriverFixture;
-use Tests\Fixtures\DomainDataDriverFixture;
 
 class DomainFunctionalTest extends TestCase
 {
@@ -31,17 +30,14 @@ class DomainFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Domain::getExportDriver
-     * @covers \Drobotik\Eav\Domain::hasExportDriver
-     * @covers \Drobotik\Eav\Domain::setExportDriver
+     * @covers \Drobotik\Eav\Domain::getImportManager
+     * @covers \Drobotik\Eav\Domain::setImportManager
      */
-    public function exportDriver()
+    public function importManager()
     {
-        $driver = new ExportDriverFixture();
-        $this->assertFalse($this->domain->hasExportDriver());
-        $this->domain->setExportDriver($driver);
-        $this->assertSAME($driver, $this->domain->getExportDriver());
-        $this->assertTrue($this->domain->hasExportDriver());
+        $manager = new ImportManager();
+        $this->domain->setImportManager($manager);
+        $this->assertSame($manager, $this->domain->getImportManager());
     }
 
     /**
@@ -49,48 +45,14 @@ class DomainFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Domain::getImportDriver
-     * @covers \Drobotik\Eav\Domain::hasImportDriver
-     * @covers \Drobotik\Eav\Domain::setImportDriver
+     * @covers \Drobotik\Eav\Domain::getExportManager
+     * @covers \Drobotik\Eav\Domain::setExportManager
      */
-    public function importDriver()
+    public function exportManager()
     {
-        $driver = new DomainDataDriverFixture();
-        $this->assertFalse($this->domain->hasImportDriver());
-        $this->domain->setImportDriver($driver);
-        $this->assertSAME($driver, $this->domain->getImportDriver());
-        $this->assertTrue($this->domain->hasImportDriver());
+        $manager = new ExportManager();
+        $this->domain->setExportManager($manager);
+        $this->assertSame($manager, $this->domain->getExportManager());
     }
 
-    /**
-     * @test
-     *
-     * @group functional
-     *
-     * @covers \Drobotik\Eav\Domain::import
-     */
-    public function importResult()
-    {
-        $driver = new DomainDataDriverFixture();
-        $result = (new Result())->importSuccess();
-        $driver->setResult($result);
-        $this->domain->setImportDriver($driver);
-        $this->assertSame($result, $this->domain->import([]));
-    }
-
-    /**
-     * @test
-     *
-     * @group functional
-     *
-     * @covers \Drobotik\Eav\Domain::import
-     */
-    public function exportResult()
-    {
-        $driver = new ExportDriverFixture();
-        $result = (new Result())->exportSuccess();
-        $driver->setResult($result);
-        $this->domain->setExportDriver($driver);
-        $this->assertSame($result, $this->domain->export());
-    }
 }

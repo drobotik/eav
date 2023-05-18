@@ -10,50 +10,44 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav;
 
+use Drobotik\Eav\Export\ExportManager;
+use Drobotik\Eav\Import\ImportManager;
 use Drobotik\Eav\Result\Result;
 
 class Domain
 {
-    private DomainDataDriver $exportDriver;
-    private DomainDataDriver $importDriver;
+    private ExportManager $exportManager;
+    private ImportManager $importManager;
 
-    public function setExportDriver(DomainDataDriver $driver): void
+    public function getExportManager() : ExportManager
     {
-        $this->exportDriver = $driver;
+        return $this->exportManager;
     }
 
-    public function getExportDriver(): DomainDataDriver
+    public function setExportManager(ExportManager $manager) : void
     {
-        return $this->exportDriver;
+        $manager->setDomain($this);
+        $this->exportManager = $manager;
     }
 
-    public function hasExportDriver(): bool
+    public function getImportManager() : ImportManager
     {
-        return isset($this->exportDriver);
+        return $this->importManager;
     }
 
-    public function setImportDriver(DomainDataDriver $driver): void
+    public function setImportManager(ImportManager $manager) : void
     {
-        $this->importDriver = $driver;
-    }
-
-    public function getImportDriver(): DomainDataDriver
-    {
-        return $this->importDriver;
-    }
-
-    public function hasImportDriver(): bool
-    {
-        return isset($this->importDriver);
+        $manager->setDomain($this);
+        $this->importManager = $manager;
     }
 
     public function import(): Result
     {
-        return $this->getImportDriver()->run();
+        return $this->getImportManager()->run();
     }
 
     public function export(): Result
     {
-        return $this->getExportDriver()->run();
+        return $this->getExportManager()->run();
     }
 }

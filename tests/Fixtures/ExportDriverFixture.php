@@ -10,14 +10,14 @@ declare(strict_types=1);
 
 namespace Tests\Fixtures;
 
-use Drobotik\Eav\DomainDataDriver;
+use Drobotik\Eav\ExportDriver;
 use Drobotik\Eav\Result\Result;
 
-class ExportDriverFixture extends DomainDataDriver
+class ExportDriverFixture extends ExportDriver
 {
     private ?Result $result = null;
 
-    public function run(): Result
+    public function run(array $data): Result
     {
         return $this->hasResult()
             ? $this->getResult()

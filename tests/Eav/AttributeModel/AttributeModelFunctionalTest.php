@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Tests\Eav\AttributeModel;
 
+use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Model\AttributeModel;
 use PHPUnit\Framework\TestCase;
 
@@ -89,5 +90,15 @@ class AttributeModelFunctionalTest extends TestCase
     public function strategy() {
         $this->model->setStrategy('test');
         $this->assertEquals('test', $this->model->getStrategy());
+    }
+
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\Model\AttributeModel::getTypeEnum
+     */
+    public function type_enum() {
+        $this->model->setType(ATTR_TYPE::INTEGER->value());
+        $this->assertEquals(ATTR_TYPE::INTEGER, $this->model->getTypeEnum());
     }
 }

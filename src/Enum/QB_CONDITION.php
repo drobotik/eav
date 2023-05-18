@@ -7,11 +7,18 @@
  */
 declare(strict_types=1);
 
-namespace Drobotik\Eav;
+namespace Drobotik\Eav\Enum;
 
-use Drobotik\Eav\Interface\DomainDataDriverInterface;
-
-abstract class DomainDataDriver extends Transporter implements DomainDataDriverInterface
+enum QB_CONDITION
 {
+    case AND;
+    case OR;
 
+    public function sql() : string
+    {
+        return match ($this) {
+            self::AND => "and",
+            self::OR => "or"
+        };
+    }
 }
