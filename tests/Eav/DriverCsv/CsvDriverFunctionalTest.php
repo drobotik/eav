@@ -18,6 +18,50 @@ use Tests\TestCase;
 
 class CsvDriverFunctionalTest extends TestCase
 {
+
+    /**
+     * @test
+     *
+     * @group acceptance
+     *
+     * @covers \Drobotik\Eav\Driver\CsvDriver::getChunk
+     */
+    public function chunk_cursor()
+    {
+        $driver = new CsvDriver();
+        $driver->setPath(dirname(__DIR__, 2) . '/Data/test.csv');
+        $driver->setMode('r');
+        $driver->setCursor(0);
+        $driver->setChunkSize(10);
+        $chunk = $driver->getChunk();
+        $this->assertCount(10, $chunk);
+        $this->assertEquals('sunt', $chunk[0][ATTR_TYPE::STRING->value()]);
+        $this->assertEquals('repudiandae', $chunk[9][ATTR_TYPE::STRING->value()]);
+        $this->assertEquals(10, $driver->getCursor());
+        $chunk = $driver->getChunk();
+        $this->assertCount(10, $chunk);
+        $this->assertEquals('rerum', $chunk[0][ATTR_TYPE::STRING->value()]);
+        $this->assertEquals('voluptatem', $chunk[9][ATTR_TYPE::STRING->value()]);
+        $this->assertEquals(20, $driver->getCursor());
+        $driver->setChunkSize(75);
+        $chunk = $driver->getChunk();
+        $this->assertCount(75, $chunk);
+        $this->assertEquals('reprehenderit', $chunk[0][ATTR_TYPE::STRING->value()]);
+        $this->assertEquals('quos', $chunk[74][ATTR_TYPE::STRING->value()]);
+        $this->assertEquals(95, $driver->getCursor());
+        $driver->setChunkSize(10);
+        $chunk = $driver->getChunk();
+        $this->assertCount(5, $chunk);
+        $this->assertEquals('est', $chunk[0][ATTR_TYPE::STRING->value()]);
+        $this->assertEquals('vel', $chunk[4][ATTR_TYPE::STRING->value()]);
+        $this->assertEquals(100, $driver->getCursor());
+
+        $chunk = $driver->getChunk();
+        $this->assertNull($chunk);
+        $this->assertEquals(100, $driver->getCursor());
+    }
+
+
     /**
      * @test
      *
@@ -70,7 +114,7 @@ class CsvDriverFunctionalTest extends TestCase
      *
      * @group acceptance
      *
-     * @covers \Drobotik\Eav\Driver\CsvDriver::read
+     * @covers \Drobotik\Eav\Driver\CsvDriver::getAll
      */
     public function read()
     {
@@ -96,7 +140,7 @@ class CsvDriverFunctionalTest extends TestCase
 
         $driver = new CsvDriver();
         $driver->setPath($path);
-        $result = $driver->read();
+        $result = $driver->getAll();
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals($data, $result->getData());
     }
