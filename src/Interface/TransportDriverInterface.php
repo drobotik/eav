@@ -13,6 +13,8 @@ use Drobotik\Eav\Result\Result;
 
 interface TransportDriverInterface
 {
-    public function read() : Result;
-    public function write(array $data): Result;
+    public function getHeader() : array;
+    public function getChunk() : array|null;
+    public function readAll() : array;
+    public function writeAll(array $data): Result;
 }

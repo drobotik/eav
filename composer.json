@@ -25,7 +25,8 @@
         "illuminate/database": "^9.0|^10.0",
         "illuminate/validation": "^9.0|^10.0",
         "illuminate/translation": "^9.0|^10.0",
-        "ext-pdo": "*"
+        "ext-pdo": "*",
+        "league/csv": "^9.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.21",

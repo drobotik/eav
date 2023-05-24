@@ -13,135 +13,49 @@ use Drobotik\Eav\Result\Result;
 use Drobotik\Eav\TransportDriver;
 use League\Csv\Reader;
 use League\Csv\Statement;
-use SplFileObject;
+use League\Csv\Writer;
 
 class CsvDriver extends TransportDriver
 {
-    private string $path;
-    private string $mode;
-    private string $delimiter    = ',';
-    private int    $headerOffset = 0;
-    private int $total;
-    private int $cursor;
+    private Reader $reader;
+    private Writer $writer;
 
-    private int $chunkSize;
-    private SplFileObject $file;
-
-    public function setDelimiter(string $delimiter)
+    public function setReader(Reader $reader)
     {
-        $this->delimiter = $delimiter;
+        $this->reader = $reader;
     }
 
-    public function getDelimiter() : string
+    public function getReader() : Reader
     {
-        return $this->delimiter;
+        return $this->reader;
     }
 
-    public function setHeaderOffset(int $offset) : void
+    public function setWriter(Writer $writer)
     {
-        $this->headerOffset = $offset;
+        $this->writer = $writer;
     }
 
-    public function getHeaderOffset() : int
+    public function getWriter() : Writer
     {
-        return $this->headerOffset;
+        return $this->writer;
     }
 
-    public function setTotal(int $total)
+    public function getHeader(): array
     {
-        $this->total = $total;
-    }
-
-    public function getTotal() : int
-    {
-        return $this->total;
-    }
-
-    public function calculateTotal() : void
-    {
-        $i = 1;
-        $file = $this->getStream();
-        while (!$file->eof()) {
-            $i++;
-            $file->next();
-        }
-        $this->setTotal($i);
-    }
-
-    public function getChunkSize() : int
-    {
-        return $this->chunkSize;
-    }
-
-    public function setChunkSize(int $size)
-    {
-        $this->chunkSize = $size;
-    }
-
-    public function getCursor() : int
-    {
-        return $this->cursor;
-    }
-
-
-    public function setCursor(int $index) : void
-    {
-        $this->cursor = $index;
-    }
-
-    public function getStream(): SplFileObject
-    {
-        return $this->file;
-    }
-
-    public function isStream(): bool
-    {
-        return isset($this->file);
-    }
-
-    public function openStream() : SplFileObject
-    {
-        $this->file = new SplFileObject($this->getPath(), $this->getMode());
-        return $this->file;
-    }
-
-    public function setPath(string $path)
-    {
-        $this->path = $path;
-    }
-
-    public function getPath()
-    {
-        return $this->path;
-    }
-
-    public function setMode(string $mode)
-    {
-        $this->mode = $mode;
-    }
-
-    public function getMode(): string
-    {
-        return $this->mode;
+        return $this->getReader()->getHeader();
     }
 
     public function getChunk() : array|null
     {
-        if (!$this->isStream())
-        {
-            $this->openStream();
-        }
-        $file = $this->getStream();
         $cursor = $this->getCursor();
         $chunkSize = $this->getChunkSize();
-        $csv = Reader::createFromFileObject($file);
-        $csv->setDelimiter($this->getDelimiter());
-        $csv->setHeaderOffset($this->getHeaderOffset());
+        $csv = $this->getReader();
 
         $stmt = new Statement();
         $stmt = $stmt->offset($cursor)->limit($chunkSize);
         $records = $stmt->process($csv);
         $outputSize = $records->count();
+
         if($outputSize == 0)
         {
             return null;
@@ -154,33 +68,22 @@ class CsvDriver extends TransportDriver
         return $output;
     }
 
-    public function getAll() : Result
+    public function readAll() : array
     {
-        $result = new Result();
-        $fp = fopen($this->getPath(), 'r');
+        $reader = $this->getReader();
+        $records = $reader->getRecords();
         $output = [];
-        while (($row = fgetcsv($fp)) !== false) {
-            $output[] = $row;
+        foreach ($records as $record) {
+            $output[] = $record;
         }
-        fclose($fp);
-        $result->setData($output);
-        return $result;
+        return $output;
     }
 
-    public function write(array $data) : Result
+    public function writeAll(array $data) : Result
     {
         $result = new Result();
-        $fp = fopen($this->getPath(), 'w');
-        $header = count($data) < 1
-            ? []
-            : array_keys($data[0]);
-
-        fputcsv($fp, $header);
-        foreach($data as $row)
-        {
-            fputcsv($fp, $row);
-        }
-        fclose($fp);
+        $writer = $this->getWriter();
+        $writer->insertAll($data);
         $result->exportSuccess();
         return $result;
     }

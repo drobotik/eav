@@ -31,17 +31,25 @@ class TransportDriverFixture extends TransportDriver
         return !is_null($this->result);
     }
 
-    public function read(): Result
+    public function readAll(): array
+    {
+        return [];
+    }
+
+    public function writeAll(array $data): Result
     {
         return $this->hasResult()
             ? $this->getResult()
             : new Result();
     }
 
-    public function write(array $data): Result
+    public function getHeader(): array
     {
-        return $this->hasResult()
-            ? $this->getResult()
-            : new Result();
+        return [];
+    }
+
+    public function getChunk(): array|null
+    {
+        return [];
     }
 }

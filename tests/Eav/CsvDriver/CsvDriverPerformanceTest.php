@@ -8,10 +8,11 @@
  */
 declare(strict_types=1);
 
-namespace Tests\Eav\DriverCsv;
+namespace Tests\Eav\CsvDriver;
 
 use Drobotik\Eav\Driver\CsvDriver;
 use Faker\Factory;
+use League\Csv\Writer;
 use Tests\PerformanceTestCase;
 
 class CsvDriverPerformanceTest extends PerformanceTestCase
@@ -21,12 +22,15 @@ class CsvDriverPerformanceTest extends PerformanceTestCase
      *
      * @group performance
      *
-     * @covers \Drobotik\Eav\Driver\CsvDriver::write
+     * @covers \Drobotik\Eav\Driver\CsvDriver::writeAll
      */
     public function write_twenty_thousands_records() {
         $driver = new CsvDriver();
         $path = dirname(__DIR__, 2) . '/temp/csv.csv';
-        $driver->setPath($path);
+
+        $writer = Writer::createFromPath($path, 'w+');
+        $writer->setDelimiter(',');
+        $driver->setWriter($writer);
 
         $faker = Factory::create();
 
@@ -41,7 +45,7 @@ class CsvDriverPerformanceTest extends PerformanceTestCase
             ];
         }
         $start = microtime(true);
-        $driver->write($data);
+        $driver->writeAll($data);
         $end = microtime(true);
         $this->assertLessThan(120, $end - $start);
     }
