@@ -13,11 +13,10 @@ class Config
 {
     /** @var ConfigAttribute[] $attributes */
     private array $attributes = [];
-    /** @var ConfigPivot[] $pivots */
-    private array $pivots = [];
 
-    public function appendAttribute(ConfigAttribute $attribute)
+    public function appendAttribute(ConfigAttribute $attribute): void
     {
+        $attribute->validate();
         $this->attributes[$attribute->getName()] = $attribute;
     }
 
@@ -29,20 +28,5 @@ class Config
     public function hasAttribute(string $name): bool
     {
         return key_exists($name, $this->attributes);
-    }
-
-    public function appendPivot(ConfigPivot $pivot)
-    {
-        $this->pivots[$pivot->getAttributeKey()] = $pivot;
-    }
-
-    public function getPivots() : array
-    {
-        return $this->pivots;
-    }
-
-    public function hasPivot(int $key) : bool
-    {
-        return key_exists($key, $this->pivots);
     }
 }

@@ -11,17 +11,24 @@ namespace Tests\Eav\ImportAttributesConfigAttribute;
 
 use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\ATTR_TYPE;
+use Drobotik\Eav\Exception\AttributeException;
 use Drobotik\Eav\Import\Attributes\ConfigAttribute;
 use PHPUnit\Framework\TestCase;
 
 class ConfigAttributeFunctionalTest extends TestCase
 {
     private ConfigAttribute $attribute;
+    private array $fields;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->attribute = new ConfigAttribute();
+        $this->fields = [
+            _ATTR::ID->column() => 123,
+            _ATTR::NAME->column() => 'name',
+            _ATTR::TYPE->column() => ATTR_TYPE::TEXT->value()
+        ];
     }
     /**
      * @test
@@ -33,8 +40,8 @@ class ConfigAttributeFunctionalTest extends TestCase
      */
     public function fields()
     {
-        $this->attribute->setFields([123]);
-        $this->assertEquals([123], $this->attribute->getFields());
+        $this->attribute->setFields($this->fields);
+        $this->assertEquals($this->fields, $this->attribute->getFields());
     }
     /**
      * @test
@@ -58,8 +65,8 @@ class ConfigAttributeFunctionalTest extends TestCase
      */
     public function name()
     {
-        $this->attribute->setFields([_ATTR::NAME->column() => 'test']);
-        $this->assertEquals('test', $this->attribute->getName());
+        $this->attribute->setFields($this->fields);
+        $this->assertEquals('name', $this->attribute->getName());
     }
     /**
      * @test
@@ -70,7 +77,7 @@ class ConfigAttributeFunctionalTest extends TestCase
      */
     public function type()
     {
-        $this->attribute->setFields([_ATTR::TYPE->column() => ATTR_TYPE::TEXT->value()]);
+        $this->attribute->setFields($this->fields);
         $this->assertEquals( ATTR_TYPE::TEXT, $this->attribute->getType());
     }
     /**
@@ -82,7 +89,37 @@ class ConfigAttributeFunctionalTest extends TestCase
      */
     public function key()
     {
-        $this->attribute->setFields([_ATTR::ID->column() => 123]);
+        $this->attribute->setFields($this->fields);
         $this->assertEquals( 123, $this->attribute->getKey());
+    }
+
+    /**
+     * @test
+     *
+     * @group functional
+     *
+     * @covers \Drobotik\Eav\Import\Attributes\ConfigAttribute::validate
+     */
+    public function validate_name()
+    {
+        $this->expectException(AttributeException::class);
+        $this->expectExceptionMessage(AttributeException::UNDEFINED_NAME);
+        $this->attribute->setFields([]);
+        $this->attribute->validate();
+    }
+
+    /**
+     * @test
+     *
+     * @group functional
+     *
+     * @covers \Drobotik\Eav\Import\Attributes\ConfigAttribute::validate
+     */
+    public function validate_type()
+    {
+        $this->attribute->setFields([_ATTR::NAME->column() => 'test']);
+        $this->expectException(AttributeException::class);
+        $this->expectExceptionMessage(AttributeException::UNDEFINED_TYPE);
+        $this->attribute->validate();
     }
 }

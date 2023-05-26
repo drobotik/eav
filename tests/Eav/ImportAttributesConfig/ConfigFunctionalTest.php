@@ -10,12 +10,13 @@ declare(strict_types=1);
 namespace Tests\Eav\ImportAttributesConfig;
 
 use Drobotik\Eav\Enum\_ATTR;
+use Drobotik\Eav\Enum\ATTR_TYPE;
+use Drobotik\Eav\Exception\AttributeException;
 use Drobotik\Eav\Import\Attributes\Config;
 use Drobotik\Eav\Import\Attributes\ConfigAttribute;
-use Drobotik\Eav\Import\Attributes\ConfigPivot;
 use PHPUnit\Framework\TestCase;
 
-class ImportAttributesConfigFunctionalTest extends TestCase
+class ConfigFunctionalTest extends TestCase
 {
     /**
      * @test
@@ -33,7 +34,7 @@ class ImportAttributesConfigFunctionalTest extends TestCase
         $this->assertFalse($config->hasAttribute('test'));
 
         $attribute = new ConfigAttribute();
-        $attribute->setFields([_ATTR::NAME->column() => 'test']);
+        $attribute->setFields([_ATTR::NAME->column() => 'test', _ATTR::TYPE->column() => ATTR_TYPE::TEXT->value()]);
         $config->appendAttribute($attribute);
 
         $this->assertSame(['test' => $attribute], $config->getAttributes());
@@ -45,21 +46,14 @@ class ImportAttributesConfigFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Import\Attributes\Config::getPivots
-     * @covers \Drobotik\Eav\Import\Attributes\Config::appendPivot
-     * @covers \Drobotik\Eav\Import\Attributes\Config::hasPivot
+     * @covers \Drobotik\Eav\Import\Attributes\Config::appendAttribute
      */
-    public function pivot()
+    public function attribute_validated_on_append()
     {
+        $this->expectException(AttributeException::class);
         $config = new Config();
-        $this->assertEquals([], $config->getPivots());
-        $this->assertFalse($config->hasPivot(123));
-
-        $pivot = new ConfigPivot();
-        $pivot->setAttributeKey(123);
-        $config->appendPivot($pivot);
-
-        $this->assertSame([123 => $pivot], $config->getPivots());
-        $this->assertTrue($config->hasPivot(123));
+        $attribute = new ConfigAttribute();
+        $attribute->setFields([]);
+        $config->appendAttribute($attribute);
     }
 }
