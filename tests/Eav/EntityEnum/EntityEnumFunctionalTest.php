@@ -38,6 +38,7 @@ class EntityEnumFunctionalTest extends TestCase
             _ENTITY::ID->column() => 'entity_id',
             _ENTITY::DOMAIN_ID->column() => _DOMAIN::ID->column(),
             _ENTITY::ATTR_SET_ID->column() => _SET::ID->column(),
+            _ENTITY::SERVICE_KEY->column() => 'service_key'
         ], $cases);
     }
 

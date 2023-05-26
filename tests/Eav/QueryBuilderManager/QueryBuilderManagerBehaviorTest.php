@@ -16,6 +16,7 @@ use Drobotik\Eav\QueryBuilder\QueryBuilderAttributes;
 use Drobotik\Eav\QueryBuilder\QueryBuilderGroup;
 use Drobotik\Eav\QueryBuilder\QueryBuilderManager;
 use Drobotik\Eav\QueryBuilder\QueryBuilderParser;
+use Drobotik\Eav\Repository\AttributeRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Tests\QueryBuilderTestCase;
 
@@ -182,6 +183,13 @@ class QueryBuilderManagerBehaviorTest extends QueryBuilderTestCase
         $query = $this->getQuery();
         $storedAttributes = new Collection();
 
+        $attributeRepo = $this->getMockBuilder(AttributeRepository::class)
+            ->onlyMethods(['getLinked'])->getMock();
+
+        $attributeRepo->expects($this->once())->method('getLinked')
+            ->with(8, 9)
+            ->willReturn($storedAttributes);
+
         $pivot = $this->getMockBuilder(QueryBuilderAttributes::class)
             ->onlyMethods(['setAttributes'])
             ->getMock();
@@ -190,18 +198,24 @@ class QueryBuilderManagerBehaviorTest extends QueryBuilderTestCase
 
         $manager = $this->getMockBuilder(QueryBuilderManager::class)
             ->onlyMethods([
+                'getDomainKey',
+                'getSetKey',
+                'makeAttributeRepository',
                 'makeQueryBuilderAttributes',
                 'setAttributesPivot',
-                'getStoredAttributes',
                 'makeQuery',
                 'makeAttributes'
             ])
             ->getMock();
 
+        $manager->expects($this->once())->method('getDomainKey')
+            ->willReturn(8);
+        $manager->expects($this->once())->method('getSetKey')
+            ->willReturn(9);
+        $manager->expects($this->once())->method('makeAttributeRepository')
+            ->willReturn($attributeRepo);
         $manager->expects($this->once())->method('makeQueryBuilderAttributes')
             ->willReturn($pivot);
-        $manager->expects($this->once())->method('getStoredAttributes')
-            ->willReturn($storedAttributes);
         $manager->expects($this->once())->method('setAttributesPivot')
             ->with($pivot);
         $manager->expects($this->once())->method('makeQuery')

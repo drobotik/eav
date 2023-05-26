@@ -49,8 +49,8 @@ class ExportManagerBehaviorTest extends TestCase
             ->willReturn($query);
 
         $driver = $this->getMockBuilder(CsvDriver::class)
-            ->onlyMethods(['write'])->getMock();
-        $driver->expects($this->once())->method('write')
+            ->onlyMethods(['writeAll'])->getMock();
+        $driver->expects($this->once())->method('writeAll')
             ->with([123])
             ->willReturn($result);
 

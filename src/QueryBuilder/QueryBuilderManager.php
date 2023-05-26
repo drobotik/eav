@@ -9,13 +9,11 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\QueryBuilder;
 
-use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\_ENTITY;
-use Drobotik\Eav\Enum\_PIVOT;
 use Drobotik\Eav\Model\AttributeModel;
 use Drobotik\Eav\Trait\QueryBuilderSingletons;
+use Drobotik\Eav\Trait\RepositoryTrait;
 use Illuminate\Database\Capsule\Manager;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\Grammars\MySqlGrammar as MySQLGrammar;
 use Illuminate\Database\Query\Processors\MySqlProcessor as MySQLProcessor;
@@ -23,6 +21,7 @@ use Illuminate\Database\Query\Processors\MySqlProcessor as MySQLProcessor;
 class QueryBuilderManager
 {
     use QueryBuilderSingletons;
+    use RepositoryTrait;
 
     private int $domainKey;
     private int $setKey;
@@ -114,17 +113,6 @@ class QueryBuilderManager
         return $query;
     }
 
-    public function getStoredAttributes() : Collection
-    {
-        $pt = _PIVOT::table();
-        $at = _ATTR::table();
-        return AttributeModel::query()
-            ->join($pt, $pt.'.'._PIVOT::ATTR_ID->column(), '=', $at.'.'._ATTR::ID->column())
-            ->where($pt. '.'._PIVOT::SET_ID->column(), '=', $this->getSetKey())
-            ->where($pt. '.'._PIVOT::DOMAIN_ID->column(), '=', $this->getDomainKey())
-            ->get();
-    }
-
     public function markSelected(AttributeModel $attribute, Builder $query) : Builder
     {
         $attributes = $this->getAttributesPivot();
@@ -168,7 +156,9 @@ class QueryBuilderManager
     public function initialize() : Builder
     {
         $attributes = $this->makeQueryBuilderAttributes();
-        $attributes->setAttributes($this->getStoredAttributes());
+        $repository = $this->makeAttributeRepository();
+        $linkedAttrs = $repository->getLinked($this->getDomainKey(), $this->getSetKey());
+        $attributes->setAttributes($linkedAttrs);
         $this->setAttributesPivot($attributes);
         $query = $this->makeQuery();
         return $this->makeAttributes($query);

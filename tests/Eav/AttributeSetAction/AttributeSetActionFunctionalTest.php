@@ -47,10 +47,10 @@ class AttributeSetActionFunctionalTest extends TestCase
      */
     public function initialized_attribute_without_pivot() {
         $domainModel = $this->eavFactory->createDomain();
-        $setModel = $this->eavFactory->createAttributeSet($domainModel);
-        $groupModel = $this->eavFactory->createGroup($setModel);
-        $attributeModel = $this->eavFactory->createAttribute($domainModel);
-        $this->eavFactory->createPivot($domainModel, $setModel, $groupModel, $attributeModel);
+        $setModel = $this->eavFactory->createAttributeSet($domainModel->getKey());
+        $groupModel = $this->eavFactory->createGroup($setModel->getKey());
+        $attributeModel = $this->eavFactory->createAttribute($domainModel->getKey());
+        $this->eavFactory->createPivot($domainModel->getKey(), $setModel->getKey(), $groupModel->getKey(), $attributeModel->getKey());
         $attribute = $setModel->attributes()->get()->first();
         $result = $this->action->initializeAttribute($attribute);
         $this->assertEquals($attributeModel->toArray(), $result->getBag()->getFields());
@@ -74,13 +74,13 @@ class AttributeSetActionFunctionalTest extends TestCase
      */
     public function initialize() {
         $domainModel = $this->eavFactory->createDomain();
-        $entityModel = $this->eavFactory->createEntity($domainModel);
-        $setModel = $this->eavFactory->createAttributeSet($domainModel);
-        $groupModel = $this->eavFactory->createGroup($setModel);
-        $attributeModel = $this->eavFactory->createAttribute($domainModel);
-        $this->eavFactory->createPivot($domainModel, $setModel, $groupModel, $attributeModel);
+        $entityModel = $this->eavFactory->createEntity($domainModel->getKey());
+        $setModel = $this->eavFactory->createAttributeSet($domainModel->getKey());
+        $groupModel = $this->eavFactory->createGroup($setModel->getKey());
+        $attributeModel = $this->eavFactory->createAttribute($domainModel->getKey());
+        $this->eavFactory->createPivot($domainModel->getKey(), $setModel->getKey(), $groupModel->getKey(), $attributeModel->getKey());
         $valueModel = $this->eavFactory->createValue(
-            ATTR_TYPE::STRING, $domainModel, $entityModel, $attributeModel, "test");
+            ATTR_TYPE::STRING, $domainModel->getKey(), $entityModel->getKey(), $attributeModel->getKey(), "test");
 
         $entity = new Entity();
         $entity->setKey($entityModel->getKey());

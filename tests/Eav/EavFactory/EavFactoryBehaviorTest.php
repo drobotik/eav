@@ -26,7 +26,7 @@ class EavFactoryBehaviorTest extends TestCase
         $factory->expects($this->never())
             ->method('createDomain');
         $domain = $this->eavFactory->createDomain();
-        $factory->createEntity($domain);
+        $factory->createEntity($domain->getKey());
     }
     /**
      * @test
@@ -40,8 +40,8 @@ class EavFactoryBehaviorTest extends TestCase
         $factory->expects($this->never())
             ->method('createAttributeSet');
         $domain = $this->eavFactory->createDomain();
-        $attrSet = $this->eavFactory->createAttributeSet($domain);
-        $factory->createEntity($domain, $attrSet);
+        $attrSet = $this->eavFactory->createAttributeSet($domain->getKey());
+        $factory->createEntity($domain->getKey(), $attrSet->getKey());
     }
     /**
      * @test
@@ -55,7 +55,7 @@ class EavFactoryBehaviorTest extends TestCase
         $factory->expects($this->never())
             ->method('createDomain');
         $domain = $this->eavFactory->createDomain();
-        $factory->createAttributeSet($domain);
+        $factory->createAttributeSet($domain->getKey());
     }
     /**
      * @test
@@ -69,7 +69,7 @@ class EavFactoryBehaviorTest extends TestCase
         $factory->expects($this->never())
             ->method('createAttributeSet');
         $set = $this->eavFactory->createAttributeSet();
-        $factory->createGroup($set);
+        $factory->createGroup($set->getKey());
     }
     /**
      * @test
@@ -83,6 +83,6 @@ class EavFactoryBehaviorTest extends TestCase
         $factory->expects($this->never())
             ->method('createDomain');
         $domain = $this->eavFactory->createDomain();
-        $factory->createAttribute($domain);
+        $factory->createAttribute($domain->getKey());
     }
 }

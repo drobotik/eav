@@ -42,10 +42,10 @@ class ImportContainer
         $this->setKey = $key;
     }
 
-    public function setManager(ImportManager $manager): ImportManager
+    public function setManager(ImportManager $manager): void
     {
         $manager->setContainer($this);
-        return $this->manager;
+        $this->manager = $manager;
     }
 
     public function getManager(): ImportManager

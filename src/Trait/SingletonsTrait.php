@@ -11,6 +11,7 @@ namespace Drobotik\Eav\Trait;
 
 use Drobotik\Eav\AttributeContainer;
 use Drobotik\Eav\AttributeSet;
+use Drobotik\Eav\Factory\EavFactory;
 use Drobotik\Eav\Model\AttributeSetModel;
 use Drobotik\Eav\Model\DomainModel;
 use Drobotik\Eav\Model\EntityModel;
@@ -40,6 +41,11 @@ trait SingletonsTrait
     public function makeDomainModel() : DomainModel
     {
         return new DomainModel();
+    }
+
+    public function makeEavFactory(): EavFactory
+    {
+        return new EavFactory();
     }
 
 }

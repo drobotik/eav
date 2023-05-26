@@ -48,34 +48,39 @@ class EavFactory
         return $model;
     }
 
-    public function createEntity(?DomainModel $domain = null, ?AttributeSetModel $attrSet = null): EntityModel
+    public function createEntity(?int $domainKey = null, ?int $setKey = null): EntityModel
     {
-        if (is_null($domain)) {
+        if (is_null($domainKey))
+        {
             $domain = $this->createDomain();
+            $domainKey = $domain->getKey();
         }
-        if (is_null($attrSet)) {
-            $attrSet = $this->createAttributeSet($domain);
+        if (is_null($setKey))
+        {
+            $attrSet = $this->createAttributeSet($domainKey);
+            $setKey = $attrSet->getKey();
         }
         $model = new EntityModel();
-        $model->setDomainKey($domain->getKey());
-        $model->setAttrSetKey($attrSet->getKey());
+        $model->setDomainKey($domainKey);
+        $model->setAttrSetKey($setKey);
         $model->save();
         $model->refresh();
 
         return $model;
     }
 
-    public function createAttributeSet(?DomainModel $domain = null, array $data = []): AttributeSetModel
+    public function createAttributeSet(?int $domainKey = null, array $data = []): AttributeSetModel
     {
-        if (is_null($domain)) {
+        if (is_null($domainKey)) {
             $domain = $this->createDomain();
+            $domainKey = $domain->getKey();
         }
         $defaultData = [
             _SET::NAME->column() => $this->faker->word(),
         ];
         $input = array_merge($defaultData, $data);
         $model = new AttributeSetModel();
-        $model->setDomainKey($domain->getKey())
+        $model->setDomainKey($domainKey)
             ->setName($input[_SET::NAME->column()]);
         
         $model->save();
@@ -84,18 +89,19 @@ class EavFactory
         return $model;
     }
 
-    public function createGroup(?AttributeSetModel $set = null, array $data = []): AttributeGroupModel
+    public function createGroup(?int $setKey = null, array $data = []): AttributeGroupModel
     {
-        if (is_null($set)) {
+        if (is_null($setKey)) {
             $set = $this->createAttributeSet();
+            $setKey = $set->getKey();
         }
         $defaultData = [
-            _GROUP::SET_ID->column() => $set->getKey(),
+            _GROUP::SET_ID->column() => $setKey,
             _GROUP::NAME->column() => $this->faker->word(),
         ];
         $input = array_merge($defaultData, $data);
         $model = new AttributeGroupModel();
-        $model->setAttrSetKey($set->getKey())
+        $model->setAttrSetKey($setKey)
             ->setName($input[_SET::NAME->column()]);
         
         $model->save();
@@ -104,13 +110,14 @@ class EavFactory
         return $model;
     }
 
-    public function createAttribute(?DomainModel $domain = null, array $data = []): AttributeModel
+    public function createAttribute(?int $domainKey = null, array $data = []): AttributeModel
     {
-        if (is_null($domain)) {
+        if (is_null($domainKey)) {
             $domain = $this->createDomain();
+            $domainKey = $domain->getKey();
         }
         $defaultData = [
-            _ATTR::DOMAIN_ID->column() => $domain->getKey(),
+            _ATTR::DOMAIN_ID->column() => $domainKey,
             _ATTR::NAME->column() => $this->faker->slug(2),
             _ATTR::TYPE->column() => _ATTR::TYPE->default(),
             _ATTR::STRATEGY->column() => _ATTR::STRATEGY->default(),
@@ -121,7 +128,7 @@ class EavFactory
         $input = array_merge($defaultData, $data);
         $model = new AttributeModel();
         $model->setName($input[_ATTR::NAME->column()])
-            ->setDomainKey($domain->getKey())
+            ->setDomainKey($domainKey)
             ->setType($input[_ATTR::TYPE->column()])
             ->setStrategy($input[_ATTR::STRATEGY->column()])
             ->setSource($input[_ATTR::SOURCE->column()])
@@ -134,13 +141,13 @@ class EavFactory
         return $model;
     }
 
-    public function createPivot(DomainModel $domain, AttributeSetModel $set, AttributeGroupModel $group, AttributeModel $attribute): PivotModel
+    public function createPivot(int $domainKey, int $setKey, int $groupKey, int $attributeKey): PivotModel
     {
         $model = new PivotModel();
-        $model->setDomainKey($domain->getKey())
-            ->setAttrSetKey($set->getKey())
-            ->setGroupKey($group->getKey())
-            ->setAttrKey($attribute->getKey());
+        $model->setDomainKey($domainKey)
+            ->setAttrSetKey($setKey)
+            ->setGroupKey($groupKey)
+            ->setAttrKey($attributeKey);
         
         $model->save();
         $model->refresh();
@@ -148,12 +155,12 @@ class EavFactory
         return $model;
     }
 
-    public function createValue(ATTR_TYPE $enum, DomainModel $domain, EntityModel $entity, AttributeModel $attribute, $value): ValueBase
+    public function createValue(ATTR_TYPE $enum, int $domainKey, int $entityKey, int $attributeKey, $value): ValueBase
     {
         $model = $enum->model();
-        $model->setDomainKey($domain->getKey())
-            ->setEntityKey($entity->getKey())
-            ->setAttrKey($attribute->getKey())
+        $model->setDomainKey($domainKey)
+            ->setEntityKey($entityKey)
+            ->setAttrKey($attributeKey)
             ->setValue($value);
         
         $model->save();
@@ -162,12 +169,12 @@ class EavFactory
         return $model;
     }
 
-    public function createEavEntity(array $config, DomainModel $domain, AttributeSetModel $set): Result
+    public function createEavEntity(array $config, int $domainKey, int $setKey): Result
     {
         $result = new Result();
         $result->created();
-        $factory = new EntityFactory($this);
-        $result->setData($factory->create($config, $domain, $set));
+        $factory = new EntityFactory();
+        $result->setData($factory->create($config, $domainKey, $setKey));
 
         return $result;
     }

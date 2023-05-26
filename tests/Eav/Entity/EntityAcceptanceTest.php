@@ -34,33 +34,35 @@ class EntityAcceptanceTest extends TestCase
      */
     public function creating_entities() {
         $domain = $this->eavFactory->createDomain();
-        $attrSet = $this->eavFactory->createAttributeSet($domain);
-        $group = $this->eavFactory->createGroup($attrSet);
-        $stringAttribute = $this->eavFactory->createAttribute($domain, [
+        $domainKey = $domain->getKey();
+        $attrSet = $this->eavFactory->createAttributeSet($domainKey);
+        $setKey = $attrSet->getKey();
+        $group = $this->eavFactory->createGroup($setKey);
+        $stringAttribute = $this->eavFactory->createAttribute($domainKey, [
             _ATTR::NAME->column() => "string",
             _ATTR::TYPE->column() => ATTR_TYPE::STRING->value()
         ]);
-        $integerAttribute = $this->eavFactory->createAttribute($domain, [
+        $integerAttribute = $this->eavFactory->createAttribute($domainKey, [
             _ATTR::NAME->column() => "integer",
             _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value()
         ]);
-        $decimalAttribute = $this->eavFactory->createAttribute($domain, [
+        $decimalAttribute = $this->eavFactory->createAttribute($domainKey, [
             _ATTR::NAME->column() => "decimal",
             _ATTR::TYPE->column() => ATTR_TYPE::DECIMAL->value()
         ]);
-        $datetimeAttribute = $this->eavFactory->createAttribute($domain, [
+        $datetimeAttribute = $this->eavFactory->createAttribute($domainKey, [
             _ATTR::NAME->column() => "datetime",
             _ATTR::TYPE->column() => ATTR_TYPE::DATETIME->value()
         ]);
-        $textAttribute = $this->eavFactory->createAttribute($domain, [
+        $textAttribute = $this->eavFactory->createAttribute($domainKey, [
             _ATTR::NAME->column() => "text",
             _ATTR::TYPE->column() => ATTR_TYPE::TEXT->value()
         ]);
-        $this->eavFactory->createPivot($domain, $attrSet, $group, $stringAttribute);
-        $this->eavFactory->createPivot($domain, $attrSet, $group, $integerAttribute);
-        $this->eavFactory->createPivot($domain, $attrSet, $group, $decimalAttribute);
-        $this->eavFactory->createPivot($domain, $attrSet, $group, $datetimeAttribute);
-        $this->eavFactory->createPivot($domain, $attrSet, $group, $textAttribute);
+        $this->eavFactory->createPivot($domainKey, $setKey, $group->getKey(), $stringAttribute->getKey());
+        $this->eavFactory->createPivot($domainKey, $setKey, $group->getKey(), $integerAttribute->getKey());
+        $this->eavFactory->createPivot($domainKey, $setKey, $group->getKey(), $decimalAttribute->getKey());
+        $this->eavFactory->createPivot($domainKey, $setKey, $group->getKey(), $datetimeAttribute->getKey());
+        $this->eavFactory->createPivot($domainKey, $setKey, $group->getKey(), $textAttribute->getKey());
 
         for($i = 0; $i < 2; $i++) {
             $message = "Failed on iteration $i";
@@ -130,8 +132,8 @@ class EntityAcceptanceTest extends TestCase
      */
     public function find_and_update() {
         $domain = $this->eavFactory->createDomain();
-        $attrSet = $this->eavFactory->createAttributeSet($domain);
-        $group = $this->eavFactory->createGroup($attrSet);
+        $attrSet = $this->eavFactory->createAttributeSet($domain->getKey());
+        $group = $this->eavFactory->createGroup($attrSet->getKey());
         $fields = [
             [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
@@ -175,7 +177,7 @@ class EntityAcceptanceTest extends TestCase
             ]
         ];
         /** @var EntityFactoryResult $result */
-        $result = $this->eavFactory->createEavEntity($fields, $domain, $attrSet)->getData();
+        $result = $this->eavFactory->createEavEntity($fields, $domain->getKey(), $attrSet->getKey())->getData();
         $entityModel = $result->getEntityModel();
 
         $entity = new Entity();
@@ -231,8 +233,8 @@ class EntityAcceptanceTest extends TestCase
      */
     public function delete() {
         $domain = $this->eavFactory->createDomain();
-        $attrSet = $this->eavFactory->createAttributeSet($domain);
-        $group = $this->eavFactory->createGroup($attrSet);
+        $attrSet = $this->eavFactory->createAttributeSet($domain->getKey());
+        $group = $this->eavFactory->createGroup($attrSet->getKey());
         $fields = [
             [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
@@ -276,7 +278,7 @@ class EntityAcceptanceTest extends TestCase
             ]
         ];
         /** @var EntityFactoryResult $result */
-        $result = $this->eavFactory->createEavEntity($fields, $domain, $attrSet)->getData();
+        $result = $this->eavFactory->createEavEntity($fields, $domain->getKey(), $attrSet->getKey())->getData();
         $entityModel = $result->getEntityModel();
 
         $entity = new Entity();
@@ -312,8 +314,8 @@ class EntityAcceptanceTest extends TestCase
      */
     public function find_and_delete() {
         $domain = $this->eavFactory->createDomain();
-        $attrSet = $this->eavFactory->createAttributeSet($domain);
-        $group = $this->eavFactory->createGroup($attrSet);
+        $attrSet = $this->eavFactory->createAttributeSet($domain->getKey());
+        $group = $this->eavFactory->createGroup($attrSet->getKey());
         $fields = [
             [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
@@ -357,7 +359,7 @@ class EntityAcceptanceTest extends TestCase
             ]
         ];
         /** @var EntityFactoryResult $result */
-        $result = $this->eavFactory->createEavEntity($fields, $domain, $attrSet)->getData();
+        $result = $this->eavFactory->createEavEntity($fields, $domain->getKey(), $attrSet->getKey())->getData();
         $entityModel = $result->getEntityModel();
 
         $entity = new Entity();

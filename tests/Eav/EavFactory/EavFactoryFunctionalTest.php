@@ -95,6 +95,7 @@ class EavFactoryFunctionalTest extends TestCase
             _ENTITY::ID->column() => 1,
             _ENTITY::DOMAIN_ID->column() => 1,
             _ENTITY::ATTR_SET_ID->column() => 1,
+            _ENTITY::SERVICE_KEY->column() => null
         ], $data);
         // domain created
         $this->assertEquals(1, DomainModel::query()->count());
@@ -236,14 +237,14 @@ class EavFactoryFunctionalTest extends TestCase
     {
         $this->eavFactory->createDomain();
         $domain = $this->eavFactory->createDomain();
-        $this->eavFactory->createAttributeSet($domain);
-        $attrSet = $this->eavFactory->createAttributeSet($domain);
-        $this->eavFactory->createGroup($attrSet);
-        $group = $this->eavFactory->createGroup($attrSet);
-        $this->eavFactory->createAttribute($domain);
-        $attribute = $this->eavFactory->createAttribute($domain);
+        $this->eavFactory->createAttributeSet($domain->getKey());
+        $attrSet = $this->eavFactory->createAttributeSet($domain->getKey());
+        $this->eavFactory->createGroup($attrSet->getKey());
+        $group = $this->eavFactory->createGroup($attrSet->getKey());
+        $this->eavFactory->createAttribute($domain->getKey());
+        $attribute = $this->eavFactory->createAttribute($domain->getKey());
 
-        $result = $this->eavFactory->createPivot($domain, $attrSet, $group, $attribute);
+        $result = $this->eavFactory->createPivot($domain->getKey(), $attrSet->getKey(), $group->getKey(), $attribute->getKey());
         $this->assertInstanceOf(PivotModel::class, $result);
         $this->assertEquals(1, $result->getKey());
         $this->assertEquals(2, $result->getDomainKey());
@@ -261,13 +262,13 @@ class EavFactoryFunctionalTest extends TestCase
     public function valueString()
     {
         $domain = $this->eavFactory->createDomain();
-        $entity = $this->eavFactory->createEntity($domain);
-        $attribute = $this->eavFactory->createAttribute($domain);
+        $entity = $this->eavFactory->createEntity($domain->getKey());
+        $attribute = $this->eavFactory->createAttribute($domain->getKey());
         $result = $this->eavFactory->createValue(
             ATTR_TYPE::STRING,
-            $domain,
-            $entity,
-            $attribute,
+            $domain->getKey(),
+            $entity->getKey(),
+            $attribute->getKey(),
             'test'
         );
         $this->assertInstanceOf(ValueStringModel::class, $result);
@@ -288,13 +289,13 @@ class EavFactoryFunctionalTest extends TestCase
     public function valueText()
     {
         $domain = $this->eavFactory->createDomain();
-        $entity = $this->eavFactory->createEntity($domain);
-        $attribute = $this->eavFactory->createAttribute($domain);
+        $entity = $this->eavFactory->createEntity($domain->getKey());
+        $attribute = $this->eavFactory->createAttribute($domain->getKey());
         $result = $this->eavFactory->createValue(
             ATTR_TYPE::TEXT,
-            $domain,
-            $entity,
-            $attribute,
+            $domain->getKey(),
+            $entity->getKey(),
+            $attribute->getKey(),
             'test'
         );
         $this->assertInstanceOf(ValueTextModel::class, $result);
@@ -315,13 +316,13 @@ class EavFactoryFunctionalTest extends TestCase
     public function valueInteger()
     {
         $domain = $this->eavFactory->createDomain();
-        $entity = $this->eavFactory->createEntity($domain);
-        $attribute = $this->eavFactory->createAttribute($domain);
+        $entity = $this->eavFactory->createEntity($domain->getKey());
+        $attribute = $this->eavFactory->createAttribute($domain->getKey());
         $result = $this->eavFactory->createValue(
             ATTR_TYPE::INTEGER,
-            $domain,
-            $entity,
-            $attribute,
+            $domain->getKey(),
+            $entity->getKey(),
+            $attribute->getKey(),
             123
         );
         $this->assertInstanceOf(ValueIntegerModel::class, $result);
@@ -342,13 +343,13 @@ class EavFactoryFunctionalTest extends TestCase
     public function valueDecimal()
     {
         $domain = $this->eavFactory->createDomain();
-        $entity = $this->eavFactory->createEntity($domain);
-        $attribute = $this->eavFactory->createAttribute($domain);
+        $entity = $this->eavFactory->createEntity($domain->getKey());
+        $attribute = $this->eavFactory->createAttribute($domain->getKey());
         $result = $this->eavFactory->createValue(
             ATTR_TYPE::DECIMAL,
-            $domain,
-            $entity,
-            $attribute,
+            $domain->getKey(),
+            $entity->getKey(),
+            $attribute->getKey(),
             123.123
         );
         $this->assertInstanceOf(ValueDecimalModel::class, $result);
@@ -369,14 +370,14 @@ class EavFactoryFunctionalTest extends TestCase
     public function valueDatetime()
     {
         $domain = $this->eavFactory->createDomain();
-        $entity = $this->eavFactory->createEntity($domain);
-        $attribute = $this->eavFactory->createAttribute($domain);
+        $entity = $this->eavFactory->createEntity($domain->getKey());
+        $attribute = $this->eavFactory->createAttribute($domain->getKey());
         $datetime = (new \DateTime())->format('Y-m-d H:i:s');
         $result = $this->eavFactory->createValue(
             ATTR_TYPE::DATETIME,
-            $domain,
-            $entity,
-            $attribute,
+            $domain->getKey(),
+            $entity->getKey(),
+            $attribute->getKey(),
             $datetime
         );
         $this->assertInstanceOf(ValueDatetimeModel::class, $result);
@@ -396,8 +397,8 @@ class EavFactoryFunctionalTest extends TestCase
     public function createEavEntity()
     {
         $domain = $this->eavFactory->createDomain();
-        $set = $this->eavFactory->createAttributeSet($domain);
-        $group = $this->eavFactory->createGroup($set);
+        $set = $this->eavFactory->createAttributeSet($domain->getKey());
+        $group = $this->eavFactory->createGroup($set->getKey());
         $config = [
             [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
@@ -408,7 +409,7 @@ class EavFactoryFunctionalTest extends TestCase
                 ATTR_FACTORY::GROUP->field() => $group->getKey()
             ]
         ];
-        $result = $this->eavFactory->createEavEntity($config, $domain, $set);
+        $result = $this->eavFactory->createEavEntity($config, $domain->getKey(), $set->getKey());
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::CREATED->code(), $result->getCode());
         $this->assertEquals(_RESULT::CREATED->message(), $result->getMessage());

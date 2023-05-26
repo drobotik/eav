@@ -7,37 +7,30 @@
  */
 declare(strict_types=1);
 
-namespace Tests\Eav\QueryBuilderManager;
+namespace Tests\Eav\AttributeRepository;
 
 use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\_PIVOT;
 use Drobotik\Eav\Enum\ATTR_FACTORY;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Model\AttributeModel;
-use Drobotik\Eav\QueryBuilder\QueryBuilderManager;
+use Drobotik\Eav\Repository\AttributeRepository;
 use Tests\TestCase;
 
-class QueryBuilderManagerAcceptanceTest extends TestCase
+class AttributeRepositoryFunctionalTest extends TestCase
 {
-    private QueryBuilderManager $manager;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-        $this->manager = new QueryBuilderManager();
-    }
     /**
      * @test
      *
      * @group acceptance
      *
-     * @covers \Drobotik\Eav\QueryBuilder\QueryBuilderManager::getStoredAttributes
+     * @covers \Drobotik\Eav\Repository\AttributeRepository::getLinked
      */
-    public function domain_key()
+    public function get_linked()
     {
         $domain = $this->eavFactory->createDomain();
         $set = $this->eavFactory->createAttributeSet();
-        $group = $this->eavFactory->createGroup($set);
+        $group = $this->eavFactory->createGroup($set->getKey());
         $fields = [
             [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
@@ -57,11 +50,11 @@ class QueryBuilderManagerAcceptanceTest extends TestCase
             ]
         ];
 
-        $this->eavFactory->createEavEntity($fields, $domain, $set);
+        $res = $this->eavFactory->createEavEntity($fields, $domain->getKey(), $set->getKey());
 
-        $this->manager->setDomainKey($domain->getKey());
-        $this->manager->setSetKey($set->getKey());
-        $attributes = $this->manager->getStoredAttributes();
+        $repository = new AttributeRepository();
+        $attributes = $repository->getLinked($domain->getKey(), $set->getKey());
+
         $this->assertEquals(2, $attributes->count());
         /** @var AttributeModel $attr1 */
         $attr1 = $attributes[0];

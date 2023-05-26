@@ -48,7 +48,7 @@ class ExportManager
 
     public function run(): Result
     {
-        return $this->getDriver()->write(
+        return $this->getDriver()->writeAll(
             $this->getQueryBuilderManager()
                 ->run()
                 ->get()

@@ -109,7 +109,7 @@ class EntityGnomeFunctionalTest extends TestCase
         $this->eavFactory->createDomain();
         $this->eavFactory->createAttributeSet();
         $domain = $this->eavFactory->createDomain();
-        $attrSet = $this->eavFactory->createAttributeSet($domain);
+        $attrSet = $this->eavFactory->createAttributeSet($domain->getKey());
         $entity = $this->gnome->getEntity();
         $entity->setDomainKey($domain->getKey());
         $entity->getAttributeSet()->setKey($attrSet->getKey());
@@ -174,8 +174,8 @@ class EntityGnomeFunctionalTest extends TestCase
      */
     public function save_with_entity_key_fetching_record() {
         $domain = $this->eavFactory->createDomain();
-        $attrSet = $this->eavFactory->createAttributeSet($domain);
-        $entityModel = $this->eavFactory->createEntity($domain, $attrSet);
+        $attrSet = $this->eavFactory->createAttributeSet($domain->getKey());
+        $entityModel = $this->eavFactory->createEntity($domain->getKey(), $attrSet->getKey());
         $entity = $this->gnome->getEntity();
         $entity->setKey($entityModel->getKey());
 
@@ -202,20 +202,20 @@ class EntityGnomeFunctionalTest extends TestCase
         ];
 
         $domain = $this->eavFactory->createDomain();
-        $attrSet = $this->eavFactory->createAttributeSet($domain);
-        $group = $this->eavFactory->createGroup($attrSet);
-        $attrEmail = $this->eavFactory->createAttribute($domain, [
+        $attrSet = $this->eavFactory->createAttributeSet($domain->getKey());
+        $group = $this->eavFactory->createGroup($attrSet->getKey());
+        $attrEmail = $this->eavFactory->createAttribute($domain->getKey(), [
             _ATTR::NAME->column() => "email"
         ]);
-        $attrPhone = $this->eavFactory->createAttribute($domain, [
+        $attrPhone = $this->eavFactory->createAttribute($domain->getKey(), [
             _ATTR::NAME->column() => "phone"
         ]);
-        $attrNote = $this->eavFactory->createAttribute($domain, [
+        $attrNote = $this->eavFactory->createAttribute($domain->getKey(), [
             _ATTR::NAME->column() => "note"
         ]);
-        $this->eavFactory->createPivot($domain, $attrSet, $group, $attrEmail);
-        $this->eavFactory->createPivot($domain, $attrSet, $group, $attrPhone);
-        $this->eavFactory->createPivot($domain, $attrSet, $group, $attrNote);
+        $this->eavFactory->createPivot($domain->getKey(), $attrSet->getKey(), $group->getKey(), $attrEmail->getKey());
+        $this->eavFactory->createPivot($domain->getKey(), $attrSet->getKey(), $group->getKey(), $attrPhone->getKey());
+        $this->eavFactory->createPivot($domain->getKey(), $attrSet->getKey(), $group->getKey(), $attrNote->getKey());
 
         $entity = $this->gnome->getEntity();
         $entity->setDomainKey($domain->getKey());
