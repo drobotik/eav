@@ -11,7 +11,7 @@ namespace Drobotik\Eav\Enum;
 
 use Carbon\Carbon;
 use Doctrine\DBAL\Types\Types;
-use Drobotik\Eav\Exception\AttributeTypeException;
+use Drobotik\Eav\Exception\AttributeException;
 use Drobotik\Eav\Model\ValueBase;
 use Drobotik\Eav\Model\ValueDatetimeModel;
 use Drobotik\Eav\Model\ValueDecimalModel;
@@ -115,7 +115,7 @@ enum ATTR_TYPE
     }
 
     /**
-     * @throws AttributeTypeException
+     * @throws AttributeException
      */
     public static function getCase(string $type): ATTR_TYPE
     {
@@ -125,7 +125,7 @@ enum ATTR_TYPE
             self::DECIMAL->value() => self::DECIMAL,
             self::STRING->value() => self::STRING,
             self::TEXT->value() => self::TEXT,
-            default => AttributeTypeException::unsupportedType()
+            default => AttributeException::unsupportedType($type)
         };
     }
 }

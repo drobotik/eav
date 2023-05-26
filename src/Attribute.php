@@ -84,10 +84,6 @@ class Attribute
     public function getType(): ATTR_TYPE
     {
         $type = $this->getBag()->getField(_ATTR::TYPE);
-        if (!ATTR_TYPE::isValid($type)) {
-            AttributeException::unexpectedType($type);
-        }
-
         return ATTR_TYPE::getCase($type);
     }
 

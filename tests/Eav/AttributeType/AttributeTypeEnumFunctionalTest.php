@@ -13,7 +13,7 @@ use Carbon\Carbon;
 use Doctrine\DBAL\Types\Types;
 use Drobotik\Eav\Enum\_VALUE;
 use Drobotik\Eav\Enum\ATTR_TYPE;
-use Drobotik\Eav\Exception\AttributeTypeException;
+use Drobotik\Eav\Exception\AttributeException;
 use Drobotik\Eav\Model\ValueDatetimeModel;
 use Drobotik\Eav\Model\ValueDecimalModel;
 use Drobotik\Eav\Model\ValueIntegerModel;
@@ -116,8 +116,8 @@ class AttributeTypeEnumFunctionalTest extends TestCase
      * @covers \Drobotik\Eav\Enum\ATTR_TYPE::getCase
      */
     public function get_case_exception() {
-        $this->expectException(AttributeTypeException::class);
-        $this->expectExceptionMessage(AttributeTypeException::UNSUPPORTED_TYPE);
+        $this->expectException(AttributeException::class);
+        $this->expectExceptionMessage(sprintf(AttributeException::UNSUPPORTED_TYPE, 'test'));
         ATTR_TYPE::getCase("test");
     }
 

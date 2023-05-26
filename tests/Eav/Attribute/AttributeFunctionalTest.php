@@ -91,7 +91,7 @@ class AttributeFunctionalTest extends TestCase
      */
     public function get_type_throws_unexpected_type() {
         $this->expectException(AttributeException::class);
-        $this->expectExceptionMessage(sprintf(AttributeException::UNEXPECTED_TYPE, 'test'));
+        $this->expectExceptionMessage(sprintf(AttributeException::UNSUPPORTED_TYPE, 'test'));
         $this->attribute->setType("test");
         $this->attribute->getType();
     }

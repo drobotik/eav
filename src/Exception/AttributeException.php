@@ -13,12 +13,31 @@ use Exception;
 
 class AttributeException extends Exception
 {
-    public const UNEXPECTED_TYPE = 'Unexpected type: %s';
+    public const UNDEFINED_NAME = 'Attribute name must be provided!';
+    public const UNDEFINED_TYPE = 'Attribute type must be provided!';
+    public const UNSUPPORTED_TYPE = 'Type is not supported: %s';
 
     /**
      * @throws AttributeException
      */
-    public static function unexpectedType($type) {
-        throw new static(sprintf(self::UNEXPECTED_TYPE, $type));
+    public static function undefinedAttributeName()
+    {
+        throw new static(self::UNDEFINED_NAME);
+    }
+
+    /**
+     * @throws AttributeException
+     */
+    public static function undefinedAttributeType()
+    {
+        throw new static(self::UNDEFINED_TYPE);
+    }
+
+    /**
+     * @throws AttributeException
+     */
+    public static function unsupportedType($type)
+    {
+        throw new static(sprintf(self::UNSUPPORTED_TYPE, $type));
     }
 }
