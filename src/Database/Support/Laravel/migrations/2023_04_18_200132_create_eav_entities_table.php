@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integerIncrements(_ENTITY::ID->column());
             $table->unsignedInteger(_ENTITY::DOMAIN_ID->column())->index();
             $table->unsignedInteger(_ENTITY::ATTR_SET_ID->column())->index();
+            $table->unsignedInteger(_ENTITY::SERVICE_KEY->column());
         });
     }
 
