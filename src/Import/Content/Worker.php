@@ -22,10 +22,13 @@ class Worker
 
     private AttributeSet  $attributeSet;
     private ValueSet      $valueSet;
+    private int $lineIndex;
 
     public function __construct() {
         $this->valueSet = new ValueSet();
         $this->attributeSet = new AttributeSet();
+        $this->attributeSet->setWorker($this);
+        $this->resetLineIndex();
     }
 
     public function getValueSet(): ValueSet
@@ -43,6 +46,19 @@ class Worker
         return new ValueSet();
     }
 
+    public function incrementLineIndex(): void
+    {
+        $this->lineIndex++;
+    }
+    public function getLineIndex(): int
+    {
+        return $this->lineIndex;
+    }
+    public function resetLineIndex() : void
+    {
+        $this->lineIndex = -1;
+    }
+
     public function parseCell(string $attributeName, $content, ?int $entityKey = null): void
     {
         $valueSet = $this->getValueSet();
@@ -54,7 +70,13 @@ class Worker
         $value->setAttributeKey($attribute->getKey());
         $value->setAttributeName($attribute->getName());
         if(!is_null($entityKey))
+        {
             $value->setEntityKey($entityKey);
+        } else
+        {
+            $value->setLineIndex($this->getLineIndex());
+        }
+
         $valueSet->appendValue($value);
     }
 
@@ -65,7 +87,13 @@ class Worker
             : null;
 
         if(!is_null($entityKey))
+        {
             unset($line[_ENTITY::ID->column()]);
+        }
+        else
+        {
+            $this->incrementLineIndex();
+        }
 
         foreach($line as $name => $content)
         {
@@ -85,13 +113,13 @@ class Worker
     {
         $entityRepo = $this->makeEntityRepository();
         $container = $this->getContainer();
-        $valueSet = $this->getValueSet();
-        $values = $valueSet->forNewEntities();
+
         $domainKey = $container->getDomainKey();
         $setKey = $container->getSetKey();
 
-        $amount = count($values);
+        $amount = $this->getLineIndex() + 1;
         $serviceKey = $entityRepo->getServiceKey();
+
         $entityRepo->bulkCreate($amount, $domainKey, $setKey, $serviceKey);
         return $entityRepo->getByServiceKey($serviceKey);
     }
@@ -108,9 +136,9 @@ class Worker
         /**
          * @var Value $value
          */
-        foreach($valueSet->forNewEntities() as $index => $value)
+        foreach($valueSet->forNewEntities() as $value)
         {
-            $value->setEntityKey($entities[$index]->getKey());
+            $value->setEntityKey($entities[$value->getLineIndex()]->getKey());
             $bulkCreateSet->appendValue($value);
         }
         $valueRepo->bulkCreate($bulkCreateSet, $domainKey);
@@ -156,6 +184,7 @@ class Worker
             $this->processExistingEntities();
             $this->processNewEntities();
             $this->cleanup();
+            $this->resetLineIndex();
         }
     }
 

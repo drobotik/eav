@@ -50,7 +50,9 @@ class ImportContentFunctionalTest extends TestCase
      */
     public function attribute_set()
     {
-        $this->assertInstanceOf(AttributeSet::class, $this->worker->getAttributeSet());
+        $set = $this->worker->getAttributeSet();
+        $this->assertInstanceOf(AttributeSet::class, $set);
+        $this->assertSame($this->worker, $set->getWorker());
     }
 
     /**
@@ -66,6 +68,24 @@ class ImportContentFunctionalTest extends TestCase
         $this->assertInstanceOf(ValueSet::class, $this->worker->makeBulkValuesSet());
         $this->assertNotSame($set, $this->worker->getValueSet());
     }
+    /**
+     * @test
+     *
+     * @group functional
+
+     * @covers \Drobotik\Eav\Import\Content\Worker::__construct
+     * @covers \Drobotik\Eav\Import\Content\Worker::incrementLineIndex
+     * @covers \Drobotik\Eav\Import\Content\Worker::getLineIndex
+     * @covers \Drobotik\Eav\Import\Content\Worker::resetLineIndex
+     */
+    public function line_index()
+    {
+        $this->assertEquals(-1, $this->worker->getLineIndex());
+        $this->worker->incrementLineIndex();
+        $this->assertEquals(0, $this->worker->getLineIndex());
+        $this->worker->resetLineIndex();
+        $this->assertEquals(-1, $this->worker->getLineIndex());
+    }
 
     /**
      * @test
@@ -80,6 +100,7 @@ class ImportContentFunctionalTest extends TestCase
         $attributeName = 'test';
         $attributeType = ATTR_TYPE::TEXT;
         $content = 'text';
+        $lineIndex = 45;
 
         $attributeModel = $this->getMockBuilder(AttributeModel::class)
             ->disableOriginalConstructor()
@@ -92,8 +113,9 @@ class ImportContentFunctionalTest extends TestCase
         $attrSet->appendAttribute($attributeModel);
 
         $worker = $this->getMockBuilder(Worker::class)
-            ->onlyMethods(['getAttributeSet'])->getMock();
+            ->onlyMethods(['getAttributeSet', 'getLineIndex'])->getMock();
         $worker->method('getAttributeSet')->willReturn($attrSet);
+        $worker->method('getLineIndex')->willReturn($lineIndex);
 
         $worker->parseCell($attributeName, $content);
 
@@ -107,6 +129,7 @@ class ImportContentFunctionalTest extends TestCase
         $this->assertEquals($attributeType, $value->getType());
         $this->assertEquals($attributeName, $value->getAttributeName());
         $this->assertEquals($attributeKey, $value->getAttributeKey());
+        $this->assertEquals($lineIndex, $value->getLineIndex());
         $this->assertFalse($value->isEntityKey());
     }
 
@@ -124,6 +147,7 @@ class ImportContentFunctionalTest extends TestCase
         $attributeName = 'test';
         $attributeType = ATTR_TYPE::TEXT;
         $content = 'text';
+        $lineIndex = 45;
 
         $attributeModel = $this->getMockBuilder(AttributeModel::class)
             ->disableOriginalConstructor()
@@ -136,14 +160,16 @@ class ImportContentFunctionalTest extends TestCase
         $attrSet->appendAttribute($attributeModel);
 
         $worker = $this->getMockBuilder(Worker::class)
-            ->onlyMethods(['getAttributeSet'])->getMock();
+            ->onlyMethods(['getAttributeSet', 'getLineIndex'])->getMock();
         $worker->method('getAttributeSet')->willReturn($attrSet);
+        $worker->method('getLineIndex')->willReturn($lineIndex);
 
         $worker->parseCell($attributeName, $content, $entityKey);
         $valueSet = $worker->getValueSet();
         $values = $valueSet->getValues();
         $value = $values[0];
         $this->assertEquals($entityKey, $value->getEntityKey());
+        $this->assertFalse($value->isLineIndex());
     }
 
     /**
@@ -157,10 +183,11 @@ class ImportContentFunctionalTest extends TestCase
     {
         $line = [_ENTITY::ID->column() => 1,"name" => "Tom", "type" => "cat"];
         $worker = $this->getMockBuilder(Worker::class)
-            ->onlyMethods(['parseCell'])->getMock();
+            ->onlyMethods(['parseCell','incrementLineIndex'])->getMock();
         $worker->expects($this->exactly(2))
             ->method('parseCell')
             ->withConsecutive(["name", "Tom", 1], ["type", "cat", 1]);
+        $worker->expects($this->never())->method('incrementLineIndex');
         $worker->parseLine($line);
     }
 
@@ -175,10 +202,11 @@ class ImportContentFunctionalTest extends TestCase
     {
         $line = ["name" => "Tom", "type" => "cat"];
         $worker = $this->getMockBuilder(Worker::class)
-            ->onlyMethods(['parseCell'])->getMock();
+            ->onlyMethods(['parseCell','incrementLineIndex'])->getMock();
         $worker->expects($this->exactly(2))
             ->method('parseCell')
             ->withConsecutive(["name", "Tom", null], ["type", "cat", null]);
+        $worker->expects($this->once())->method('incrementLineIndex');
         $worker->parseLine($line);
     }
 

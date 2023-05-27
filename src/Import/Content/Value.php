@@ -17,6 +17,8 @@ class Value
     private int $attributeKey;
     private string $attributeName;
     private ?int $entityKey = null;
+    private int  $lineIndex;
+
     private ATTR_TYPE $type;
 
     public function setType(ATTR_TYPE $type): void
@@ -52,6 +54,21 @@ class Value
     public function isEntityKey() : bool
     {
         return !is_null($this->entityKey);
+    }
+
+    public function setLineIndex(int $index)
+    {
+        $this->lineIndex = $index;
+    }
+
+    public function getLineIndex() : int
+    {
+        return $this->lineIndex;
+    }
+
+    public function isLineIndex() : bool
+    {
+        return isset($this->lineIndex);
     }
 
     public function getAttributeKey() : int

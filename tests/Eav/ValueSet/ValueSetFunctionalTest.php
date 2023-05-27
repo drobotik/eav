@@ -60,10 +60,9 @@ class ValueSetFunctionalTest extends TestCase
     public function for_new_entities()
     {
         $value1 = new Value();
-        $value1->setEntityKey(123);
         $value2 = new Value();
-        $value2->setEntityKey(123);
         $value3 = new Value();
+        $value3->setLineIndex(123);
         $this->valueSet->appendValue($value1);
         $this->valueSet->appendValue($value2);
         $this->valueSet->appendValue($value3);

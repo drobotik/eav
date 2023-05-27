@@ -91,4 +91,20 @@ class ImportContentValue extends TestCase
         $this->value->setAttributeKey(123);
         $this->assertEquals(123, $this->value->getAttributeKey());
     }
+    /**
+     * @test
+     *
+     * @group functional
+     *
+     * @covers \Drobotik\Eav\Import\Content\Value::setLineIndex
+     * @covers \Drobotik\Eav\Import\Content\Value::getLineIndex
+     * @covers \Drobotik\Eav\Import\Content\Value::isLineIndex
+     */
+    public function line_index()
+    {
+        $this->assertFalse($this->value->isLineIndex());
+        $this->value->setLineIndex(22);
+        $this->assertTrue($this->value->isLineIndex());
+        $this->assertEquals(22, $this->value->getLineIndex());
+    }
 }

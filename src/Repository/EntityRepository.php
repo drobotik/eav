@@ -40,8 +40,7 @@ class EntityRepository extends BaseRepository
     {
         return EntityModel::query()
             ->where(_ENTITY::SERVICE_KEY->column(), $key)
-            ->get()
-            ->keyBy(_ENTITY::ID->column());
+            ->get();
     }
 
     public function bulkCreate(int $amount, int $domainKey, int $setKey, int $serviceKey) : void

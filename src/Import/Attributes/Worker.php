@@ -9,8 +9,6 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\Import\Attributes;
 
-use Drobotik\Eav\Factory\EavFactory;
-use Drobotik\Eav\Model\AttributeModel;
 use Drobotik\Eav\Trait\ImportContainerTrait;
 use Drobotik\Eav\Trait\RepositoryTrait;
 use Drobotik\Eav\Trait\SingletonsTrait;
@@ -40,7 +38,9 @@ class Worker
 
     public function getValidator(): Validator
     {
-        return new Validator();
+        $validator = new Validator();
+        $validator->setWorker($this);
+        return $validator;
     }
 
     public function validate(): void

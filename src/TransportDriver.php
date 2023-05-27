@@ -32,9 +32,9 @@ abstract class TransportDriver implements TransportDriverInterface
         return $this->cursor;
     }
 
-    public function setCursor(int $index) : void
+    public function setCursor(int $cursor) : void
     {
-        $this->cursor = $index;
+        $this->cursor = $cursor;
     }
 
     public function setTotal(int $total)

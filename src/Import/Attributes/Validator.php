@@ -16,13 +16,14 @@ use Drobotik\Eav\Trait\RepositoryTrait;
 
 class Validator
 {
-    use ImportContainerTrait;
+
     use RepositoryTrait;
     /** @var AttributeModel[] $existingAttributes */
-    private array $existingAttributes;
+    private array $existingAttributes = [];
     private array $requiredAttributes = [];
 
     private Config $config;
+    private Worker $worker;
 
     public function setConfig(Config $config): void
     {
@@ -32,6 +33,16 @@ class Validator
     public function getConfig() : Config
     {
         return $this->config;
+    }
+
+    public function getWorker() : Worker
+    {
+        return $this->worker;
+    }
+
+    public function setWorker(Worker $worker) : void
+    {
+        $this->worker = $worker;
     }
 
     public function getRequiredAttributes() : array
@@ -46,7 +57,8 @@ class Validator
 
     public function fetchStoredAttributes(): void
     {
-        $container = $this->getContainer();
+        $worker = $this->getWorker();
+        $container = $worker->getContainer();
         $domainKey = $container->getDomainKey();
         $repository = $this->makeAttributeRepository();
         /** @var AttributeModel $attribute */
@@ -78,7 +90,8 @@ class Validator
      */
     public function validate() : void
     {
-        $container = $this->getContainer();
+        $worker = $this->getWorker();
+        $container = $worker->getContainer();
         $driver = $container->getDriver();
         $columns = $driver->getHeader();
         $this->fetchStoredAttributes();

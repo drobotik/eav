@@ -23,7 +23,7 @@ use Drobotik\Eav\Repository\ValueRepository;
 use Illuminate\Database\Eloquent\Collection;
 use PHPUnit\Framework\TestCase;
 
-class ImportContentBehaviorTest extends TestCase
+class ImportContentWorkerBehaviorTest extends TestCase
 {
     /**
      * @test
@@ -38,6 +38,7 @@ class ImportContentBehaviorTest extends TestCase
         $setKey = 2;
         $values = [1,2,3];
         $serviceKey = 456;
+        $lineIndex = 2;
         $collection = new Collection($values);
 
         $container = $this->getMockBuilder(ImportContainer::class)
@@ -45,29 +46,22 @@ class ImportContentBehaviorTest extends TestCase
         $container->method('getDomainKey')->willReturn($domainKey);
         $container->method('getSetKey')->willReturn($setKey);
 
-        $valueSet = $this->getMockBuilder(ValueSet::class)
-            ->onlyMethods(['forNewEntities'])
-            ->getMock();
-
-        $valueSet->method('forNewEntities')
-            ->willReturn($values);
-
         $entityRepository = $this->getMockBuilder(EntityRepository::class)
             ->onlyMethods(['getServiceKey', 'bulkCreate', 'getByServiceKey'])
             ->getMock();
         $entityRepository->expects($this->once())->method('getServiceKey')
             ->willReturn($serviceKey);
         $entityRepository->expects($this->once())->method('bulkCreate')
-            ->with(3, $domainKey, $setKey, $serviceKey);
+            ->with($lineIndex + 1, $domainKey, $setKey, $serviceKey);
         $entityRepository->expects($this->once())->method('getByServiceKey')
             ->with($serviceKey)
             ->willReturn($collection);
 
         $worker = $this->getMockBuilder(Worker::class)
-            ->onlyMethods(['getContainer', 'getValueSet', 'makeEntityRepository'])->getMock();
+            ->onlyMethods(['getContainer', 'getLineIndex', 'makeEntityRepository'])->getMock();
         $worker->method('getContainer')->willReturn($container);
-        $worker->method('getValueSet')->willReturn($valueSet);
         $worker->method('makeEntityRepository')->willReturn($entityRepository);
+        $worker->method('getLineIndex')->willReturn($lineIndex);
 
         $this->assertEquals($collection, $worker->createEntities());
     }
@@ -94,11 +88,13 @@ class ImportContentBehaviorTest extends TestCase
         $collection = new Collection([$entity1, $entity2]);
 
         $value1 = $this->getMockBuilder(Value::class)
-            ->onlyMethods(['setEntityKey'])->getMock();
+            ->onlyMethods(['setEntityKey', 'getLineIndex'])->getMock();
+        $value1->expects($this->once())->method('getLineIndex')->willReturn(0);
         $value1->expects($this->once())->method('setEntityKey')
             ->with($entity1Key);
         $value2 = $this->getMockBuilder(Value::class)
-            ->onlyMethods(['setEntityKey'])->getMock();
+            ->onlyMethods(['setEntityKey', 'getLineIndex'])->getMock();
+        $value2->expects($this->once())->method('getLineIndex')->willReturn(1);
         $value2->expects($this->once())->method('setEntityKey')
             ->with($entity2Key);
 
@@ -272,7 +268,8 @@ class ImportContentBehaviorTest extends TestCase
                 'parseChunk',
                 'processExistingEntities',
                 'processNewEntities',
-                'cleanup'
+                'cleanup',
+                'resetLineIndex'
             ])->getMock();
         $worker->method('getContainer')->willReturn($container);
         $worker->method('getAttributeSet')->willReturn($attrSet);
@@ -282,7 +279,7 @@ class ImportContentBehaviorTest extends TestCase
         $worker->expects($this->exactly(2))->method('processExistingEntities');
         $worker->expects($this->exactly(2))->method('processNewEntities');
         $worker->expects($this->exactly(2))->method('cleanup');
-
+        $worker->expects($this->exactly(2))->method('resetLineIndex');
         $worker->run();
     }
 

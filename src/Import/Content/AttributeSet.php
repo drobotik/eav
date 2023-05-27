@@ -10,17 +10,26 @@ declare(strict_types=1);
 namespace Drobotik\Eav\Import\Content;
 
 use Drobotik\Eav\Model\AttributeModel;
-use Drobotik\Eav\Trait\ImportContainerTrait;
 use Drobotik\Eav\Trait\RepositoryTrait;
 
 class AttributeSet
 {
-
-    use ImportContainerTrait;
     use RepositoryTrait;
 
     /** @var AttributeModel[]  */
     private array $attributes = [];
+    private Worker $worker;
+
+    public function setWorker(Worker $worker) : void
+    {
+        $this->worker = $worker;
+    }
+
+    public function getWorker() : Worker
+    {
+        return $this->worker;
+    }
+
 
     public function appendAttribute(AttributeModel $attributeModel): void
     {
@@ -39,7 +48,8 @@ class AttributeSet
 
     public function initialize() : void
     {
-        $container = $this->getContainer();
+        $worker = $this->getWorker();
+        $container = $worker->getContainer();
         $driver = $container->getDriver();
         $columns = $driver->getHeader();
         $repository = $this->makeAttributeRepository();

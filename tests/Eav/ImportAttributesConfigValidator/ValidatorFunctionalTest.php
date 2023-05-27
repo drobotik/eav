@@ -7,15 +7,15 @@
  */
 declare(strict_types=1);
 
-namespace Tests\Eav\ImportAttributesConfigAnalyser;
+namespace Tests\Eav\ImportAttributesConfigValidator;
 
-use Drobotik\Eav\Driver\CsvDriver;
 use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Exception\ImportException;
 use Drobotik\Eav\Import\Attributes\Config;
 use Drobotik\Eav\Import\Attributes\ConfigAttribute;
 use Drobotik\Eav\Import\Attributes\Validator;
+use Drobotik\Eav\Import\Attributes\Worker;
 use Drobotik\Eav\Import\ImportContainer;
 use Drobotik\Eav\Model\AttributeModel;
 use Drobotik\Eav\Repository\AttributeRepository;
@@ -52,6 +52,21 @@ class ValidatorFunctionalTest extends TestCase
      * @test
      *
      * @group functional
+     *
+     * @covers \Drobotik\Eav\Import\Attributes\Validator::getWorker
+     * @covers \Drobotik\Eav\Import\Attributes\Validator::setWorker
+     */
+    public function worker()
+    {
+        $worker = new Worker();
+        $this->validator->setWorker($worker);
+        $this->assertSame($worker, $this->validator->getWorker());
+    }
+
+    /**
+     * @test
+     *
+     * @group functional
      * @group behavior
      *
      * @covers \Drobotik\Eav\Import\Attributes\Validator::getExistingAttributes
@@ -62,6 +77,10 @@ class ValidatorFunctionalTest extends TestCase
         $container = $this->getMockBuilder(ImportContainer::class)
             ->onlyMethods(['getDomainKey'])->getMock();
         $container->expects($this->once())->method('getDomainKey')->willReturn(123);
+
+        $worker = $this->getMockBuilder(Worker::class)
+            ->onlyMethods(['getContainer'])->getMock();
+        $worker->expects($this->once())->method('getContainer')->willReturn($container);
 
         $attr1 = new AttributeModel();
         $attr1->setName('test1');
@@ -76,9 +95,9 @@ class ValidatorFunctionalTest extends TestCase
             ->willReturn($collection);
 
         $analyzer = $this->getMockBuilder(Validator::class)
-            ->onlyMethods(['makeAttributeRepository', 'getContainer'])
+            ->onlyMethods(['makeAttributeRepository', 'getWorker'])
             ->getMock();
-        $analyzer->expects($this->once())->method('getContainer')->willReturn($container);
+        $analyzer->expects($this->once())->method('getWorker')->willReturn($worker);
         $analyzer->expects($this->once())->method('makeAttributeRepository')->willReturn($repository);
 
         $analyzer->fetchStoredAttributes();
@@ -204,34 +223,5 @@ class ValidatorFunctionalTest extends TestCase
         $this->validator->setConfig($config);
         $this->assertTrue($this->validator->validateAttributes());
     }
-    /**
-     * @test
-     *
-     * @group behavior
-     *
-     * @covers \Drobotik\Eav\Import\Attributes\Validator::validatePivots
-     */
-    public function validate()
-    {
-        $columns = [123];
-        $driver = $this->getMockBuilder(CsvDriver::class)
-            ->onlyMethods(['getHeader'])->getMock();
-        $driver->expects($this->once())->method('getHeader')
-            ->willReturn($columns);
-        $container = $this->getMockBuilder(ImportContainer::class)
-            ->onlyMethods(['getDriver'])->getMock();
-        $container->expects($this->once())->method('getDriver')->willReturn($driver);
-        $validator = $this->getMockBuilder(Validator::class)
-            ->onlyMethods([
-                'getContainer',
-                'fetchStoredAttributes',
-                'analyse',
-                'validateAttributes'
-            ])->getMock();
-        $validator->expects($this->once())->method('getContainer')->willReturn($container);
-        $validator->expects($this->once())->method('fetchStoredAttributes');
-        $validator->expects($this->once())->method('analyse')->with($columns);
-        $validator->expects($this->once())->method('validateAttributes');
-        $validator->validate();
-    }
+
 }

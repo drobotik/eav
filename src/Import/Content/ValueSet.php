@@ -32,7 +32,7 @@ class ValueSet
 
     public function forNewEntities() : array
     {
-        return array_values(array_filter($this->values, fn(Value $value) => !$value->isEntityKey()));
+        return array_values(array_filter($this->values, fn(Value $value) => $value->isLineIndex()));
     }
 
     public function forExistingEntities() : array
