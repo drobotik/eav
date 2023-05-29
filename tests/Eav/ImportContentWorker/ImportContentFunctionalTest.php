@@ -11,6 +11,7 @@ namespace Tests\Eav\ImportContentWorker;
 
 use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Enum\ATTR_TYPE;
+use Drobotik\Eav\Exception\EntityException;
 use Drobotik\Eav\Import\Content\AttributeSet;
 use Drobotik\Eav\Import\Content\ValueSet;
 use Drobotik\Eav\Import\Content\Worker;
@@ -80,11 +81,11 @@ class ImportContentFunctionalTest extends TestCase
      */
     public function line_index()
     {
-        $this->assertEquals(-1, $this->worker->getLineIndex());
-        $this->worker->incrementLineIndex();
         $this->assertEquals(0, $this->worker->getLineIndex());
+        $this->worker->incrementLineIndex();
+        $this->assertEquals(1, $this->worker->getLineIndex());
         $this->worker->resetLineIndex();
-        $this->assertEquals(-1, $this->worker->getLineIndex());
+        $this->assertEquals(0, $this->worker->getLineIndex());
     }
 
     /**
@@ -179,6 +180,23 @@ class ImportContentFunctionalTest extends TestCase
      *
      * @covers \Drobotik\Eav\Import\Content\Worker::parseLine
      */
+    public function parse_line_entity_key_as_string()
+    {
+        $line = [_ENTITY::ID->column() => '1',"name" => "Tom"];
+        $worker = $this->getMockBuilder(Worker::class)
+            ->onlyMethods(['parseCell'])->getMock();
+        $worker->expects($this->once())->method('parseCell')
+            ->with('name', 'Tom', 1);
+        $worker->parseLine($line);
+    }
+
+    /**
+     * @test
+     *
+     * @group functional
+     *
+     * @covers \Drobotik\Eav\Import\Content\Worker::parseLine
+     */
     public function parse_line_with_entity_key()
     {
         $line = [_ENTITY::ID->column() => 1,"name" => "Tom", "type" => "cat"];
@@ -198,9 +216,9 @@ class ImportContentFunctionalTest extends TestCase
      *
      * @covers \Drobotik\Eav\Import\Content\Worker::parseLine
      */
-    public function parse_line_without_entity_key()
+    public function parse_line_without_nullable_entity_key()
     {
-        $line = ["name" => "Tom", "type" => "cat"];
+        $line = [_ENTITY::ID->column() => null, "name" => "Tom", "type" => "cat"];
         $worker = $this->getMockBuilder(Worker::class)
             ->onlyMethods(['parseCell','incrementLineIndex'])->getMock();
         $worker->expects($this->exactly(2))
@@ -208,6 +226,22 @@ class ImportContentFunctionalTest extends TestCase
             ->withConsecutive(["name", "Tom", null], ["type", "cat", null]);
         $worker->expects($this->once())->method('incrementLineIndex');
         $worker->parseLine($line);
+    }
+
+    /**
+     * @test
+     *
+     * @group functional
+     *
+     * @covers \Drobotik\Eav\Import\Content\Worker::parseLine
+     */
+    public function parse_line_without_entity_key_exception()
+    {
+        $this->expectException(EntityException::class);
+        $this->expectExceptionMessage(EntityException::MUST_BE_ENTITY_KEY);
+        $worker = new Worker();
+        $worker->parseLine( ["name" => "Tom"]);
+
     }
 
     /**

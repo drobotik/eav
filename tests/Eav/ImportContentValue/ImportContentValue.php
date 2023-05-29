@@ -43,11 +43,15 @@ class ImportContentValue extends TestCase
      *
      * @covers \Drobotik\Eav\Import\Content\Value::setValue
      * @covers \Drobotik\Eav\Import\Content\Value::getValue
+     * @covers \Drobotik\Eav\Import\Content\Value::isEmptyValue
      */
     public function value()
     {
         $this->value->setValue('test');
         $this->assertEquals('test', $this->value->getValue());
+        $this->assertFalse($this->value->isEmptyValue());
+        $this->value->setValue('');
+        $this->assertTrue($this->value->isEmptyValue());
     }
     /**
      * @test

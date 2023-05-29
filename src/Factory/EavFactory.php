@@ -155,9 +155,9 @@ class EavFactory
         return $model;
     }
 
-    public function createValue(ATTR_TYPE $enum, int $domainKey, int $entityKey, int $attributeKey, $value): ValueBase
+    public function createValue(ATTR_TYPE $type, int $domainKey, int $entityKey, int $attributeKey, $value): ValueBase
     {
-        $model = $enum->model();
+        $model = $type->model();
         $model->setDomainKey($domainKey)
             ->setEntityKey($entityKey)
             ->setAttrKey($attributeKey)

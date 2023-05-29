@@ -12,6 +12,7 @@ namespace Tests\Eav\CsvDriver;
 
 use Carbon\Carbon;
 use Drobotik\Eav\Driver\CsvDriver;
+use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Result\Result;
 use Drobotik\Eav\TransportDriver;
@@ -78,6 +79,7 @@ class CsvDriverFunctionalTest extends TestCase
         $this->driver->setReader($reader);
         $result = $this->driver->getHeader();
         $this->assertEquals([
+            _ENTITY::ID->column(),
             ATTR_TYPE::STRING->value(),
             ATTR_TYPE::INTEGER->value(),
             ATTR_TYPE::DECIMAL->value(),

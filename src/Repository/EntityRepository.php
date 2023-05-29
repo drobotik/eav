@@ -11,6 +11,7 @@ namespace Drobotik\Eav\Repository;
 
 use Drobotik\Eav\Database\Connection;
 use Drobotik\Eav\Enum\_ENTITY;
+use Drobotik\Eav\Exception\EntityException;
 use Drobotik\Eav\Model\EntityModel;
 
 class EntityRepository extends BaseRepository
@@ -43,8 +44,15 @@ class EntityRepository extends BaseRepository
             ->get();
     }
 
+    /**
+     * @throws EntityException
+     */
     public function bulkCreate(int $amount, int $domainKey, int $setKey, int $serviceKey) : void
     {
+        if($amount < 1)
+        {
+            EntityException::mustBePositiveAmount();
+        }
         $format = "($domainKey, $setKey, $serviceKey)";
         $bulk = [];
         for($i=0;$i<$amount;$i++) {

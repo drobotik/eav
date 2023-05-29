@@ -41,6 +41,11 @@ class Value
         $this->value = $value;
     }
 
+    public function isEmptyValue(): bool
+    {
+        return $this->value == '';
+    }
+
     public function getEntityKey() : ?int
     {
         return $this->entityKey;

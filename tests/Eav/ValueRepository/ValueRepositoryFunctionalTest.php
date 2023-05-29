@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Tests\Eav\ValueRepository;
 
 use Carbon\Carbon;
+use Drobotik\Eav\Enum\_VALUE;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Import\Content\Value;
 use Drobotik\Eav\Import\Content\ValueSet;
@@ -215,5 +216,30 @@ class ValueRepositoryFunctionalTest extends TestCase
         $this->assertEquals($valueText2->getEntityKey(), $textRecords[1]->getEntityKey());
         $this->assertEquals($valueText2->getValue(), $textRecords[1]->getValue());
     }
+
+    /**
+     * @test
+     *
+     * @group functional
+     *
+     * @covers \Drobotik\Eav\Repository\ValueRepository::destroy
+     */
+    public function destroy()
+    {
+        $domainKey = 1;
+        $entityKey = 2;
+        $attributeKey = 3;
+
+        $this->eavFactory->createValue(ATTR_TYPE::STRING, $domainKey, $entityKey, $attributeKey, 'test');
+
+        $repository = new ValueRepository();
+        $repository->destroy($domainKey, $entityKey, $attributeKey, ATTR_TYPE::STRING);
+        $this->assertFalse(ValueStringModel::query()
+            ->where(_VALUE::DOMAIN_ID->column(), $domainKey)
+            ->where(_VALUE::ENTITY_ID->column(), $entityKey)
+            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributeKey)
+        ->exists());
+    }
+
 
 }

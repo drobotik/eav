@@ -9,9 +9,9 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\Import\Attributes;
 
+use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Exception\ImportException;
 use Drobotik\Eav\Model\AttributeModel;
-use Drobotik\Eav\Trait\ImportContainerTrait;
 use Drobotik\Eav\Trait\RepositoryTrait;
 
 class Validator
@@ -71,7 +71,7 @@ class Validator
     public function analyseAttribute(string $name): void
     {
         $attributes = $this->getExistingAttributes();
-        if (!key_exists($name, $attributes))
+        if (!key_exists($name, $attributes) && $name !== _ENTITY::ID->column())
         {
             $this->requiredAttributes[] = $name;
         }

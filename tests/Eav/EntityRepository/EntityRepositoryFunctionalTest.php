@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Tests\Eav\EntityRepository;
 
 use Drobotik\Eav\Enum\_ENTITY;
+use Drobotik\Eav\Exception\EntityException;
 use Drobotik\Eav\Model\EntityModel;
 use Drobotik\Eav\Repository\EntityRepository;
 use Tests\TestCase;
@@ -66,5 +67,16 @@ class EntityRepositoryFunctionalTest extends TestCase
         }
     }
 
-
+    /**
+     * @test
+     *
+     * @group functional
+     *
+     * @covers \Drobotik\Eav\Repository\EntityRepository::bulkCreate
+     */
+    public function bulk_create_entities_null_amount() {
+        $this->expectException(EntityException::class);
+        $this->expectExceptionMessage(EntityException::MUST_BE_POSITIVE_AMOUNT);
+        $this->repository->bulkCreate(0, 1, 1, 1);
+    }
 }

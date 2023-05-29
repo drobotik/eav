@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Drobotik\Eav\Import\Content;
 
 use Drobotik\Eav\Enum\_ENTITY;
+use Drobotik\Eav\Exception\EntityException;
 use Drobotik\Eav\Model\EntityModel;
 use Drobotik\Eav\Trait\ImportContainerTrait;
 use Drobotik\Eav\Trait\RepositoryTrait;
@@ -56,7 +57,7 @@ class Worker
     }
     public function resetLineIndex() : void
     {
-        $this->lineIndex = -1;
+        $this->lineIndex = 0;
     }
 
     public function parseCell(string $attributeName, $content, ?int $entityKey = null): void
@@ -82,15 +83,17 @@ class Worker
 
     public function parseLine(array $line): void
     {
-        $entityKey = key_exists(_ENTITY::ID->column(), $line) && !empty($line[_ENTITY::ID->column()])
-            ? $line[_ENTITY::ID->column()]
-            : null;
-
-        if(!is_null($entityKey))
+        if(!key_exists(_ENTITY::ID->column(), $line))
         {
-            unset($line[_ENTITY::ID->column()]);
+            EntityException::mustBeEntityKey();
         }
-        else
+
+        $entityKey = empty($line[_ENTITY::ID->column()])
+            ? null
+            : (int) $line[_ENTITY::ID->column()];
+        unset($line[_ENTITY::ID->column()]);
+
+        if ($entityKey < 1)
         {
             $this->incrementLineIndex();
         }
@@ -117,7 +120,7 @@ class Worker
         $domainKey = $container->getDomainKey();
         $setKey = $container->getSetKey();
 
-        $amount = $this->getLineIndex() + 1;
+        $amount = $this->getLineIndex();
         $serviceKey = $entityRepo->getServiceKey();
 
         $entityRepo->bulkCreate($amount, $domainKey, $setKey, $serviceKey);
@@ -138,7 +141,8 @@ class Worker
          */
         foreach($valueSet->forNewEntities() as $value)
         {
-            $value->setEntityKey($entities[$value->getLineIndex()]->getKey());
+            if($value->isEmptyValue()) continue;
+            $value->setEntityKey($entities[$value->getLineIndex() - 1]->getKey());
             $bulkCreateSet->appendValue($value);
         }
         $valueRepo->bulkCreate($bulkCreateSet, $domainKey);
@@ -154,16 +158,17 @@ class Worker
         /**
          * @var Value $value
          */
-        foreach($valueSet->forExistingEntities() as $value)
+        foreach($valueSet->forExistingEntities() as $attributeValue)
         {
-            $attribute = $attrSet->getAttribute($value->getAttributeName());
-            $repository->updateOrCreate(
-                $domainKey,
-                $value->getEntityKey(),
-                $attribute->getKey(),
-                $attribute->getTypeEnum(),
-                $value->getValue()
-            );
+            $value = $attributeValue->getValue();
+            $entityKey = $attributeValue->getEntityKey();
+            $attribute = $attrSet->getAttribute($attributeValue->getAttributeName());
+            $attributeKey = $attribute->getKey();
+            $attributeType = $attribute->getTypeEnum();
+            if($value == '')
+                $repository->destroy($domainKey,$entityKey,$attributeKey,$attributeType);
+            else
+                $repository->updateOrCreate($domainKey,$entityKey,$attributeKey,$attributeType,$value);
         }
     }
 

@@ -19,6 +19,8 @@ class EntityException extends Exception
     public const ATTR_SET_NOT_FOUND = 'Attribute set not found';
     public const UNDEFINED_ENTITY_KEY = "Undefined entity key";
     public const ENTITY_NOT_FOUND = 'Entity not found';
+    public const MUST_BE_POSITIVE_AMOUNT = 'Must be positive amount';
+    public const MUST_BE_ENTITY_KEY = 'Must be entity key';
 
     /**
      *
@@ -66,5 +68,21 @@ class EntityException extends Exception
      */
     public static function entityNotFound() {
         throw new static(self::ENTITY_NOT_FOUND);
+    }
+
+    /**
+     *
+     * @throws EntityException
+     */
+    public static function mustBePositiveAmount() {
+        throw new static(self::MUST_BE_POSITIVE_AMOUNT);
+    }
+
+    /**
+     *
+     * @throws EntityException
+     */
+    public static function mustBeEntityKey() {
+        throw new static(self::MUST_BE_ENTITY_KEY);
     }
 }

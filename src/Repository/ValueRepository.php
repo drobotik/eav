@@ -18,7 +18,17 @@ use Drobotik\Eav\Model\ValueBase;
 class ValueRepository extends BaseRepository
 {
 
-    public function updateOrCreate(int $domainKey, int $entityKey, int $attributeKey, ATTR_TYPE $type, mixed $value) : ValueBase
+    public function destroy(int $domainKey, int $entityKey, int $attributeKey, ATTR_TYPE $type)
+    {
+        $model = $type->model();
+        return $model->newQuery()
+            ->where(_VALUE::DOMAIN_ID->column(), $domainKey)
+            ->where(_VALUE::ENTITY_ID->column(), $entityKey)
+            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributeKey)
+            ->delete();
+    }
+
+    public function updateOrCreate(int $domainKey, int $entityKey, int $attributeKey, ATTR_TYPE $type, mixed $value) : ValueBase|null
     {
         $model = $type->model();
         $query = $model->newQuery()

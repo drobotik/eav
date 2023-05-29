@@ -52,7 +52,7 @@ class ImportContentWorkerBehaviorTest extends TestCase
         $entityRepository->expects($this->once())->method('getServiceKey')
             ->willReturn($serviceKey);
         $entityRepository->expects($this->once())->method('bulkCreate')
-            ->with($lineIndex + 1, $domainKey, $setKey, $serviceKey);
+            ->with($lineIndex, $domainKey, $setKey, $serviceKey);
         $entityRepository->expects($this->once())->method('getByServiceKey')
             ->with($serviceKey)
             ->willReturn($collection);
@@ -88,13 +88,15 @@ class ImportContentWorkerBehaviorTest extends TestCase
         $collection = new Collection([$entity1, $entity2]);
 
         $value1 = $this->getMockBuilder(Value::class)
-            ->onlyMethods(['setEntityKey', 'getLineIndex'])->getMock();
-        $value1->expects($this->once())->method('getLineIndex')->willReturn(0);
+            ->onlyMethods(['setEntityKey', 'getLineIndex','isEmptyValue'])->getMock();
+        $value1->expects($this->once())->method('isEmptyValue')->willReturn(false);
+        $value1->expects($this->once())->method('getLineIndex')->willReturn(1);
         $value1->expects($this->once())->method('setEntityKey')
             ->with($entity1Key);
         $value2 = $this->getMockBuilder(Value::class)
-            ->onlyMethods(['setEntityKey', 'getLineIndex'])->getMock();
-        $value2->expects($this->once())->method('getLineIndex')->willReturn(1);
+            ->onlyMethods(['setEntityKey', 'getLineIndex','isEmptyValue'])->getMock();
+        $value1->expects($this->once())->method('isEmptyValue')->willReturn(false);
+        $value2->expects($this->once())->method('getLineIndex')->willReturn(2);
         $value2->expects($this->once())->method('setEntityKey')
             ->with($entity2Key);
 
@@ -149,12 +151,16 @@ class ImportContentWorkerBehaviorTest extends TestCase
         $entity2Key = 20;
         $attribute1name = "name";
         $attribute2name = "type";
+        $attribute3name = "description";
         $attribute1key = 5;
         $attribute2key = 15;
+        $attribute3key = 21;
         $attribute1type = ATTR_TYPE::INTEGER;
         $attribute2type = ATTR_TYPE::TEXT;
+        $attribute3type = ATTR_TYPE::TEXT;
         $content1 = "content1";
         $content2 = "content2";
+        $content3 = "";
 
         $attribute1 = $this->getMockBuilder(AttributeModel::class)
             ->disableOriginalConstructor()
@@ -174,11 +180,20 @@ class ImportContentWorkerBehaviorTest extends TestCase
         $attribute2->expects($this->once())->method('getTypeEnum')
             ->willReturn($attribute2type);
 
+        $attribute3 = $this->getMockBuilder(AttributeModel::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getKey', 'getTypeEnum'])
+            ->getMock();
+        $attribute3->expects($this->once())->method('getKey')
+            ->willReturn($attribute3key);
+        $attribute3->expects($this->once())->method('getTypeEnum')
+            ->willReturn($attribute3type);
+
         $attrSet = $this->getMockBuilder(AttributeSet::class)
             ->onlyMethods(['getAttribute'])->getMock();
-        $attrSet->expects($this->exactly(2))->method('getAttribute')
-            ->withConsecutive([$attribute1name], [$attribute2name])
-            ->willReturn($attribute1, $attribute2);
+        $attrSet->expects($this->exactly(3))->method('getAttribute')
+            ->withConsecutive([$attribute1name], [$attribute2name], [$attribute3name])
+            ->willReturn($attribute1, $attribute2, $attribute3);
 
         $value1 = $this->getMockBuilder(Value::class)
             ->onlyMethods(['getEntityKey', 'getAttributeName', 'getValue'])->getMock();
@@ -196,23 +211,33 @@ class ImportContentWorkerBehaviorTest extends TestCase
             ->willReturn($attribute2name);
         $value2->expects($this->once())->method('getValue')
             ->willReturn($content2);
+        $value3 = $this->getMockBuilder(Value::class)
+            ->onlyMethods(['getEntityKey', 'getAttributeName', 'getValue'])->getMock();
+        $value3->expects($this->once())->method('getEntityKey')
+            ->willReturn($entity1Key);
+        $value3->expects($this->once())->method('getAttributeName')
+            ->willReturn($attribute3name);
+        $value3->expects($this->once())->method('getValue')
+            ->willReturn($content3);
 
         $valueSet = $this->getMockBuilder(ValueSet::class)
             ->onlyMethods(['forExistingEntities'])->getMock();
         $valueSet->expects($this->once())->method('forExistingEntities')
-            ->willReturn([$value1, $value2]);
+            ->willReturn([$value1, $value2, $value3]);
 
         $container = $this->getMockBuilder(ImportContainer::class)
             ->onlyMethods(['getDomainKey'])->getMock();
         $container->method('getDomainKey')->willReturn($domainKey);
 
         $valueRepo = $this->getMockBuilder(ValueRepository::class)
-            ->onlyMethods(['updateOrCreate'])->getMock();
+            ->onlyMethods(['updateOrCreate', 'destroy'])->getMock();
         $valueRepo->expects($this->exactly(2))->method('updateOrCreate')
             ->withConsecutive(
                 [$domainKey, $entity1Key, $attribute1key, $attribute1type, $content1],
                 [$domainKey, $entity2Key, $attribute2key, $attribute2type, $content2]
             );
+        $valueRepo->expects($this->once())->method('destroy')
+            ->with($domainKey, $entity1Key, $attribute3key, $attribute3type);
 
         $worker = $this->getMockBuilder(Worker::class)
             ->onlyMethods([

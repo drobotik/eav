@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Tests\Eav\ImportAttributesConfigValidator;
 
 use Drobotik\Eav\Enum\_ATTR;
+use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Exception\ImportException;
 use Drobotik\Eav\Import\Attributes\Config;
@@ -144,6 +145,24 @@ class ValidatorFunctionalTest extends TestCase
             ->getMock();
         $analyzer->expects($this->exactly(1))->method('getExistingAttributes')->willReturn($attributes);
         $analyzer->analyseAttribute('test');
+        $this->assertEquals([], $analyzer->getRequiredAttributes());
+    }
+    /**
+     * @test
+     *
+     * @group functional
+     *
+     * @covers \Drobotik\Eav\Import\Attributes\Validator::analyseAttribute
+     * @covers \Drobotik\Eav\Import\Attributes\Validator::getRequiredAttributes
+     */
+    public function analyse_entity_key()
+    {
+        $attributes = [_ENTITY::ID->column() => null];
+        $analyzer = $this->getMockBuilder(Validator::class)
+            ->onlyMethods(['getExistingAttributes'])
+            ->getMock();
+        $analyzer->expects($this->once())->method('getExistingAttributes')->willReturn($attributes);
+        $analyzer->analyseAttribute(_ENTITY::ID->column());
         $this->assertEquals([], $analyzer->getRequiredAttributes());
     }
     /**
