@@ -299,7 +299,7 @@ class ImportManagerAcceptanceTest extends TestCase
         $newValues[] = ['', '', '', '', Carbon::now()->toISOString()];
         $newValues[] = ['', '', '', '', ''];
 
-        $file = new \SplFileObject(dirname(__DIR__, 2).'/temp/csv.csv', 'w+');
+        $file = new \SplFileObject(dirname(__DIR__, 2).'/Data/csv.csv', 'w');
         $writer = Writer::createFromFileObject($file);
         $writer->insertOne([
             _ENTITY::ID->column(),
