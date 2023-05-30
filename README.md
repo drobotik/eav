@@ -10,10 +10,6 @@ Manage, manipulate EAV data across multiple domains. CRUD/import/export entities
 Configurable attributes, attribute strategies with hooks.
 It's ideas from "Magento way". App oriented for custom CMS. 
 
-Currently, it dependent from Illuminate\database Laravel models, they are used for this structure tables: 
-domain, entity, attribute_set, attribute_group, attribute, pivot, 
-string_value, integer_value, decimal_value, datetime_value, text_value. 
-
 ### Features
 - single entity CRUD
 - import attribute set, bulk create new, update/delete existing, csv driver
