@@ -24,6 +24,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
     protected function setUp() : void
     {
         parent::setUp();
+        Cleaner::run();
         $dbParams = [
             'driver' => 'pdo_sqlite',
             'path' => dirname(__DIR__) . '/tests/test.sqlite'
@@ -50,7 +51,6 @@ class TestCase extends \PHPUnit\Framework\TestCase
     {
         $migrator = new Migrator();
         $migrator->rollback();
-        Cleaner::run();
         parent::tearDown();
     }
 }
