@@ -99,17 +99,16 @@ class QueryBuilderManager
 
     public function getBuilder() : Builder
     {
-        $capsule = new Manager();
-        return new Builder($capsule->getConnection(), new MySQLGrammar(), new MySQLProcessor());
+        return new Builder(Manager::connection(), new MySQLGrammar(), new MySQLProcessor());
     }
 
     public function makeQuery() : Builder
     {
         $query = $this->getBuilder();
         $query->from(_ENTITY::table(), 'e');
-        $query->where(_ENTITY::DOMAIN_ID->column(), '=', $this->getDomainKey());
-        $query->where(_ENTITY::ATTR_SET_ID->column(), '=', $this->getSetKey());
-        $query->addSelect(_ENTITY::ID->column());
+        $query->where('e.'._ENTITY::DOMAIN_ID->column(), '=', $this->getDomainKey());
+        $query->where('e.'._ENTITY::ATTR_SET_ID->column(), '=', $this->getSetKey());
+        $query->addSelect('e.'._ENTITY::ID->column());
         return $query;
     }
 

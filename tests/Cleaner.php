@@ -9,14 +9,19 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use League\Csv\Writer;
+
 class Cleaner
 {
     public static function run() {
-        $paths = [
-            __DIR__.'/temp/csv.csv'
-        ];
-        foreach ($paths as $path)
-            if(file_exists($path))
-                unlink($path);
+        self::resetCsv(__DIR__.'/Data/csv.csv');
     }
+
+    private static function resetCsv(string $path): void
+    {
+        $file = new \SplFileObject($path, 'w');
+        $writer = Writer::createFromFileObject($file);
+        $writer->insertAll([]);
+    }
+
 }

@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace Tests\Fixtures;
 
-use Drobotik\Eav\TransportDriver;
+use Drobotik\Eav\Driver;
 use Drobotik\Eav\Result\Result;
 
-class TransportDriverFixture extends TransportDriver
+class DriverFixture extends Driver
 {
     private ?Result $result = null;
     public function setResult(Result $result)
@@ -41,11 +41,6 @@ class TransportDriverFixture extends TransportDriver
         return $this->hasResult()
             ? $this->getResult()
             : new Result();
-    }
-
-    public function getHeader(): array
-    {
-        return [];
     }
 
     public function getChunk(): array|null

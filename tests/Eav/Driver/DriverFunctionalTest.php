@@ -7,20 +7,20 @@
  */
 declare(strict_types=1);
 
-namespace Tests\Eav\TransportDriver;
+namespace Tests\Eav\Driver;
 
-use Drobotik\Eav\TransportDriver;
+use Drobotik\Eav\Driver;
 use PHPUnit\Framework\TestCase;
-use Tests\Fixtures\TransportDriverFixture;
+use Tests\Fixtures\DriverFixture;
 
-class TransportDriverFunctionalTest extends TestCase
+class DriverFunctionalTest extends TestCase
 {
-    private TransportDriver $driver;
+    private Driver $driver;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->driver = new TransportDriverFixture();
+        $this->driver = new DriverFixture();
     }
 
     /**
@@ -28,8 +28,8 @@ class TransportDriverFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\TransportDriver::getChunkSize
-     * @covers \Drobotik\Eav\TransportDriver::setChunkSize
+     * @covers \Drobotik\Eav\Driver::getChunkSize
+     * @covers \Drobotik\Eav\Driver::setChunkSize
      */
     public function chunk_size()
     {
@@ -41,8 +41,8 @@ class TransportDriverFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\TransportDriver::getCursor
-     * @covers \Drobotik\Eav\TransportDriver::setCursor
+     * @covers \Drobotik\Eav\Driver::getCursor
+     * @covers \Drobotik\Eav\Driver::setCursor
      */
     public function cursor()
     {
@@ -54,12 +54,29 @@ class TransportDriverFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\TransportDriver::getTotal
-     * @covers \Drobotik\Eav\TransportDriver::setTotal
+     * @covers \Drobotik\Eav\Driver::getTotal
+     * @covers \Drobotik\Eav\Driver::setTotal
      */
     public function total()
     {
         $this->driver->setTotal(123);
         $this->assertEquals(123, $this->driver->getTotal());
+    }
+
+    /**
+     * @test
+     *
+     * @group functional
+     *
+     * @covers \Drobotik\Eav\Driver::setHeader
+     * @covers \Drobotik\Eav\Driver::getHeader
+     * @covers \Drobotik\Eav\Driver::isHeader
+     */
+    public function header()
+    {
+        $this->assertFalse($this->driver->isHeader());
+        $this->driver->setHeader([123]);
+        $this->assertTrue($this->driver->isHeader());
+        $this->assertEquals([123], $this->driver->getHeader());
     }
 }

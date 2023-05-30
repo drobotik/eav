@@ -12,10 +12,9 @@ namespace Tests\Eav\CsvDriver;
 
 use Carbon\Carbon;
 use Drobotik\Eav\Driver\CsvDriver;
-use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Result\Result;
-use Drobotik\Eav\TransportDriver;
+use Drobotik\Eav\Driver;
 use League\Csv\Reader;
 use League\Csv\Writer;
 use SplFileObject;
@@ -23,7 +22,7 @@ use Tests\TestCase;
 
 class CsvDriverFunctionalTest extends TestCase
 {
-    private TransportDriver $driver;
+    private Driver $driver;
     private string $path;
 
     public function setUp(): void
@@ -69,23 +68,42 @@ class CsvDriverFunctionalTest extends TestCase
      * @group functional
      *
      * @covers \Drobotik\Eav\Driver\CsvDriver::getHeader
+     * @covers \Drobotik\Eav\Driver\CsvDriver::setHeader
+     * @covers \Drobotik\Eav\Driver\CsvDriver::isHeader
      */
     public function get_header()
     {
-        $file = new SplFileObject($this->path, 'r');
-        $reader = Reader::createFromFileObject($file);
-        $reader->setDelimiter(',');
-        $reader->setHeaderOffset(0);
-        $this->driver->setReader($reader);
-        $result = $this->driver->getHeader();
-        $this->assertEquals([
-            _ENTITY::ID->column(),
-            ATTR_TYPE::STRING->value(),
-            ATTR_TYPE::INTEGER->value(),
-            ATTR_TYPE::DECIMAL->value(),
-            ATTR_TYPE::DATETIME->value(),
-            ATTR_TYPE::TEXT->value()
-        ], $result);
+        $columns = [123,456];
+        $this->assertFalse($this->driver->isHeader());
+        $this->driver->setHeader([123,456]);
+        $this->assertTrue($this->driver->isHeader());
+        $this->assertEquals($columns, $this->driver->getHeader());
+    }
+
+    /**
+     * @test
+     *
+     * @group functional
+     *
+     * @covers \Drobotik\Eav\Driver\CsvDriver::getHeader
+     */
+    public function get_header_when_not_set()
+    {
+        $result = [123];
+        $reader = $this->getMockBuilder(Reader::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getHeader'])
+            ->getMock();
+
+        $reader->expects($this->once())->method('getHeader')
+            ->willReturn($result);
+
+        $driver = $this->getMockBuilder(CsvDriver::class)
+            ->onlyMethods(['getReader'])->getMock();
+        $driver->expects($this->once())->method('getReader')
+            ->willReturn($reader);
+
+        $this->assertEquals($result, $driver->getHeader());
     }
 
     /**
@@ -142,14 +160,14 @@ class CsvDriverFunctionalTest extends TestCase
     public function write_all()
     {
         $driver = new CsvDriver();
+        $columns = [
+            ATTR_TYPE::STRING->value(),
+            ATTR_TYPE::INTEGER->value(),
+            ATTR_TYPE::DECIMAL->value(),
+            ATTR_TYPE::DATETIME->value(),
+            ATTR_TYPE::TEXT->value()
+        ];
         $input = [
-            [
-                ATTR_TYPE::STRING->value(),
-                ATTR_TYPE::INTEGER->value(),
-                ATTR_TYPE::DECIMAL->value(),
-                ATTR_TYPE::DATETIME->value(),
-                ATTR_TYPE::TEXT->value()
-            ],
             ['test1', '1', '1.2', Carbon::now()->toISOString(), 'text text1'],
             ['test2', '1', '1.2', Carbon::now()->subDays()->toISOString(), 'text text2'],
             ['test3', '1', '1.2', Carbon::now()->subDays(2)->toISOString(), 'text text3']
@@ -160,6 +178,7 @@ class CsvDriverFunctionalTest extends TestCase
 
         $writer->setDelimiter(',');
         $driver->setWriter($writer);
+        $driver->setHeader($columns);
         $result = $driver->writeAll($input);
         $this->assertInstanceOf(Result::class, $result);
         $this->assertFileExists($path);
@@ -169,7 +188,11 @@ class CsvDriverFunctionalTest extends TestCase
             $output[] = $row;
         }
         fclose($fp);
-        $this->assertEquals($input, $output);
+        $expected = [];
+        $expected[] = $columns;
+        foreach ($input as $line)
+            $expected[] = $line;
+        $this->assertEquals($expected, $output);
     }
 
     /**

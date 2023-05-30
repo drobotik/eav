@@ -9,13 +9,14 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav;
 
-use Drobotik\Eav\Interface\TransportDriverInterface;
+use Drobotik\Eav\Interface\DriverInterface;
 
-abstract class TransportDriver implements TransportDriverInterface
+abstract class Driver implements DriverInterface
 {
     private int $total;
     private int $cursor;
     private int $chunkSize;
+    protected array $header;
 
     public function getChunkSize() : int
     {
@@ -46,4 +47,20 @@ abstract class TransportDriver implements TransportDriverInterface
     {
         return $this->total;
     }
+
+    public function getHeader(): array
+    {
+        return $this->header;
+    }
+
+    public function setHeader(array $columns): void
+    {
+        $this->header = $columns;
+    }
+
+    public function isHeader(): bool
+    {
+        return isset($this->header);
+    }
+
 }

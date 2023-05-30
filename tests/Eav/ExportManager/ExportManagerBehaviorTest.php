@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Tests\Eav\ExportManager;
 
 use Drobotik\Eav\Driver\CsvDriver;
+use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Export\ExportManager;
 use Drobotik\Eav\QueryBuilder\QueryBuilderManager;
 use Drobotik\Eav\Result\Result;
@@ -29,10 +30,13 @@ class ExportManagerBehaviorTest extends TestCase
     public function run_manager()
     {
         $result = new Result();
+        $columns = ['one', 'two'];
 
         $collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['toArray'])->getMock();
+            ->onlyMethods(['toArray', 'map'])->getMock();
+        $collection ->expects($this->once())->method('map')
+            ->willReturn($collection);
         $collection->expects($this->once())
             ->method('toArray')
             ->willReturn([123]);
@@ -44,15 +48,19 @@ class ExportManagerBehaviorTest extends TestCase
             ->willReturn($collection);
 
         $queryBuilderManager = $this->getMockBuilder(QueryBuilderManager::class)
-            ->onlyMethods(['run'])->getMock();
+            ->onlyMethods(['run', 'getColumns'])->getMock();
         $queryBuilderManager->expects($this->once())->method('run')
             ->willReturn($query);
+        $queryBuilderManager->expects($this->once())->method('getColumns')
+            ->willReturn($columns);
 
         $driver = $this->getMockBuilder(CsvDriver::class)
-            ->onlyMethods(['writeAll'])->getMock();
+            ->onlyMethods(['writeAll', 'setHeader'])->getMock();
         $driver->expects($this->once())->method('writeAll')
             ->with([123])
             ->willReturn($result);
+        $driver->expects($this->once())->method('setHeader')
+            ->with(array_merge([_ENTITY::ID->column()], $columns));
 
         $manager = $this->getMockBuilder(ExportManager::class)
             ->onlyMethods(['getDriver', 'getQueryBuilderManager'])

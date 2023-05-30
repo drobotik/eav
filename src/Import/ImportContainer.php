@@ -11,14 +11,14 @@ namespace Drobotik\Eav\Import;
 
 use Drobotik\Eav\Import\Attributes\Worker as AttributesWorker;
 use Drobotik\Eav\Import\Content\Worker as ContentWorker;
-use Drobotik\Eav\TransportDriver;
+use Drobotik\Eav\Driver;
 
 class ImportContainer
 {
     private int           $domainKey;
     private int           $setKey;
-    private TransportDriver $driver;
-    private ImportManager       $manager;
+    private Driver        $driver;
+    private ImportManager $manager;
     private AttributesWorker    $attributesWorker;
     private ContentWorker          $contentWorker;
 
@@ -75,12 +75,12 @@ class ImportContainer
         $this->contentWorker = $worker;
     }
 
-    public function setDriver(TransportDriver $driver): void
+    public function setDriver(Driver $driver): void
     {
         $this->driver = $driver;
     }
 
-    public function getDriver(): TransportDriver
+    public function getDriver(): Driver
     {
         return $this->driver;
     }

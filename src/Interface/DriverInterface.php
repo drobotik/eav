@@ -11,7 +11,7 @@ namespace Drobotik\Eav\Interface;
 
 use Drobotik\Eav\Result\Result;
 
-interface TransportDriverInterface
+interface DriverInterface
 {
     public function getHeader() : array;
     public function getChunk() : array|null;

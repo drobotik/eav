@@ -10,12 +10,12 @@ declare(strict_types=1);
 namespace Drobotik\Eav\Driver;
 
 use Drobotik\Eav\Result\Result;
-use Drobotik\Eav\TransportDriver;
+use Drobotik\Eav\Driver;
 use League\Csv\Reader;
 use League\Csv\Statement;
 use League\Csv\Writer;
 
-class CsvDriver extends TransportDriver
+class CsvDriver extends Driver
 {
     private Reader $reader;
     private Writer $writer;
@@ -42,7 +42,9 @@ class CsvDriver extends TransportDriver
 
     public function getHeader(): array
     {
-        return $this->getReader()->getHeader();
+        if(!$this->isHeader())
+            return $this->getReader()->getHeader();
+        return $this->header;
     }
 
     public function getChunk() : array|null
@@ -83,6 +85,8 @@ class CsvDriver extends TransportDriver
     {
         $result = new Result();
         $writer = $this->getWriter();
+        $header = $this->getHeader();
+        array_unshift($data, $header);
         $writer->insertAll($data);
         $result->exportSuccess();
         return $result;

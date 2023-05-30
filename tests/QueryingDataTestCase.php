@@ -10,18 +10,14 @@ declare(strict_types=1);
 namespace Tests;
 
 use Drobotik\Eav\Database\Connection;
-use Drobotik\Eav\Factory\EavFactory;
-use Faker\Generator;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
-class TestCase extends \PHPUnit\Framework\TestCase
+class QueryingDataTestCase extends \PHPUnit\Framework\TestCase
 {
-    protected EavFactory $eavFactory;
-    protected Generator $faker;
-    protected function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
-        $sqlitePath = dirname(__DIR__) . '/tests/test.sqlite';
+        $sqlitePath = dirname(__DIR__) . '/tests/large.sqlite';
         $dbParams = [
             'driver' => 'pdo_sqlite',
             'path' => $sqlitePath
@@ -36,17 +32,10 @@ class TestCase extends \PHPUnit\Framework\TestCase
         $this->capsule = $capsule;
         $capsule->setAsGlobal();
         $capsule->bootEloquent();
-        $migrator = new Migrator();
-        $migrator->rollback();
-        $migrator->migrate();
-        $this->eavFactory = new EavFactory();
-        $this->faker = \Faker\Factory::create();
     }
 
-    protected function tearDown(): void
+    public function tearDown(): void
     {
-        $migrator = new Migrator();
-        $migrator->rollback();
         Cleaner::run();
         parent::tearDown();
     }

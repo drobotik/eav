@@ -9,7 +9,8 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\Export;
 
-use Drobotik\Eav\TransportDriver;
+use Drobotik\Eav\Enum\_ENTITY;
+use Drobotik\Eav\Driver;
 use Drobotik\Eav\QueryBuilder\QueryBuilderManager;
 use Drobotik\Eav\Result\Result;
 use Drobotik\Eav\Trait\DomainTrait;
@@ -18,7 +19,7 @@ class ExportManager
 {
     use DomainTrait;
 
-    private TransportDriver     $driver;
+    private Driver              $driver;
     private QueryBuilderManager $queryBuilderManager;
 
     public function setQueryBuilderManager(QueryBuilderManager $manager): void
@@ -31,12 +32,12 @@ class ExportManager
         return $this->queryBuilderManager;
     }
 
-    public function setDriver(TransportDriver $driver): void
+    public function setDriver(Driver $driver): void
     {
         $this->driver = $driver;
     }
 
-    public function getDriver(): TransportDriver
+    public function getDriver(): Driver
     {
         return $this->driver;
     }
@@ -48,12 +49,20 @@ class ExportManager
 
     public function run(): Result
     {
-        return $this->getDriver()->writeAll(
-            $this->getQueryBuilderManager()
-                ->run()
-                ->get()
-                ->toArray()
-        );
+        $qbManager = $this->getQueryBuilderManager();
+        $records = $qbManager
+            ->run()
+            ->get()
+            ->map(function ($value) {
+                // query builder return not Arrayable items (stdClass)
+                return json_decode(json_encode($value), true);
+            })
+            ->toArray();
+        $columns = $qbManager->getColumns();
+        $header = array_merge([_ENTITY::ID->column()], $columns);
+        $driver = $this->getDriver();
+        $driver->setHeader($header);
+        return $driver->writeAll($records);
     }
 
 

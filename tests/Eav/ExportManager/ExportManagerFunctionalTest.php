@@ -13,7 +13,7 @@ use Drobotik\Eav\Domain;
 use Drobotik\Eav\Export\ExportManager;
 use Drobotik\Eav\QueryBuilder\QueryBuilderManager;
 use PHPUnit\Framework\TestCase;
-use Tests\Fixtures\TransportDriverFixture;
+use Tests\Fixtures\DriverFixture;
 
 class ExportManagerFunctionalTest extends TestCase
 {
@@ -51,7 +51,7 @@ class ExportManagerFunctionalTest extends TestCase
      */
     public function driver()
     {
-        $driver = new TransportDriverFixture();
+        $driver = new DriverFixture();
         $this->assertFalse($this->manager->hasDriver());
         $this->manager->setDriver($driver);
         $this->assertSAME($driver, $this->manager->getDriver());
