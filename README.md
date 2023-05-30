@@ -1,5 +1,11 @@
 # EAV package
 
+[![Latest Version](https://img.shields.io/github/release/drobotik/csv.svg?style=flat-square)](https://github.com/drobotik/eav/releases)
+[![Build Status](https://scrutinizer-ci.com/g/drobotik/eav/badges/build.png?b=master)](https://scrutinizer-ci.com/g/drobotik/eav/build-status/master)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://opensource.org/license/mit)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/drobotik/eav/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/drobotik/eav/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/drobotik/eav/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/drobotik/eav/?branch=master)
+
 Manage, manipulate EAV data across multiple domains. CRUD/import/export entities, manage attribute sets and groups.
 Configurable attributes, attribute strategies with hooks.
 It's ideas from "Magento way". App oriented for custom CMS. 
