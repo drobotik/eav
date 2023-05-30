@@ -154,8 +154,7 @@ class CsvDriverFunctionalTest extends TestCase
             ['test2', '1', '1.2', Carbon::now()->subDays()->toISOString(), 'text text2'],
             ['test3', '1', '1.2', Carbon::now()->subDays(2)->toISOString(), 'text text3']
         ];
-        $path = dirname(__DIR__, 2) . '/temp/csv.csv';
-
+        $path = tempnam('/', 'csv.csv');
         $file = new SplFileObject($path, 'w+');
         $writer = Writer::createFromFileObject($file);
         $writer->setDelimiter(',');
@@ -181,7 +180,7 @@ class CsvDriverFunctionalTest extends TestCase
      */
     public function read_all()
     {
-        $path = dirname(__DIR__, 2) . '/temp/csv.csv';
+        $path = tempnam('/', 'csv.csv');
         $fp = fopen($path, 'w+');
         $data = [
             [
