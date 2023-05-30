@@ -299,7 +299,7 @@ class ImportManagerAcceptanceTest extends TestCase
         $newValues[] = ['', '', '', '', Carbon::now()->toISOString()];
         $newValues[] = ['', '', '', '', ''];
 
-        $file = new \SplFileObject(dirname(__DIR__, 2).'/temp/test.csv', 'w');
+        $file = new \SplFileObject(dirname(__DIR__, 2).'/temp/csv.csv', 'w+');
         $writer = Writer::createFromFileObject($file);
         $writer->insertOne([
             _ENTITY::ID->column(),
@@ -336,7 +336,7 @@ class ImportManagerAcceptanceTest extends TestCase
         $attributesConfig->appendAttribute($datetimeConfig);
         $attributesConfig->appendAttribute($textConfig);
 
-        $file = new \SplFileObject(dirname(__DIR__,2).'/temp/test.csv', 'r');
+        $file = new \SplFileObject(dirname(__DIR__,2).'/temp/csv.csv', 'r');
         $reader = Reader::createFromFileObject($file);
         $reader->setDelimiter(',');
         $reader->setHeaderOffset(0);

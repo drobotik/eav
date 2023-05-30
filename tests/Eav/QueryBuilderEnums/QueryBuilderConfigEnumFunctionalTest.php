@@ -19,7 +19,7 @@ class QueryBuilderConfigEnumFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Enum\QB_CONFIG::sql
+     * @covers \Drobotik\Eav\Enum\QB_CONFIG
      */
     public function sql()
     {

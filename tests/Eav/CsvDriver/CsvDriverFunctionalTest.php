@@ -156,7 +156,7 @@ class CsvDriverFunctionalTest extends TestCase
         ];
         $path = dirname(__DIR__, 2) . '/temp/csv.csv';
 
-        $file = new SplFileObject($path, 'w');
+        $file = new SplFileObject($path, 'w+');
         $writer = Writer::createFromFileObject($file);
         $writer->setDelimiter(',');
         $driver->setWriter($writer);
@@ -182,7 +182,7 @@ class CsvDriverFunctionalTest extends TestCase
     public function read_all()
     {
         $path = dirname(__DIR__, 2) . '/temp/csv.csv';
-        $fp = fopen($path, 'w');
+        $fp = fopen($path, 'w+');
         $data = [
             [
                 ATTR_TYPE::STRING->value(),
