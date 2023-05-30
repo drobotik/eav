@@ -14,6 +14,8 @@
     - <a href="#attribute-set">Attribute set</a>
     - <a href="#attribute-group">AttributeGroup</a>
     - <a href="#attribute">Attribute</a>
+    - <a href="#attribute-container">Attribute container</a>
+    - <a href="#attribute-set-action">AttributeSetAction</a>
     - <a href="#value">Value</a>
     - <a href="#pivot">Pivot</a>
 - <a href="#import">Import</a>
@@ -185,7 +187,7 @@ Other features
 More examples:
 tests/Eav/Entity/EntityAcceptanceTest.php
 
-#### Attribute set
+### Attribute set
 
 This class is a wrapper for Attribute Containers.
 Entity aggregated composition. Part of Entity.
@@ -219,21 +221,122 @@ $set->setEntity(new \Drobotik\Eav\Entity());
 $set->getEntity(); // \Drobotik\Eav\Entity
 ```
 
-#### Attribute group
+### Attribute group
 
 Attribute group is used to separate attributes for subsections. 
 Without group Attribute set not able to fetchContainers.
 Please see <a href="#pivot">Pivot</a>.
 
-#### Attribute
+### Attribute
+
+Attribute is a wrapper for attribute data from database
 
 ```php
 
+$attribute = new \Drobotik\Eav\Attribute();
+$bag = $attribute->getBag();
+
+$bag->setField(\Drobotik\Eav\Enum\_ATTR::NAME->column(), 'price')
+$bag->setField(\Drobotik\Eav\Enum\_ATTR::TYPE->column(), \Drobotik\Eav\Enum\ATTR_TYPE::DECIMAL->value())
+$bag->setField(\Drobotik\Eav\Enum\_ATTR::STRATEGY->column(), \Drobotik\Eav\Strategy::class);
+
+
+$type = $attribute->getType(); // \Drobotik\Eav\Enum\ATTR_TYPE::DECIMAL
+$valueModel = $type->model(); // \Drobotik\Eav\Enum\ATTR_TYPE::DECIMAL->model()
+$valueModelTable = $type->valueTable(); // \Drobotik\Eav\Enum\ATTR_TYPE::DECIMAL->valueTable()
+$typeName = $type->value(); // \Drobotik\Eav\Enum\ATTR_TYPE::DECIMAL->value()
+// ...
+
+$attribute->getName();
+$attribute->getStrategy();
+$attribute->getSource();
+$attribute->getDefaultValue();
+$attribute->getDescription();
+
 ```
 
-#### Value
+### Attribute container
+
+Dependency injection class. Attribute set constructing attribute containers 
+for each attribute.
+
+```php
+
+$container = new \Drobotik\Eav\AttributeContainer();
+
+$container->setAttributeSet(new \Drobotik\Eav\AttributeSet());
+$container->getAttributeSet();
+$container->setAttribute(new \Drobotik\Eav\Attribute());
+$container->getAttribute();
+$container->setAttributeSetAction(new \Drobotik\Eav\AttributeSetAction());
+$container->getAttributeSetAction();
+$container->setStrategy(new \Drobotik\Eav\Strategy());
+$container->getStrategy();
+$container->setValueAction(new \Drobotik\Eav\Value\ValueAction());
+$container->getValueAction();
+$container->setValueValidator(new \Drobotik\Eav\Value\ValueValidator());
+$container->getValueValidator();
+$container->setValueManager(new \Drobotik\Eav\Value\ValueManager());
+$container->getValueManager();
+
+```
+
+### Attribute set action
+
+Helper class that is used to initialize attribute objects. 
+Attribute set used this action on fetchAttributes
+
+```php
+
+$action = new \Drobotik\Eav\AttributeSetAction();
+$action->setAttributeContainer(new \Drobotik\Eav\AttributeContainer());
+
+$record = new \Drobotik\Eav\Model\AttributeModel();
+$record->setName('test');
+
+$action->initialize($record);
+
+// more internal methods
+$action->initializeStrategy($record); 
+$action->initializeValueManager();
+
+```
+
+### Value
+
+Value is internal object which is used to work with EAV value. 
+It can store two types of value, - runtimeValue and storedValue.
+Runtime value - some dynamic value claiming to be saved in database
+Stored value - value that is already stored in database
+
+```php
+
+$value = new \Drobotik\Eav\Value\ValueManager();
+$value->setStored(123);
+$value->getValue(); // 123
+$value->setRuntime(456); 
+$value->getValue(); // 456
+$value->IsEquivalent() // false
+$value->isRuntime(); // true
+$value->clearRuntime(); 
+$value->isRuntime(); // false
+$value->isStored(); // true
+
+```
 
 #### Pivot
+
+Before to work with EAV data, need to specify structure of attribute set.
+If attribute is not linked in pivot table, the attribute & data will be not fetched.
+
+```php
+$model = new \Drobotik\Eav\Model\PivotModel();
+$model->setDomainKey(1);
+$model->setAttrSetKey(2);
+$model->setGroupKey(3);
+$model->setAttrKey(4);
+$model->save();
+```
 
 ### Import
 
