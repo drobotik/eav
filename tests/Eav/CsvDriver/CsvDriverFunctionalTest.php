@@ -154,9 +154,10 @@ class CsvDriverFunctionalTest extends TestCase
             ['test2', '1', '1.2', Carbon::now()->subDays()->toISOString(), 'text text2'],
             ['test3', '1', '1.2', Carbon::now()->subDays(2)->toISOString(), 'text text3']
         ];
-        $path = tempnam('/', 'csv.csv');
-        $file = new SplFileObject($path, 'w+');
+        $path = dirname(__DIR__, 2) . '/Data/csv.csv';
+        $file = new SplFileObject($path, 'w');
         $writer = Writer::createFromFileObject($file);
+
         $writer->setDelimiter(',');
         $driver->setWriter($writer);
         $result = $driver->writeAll($input);
@@ -180,8 +181,8 @@ class CsvDriverFunctionalTest extends TestCase
      */
     public function read_all()
     {
-        $path = tempnam('/', 'csv.csv');
-        $fp = fopen($path, 'w+');
+        $path = dirname(__DIR__, 2) . '/Data/csv.csv';
+        $fp = fopen($path, 'w');
         $data = [
             [
                 ATTR_TYPE::STRING->value(),
@@ -217,6 +218,13 @@ class CsvDriverFunctionalTest extends TestCase
         $driver->setReader($reader);
         $result = $driver->readAll();
         $this->assertEquals($expected, $result);
+    }
+
+    protected function tearDown(): void
+    {
+        $csv = new SplFileObject(dirname(__DIR__, 2) . '/Data/csv.csv', 'w');
+        $csv->setCsvControl();
+        $csv->fputcsv([], ',', '"');
     }
 
 }
