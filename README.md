@@ -1,6 +1,6 @@
 # EAV package
 
-[![Latest Version](https://img.shields.io/github/release/drobotik/csv.svg?style=flat-square)](https://github.com/drobotik/eav/releases)
+[![Latest Version](https://img.shields.io/github/release/drobotik/eav.svg?style=flat-square)](https://github.com/drobotik/eav/releases)
 [![Build Status](https://github.com/drobotik/eav/workflows/tests/badge.svg)](https://github.com/drobotik/eav/actions)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://opensource.org/license/mit)
 [![Quality Score](https://img.shields.io/scrutinizer/g/drobotik/eav.svg?style=flat-square)](https://scrutinizer-ci.com/g/drobotik/eav)
