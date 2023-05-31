@@ -144,16 +144,15 @@ $fields->setField('not_existing_attribute', '');
 // VALIDATE
 // validate attributes and values
 $result = $entity->validate(); // result from laravel validator 
-// override your translator if needed
 
 $result->getData(); // validation array
 $result->getCode(); // just for internal use
 $result->getMessage(); // human message
 
 // SAVE
-// attribute strategy before save hooks
-// values will be inserted/updated or deleted
-// attribute strategy after save hooks
+// before-save hooks for attribute strategy
+// values will be inserted, updated, or deleted
+// after-save hooks for attribute strategy
 $entity->save();
 
 // DELETE
@@ -202,15 +201,16 @@ $attributeSetKey = 1;
 $set = new \Drobotik\Eav\AttributeSet();
 $set->setKey($attributeSetKey);
 /* 
- * Making new db query to get corresponded attributes;
- * Initializes this Attribute containers
- * Initializes Attribute, Strategy, Value and other objects
- * Grav Values from database if they exist
+ * Making a new database query to retrieve corresponding attributes.
+ * Initializing the Attribute containers
+ * Initializing Attribute, Strategy, Value, and other objects
+ * Retrieving values from the database if they exist
  */
 $set->fetchContainers();
 
 /* 
- * It can be forced to rebuild all Attribute containers array from the scratch
+ * It is possible to force the rebuilding 
+ * of all Attribute container arrays from scratch
  */
 $set->fetchContainers(true);
 
@@ -306,7 +306,7 @@ $strategy->afterCreate();
 $strategy->afterUpdate();
 $strategy->afterDelete();
 
-$strategy->rules(); // get validation rules
+$strategy->rules();
 $strategy->isCreate();
 $strategy->isUpdate();
 
@@ -387,26 +387,28 @@ The program further divides entities to update into three categories: new values
 ### Import data
 
 ```php
-// Import required a source. In this example source is csv file.
+// import operation requires a data source.
+// In this example, the source is a CSV file
 $file = new \SplFileObject('dir/data.csv', 'r');
 $reader = Reader::createFromFileObject($file);
 $reader->setDelimiter(',');
 $reader->setHeaderOffset(0);
 
 $driver = new CsvDriver();
-// index or line number where to start from
+// the index or line number from which to start
 $driver->setCursor(0);
-// import data going to be imported by chunked, after each iteration default state restored.
+// the import data will be imported in chunks,
+// after each iteration default state will be restored
 $driver->setChunkSize(50); // recommended to not use large chunks   
 $driver->setReader($reader);
 
 // this worker will insert data to database
 $contentWorker = new \Drobotik\Eav\Import\Content\Worker();
-// Import DI container
+// import DI container
 $importContainer = new \Drobotik\Eav\Import\ImportContainer();
 $importContainer->setContentWorker($contentWorker);
 
-// main handler that will make everything work on run()
+// the main handler that orchestrates the execution of all necessary operations
 $importManager = new \Drobotik\Eav\Import\ImportManager();
 $importManager->setContainer($importContainer);
 
@@ -500,7 +502,8 @@ $qbManager = new \Drobotik\Eav\QueryBuilder\QueryBuilderManager();
 $qbManager->setDomainKey($domainKey);
 $qbManager->setSetKey($setKey);
 $qbManager->setFilters($config);
-// specify columns that should be on dataset. Only existing attributes linked to attribute set 
+// Specify the columns that should be included in the dataset.
+// Only existing attributes linked to the attribute set will be considered.
 $qbManager->setColumns(["name", "size", "color"]);
 
 $manager->setQueryBuilderManager($qbManager);
