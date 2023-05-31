@@ -30,6 +30,7 @@
 ## Common
 
 The image illustrates a simplified process for creating a new entity.
+https://miro.com/app/board/uXjVMDWBzBU=/?share_link_id=625279004139
 ![Magento way](./eav.png)
 
 ### CLI app
