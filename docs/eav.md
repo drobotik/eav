@@ -2,9 +2,8 @@
 ### Table of Contents
 - Common
     - <a href="#cli-app">CLI</a>
-    - Connections
-      - <a href="#cli-connection">CLI app overriding connection</a>
-      - <a href="#cli-connection">Laravel applications connection</a>
+    - <a href="#connection">Connection</a>
+    - <a href="#laravel-connection">Laravel connection</a>
     - <a href="#dbal-migrations">DBAL migrations</a>
     - <a href="#laravel-migrations">Support Laravel migrations</a>
     - <a href="#laravel-models">Laravel models</a>
@@ -31,13 +30,15 @@
 - <a href="#presenters">Examples</a>
 
 ### CLI app
-Symphony app with DBAL migrations commands. 
-This also can contain Doctrine entities, but was disabled
+The Symfony app utilizes DBAL migration commands. 
+The CLI app is primarily used for executing migrations.
 
-### CLI connection
-CLI app relies on a database connection. It uses [Doctrine DBAL](https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#configuration) to perform connections.<br />
-There isn't any pre-configured connection information. For non-docker environments is required to set up a connection.
-As an option, make a new file connection.php in root folder. This file will be automatically included.
+### Connection
+The CLI app relies on a database connection and utilizes Doctrine DBAL for establishing connections.<br />
+No pre-configured connection information is available. To set up a connection in non-docker environments, you need to follow these steps:
+
+1. Create a new file named connection.php in the root folder.
+2. The contents of this file will be automatically included in the application.
 ```php
 #connection.php
 use Drobotik\Eav\Database\Connection;
@@ -46,12 +47,10 @@ $config = [
 ]
 $connection = Connection::get($config)
 ```
-Note use a [driver](https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#driver) that suits your needs.
-
+Choose a [driver](https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#driver) that best suits your requirements.
 ### Laravel connection
-Library uses Laravel Capsule for connections.
-Within Laravel application default connection will be used.
-For other cases, initialize a Capsule instance:
+The program currently utilizes Laravel models, which means it uses Laravel Capsule for database connections. By default, the program will use the default connection within a Laravel application. However, for other cases, you need to initialize a Capsule instance.
+For the CLI app, you can add the following code to the connections.php file:
 ```php
 $capsule = new Capsule;
 $capsule->addConnection([
@@ -62,8 +61,7 @@ $capsule->bootEloquent();
 ```
 
 ### DBAL migrations
-Just use Doctrine migrations.
-Migrate to the end:
+Migrate:
 ```bash
 $ php eav migrations:migrate latest
 ```
@@ -72,23 +70,35 @@ Rollback:
 $ php eav migrations:migrate first
 ```
 ### Laravel migrations
-Publishing on Laravel app. Add EavServiceProvider to
-app config.
+Publishing on Laravel app. 
+Add EavServiceProvider to app config.
 ```php
 \Drobotik\Eav\Database\Support\Laravel\EavServiceProvider::class
 ```
 Publish migrations by vendor:publish.
-
 ### Laravel models
 
-At this moment library dependent from Illuminate\database Laravel models, they are used for this structure tables:
-domain, entity, attribute_set, attribute_group, attribute, pivot,
-string_value, integer_value, decimal_value, datetime_value, text_value.
+Currently, the library is dependent on Laravel's Illuminate\Database and utilizes Laravel models for the following table structure:
+
+- eav_domains
+- eav_entities
+- eav_attribute_sets
+- eav_attribute_groups
+- eav_attributes
+- eav_pivot
+- eav_value_string
+- eav_value_integer
+- eav_value_decimal
+- eav_value_datetime
+- eav_value_text
+
+These Laravel models are used to interact with these tables and perform various database operations.
 
 ## Objects
 
 ### Domain
-Domain is used just as wrapper to perform import/export.
+
+The Domain is used solely as a wrapper for performing import and export operations. It provides a convenient interface for managing the import/export functionality within the library.
 ```php
 $domain = new \Drobotik\Eav\Domain();
 $domain->setExportManager(new \Drobotik\Eav\Export\ExportManager());
@@ -102,12 +112,8 @@ $domain->export();
 ```
 
 ### Entity
-Entity is a robust CRUD model. 
-Used to simplify routine with EAV data structure. 
-Main model to work with single data.
-Good for single record operations. 
 
-Not recommended for bulk usage.
+The Entity model is a robust CRUD model that simplifies working with the EAV (Entity-Attribute-Value) data structure. It serves as the primary model for working with individual data records, making it well-suited for single record operations. However, it is not recommended for bulk usage or performing operations on a large number of records simultaneously.
 
 ```php
 
@@ -155,7 +161,7 @@ $entity->save();
 $entity->delete();
 
 ```
-To create new entity. New instance without $entity->setKey().
+Entity create (without $entity->setKey())
 ```php
 $domainKey = 2;
 $attributeSetKey = 3;
@@ -184,13 +190,12 @@ Other features
     /* toArray */
     $entity->toArray(); 
 ```
-More examples:
-tests/Eav/Entity/EntityAcceptanceTest.php
+More examples:<br>
+tests/Eav/Entity/[EntityAcceptanceTest.php](https://github.com/drobotik/eav/blob/master/tests/Eav/Entity/EntityAcceptanceTest.php)
 
 ### Attribute set
 
-This class is a wrapper for Attribute Containers.
-Entity aggregated composition. Part of Entity.
+This class serves as a wrapper for Attribute Containers and is an integral part of Entity.
 ```php
 $attributeSetKey = 1;
 
@@ -223,13 +228,12 @@ $set->getEntity(); // \Drobotik\Eav\Entity
 
 ### Attribute group
 
-Attribute group is used to separate attributes for subsections. 
-Without group Attribute set not able to fetchContainers.
-Please see <a href="#pivot">Pivot</a>.
+Attribute groups are utilized to categorize attributes into subsections. It is important to note that without a group, an attribute set is unable to fetch containers.
+<br>Please see <a href="#pivot">Pivot</a>.
 
 ### Attribute
 
-Attribute is a wrapper for attribute data from database
+The Attribute class represents attribute data retrieved from the database. It plays a crucial role in managing how data should be saved and determining the source of initial data. An important component of the Attribute class is the AttributeStrategy class, which handles all CRUD operations related to attribute values.
 
 ```php
 
@@ -257,8 +261,7 @@ $attribute->getDescription();
 
 ### Attribute container
 
-Dependency injection class. Attribute set constructing attribute containers 
-for each attribute.
+The AttributeContainer class is extensively utilized by the AttributeSet to construct and store attribute containers for each attribute in the AttributeSet.
 
 ```php
 
@@ -283,8 +286,7 @@ $container->getValueManager();
 
 ### Attribute set action
 
-Helper class that is used to initialize attribute objects. 
-Attribute set used this action on fetchAttributes
+The helper class is utilized to initialize attribute objects. The AttributeSet employs this action when fetching attributes.
 
 ```php
 
@@ -304,10 +306,11 @@ $action->initializeValueManager();
 
 ### Value
 
-Value is internal object which is used to work with EAV value. 
-It can store two types of value, - runtimeValue and storedValue.
-Runtime value - some dynamic value claiming to be saved in database
-Stored value - value that is already stored in database
+The Value class is an internal object used to handle EAV (Entity-Attribute-Value) values. It can store two types of values: runtimeValue and storedValue.
+
+The runtimeValue represents a dynamic value that is intended to be saved in the database but has not been stored yet.
+
+On the other hand, the storedValue represents a value that has already been stored in the database.
 
 ```php
 
@@ -326,8 +329,7 @@ $value->isStored(); // true
 
 #### Pivot
 
-Before to work with EAV data, need to specify structure of attribute set.
-If attribute is not linked in pivot table, the attribute & data will be not fetched.
+Before working with EAV (Entity-Attribute-Value) data, it is necessary to specify the structure of the attribute set. If an attribute is not linked in the pivot table, both the attribute and its corresponding data will not be fetched by the AttributeSet.
 
 ```php
 $model = new \Drobotik\Eav\Model\PivotModel();
@@ -340,23 +342,156 @@ $model->save();
 
 ### Import
 
-#### Import setup
+Attribute import:
+During the import process, the attribute import functionality creates new attributes that are linked to the attribute set. These attributes are specifically added and associated with the attribute set.
 
-#### Import attributes
+Data Import:
+The Data Import feature is responsible for importing values for attributes that belong to the attribute set. It handles the import of actual data associated with the attributes.
+
+Before starting the program, the data is divided into two parts: new entities to create and entities to update.
+
+New entities to create:
+For new entities, a bulk import query is used, which offers fast processing. However, it is recommended to avoid using a large chunk size to prevent the query from becoming too large.
+
+Entities to update:
+The program further divides entities to update into three categories: new values, values to update, and values to create.
 
 #### Import data
 
+```php
+// Import required a source. In this example source is csv file.
+$file = new \SplFileObject('dir/data.csv', 'r');
+$reader = Reader::createFromFileObject($file);
+$reader->setDelimiter(',');
+$reader->setHeaderOffset(0);
+
+$driver = new CsvDriver();
+// index or line number where to start from
+$driver->setCursor(0);
+// import data going to be imported by chunked, after each iteration default state restored.
+$driver->setChunkSize(50); // recommended to not use large chunks   
+$driver->setReader($reader);
+
+// this worker will insert data to database
+$contentWorker = new \Drobotik\Eav\Import\Content\Worker();
+// Import DI container
+$importContainer = new \Drobotik\Eav\Import\ImportContainer();
+$importContainer->setContentWorker($contentWorker);
+
+// main handler that will make everything work on run()
+$importManager = new \Drobotik\Eav\Import\ImportManager();
+$importManager->setContainer($importContainer);
+
+```
+
+#### Import attributes
+During the import process, the AttributesWorker component will retrieve column names from the source data. These column names will then be validated. If any of the column names do not correspond to existing attributes (new attributes) or attributes that are not linked with the attribute set, the program will raise an exception and provide the names of the attributes that need to be addressed.
+
+To ensure the import process works correctly, a configuration for these attributes needs to be provided. This configuration will facilitate the creation of the necessary attributes before proceeding with the data import.
+```php
+$groupKey = 1;
+
+$ageAttribute  = new \Drobotik\Eav\Import\Attributes\ConfigAttribute()
+$ageAttribute->setFields([
+    _ATTR::NAME->column() => "age",
+    _ATTR::TYPE->column() => ATTR_TYPE::INT->value()
+]);
+$ageAttribute->setGroupKey($groupKey);
+
+$noteAttribute  =  new \Drobotik\Eav\Import\Attributes\ConfigAttribute()
+$noteAttribute->setFields([
+    _ATTR::NAME->column() => "note",
+    _ATTR::TYPE->column() => ATTR_TYPE::TEXT->value()
+]);
+$noteAttribute->setGroupKey($groupKey);
+
+$config = new \Drobotik\Eav\Import\Attributes\Config();
+$config->appendAttribute($ageAttribute);
+$config->appendAttribute($noteAttribute);
+
+$attributesWorker = new \Drobotik\Eav\Import\Attributes\Worker();
+$attributesWorker->setConfig($config);
+
+/** @var \Drobotik\Eav\Import\ImportContainer $importContainer */
+$importContainer->setAttributesWorker($attributesWorker);
+```
+
+See more comprehensive examples in the
+tests/Eav/ImportManager/[ImportManagerAcceptanceTest.php](https://github.com/drobotik/eav/blob/master/tests/Eav/ImportManager/ImportManagerAcceptanceTest.php)
+
 ### Export
+The export mechanism is divided into two sections: setup and querying data.
 
-#### Export setup
+The setup section involves configuring the driver and main classes. In this example, the CsvDriver setup is used.
 
-#### Export querying data
+The querying data section involves utilizing an internal query builder within the program. The idea for the query builder originates from [jquery query builder](https://querybuilder.js.org/).
+
+The query builder generates a custom query based on the provided configuration.
+
+```php
+// specify where to write
+$file = new \SplFileObject(d'/dir/data.csv','w');
+$writer = Writer::createFromFileObject($file);
+$driver = new \Drobotik\Eav\Driver\CsvDriver();
+$driver->setWriter($writer);
+
+$manager = new \Drobotik\Eav\Export\ExportManager();
+$manager->setDriver($driver);
+
+
+// query builder config
+$config = [
+    QB_CONFIG::CONDITION => QB_CONDITION::AND,
+    QB_CONFIG::RULES => [
+        [
+            QB_CONFIG::NAME => "size",
+            QB_CONFIG::OPERATOR => QB_OPERATOR::LESS->name(),
+            QB_CONFIG::VALUE => 10000
+        ], // size < 10000
+        [ // size < 10000 and ( name like '%sit quisquam%' or name = 'et dolores'
+            QB_CONFIG::CONDITION => QB_CONDITION::OR,
+            QB_CONFIG::RULES => [
+                [
+                    QB_CONFIG::NAME => "name",
+                    QB_CONFIG::OPERATOR => QB_OPERATOR::CONTAINS->name(),
+                    QB_CONFIG::VALUE => 'sit quisquam'
+                ],
+                [
+                    QB_CONFIG::NAME => "name",
+                    QB_CONFIG::OPERATOR => QB_OPERATOR::EQUAL->name(),
+                    QB_CONFIG::VALUE => 'et dolores'
+                ]
+            ],
+        ]
+    ],
+];
+
+$domainKey = 1;
+$setKey = 2;
+
+$qbManager = new \Drobotik\Eav\QueryBuilder\QueryBuilderManager();
+$qbManager->setDomainKey($domainKey);
+$qbManager->setSetKey($setKey);
+$qbManager->setFilters($config);
+// specify columns that should be on dataset. Only existing attributes linked to attribute set 
+$qbManager->setColumns(["name", "size", "color"]);
+
+$manager->setQueryBuilderManager($qbManager);
+
+$manager->run(); // file created
+
+```
+
+
 
 ### Factory
 
+Sometimes, it may be necessary to pre-generate certain EAV data in advance.
+
 #### Eav factory
+
+This is a collection of common 'create' methods for various entities such as domain, attribute, group, entity, values. These methods are extensively utilized during application testing, but they can also be employed during runtime if required.
 
 #### Entity factory
 
-
-
+The entity factory is a configurable entity creation tool. By providing it with the necessary attribute configuration, it can generate an entity with all the corresponding attributes and values. This factory is primarily used for testing purposes. However, it should be noted that performance may be slow when dealing with a large number of entities.
