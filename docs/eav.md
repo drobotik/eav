@@ -30,8 +30,9 @@
 ## Common
 
 The image illustrates a simplified process for creating a new entity.
-https://miro.com/app/board/uXjVMDWBzBU=/?share_link_id=625279004139
+
 ![Magento way](./eav.png)
+[Link to diagram](https://miro.com/app/board/uXjVMDWBzBU=/?share_link_id=625279004139)
 
 ### CLI app
 The Symfony app utilizes DBAL migration commands. 
