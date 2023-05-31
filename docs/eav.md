@@ -100,9 +100,13 @@ These Laravel models are used to interact with these tables and perform various 
 
 The Domain is used solely as a wrapper for performing import and export operations. It provides a convenient interface for managing the import/export functionality within the library.
 ```php
-$domain = new \Drobotik\Eav\Domain();
-$domain->setExportManager(new \Drobotik\Eav\Export\ExportManager());
-$domain->setImportManager(new \Drobotik\Eav\Export\ImportManager());
+use Drobotik\Eav\Domain;
+use Drobotik\Eav\Export\ExportManager();
+use Drobotik\Eav\Export\ImportManager();
+
+$domain = new Domain();
+$domain->setExportManager(new ExportManager());
+$domain->setImportManager(new ImportManager());
 
 $exportManager = $domain->getExportManager();
 $importManager = $domain->getImportManager();
@@ -116,12 +120,13 @@ $domain->export();
 The Entity model is a robust CRUD model that simplifies working with the EAV (Entity-Attribute-Value) data structure. It serves as the primary model for working with individual data records, making it well-suited for single record operations. However, it is not recommended for bulk usage or performing operations on a large number of records simultaneously.
 
 ```php
+use Drobotik\Eav\Entity;
 
 $entityKey = 1;
 $domainKey = 2;
 $attributeSetKey = 3;
 
-$entity = new \Drobotik\Eav\Entity();
+$entity = new Entity();
 
 // SETUP
 $entity->setDomainKey($entityKey);
@@ -162,10 +167,12 @@ $entity->delete();
 ```
 Entity create (without $entity->setKey())
 ```php
+use Drobotik\Eav\Entity;
+
 $domainKey = 2;
 $attributeSetKey = 3;
 
-$entity = new \Drobotik\Eav\Entity();
+$entity = new Entity();
 
 // SETUP
 $entity->setDomainKey($entityKey);
@@ -178,16 +185,19 @@ $entity->save();
 ```
 Other features
 ```php
-    /* Override attributeSet */
-    $entity = new \Drobotik\Eav\Entity();
-    $attrSet = new \Drobotik\Eav\AttributeSet();
-    $entity->setAttributeSet($attrSet);
+use Drobotik\Eav\Entity;
+use Drobotik\Eav\AttributeSet;
     
-    /* CRUD gnome doing all routine jobs for 'Entity' */
-    $gnome = $entity->getGnome();
-    
-    /* toArray */
-    $entity->toArray(); 
+/* Override attributeSet */
+$entity = new Entity();
+$attrSet = new AttributeSet();
+$entity->setAttributeSet($attrSet);
+
+/* CRUD gnome doing all routine jobs for 'Entity' */
+$gnome = $entity->getGnome();
+
+/* toArray */
+$entity->toArray(); 
 ```
 More examples:<br>
 tests/Eav/Entity/[EntityAcceptanceTest.php](https://github.com/drobotik/eav/blob/master/tests/Eav/Entity/EntityAcceptanceTest.php)
@@ -196,9 +206,14 @@ tests/Eav/Entity/[EntityAcceptanceTest.php](https://github.com/drobotik/eav/blob
 
 This class serves as a wrapper for Attribute Containers and is an integral part of Entity.
 ```php
+
+use Drobotik\Eav\Entity;
+use Drobotik\Eav\AttributeSet;
+use Drobotik\Eav\AttributeContainer;
+
 $attributeSetKey = 1;
 
-$set = new \Drobotik\Eav\AttributeSet();
+$set = new AttributeSet();
 $set->setKey($attributeSetKey);
 /* 
  * Making a new database query to retrieve corresponding attributes.
@@ -219,11 +234,11 @@ $set->fetchContainers(true);
  */
 $set->hasContainer('test');
 $set->getContainer('test');
-$set->pushContainer(new \Drobotik\Eav\AttributeContainer());
-$set->getContainers(); // \Drobotik\Eav\AttributeContainer[] keyBy name
+$set->pushContainer(new AttributeContainer());
+$set->getContainers(); // AttributeContainer[] keyBy name
 $set->resetContainers(); // []
-$set->setEntity(new \Drobotik\Eav\Entity());
-$set->getEntity(); // \Drobotik\Eav\Entity
+$set->setEntity(new Entity());
+$set->getEntity(); // Entity
 ```
 
 ### Attribute group
@@ -237,18 +252,23 @@ The Attribute class represents attribute data retrieved from the database. It pl
 
 ```php
 
-$attribute = new \Drobotik\Eav\Attribute();
+use Drobotik\Eav\Attribute;
+use Drobotik\Eav\Strategy;
+use Drobotik\Eav\Enum\_ATTR;
+use Drobotik\Eav\Enum\ATTR_TYPE;
+
+$attribute = new Attribute();
 $bag = $attribute->getBag();
 
-$bag->setField(\Drobotik\Eav\Enum\_ATTR::NAME->column(), 'price')
-$bag->setField(\Drobotik\Eav\Enum\_ATTR::TYPE->column(), \Drobotik\Eav\Enum\ATTR_TYPE::DECIMAL->value())
-$bag->setField(\Drobotik\Eav\Enum\_ATTR::STRATEGY->column(), \Drobotik\Eav\Strategy::class);
+$bag->setField(_ATTR::NAME->column(), 'price')
+$bag->setField(_ATTR::TYPE->column(), ATTR_TYPE::DECIMAL->value())
+$bag->setField(_ATTR::STRATEGY->column(), Strategy::class);
 
 
-$type = $attribute->getType(); // \Drobotik\Eav\Enum\ATTR_TYPE::DECIMAL
-$valueModel = $type->model(); // \Drobotik\Eav\Enum\ATTR_TYPE::DECIMAL->model()
-$valueModelTable = $type->valueTable(); // \Drobotik\Eav\Enum\ATTR_TYPE::DECIMAL->valueTable()
-$typeName = $type->value(); // \Drobotik\Eav\Enum\ATTR_TYPE::DECIMAL->value()
+$type = $attribute->getType(); // ATTR_TYPE::DECIMAL
+$valueModel = $type->model(); // ATTR_TYPE::DECIMAL->model()
+$valueModelTable = $type->valueTable(); // ATTR_TYPE::DECIMAL->valueTable()
+$typeName = $type->value(); // ATTR_TYPE::DECIMAL->value()
 // ...
 
 $attribute->getName();
@@ -265,21 +285,36 @@ The AttributeContainer class is extensively utilized by the AttributeSet to cons
 
 ```php
 
+use Drobotik\Eav\AttributeContainer;
+use Drobotik\Eav\AttributeSet;
+use Drobotik\Eav\Attribute;
+use Drobotik\Eav\AttributeSetAction;
+use Drobotik\Eav\Strategy;
+use Drobotik\Eav\Value\ValueAction;
+use Drobotik\Eav\Value\ValueValidator;
+use Drobotik\Eav\Value\ValueManager;
+
 $container = new \Drobotik\Eav\AttributeContainer();
 
-$container->setAttributeSet(new \Drobotik\Eav\AttributeSet());
+$container->setAttributeSet(new AttributeSet());
 $container->getAttributeSet();
-$container->setAttribute(new \Drobotik\Eav\Attribute());
+
+$container->setAttribute(new Attribute());
 $container->getAttribute();
-$container->setAttributeSetAction(new \Drobotik\Eav\AttributeSetAction());
+
+$container->setAttributeSetAction(new AttributeSetAction());
 $container->getAttributeSetAction();
-$container->setStrategy(new \Drobotik\Eav\Strategy());
+
+$container->setStrategy(new Strategy());
 $container->getStrategy();
-$container->setValueAction(new \Drobotik\Eav\Value\ValueAction());
+
+$container->setValueAction(new ValueAction());
 $container->getValueAction();
-$container->setValueValidator(new \Drobotik\Eav\Value\ValueValidator());
+
+$container->setValueValidator(new ValueValidator());
 $container->getValueValidator();
-$container->setValueManager(new \Drobotik\Eav\Value\ValueManager());
+
+$container->setValueManager(new ValueManager());
 $container->getValueManager();
 
 ```
@@ -289,8 +324,9 @@ $container->getValueManager();
 The strategy class is frequently employed to customize manipulations with specific attributes or to introduce new features. The current strategy includes predefined CRUD operations and validation for Attribute EAV values.
 
 ```php
+use Drobotik\Eav\Strategy;
 
-$strategy = new \Drobotik\Eav\Strategy();
+$strategy = new Strategy();
 
 $strategy->delete();
 $strategy->create();
@@ -318,10 +354,14 @@ The helper class is utilized to initialize attribute objects. The AttributeSet e
 
 ```php
 
-$action = new \Drobotik\Eav\AttributeSetAction();
-$action->setAttributeContainer(new \Drobotik\Eav\AttributeContainer());
+use Drobotik\Eav\AttributeSetAction;
+use Drobotik\Eav\AttributeContainer;
+use Drobotik\Eav\Model\AttributeModel;
 
-$record = new \Drobotik\Eav\Model\AttributeModel();
+$action = new AttributeSetAction();
+$action->setAttributeContainer(new AttributeContainer());
+
+$record = new AttributeModel();
 $record->setName('test');
 
 $action->initialize($record);
@@ -342,7 +382,9 @@ On the other hand, the storedValue represents a value that has already been stor
 
 ```php
 
-$value = new \Drobotik\Eav\Value\ValueManager();
+use Drobotik\Eav\Value\ValueManager;
+
+$value = new ValueManager();
 $value->setStored(123);
 $value->getValue(); // 123
 $value->setRuntime(456); 
@@ -360,7 +402,9 @@ $value->isStored(); // true
 Before working with EAV (Entity-Attribute-Value) data, it is necessary to specify the structure of the attribute set. If an attribute is not linked in the pivot table, both the attribute and its corresponding data will not be fetched by the AttributeSet.
 
 ```php
-$model = new \Drobotik\Eav\Model\PivotModel();
+use Drobotik\Eav\Model\PivotModel;
+
+$model = new PivotModel();
 $model->setDomainKey(1);
 $model->setAttrSetKey(2);
 $model->setGroupKey(3);
@@ -387,9 +431,17 @@ The program further divides entities to update into three categories: new values
 ### Import data
 
 ```php
+
+use SplFileObject;
+use League\Csv\Reader;
+use Drobotik\Eav\Driver\CsvDriver;
+use Drobotik\Eav\Import\Content\Worker as ContentWorker;
+use Drobotik\Eav\Import\ImportContainer;
+use \Drobotik\Eav\Import\ImportManager;
+
 // import operation requires a data source.
 // In this example, the source is a CSV file
-$file = new \SplFileObject('dir/data.csv', 'r');
+$file = new SplFileObject('dir/data.csv', 'r');
 $reader = Reader::createFromFileObject($file);
 $reader->setDelimiter(',');
 $reader->setHeaderOffset(0);
@@ -403,13 +455,13 @@ $driver->setChunkSize(50); // recommended to not use large chunks
 $driver->setReader($reader);
 
 // this worker will insert data to database
-$contentWorker = new \Drobotik\Eav\Import\Content\Worker();
+$contentWorker = new ContentWorker();
 // import DI container
-$importContainer = new \Drobotik\Eav\Import\ImportContainer();
+$importContainer = new ImportContainer();
 $importContainer->setContentWorker($contentWorker);
 
 // the main handler that orchestrates the execution of all necessary operations
-$importManager = new \Drobotik\Eav\Import\ImportManager();
+$importManager = new ImportManager();
 $importManager->setContainer($importContainer);
 
 ```
@@ -419,30 +471,37 @@ During the import process, the AttributesWorker component will retrieve column n
 
 To ensure the import process works correctly, a configuration for these attributes needs to be provided. This configuration will facilitate the creation of the necessary attributes before proceeding with the data import.
 ```php
+use Drobotik\Eav\Import\Attributes\Config;
+use Drobotik\Eav\Import\Attributes\ConfigAttribute;
+use Drobotik\Eav\Import\Attributes\Worker as AttributesWorker;
+use Drobotik\Eav\Import\ImportContainer;
+
 $groupKey = 1;
 
-$ageAttribute  = new \Drobotik\Eav\Import\Attributes\ConfigAttribute()
+$ageAttribute  = new ConfigAttribute()
 $ageAttribute->setFields([
     _ATTR::NAME->column() => "age",
     _ATTR::TYPE->column() => ATTR_TYPE::INT->value()
 ]);
 $ageAttribute->setGroupKey($groupKey);
 
-$noteAttribute  =  new \Drobotik\Eav\Import\Attributes\ConfigAttribute()
+$noteAttribute  =  new ConfigAttribute()
 $noteAttribute->setFields([
     _ATTR::NAME->column() => "note",
     _ATTR::TYPE->column() => ATTR_TYPE::TEXT->value()
 ]);
 $noteAttribute->setGroupKey($groupKey);
 
-$config = new \Drobotik\Eav\Import\Attributes\Config();
+$config = new Config();
 $config->appendAttribute($ageAttribute);
 $config->appendAttribute($noteAttribute);
 
-$attributesWorker = new \Drobotik\Eav\Import\Attributes\Worker();
+$attributesWorker = new AttributesWorker();
 $attributesWorker->setConfig($config);
 
-/** @var \Drobotik\Eav\Import\ImportContainer $importContainer */
+/* ... */
+
+/** @var ImportContainer $importContainer */
 $importContainer->setAttributesWorker($attributesWorker);
 ```
 
@@ -459,13 +518,19 @@ The querying data section involves utilizing an internal query builder within th
 The query builder generates a custom query based on the provided configuration.
 
 ```php
+use SplFileObject;
+use League\Csv\Writer;
+use Drobotik\Eav\Driver\CsvDriver;
+use Drobotik\Eav\Export\ExportManager;
+use Drobotik\Eav\QueryBuilder\QueryBuilderManager;
+
 // specify where to write
-$file = new \SplFileObject(d'/dir/data.csv','w');
+$file = new SplFileObject(d'/dir/data.csv','w');
 $writer = Writer::createFromFileObject($file);
-$driver = new \Drobotik\Eav\Driver\CsvDriver();
+$driver = new CsvDriver();
 $driver->setWriter($writer);
 
-$manager = new \Drobotik\Eav\Export\ExportManager();
+$manager = new ExportManager();
 $manager->setDriver($driver);
 
 // query builder config
@@ -498,7 +563,7 @@ $config = [
 $domainKey = 1;
 $setKey = 2;
 
-$qbManager = new \Drobotik\Eav\QueryBuilder\QueryBuilderManager();
+$qbManager = new QueryBuilderManager();
 $qbManager->setDomainKey($domainKey);
 $qbManager->setSetKey($setKey);
 $qbManager->setFilters($config);
