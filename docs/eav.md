@@ -29,6 +29,8 @@
 
 ## Common
 
+![Eav](https://github.com/drobotik/eav/tree/master/docs/eav.png)
+
 ### CLI app
 The Symfony app utilizes DBAL migration commands. 
 The CLI app is primarily used for executing migrations.
