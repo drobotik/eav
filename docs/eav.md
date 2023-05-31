@@ -1,6 +1,6 @@
 
 ### Table of Contents
-- Common
+- <a href="#common">Common</a>
     - <a href="#cli-app">CLI</a>
     - <a href="#connection">Connection</a>
     - <a href="#laravel-connection">Laravel connection</a>
@@ -19,16 +19,15 @@
     - <a href="#value">Value</a>
     - <a href="#pivot">Pivot</a>
 - <a href="#import">Import</a>
-    - <a href="#import-setup">Setup</a>
-    - <a href="#import-attributes">Importing new attributes</a>
-    - <a href="#import-data">Importing data</a>
+    - <a href="#import-attributes">Import attributes</a>
+    - <a href="#import-data">Import data</a>
 - <a href="#export">Export</a>
-    - <a href="#export-setup">Setup</a>
-    - <a href="#export-qeerying-data">Querying data</a>
 - <a href="#factory">Factory</a>
     - <a href="#eav-factory">Eav factory</a>
     - <a href="#entity-factory">Entity factory</a>
 - <a href="#presenters">Examples</a>
+
+## Common
 
 ### CLI app
 The Symfony app utilizes DBAL migration commands. 
@@ -369,7 +368,7 @@ $model->setAttrKey(4);
 $model->save();
 ```
 
-### Import
+## Import
 
 Attribute import:
 During the import process, the attribute import functionality creates new attributes that are linked to the attribute set. These attributes are specifically added and associated with the attribute set.
@@ -448,7 +447,7 @@ $importContainer->setAttributesWorker($attributesWorker);
 See more comprehensive examples in the
 tests/Eav/ImportManager/[ImportManagerAcceptanceTest.php](https://github.com/drobotik/eav/blob/master/tests/Eav/ImportManager/ImportManagerAcceptanceTest.php)
 
-### Export
+## Export
 The export mechanism is divided into two sections: setup and querying data.
 
 The setup section involves configuring the driver and main classes. In this example, the CsvDriver setup is used.
