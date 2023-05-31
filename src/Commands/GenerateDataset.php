@@ -49,7 +49,7 @@ class GenerateDataset extends DoctrineCommand
         $eavFactory = new EavFactory();
         $domainRecord = $eavFactory->createDomain();
         $set = $eavFactory->createAttributeSet();
-        $group = $eavFactory->createGroup($set);
+        $group = $eavFactory->createGroup($set->getKey());
 
         $iterations = 20000;
         $this->io->progressStart($iterations);
@@ -101,7 +101,7 @@ class GenerateDataset extends DoctrineCommand
                     ATTR_FACTORY::VALUE->field() => $text
                 ]
             ];
-            $eavFactory->createEavEntity($config, $domainRecord, $set);
+            $eavFactory->createEavEntity($config, $domainRecord->getKey(), $set->getKey());
             $this->io->progressAdvance();
         }
         $this->io->progressFinish();
