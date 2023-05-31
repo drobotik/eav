@@ -29,7 +29,8 @@
 
 ## Common
 
-![Eav](https://github.com/drobotik/eav/tree/master/docs/eav.png)
+The image illustrates a simplified process for creating a new entity.
+![Magento way](./eav.png)
 
 ### CLI app
 The Symfony app utilizes DBAL migration commands. 
