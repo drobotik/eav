@@ -11,10 +11,11 @@
     - <a href="#domain">Domain</a>
     - <a href="#entity">Entity</a>
     - <a href="#attribute-set">Attribute set</a>
-    - <a href="#attribute-group">AttributeGroup</a>
+    - <a href="#attribute-group">Attribute group</a>
     - <a href="#attribute">Attribute</a>
     - <a href="#attribute-container">Attribute container</a>
-    - <a href="#attribute-set-action">AttributeSetAction</a>
+    - <a href="#attribute-strategy">Attribute strategy</a>
+    - <a href="#attribute-set-action">Attribute set action</a>
     - <a href="#value">Value</a>
     - <a href="#pivot">Pivot</a>
 - <a href="#import">Import</a>
@@ -138,7 +139,7 @@ $fields->setField('name', 'Tom');
 $fields->setField('type', 'Jerry');
 // remove record attribute value
 $fields->removeField('age');
-// will be ignored since there no attribute in attribute set
+// it will be ignored since there are no attributes in the attribute set.
 $fields->setField('not_existing_attribute', '');
 
 // VALIDATE
@@ -284,6 +285,34 @@ $container->getValueManager();
 
 ```
 
+### Attribute strategy
+
+The strategy class is frequently employed to customize manipulations with specific attributes or to introduce new features. The current strategy includes predefined CRUD operations and validation for Attribute EAV values.
+
+```php
+
+$strategy = new \Drobotik\Eav\Strategy();
+
+$strategy->delete();
+$strategy->create();
+$strategy->delete();
+$strategy->validate();
+$strategy->save();
+$strategy->find()
+
+$strategy->beforeCreate();
+$strategy->beforeUpdate();
+$strategy->beforeDelete();
+$strategy->afterCreate();
+$strategy->afterUpdate();
+$strategy->afterDelete();
+
+$strategy->rules(); // get validation rules
+$strategy->isCreate();
+$strategy->isUpdate();
+
+```
+
 ### Attribute set action
 
 The helper class is utilized to initialize attribute objects. The AttributeSet employs this action when fetching attributes.
@@ -327,7 +356,7 @@ $value->isStored(); // true
 
 ```
 
-#### Pivot
+### Pivot
 
 Before working with EAV (Entity-Attribute-Value) data, it is necessary to specify the structure of the attribute set. If an attribute is not linked in the pivot table, both the attribute and its corresponding data will not be fetched by the AttributeSet.
 
@@ -356,7 +385,7 @@ For new entities, a bulk import query is used, which offers fast processing. How
 Entities to update:
 The program further divides entities to update into three categories: new values, values to update, and values to create.
 
-#### Import data
+### Import data
 
 ```php
 // Import required a source. In this example source is csv file.
@@ -384,7 +413,7 @@ $importManager->setContainer($importContainer);
 
 ```
 
-#### Import attributes
+### Import attributes
 During the import process, the AttributesWorker component will retrieve column names from the source data. These column names will then be validated. If any of the column names do not correspond to existing attributes (new attributes) or attributes that are not linked with the attribute set, the program will raise an exception and provide the names of the attributes that need to be addressed.
 
 To ensure the import process works correctly, a configuration for these attributes needs to be provided. This configuration will facilitate the creation of the necessary attributes before proceeding with the data import.
@@ -438,7 +467,6 @@ $driver->setWriter($writer);
 $manager = new \Drobotik\Eav\Export\ExportManager();
 $manager->setDriver($driver);
 
-
 // query builder config
 $config = [
     QB_CONFIG::CONDITION => QB_CONDITION::AND,
@@ -482,16 +510,14 @@ $manager->run(); // file created
 
 ```
 
-
-
 ### Factory
 
 Sometimes, it may be necessary to pre-generate certain EAV data in advance.
 
-#### Eav factory
+### Eav factory
 
 This is a collection of common 'create' methods for various entities such as domain, attribute, group, entity, values. These methods are extensively utilized during application testing, but they can also be employed during runtime if required.
 
-#### Entity factory
+### Entity factory
 
 The entity factory is a configurable entity creation tool. By providing it with the necessary attribute configuration, it can generate an entity with all the corresponding attributes and values. This factory is primarily used for testing purposes. However, it should be noted that performance may be slow when dealing with a large number of entities.
