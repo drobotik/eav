@@ -1,4 +1,4 @@
-# EAV package
+# EAV library
 
 [![Latest Version](https://img.shields.io/github/release/drobotik/eav.svg?style=flat-square)](https://github.com/drobotik/eav/releases)
 [![Build Status](https://github.com/drobotik/eav/workflows/tests/badge.svg)](https://github.com/drobotik/eav/actions)
@@ -6,14 +6,11 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/drobotik/eav.svg?style=flat-square)](https://scrutinizer-ci.com/g/drobotik/eav)
 [![Code Coverage](https://scrutinizer-ci.com/g/drobotik/eav/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/drobotik/eav/?branch=master)
 
-Manage, manipulate EAV data across multiple domains. CRUD/import/export entities, manage attribute sets and groups.
-Configurable attributes, attribute strategies with hooks.
-It's ideas from "Magento way". App oriented for custom CMS. 
+The library is designed to manage and manipulate EAV data across multiple domains. It provides functionalities for CRUD operations, importing and exporting entities, as well as managing attribute sets and groups. The attributes are configurable, and attribute strategies with hooks are available. The approach and concepts are inspired by the "Magento way". The application is specifically tailored for a custom CMS-oriented environment.
 
 ### Features
-- single entity CRUD
-- import attribute set, bulk create new, update/delete existing, csv driver
-- export attribute set, query builder
+- single entity CRUD, validation
+- import/export entities
 
 ### Requirements
 - PHP >=8.1
@@ -27,10 +24,15 @@ It's ideas from "Magento way". App oriented for custom CMS.
 ```bash
 composer require drobotik/eav
 ```
-If you would like to work with lib.
+
+### Development
 ```bash
 $ git clone git@github.com:drobotik/eav.git 
-$ cd eav
+$ cd eav/docker 
+# if docker
+$ docker-compose up -d
+$ docker-compose exec app bash
+# 
 $ composer install
 # check cli app output
 $ php eav 
@@ -39,17 +41,17 @@ $ php eav
 ### Planned features 
 
 * ~~Domain import/export csv~~
-* Attribute props
-* removing Illuminate\database dependency, Impl folder
+* Attribute props and strategy improvements
+* Going out from Laravel models, impl folder
 
 ### Contributing
 
 Please note the following guidelines before submitting pull request.
 
-- Follow [PSR-2](http://www.php-fig.org/psr/psr-2/) coding standards
-- Create feature branches, one pull request per feature
-- Implement your change and add tests for it
-- Ensure the test suite passes
+- [PSR-2](http://www.php-fig.org/psr/psr-2/) coding standards
+- one pull request per feature
+- implement your change and add tests for it
+- ensure the test suite passes
 
 ### License
 

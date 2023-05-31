@@ -49,7 +49,7 @@ $connection = Connection::get($config)
 ```
 Choose a [driver](https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#driver) that best suits your requirements.
 ### Laravel connection
-The program currently utilizes Laravel models, which means it uses Laravel Capsule for database connections. By default, the program will use the default connection within a Laravel application. However, for other cases, you need to initialize a Capsule instance.
+The library currently utilizes Laravel models, which means it uses Laravel Capsule for database connections. By default, the library will use the default connection within a Laravel application. However, for other cases, you need to initialize a Capsule instance.
 For the CLI app, you can add the following code to the connections.php file:
 ```php
 $capsule = new Capsule;
@@ -420,13 +420,13 @@ During the import process, the attribute import functionality creates new attrib
 Data Import:
 The Data Import feature is responsible for importing values for attributes that belong to the attribute set. It handles the import of actual data associated with the attributes.
 
-Before starting the program, the data is divided into two parts: new entities to create and entities to update.
+Before starting the process, the data is divided into two parts: new entities to create and entities to update.
 
 New entities to create:
 For new entities, a bulk import query is used, which offers fast processing. However, it is recommended to avoid using a large chunk size to prevent the query from becoming too large.
 
 Entities to update:
-The program further divides entities to update into three categories: new values, values to update, and values to create.
+The process further divides entities to update into three categories: new values, values to update, and values to create.
 
 ### Import data
 
@@ -467,7 +467,7 @@ $importManager->setContainer($importContainer);
 ```
 
 ### Import attributes
-During the import process, the AttributesWorker component will retrieve column names from the source data. These column names will then be validated. If any of the column names do not correspond to existing attributes (new attributes) or attributes that are not linked with the attribute set, the program will raise an exception and provide the names of the attributes that need to be addressed.
+During the import process, the AttributesWorker component will retrieve column names from the source data. These column names will then be validated. If any of the column names do not correspond to existing attributes (new attributes) or attributes that are not linked with the attribute set, the process will raise an exception and provide the names of the attributes that need to be addressed.
 
 To ensure the import process works correctly, a configuration for these attributes needs to be provided. This configuration will facilitate the creation of the necessary attributes before proceeding with the data import.
 ```php
@@ -513,7 +513,7 @@ The export mechanism is divided into two sections: setup and querying data.
 
 The setup section involves configuring the driver and main classes. In this example, the CsvDriver setup is used.
 
-The querying data section involves utilizing an internal query builder within the program. The idea for the query builder originates from [jquery query builder](https://querybuilder.js.org/).
+The querying data section involves utilizing an internal query builder within the library. The idea for the query builder originates from [jquery query builder](https://querybuilder.js.org/).
 
 The query builder generates a custom query based on the provided configuration.
 
