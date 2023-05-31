@@ -6,7 +6,7 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/drobotik/eav.svg?style=flat-square)](https://scrutinizer-ci.com/g/drobotik/eav)
 [![Code Coverage](https://scrutinizer-ci.com/g/drobotik/eav/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/drobotik/eav/?branch=master)
 
-The library is designed to manage and manipulate EAV data across multiple domains. It provides functionalities for CRUD operations, importing and exporting entities, as well as managing attribute sets and groups. The attributes are configurable, and attribute strategies with hooks are available. The approach and concepts are inspired by the "Magento way". The application is specifically tailored for a custom CMS-oriented environment.
+The EAV library is designed to manage and manipulate EAV data across multiple domains. Library offers functionalities for configurable entity CRUD, importing and exporting entities, as well as managing attribute sets and groups. The attributes are configurable, and attribute strategies with hooks are available. The approach and concepts are inspired by the "Magento way". The application is specifically tailored for a custom CMS-oriented environment.
 
 ### Features
 - single entity CRUD, validation
@@ -14,7 +14,7 @@ The library is designed to manage and manipulate EAV data across multiple domain
 
 ### Requirements
 - PHP >=8.1
-- Illuminate\database
+- Illuminate\database ^9.0|^10.0
 - Illuminate\validator ^9.0|^10.0
 - Illuminate\translation ^9.0|^10.0
 
@@ -40,9 +40,9 @@ $ php eav
 
 ### Planned features 
 
-* ~~Domain import/export csv~~
-* Attribute props and strategy improvements
-* Going out from Laravel models, impl folder
+:heavy_check_mark: Domain import/export csv
+<br>:white_check_mark: Attribute props and strategy improvements
+<br>:white_check_mark: Going out from Laravel models, impl folder
 
 ### Contributing
 
