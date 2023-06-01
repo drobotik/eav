@@ -41,8 +41,8 @@ $ php eav
 ### Planned features 
 
 :heavy_check_mark: Domain import/export csv
-<br>:white_check_mark: Attribute props and strategy improvements
-<br>:white_check_mark: Going out from Laravel models, impl folder
+<br>:pushpin: Attribute props and strategy improvements
+<br>:pushpin: Going out from Laravel models, impl folder
 
 ### Contributing
 
