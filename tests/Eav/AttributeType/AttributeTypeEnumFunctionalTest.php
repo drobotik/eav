@@ -86,6 +86,22 @@ class AttributeTypeEnumFunctionalTest extends TestCase
         $this->assertEquals(Types::STRING, ATTR_TYPE::STRING->doctrineType());
         $this->assertEquals(Types::TEXT, ATTR_TYPE::TEXT->doctrineType());
     }
+
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::migrateOptions
+     */
+    public function migrate_options() {
+        $this->assertEquals([], ATTR_TYPE::INTEGER->migrateOptions());
+        $this->assertEquals([], ATTR_TYPE::DATETIME->migrateOptions());
+        $this->assertEquals([
+            'precision' => 21,
+            'scale' => 6
+        ], ATTR_TYPE::DECIMAL->migrateOptions());
+        $this->assertEquals([], ATTR_TYPE::STRING->migrateOptions());
+        $this->assertEquals([], ATTR_TYPE::TEXT->migrateOptions());
+    }
     /**
      * @test
      * @group functional

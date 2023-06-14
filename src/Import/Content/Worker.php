@@ -66,8 +66,8 @@ class Worker
         $attrSet = $this->getAttributeSet();
         $attribute = $attrSet->getAttribute($attributeName);
         $value = new Value();
-        $value->setValue($content);
         $value->setType($attribute->getTypeEnum());
+        $value->setValue($content);
         $value->setAttributeKey($attribute->getKey());
         $value->setAttributeName($attribute->getName());
         if(!is_null($entityKey))

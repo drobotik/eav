@@ -15,6 +15,7 @@ use Drobotik\Eav\Factory\EavFactory;
 use Drobotik\Eav\Model\AttributeSetModel;
 use Drobotik\Eav\Model\DomainModel;
 use Drobotik\Eav\Model\EntityModel;
+use Drobotik\Eav\Value\ValueParser;
 
 trait SingletonsTrait
 {
@@ -46,6 +47,11 @@ trait SingletonsTrait
     public function makeEavFactory(): EavFactory
     {
         return new EavFactory();
+    }
+
+    public function makeValueParser(): ValueParser
+    {
+        return new ValueParser();
     }
 
 }

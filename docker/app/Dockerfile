@@ -21,6 +21,8 @@ RUN wget https://cs.symfony.com/download/php-cs-fixer-v3.phar -O php-cs-fixer &&
     chmod a+x php-cs-fixer && \
     mv php-cs-fixer /usr/local/bin/php-cs-fixer
 
+RUN docker-php-ext-install bcmath
+
 COPY . /var/www/
 
 WORKDIR /var/www

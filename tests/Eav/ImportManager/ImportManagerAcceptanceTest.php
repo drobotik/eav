@@ -28,6 +28,7 @@ use Drobotik\Eav\Model\ValueDecimalModel;
 use Drobotik\Eav\Model\ValueIntegerModel;
 use Drobotik\Eav\Model\ValueStringModel;
 use Drobotik\Eav\Model\ValueTextModel;
+use Drobotik\Eav\Value\ValueParser;
 use League\Csv\Reader;
 use League\Csv\Statement;
 use League\Csv\Writer;
@@ -194,6 +195,8 @@ class ImportManagerAcceptanceTest extends TestCase
 
         $this->assertEquals(100, $outputSize);
 
+        $valueParser = new ValueParser();
+
         $iteration = 0;
         foreach ($records as $record)
         {
@@ -234,7 +237,7 @@ class ImportManagerAcceptanceTest extends TestCase
 
             $this->assertEquals($record[$string->getName()], $stringValue->getValue(), "Iteration:$iteration");
             $this->assertEquals($record[$integer->getName()], $integerValue->getValue(), "Iteration:$iteration");
-            $this->assertEquals($record[$decimal->getName()], $decimalValue->getValue(), "Iteration:$iteration");
+            $this->assertEquals($valueParser->parseDecimal($record[$decimal->getName()]), $decimalValue->getValue(), "Iteration:$iteration");
             $this->assertEquals($record[$datetime->getName()], $datetimeValue->getValue(), "Iteration:$iteration");
             $this->assertEquals($record[$text->getName()], $textValue->getValue(), "Iteration:$iteration");
 
@@ -463,6 +466,15 @@ class ImportManagerAcceptanceTest extends TestCase
                 else
                 {
                     $this->assertNotNull($valueRecord);
+
+                    // truncated decimals
+                    if($attributeName == ATTR_TYPE::DECIMAL->value())
+                    {
+                        $model = new ValueDecimalModel();
+                        $model->setValue($value);
+                        $value = $model->getValue();
+                    }
+
                     $this->assertEquals($value, $valueRecord->getValue());
                 }
             }

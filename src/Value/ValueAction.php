@@ -36,14 +36,12 @@ class ValueAction
             ->setEntityKey($entity->getKey())
             ->setAttrKey($attribute->getKey())
             ->setValue($valueManager->getRuntime())
-            ->save()
-        ;
+            ->save();
 
         $model->refresh();
         $valueManager->setStored($model->getValue())
             ->setKey($model->getKey())
-            ->clearRuntime()
-        ;
+            ->clearRuntime();
 
         return $result->created();
     }
@@ -68,8 +66,7 @@ class ValueAction
         $record = $model
             ->where(_VALUE::ENTITY_ID->column(), $entityKey)
             ->where(_VALUE::ATTRIBUTE_ID->column(), $attributeKey)
-            ->first()
-        ;
+            ->first();
 
         if (is_null($record)) {
             return $result->notFound();
@@ -77,8 +74,7 @@ class ValueAction
 
         $valueManager
             ->setKey($record->getKey())
-            ->setStored($record->getValue())
-        ;
+            ->setStored($record->getValue());
 
         return $result->found();
     }
@@ -97,12 +93,11 @@ class ValueAction
 
         $record = $model->findOrFail($valueManager->getKey());
         $record->setValue($valueManager->getRuntime())
-            ->save()
-        ;
+            ->save();
+
         $record->refresh();
         $valueManager->setStored($record->getValue())
-            ->clearRuntime()
-        ;
+            ->clearRuntime();
 
         return $result->updated();
     }
@@ -128,8 +123,7 @@ class ValueAction
 
         $valueManager->clearStored()
             ->clearRuntime()
-            ->setKey(0)
-        ;
+            ->setKey(0);
 
         return $result->deleted();
     }

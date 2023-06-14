@@ -10,9 +10,12 @@ declare(strict_types=1);
 namespace Drobotik\Eav\Import\Content;
 
 use Drobotik\Eav\Enum\ATTR_TYPE;
+use Drobotik\Eav\Trait\SingletonsTrait;
 
 class Value
 {
+    use SingletonsTrait;
+
     private mixed $value;
     private int $attributeKey;
     private string $attributeName;
@@ -38,7 +41,11 @@ class Value
 
     public function setValue(mixed $value): void
     {
-        $this->value = $value;
+        $type = $this->getType();
+        $parser = $this->makeValueParser();
+        $this->value = $value == ''
+            ? ''
+            : $parser->parse($type, $value);
     }
 
     public function isEmptyValue(): bool

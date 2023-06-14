@@ -69,7 +69,7 @@ class EntityAcceptanceTest extends TestCase
             $data = [
                 "string" => $this->faker->word,
                 "integer" => $this->faker->randomNumber(),
-                "decimal" => $this->faker->randomFloat(),
+                "decimal" => $this->faker->randomFloat(ATTR_TYPE::DECIMAL->migrateOptions()['scale']),
                 "datetime" => Carbon::now()->format('Y-m-d H:i:s'),
                 "text" => $this->faker->text
             ];

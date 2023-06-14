@@ -57,7 +57,7 @@ class ValueModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\ValueBase::getValue
+     * @covers \Drobotik\Eav\Model\ValueBase::setValue
      * @covers \Drobotik\Eav\Model\ValueBase::getValue
      */
     public function value() {
@@ -70,7 +70,7 @@ class ValueModelFunctionalTest extends TestCase
      * @group functional
      * @covers \Drobotik\Eav\Model\ValueStringModel::getTable
      */
-    public function value_string() {
+    public function value_string_table() {
         $model = new ValueStringModel();
         $this->assertEquals(ATTR_TYPE::STRING->valueTable(), $model->getTable());
     }
@@ -79,7 +79,7 @@ class ValueModelFunctionalTest extends TestCase
      * @group functional
      * @covers \Drobotik\Eav\Model\ValueTextModel::getTable
      */
-    public function value_text() {
+    public function value_text_table() {
         $model = new ValueTextModel();
         $this->assertEquals(ATTR_TYPE::TEXT->valueTable(), $model->getTable());
     }
@@ -88,7 +88,7 @@ class ValueModelFunctionalTest extends TestCase
      * @group functional
      * @covers \Drobotik\Eav\Model\ValueIntegerModel::getTable
      */
-    public function value_integer() {
+    public function value_integer_table() {
         $model = new ValueIntegerModel();
         $this->assertEquals(ATTR_TYPE::INTEGER->valueTable(), $model->getTable());
     }
@@ -97,7 +97,7 @@ class ValueModelFunctionalTest extends TestCase
      * @group functional
      * @covers \Drobotik\Eav\Model\ValueDatetimeModel::getTable
      */
-    public function value_datetime() {
+    public function value_datetime_table() {
         $model = new ValueDatetimeModel();
         $this->assertEquals(ATTR_TYPE::DATETIME->valueTable(), $model->getTable());
     }
@@ -106,7 +106,7 @@ class ValueModelFunctionalTest extends TestCase
      * @group functional
      * @covers \Drobotik\Eav\Model\ValueDecimalModel::getTable
      */
-    public function value_decimal() {
+    public function value_decimal_table() {
         $model = new ValueDecimalModel();
         $this->assertEquals(ATTR_TYPE::DECIMAL->valueTable(), $model->getTable());
     }

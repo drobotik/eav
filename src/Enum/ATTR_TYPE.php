@@ -80,6 +80,20 @@ enum ATTR_TYPE
         };
     }
 
+    public function migrateOptions() : array
+    {
+        return match ($this) {
+            self::DATETIME => [],
+            self::DECIMAL => [
+                'precision' => 21,
+                'scale' => 6
+            ],
+            self::INTEGER => [],
+            self::TEXT => [],
+            self::STRING => []
+        };
+    }
+
     public function validationRule() {
         return match ($this) {
             self::INTEGER => [

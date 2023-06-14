@@ -13,7 +13,7 @@ use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Import\Content\Value;
 use PHPUnit\Framework\TestCase;
 
-class ImportContentValue extends TestCase
+class ImportContentValueFunctionalTest extends TestCase
 {
     private Value $value;
     public function setUp(): void
@@ -47,6 +47,7 @@ class ImportContentValue extends TestCase
      */
     public function value()
     {
+        $this->value->setType(ATTR_TYPE::STRING);
         $this->value->setValue('test');
         $this->assertEquals('test', $this->value->getValue());
         $this->assertFalse($this->value->isEmptyValue());

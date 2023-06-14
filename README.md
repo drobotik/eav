@@ -14,6 +14,8 @@ The EAV library is designed to manage and manipulate EAV data across multiple do
 
 ### Requirements
 - PHP >=8.1
+- ext-pdo
+- ext-bcmath
 - Illuminate\database ^9.0|^10.0
 - Illuminate\validator ^9.0|^10.0
 - Illuminate\translation ^9.0|^10.0
