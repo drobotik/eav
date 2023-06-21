@@ -17,6 +17,7 @@ return [
     'migrations' => [
         'Drobotik\Eav\Database\Migrations\DomainMigration',
         'Drobotik\Eav\Database\Migrations\EntityMigration',
+        'Drobotik\Eav\Database\Migrations\AttributePropMigration',
         'Drobotik\Eav\Database\Migrations\AttributeMigration',
         'Drobotik\Eav\Database\Migrations\AttributeSetMigration',
         'Drobotik\Eav\Database\Migrations\GroupMigration',
