@@ -5,7 +5,6 @@
  * @copyright 2023 Aleksandr Drobotik
  * @license   https://opensource.org/license/mit  The MIT License
  */
-declare(strict_types=1);
 
 namespace Drobotik\Eav\Value;
 
@@ -13,11 +12,10 @@ use Drobotik\Eav\Enum\ATTR_TYPE;
 
 class ValueParser
 {
-    public function parseDecimal($value)
+    public function parseDecimal($value) : string|float|int
     {
         $scale = ATTR_TYPE::DECIMAL->migrateOptions()['scale'];
-        $pow = bcpow('10', (string) $scale);
-        return bcdiv(bcmul((string) $value, $pow), $pow, $scale);
+        return number_format($value, $scale, '.', '');
     }
 
     public function parse(ATTR_TYPE $type, $value) : mixed
