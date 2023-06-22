@@ -98,7 +98,8 @@ class EavFactoryFunctionalTest extends TestCase
             _ENTITY::SERVICE_KEY->column() => null
         ], $data);
         // domain created
-        $this->assertEquals(1, DomainModel::query()->count());
+        $domain = new DomainModel();
+        $this->assertEquals(1, $domain->count());
         // attribute set created
         $this->assertEquals(1, AttributeSetModel::query()->count());
     }

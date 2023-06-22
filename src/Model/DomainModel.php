@@ -9,30 +9,43 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\Model;
 
-use Illuminate\Database\Eloquent\Model;
 use Drobotik\Eav\Enum\_DOMAIN;
 
 class DomainModel extends Model
 {
-    public function __construct(array $attributes = [])
+    private string $name;
+
+    public function __construct()
     {
-        $this->table = _DOMAIN::table();
-        $this->primaryKey = _DOMAIN::ID->column();
-        $this->fillable = [
-            _DOMAIN::NAME->column()
-        ];
-        $this->timestamps = false;
-        parent::__construct($attributes);
+        $this->setTable(_DOMAIN::table());
+        $this->setKeyName(_DOMAIN::ID->column());
     }
 
-    public function getName()
+    public function getName(): string
     {
-        return $this->{_DOMAIN::NAME->column()};
+        return $this->name;
     }
 
     public function setName($name) : self
     {
-        $this->{_DOMAIN::NAME->column()} = $name;
+        $this->name = $name;
         return $this;
     }
+
+    public function create() : int
+    {
+        return $this->insert([
+            _DOMAIN::NAME->column() => $this->getName()
+        ]);
+    }
+
+    public function toArray(): array
+    {
+        $result = parent::toArray();
+        if(isset($this->name))
+            $result[_DOMAIN::NAME->column()] = $this->getName();
+        return $result;
+    }
+
+
 }

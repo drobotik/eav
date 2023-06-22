@@ -12,7 +12,6 @@ namespace Drobotik\Eav;
 
 use Drobotik\Eav\Exception\EntityException;
 use Drobotik\Eav\Model\AttributeSetModel;
-use Drobotik\Eav\Model\DomainModel;
 use Drobotik\Eav\Model\EntityModel;
 use Drobotik\Eav\Result\Result;
 use Drobotik\Eav\Trait\SingletonsTrait;
@@ -194,13 +193,16 @@ class EntityGnome
         }
     }
 
-    private function checkDomainExists(int $key): DomainModel
+    /**
+     * @throws EntityException
+     */
+    private function checkDomainExists(int $key): void
     {
-        try {
-            return $this->makeDomainModel()->findOrFail($key);
-        } catch (Throwable) {
+        $domain = $this->makeDomainModel();
+        $domain->setKey($key);
+
+        if ($domain->findMe() === false)
             EntityException::domainNotFound();
-        }
     }
 
     private function checkAttrSetExist(int $key): AttributeSetModel

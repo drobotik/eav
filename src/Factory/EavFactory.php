@@ -42,8 +42,7 @@ class EavFactory
         $input = array_merge($defaultData, $data);
         $model = new DomainModel();
         $model->setName($input[_DOMAIN::NAME->column()]);
-        $model->save();
-        $model->refresh();
+        $model->create();
 
         return $model;
     }
