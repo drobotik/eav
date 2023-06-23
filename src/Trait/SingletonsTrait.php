@@ -16,6 +16,8 @@ use Drobotik\Eav\Model\AttributeSetModel;
 use Drobotik\Eav\Model\DomainModel;
 use Drobotik\Eav\Model\EntityModel;
 use Drobotik\Eav\Value\ValueParser;
+use Faker\Factory;
+use Faker\Generator;
 
 trait SingletonsTrait
 {
@@ -52,6 +54,11 @@ trait SingletonsTrait
     public function makeValueParser(): ValueParser
     {
         return new ValueParser();
+    }
+
+    public function makeFakerGenerator(): Generator
+    {
+        return Factory::create();
     }
 
 }

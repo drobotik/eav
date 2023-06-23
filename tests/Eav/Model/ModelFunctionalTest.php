@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Tests\Eav\Model;
 
 use Drobotik\Eav\Database\Connection;
+use Doctrine\DBAL\Connection as DBALConnection;
 use Drobotik\Eav\Enum\_DOMAIN;
 use Drobotik\Eav\Model\Model;
 use PDO;
@@ -35,7 +36,7 @@ class ModelFunctionalTest extends TestCase
      */
     public function connection()
     {
-        $this->assertInstanceOf(PDO::class, $this->model->connection());
+        $this->assertInstanceOf(DBALConnection::class, $this->model->connection());
     }
 
     /**

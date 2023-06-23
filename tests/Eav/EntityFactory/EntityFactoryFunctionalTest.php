@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Tests\Eav\EntityFactory;
 
+use Drobotik\Eav\Database\Connection;
 use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Enum\_PIVOT;
@@ -28,6 +29,7 @@ use Drobotik\Eav\Model\ValueIntegerModel;
 use Drobotik\Eav\Model\ValueStringModel;
 use Drobotik\Eav\Model\ValueTextModel;
 use Drobotik\Eav\Result\EntityFactoryResult;
+use PDO;
 use Tests\TestCase;
 
 class EntityFactoryFunctionalTest extends TestCase
@@ -97,12 +99,28 @@ class EntityFactoryFunctionalTest extends TestCase
         $resEntityModel = $result->getEntityModel();
         $this->assertInstanceOf(EntityModel::class, $resEntityModel);
 
-        /** @var EntityModel $entityModel */
-        $entityModel = EntityModel::where(_ENTITY::DOMAIN_ID->column(), $domain->getKey())
-            ->where(_ENTITY::ATTR_SET_ID->column(), $set->getKey())
-            ->first();
-        $this->assertNotNull($entityModel);
-        $this->assertEquals($entityModel->toArray(), $resEntityModel->toArray());
+        $conn = Connection::pdo();
+        $sql = sprintf(
+            "SELECT * FROM %s WHERE %s = :setKey AND %s = :domainKey",
+            _ENTITY::table(),
+            _ENTITY::DOMAIN_ID->column(),
+            _ENTITY::ATTR_SET_ID->column()
+        );
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue(':setKey', $set->getKey());
+        $stmt->bindValue(':domainKey', $domain->getKey());
+        $stmt->execute();
+
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $this->assertEquals(1, count($result));
+
+        $this->assertEquals([
+            _ENTITY::ID->column() => 1,
+            _ENTITY::DOMAIN_ID->column() => $domain->getKey(),
+            _ENTITY::ATTR_SET_ID->column() => $set->getKey(),
+            _ENTITY::SERVICE_KEY->column() => null
+        ], $result[0]);
     }
 
     /**

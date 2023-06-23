@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav;
 
+use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Exception\EntityException;
 use Drobotik\Eav\Model\AttributeSetModel;
-use Drobotik\Eav\Model\EntityModel;
 use Drobotik\Eav\Result\Result;
 use Drobotik\Eav\Trait\SingletonsTrait;
 use Throwable;
@@ -50,18 +50,21 @@ class EntityGnome
             $this->checkAttrSetExist($setKey);
             $model = $this->makeEntityModel();
             $model->setDomainKey($domainKey);
-            $model->setAttrSetKey($setKey);
-            $model->save();
+            $model->setSetKey($setKey);
+            $model->create();
             $entity->setKey($model->getKey());
 
             return 1;
         }
         $key = $entity->getKey();
         $record = $this->checkEntityExists($key);
-        $this->checkDomainExists($record->getDomainKey());
-        $this->checkAttrSetExist($record->getAttrSetKey());
-        $set->setKey($record->getAttrSetKey());
-        $entity->setDomainKey($record->getDomainKey());
+        $domainKey = (int) $record[_ENTITY::DOMAIN_ID->column()];
+        $setKey = (int) $record[_ENTITY::ATTR_SET_ID->column()];
+
+        $this->checkDomainExists($domainKey);
+        $this->checkAttrSetExist($setKey);
+        $set->setKey($setKey);
+        $entity->setDomainKey($domainKey);
 
         return 2;
     }
@@ -78,15 +81,16 @@ class EntityGnome
         $key = $entity->getKey();
 
         $model = $this->makeEntityModel();
-        $record = $model->find($key);
+        $model->setKey($key);
+        $record = $model->findMe();
 
-        if (is_null($record)) {
+        if ($record === false) {
             return $result->notFound();
         }
 
-        $entity->setDomainKey($record->getDomainKey());
+        $entity->setDomainKey($record[_ENTITY::DOMAIN_ID->column()]);
         $set = $entity->getAttributeSet();
-        $set->setKey($record->getAttrSetKey());
+        $set->setKey($record[_ENTITY::ATTR_SET_ID->column()]);
         $set->fetchContainers();
 
         $result->found();
@@ -135,7 +139,9 @@ class EntityGnome
             $attribute = $container->getAttribute();
             $deleteResults[$attribute->getName()] = $container->getStrategy()->delete();
         }
-        $recordResult = $this->makeEntityModel()->findAndDelete($entity->getKey());
+        $entityModel = $this->makeEntityModel();
+        $entityModel->setKey($entity->getKey());
+        $recordResult = $entityModel->delete();
         if (!$recordResult) {
             return $result->notDeleted();
         }
@@ -184,13 +190,19 @@ class EntityGnome
         return $result;
     }
 
-    private function checkEntityExists(int $key): EntityModel
+    /**
+     * @throws EntityException
+     */
+    private function checkEntityExists(int $key): array
     {
-        try {
-            return $this->makeEntityModel()->findOrFail($key);
-        } catch (Throwable) {
+        $entity = $this->makeEntityModel();
+        $entity->setKey($key);
+
+        $result = $entity->findMe();
+        if ($entity->findMe() === false)
             EntityException::entityNotFound();
-        }
+
+        return $result;
     }
 
     /**

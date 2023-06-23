@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Tests\Eav\ImportContentWorker;
 
 use Drobotik\Eav\Driver\CsvDriver;
+use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Import\Content\AttributeSet;
 use Drobotik\Eav\Import\Content\Value;
@@ -18,9 +19,7 @@ use Drobotik\Eav\Import\Content\Worker;
 use Drobotik\Eav\Import\ImportContainer;
 use Drobotik\Eav\Model\AttributeModel;
 use Drobotik\Eav\Model\EntityModel;
-use Drobotik\Eav\Repository\EntityRepository;
 use Drobotik\Eav\Repository\ValueRepository;
-use Illuminate\Database\Eloquent\Collection;
 use PHPUnit\Framework\TestCase;
 
 class ImportContentWorkerBehaviorTest extends TestCase
@@ -39,31 +38,30 @@ class ImportContentWorkerBehaviorTest extends TestCase
         $values = [1,2,3];
         $serviceKey = 456;
         $lineIndex = 2;
-        $collection = new Collection($values);
 
         $container = $this->getMockBuilder(ImportContainer::class)
             ->onlyMethods(['getDomainKey', 'getSetKey'])->getMock();
         $container->method('getDomainKey')->willReturn($domainKey);
         $container->method('getSetKey')->willReturn($setKey);
 
-        $entityRepository = $this->getMockBuilder(EntityRepository::class)
+        $entityModel = $this->getMockBuilder(EntityModel::class)
             ->onlyMethods(['getServiceKey', 'bulkCreate', 'getByServiceKey'])
             ->getMock();
-        $entityRepository->expects($this->once())->method('getServiceKey')
+        $entityModel->expects($this->once())->method('getServiceKey')
             ->willReturn($serviceKey);
-        $entityRepository->expects($this->once())->method('bulkCreate')
+        $entityModel->expects($this->once())->method('bulkCreate')
             ->with($lineIndex, $domainKey, $setKey, $serviceKey);
-        $entityRepository->expects($this->once())->method('getByServiceKey')
+        $entityModel->expects($this->once())->method('getByServiceKey')
             ->with($serviceKey)
-            ->willReturn($collection);
+            ->willReturn($values);
 
         $worker = $this->getMockBuilder(Worker::class)
-            ->onlyMethods(['getContainer', 'getLineIndex', 'makeEntityRepository'])->getMock();
+            ->onlyMethods(['getContainer', 'getLineIndex', 'makeEntityModel'])->getMock();
         $worker->method('getContainer')->willReturn($container);
-        $worker->method('makeEntityRepository')->willReturn($entityRepository);
+        $worker->method('makeEntityModel')->willReturn($entityModel);
         $worker->method('getLineIndex')->willReturn($lineIndex);
 
-        $this->assertEquals($collection, $worker->createEntities());
+        $this->assertEquals($values, $worker->createEntities());
     }
     /**
      * @test
@@ -78,14 +76,15 @@ class ImportContentWorkerBehaviorTest extends TestCase
         $entity1Key = 10;
         $entity2Key = 20;
 
-        $entity1 = $this->getMockBuilder(EntityModel::class)
-            ->onlyMethods(['getKey'])->getMock();
-        $entity1->expects($this->once())->method('getKey')->willReturn($entity1Key);
-        $entity2 = $this->getMockBuilder(EntityModel::class)
-            ->onlyMethods(['getKey'])->getMock();
-        $entity2->expects($this->once())->method('getKey')->willReturn($entity2Key);
-
-        $collection = new Collection([$entity1, $entity2]);
+        $entity1 = [
+            _ENTITY::ID->column() => $entity1Key,
+            _ENTITY::DOMAIN_ID->column() => $domainKey
+        ];
+        $entity2 = [
+            _ENTITY::ID->column() => $entity2Key,
+            _ENTITY::DOMAIN_ID->column() => $domainKey
+        ];
+        $collection = [$entity1, $entity2];
 
         $value1 = $this->getMockBuilder(Value::class)
             ->onlyMethods(['setEntityKey', 'getLineIndex','isEmptyValue'])->getMock();

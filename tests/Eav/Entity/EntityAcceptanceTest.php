@@ -10,8 +10,10 @@ declare(strict_types=1);
 namespace Tests\Eav\Entity;
 
 use Carbon\Carbon;
+use Drobotik\Eav\Database\Connection;
 use Drobotik\Eav\Entity;
 use Drobotik\Eav\Enum\_ATTR;
+use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Enum\_VALUE;
 use Drobotik\Eav\Enum\ATTR_FACTORY;
 use Drobotik\Eav\Enum\ATTR_TYPE;
@@ -289,7 +291,10 @@ class EntityAcceptanceTest extends TestCase
 
         $entity->delete();
 
-        $this->assertEquals(0, EntityModel::query()->whereKey($entityModel->getKey())->count());
+        $m = new EntityModel();
+        $m->setKey($entityModel->getKey());
+
+        $this->assertEquals(false, $m->findMe());
         $this->assertEquals(0, ValueStringModel::query()->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())->count());
         $this->assertEquals(0, ValueIntegerModel::query()->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())->count());
         $this->assertEquals(0, ValueDecimalModel::query()->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())->count());
@@ -373,7 +378,9 @@ class EntityAcceptanceTest extends TestCase
 
         $entity->delete();
 
-        $this->assertEquals(0, EntityModel::query()->whereKey($entityModel->getKey())->count());
+        $model = new EntityModel();
+        $model->setKey($entityModel->getKey());
+        $this->assertEquals(false, $model->findMe());
         $this->assertEquals(0, ValueStringModel::query()->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())->count());
         $this->assertEquals(0, ValueIntegerModel::query()->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())->count());
         $this->assertEquals(0, ValueDecimalModel::query()->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())->count());

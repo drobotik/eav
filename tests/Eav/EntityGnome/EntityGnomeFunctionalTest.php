@@ -116,14 +116,16 @@ class EntityGnomeFunctionalTest extends TestCase
 
         $this->gnome->save();
 
-        $this->assertEquals(1, EntityModel::count());
-        $record = EntityModel::where(_ENTITY::DOMAIN_ID->column(), $domain->getKey())
-            ->where(_ENTITY::ATTR_SET_ID->column(), $attrSet->getKey())
-            ->first();
-        $this->assertInstanceOf(EntityModel::class, $record);
-        $this->assertEquals($record->getKey(), $entity->getKey());
-        $this->assertEquals($record->getDomainKey(), $entity->getDomainKey());
-        $this->assertEquals($record->getAttrSetKey(), $entity->getAttributeSet()->getKey());
+        $model = new EntityModel();
+        $model->setDomainKey($domain->getKey());
+        $model->setSetKey($attrSet->getKey());
+        $this->assertEquals(1, $model->count());
+        $record = $model->getBySetAndDomain()[0];
+
+        $this->assertIsArray($record);
+        $this->assertEquals($record[_ENTITY::ID->column()], $entity->getKey());
+        $this->assertEquals($record[_ENTITY::DOMAIN_ID->column()], $entity->getDomainKey());
+        $this->assertEquals($record[_ENTITY::ATTR_SET_ID->column()], $entity->getAttributeSet()->getKey());
     }
     /**
      * @test
@@ -146,8 +148,8 @@ class EntityGnomeFunctionalTest extends TestCase
         $this->expectExceptionMessage(EntityException::DOMAIN_NOT_FOUND);
         $entity = new EntityModel();
         $entity ->setDomainKey(123);
-        $entity ->setAttrSetKey(123);
-        $entity ->save();
+        $entity ->setSetKey(123);
+        $entity ->create();
         $this->gnome->getEntity()->setKey($entity->getKey());
         $this->gnome->save();
     }
@@ -162,8 +164,8 @@ class EntityGnomeFunctionalTest extends TestCase
         $domain = $this->eavFactory->createDomain();
         $entity = new EntityModel();
         $entity->setDomainKey($domain->getKey());
-        $entity->setAttrSetKey(123);
-        $entity->save();
+        $entity->setSetKey(123);
+        $entity->create();
         $this->gnome->getEntity()->setKey($entity->getKey());
         $this->gnome->save();
     }
@@ -181,14 +183,17 @@ class EntityGnomeFunctionalTest extends TestCase
 
         $this->gnome->save();
 
-        $this->assertEquals(1, EntityModel::count());
-        $record = EntityModel::where(_ENTITY::DOMAIN_ID->column(), $domain->getKey())
-            ->where(_ENTITY::ATTR_SET_ID->column(), $attrSet->getKey())
-            ->first();
-        $this->assertInstanceOf(EntityModel::class, $record);
-        $this->assertEquals($record->getKey(), $entity->getKey());
-        $this->assertEquals($record->getDomainKey(), $entity->getDomainKey());
-        $this->assertEquals($record->getAttrSetKey(), $entity->getAttributeSet()->getKey());
+
+        $model = new EntityModel();
+        $model->setDomainKey($domain->getKey());
+        $model->setSetKey($attrSet->getKey());
+        $this->assertEquals(1, $model->count());
+        $record = $model->getBySetAndDomain()[0];
+
+        $this->assertIsArray($record);
+        $this->assertEquals($record[_ENTITY::ID->column()], $entity->getKey());
+        $this->assertEquals($record[_ENTITY::DOMAIN_ID->column()], $entity->getDomainKey());
+        $this->assertEquals($record[_ENTITY::ATTR_SET_ID->column()], $entity->getAttributeSet()->getKey());
     }
     /**
      * @test

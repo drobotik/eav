@@ -89,13 +89,12 @@ class EavFactoryFunctionalTest extends TestCase
         $this->assertInstanceOf(EntityModel::class, $result);
         $this->assertEquals(1, $result->getKey());
         $this->assertEquals(1, $result->getDomainKey());
-        $this->assertEquals(1, $result->getAttrSetKey());
+        $this->assertEquals(1, $result->getSetKey());
         $data = $result->toArray();
         $this->assertEquals([
             _ENTITY::ID->column() => 1,
             _ENTITY::DOMAIN_ID->column() => 1,
-            _ENTITY::ATTR_SET_ID->column() => 1,
-            _ENTITY::SERVICE_KEY->column() => null
+            _ENTITY::ATTR_SET_ID->column() => 1
         ], $data);
         // domain created
         $domain = new DomainModel();

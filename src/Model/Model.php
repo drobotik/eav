@@ -9,7 +9,9 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\Model;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use Drobotik\Eav\Database\Connection;
+use Doctrine\DBAL\Connection as DBALConnection;
 use PDO;
 
 class Model
@@ -19,9 +21,14 @@ class Model
 
     protected string $table;
 
-    public function connection() : PDO
+    public function connection() : DBALConnection
     {
-        return Connection::pdo();
+        return Connection::get();
+    }
+
+    public function queryBuilder() : QueryBuilder
+    {
+        return Connection::get()->createQueryBuilder();
     }
 
     public function isKey() : bool
@@ -61,7 +68,7 @@ class Model
 
     public function insert(array $data): int
     {
-        $conn = $this->connection();
+        $conn = $this->connection()->getNativeConnection();
         $table = $this->getTable();
 
         // Extract the column names and values from the data array
@@ -87,7 +94,7 @@ class Model
         $key =  $this->getKey();
         $keyName = $this->getKeyName();
 
-        $conn = $this->connection();
+        $conn = $this->connection()->getNativeConnection();
         $table = $this->getTable();
 
         // Prepare the update statement
@@ -113,7 +120,7 @@ class Model
         $key =  $this->getKey();
         $keyName = $this->getKeyName();
 
-        $conn = $this->connection();
+        $conn = $this->connection()->getNativeConnection();
         $table = $this->getTable();
 
         $stmt = $conn->prepare("DELETE FROM $table WHERE $keyName = :key");
@@ -134,7 +141,7 @@ class Model
 
     public function count() : int
     {
-        $conn = $this->connection();
+        $conn = $this->connection()->getNativeConnection();
         $table = $this->getTable();
         $stmt = $conn->prepare("SELECT COUNT(*) as count FROM $table");
         $stmt->execute();
@@ -142,9 +149,9 @@ class Model
         return (int) $record["count"];
     }
 
-    public function findMe()
+    public function findMe() : array|false
     {
-        $conn = $this->connection();
+        $conn = $this->connection()->getNativeConnection();
         $table = $this->getTable();
         $key = $this->getKey();
         $keyName = $this->getKeyName();

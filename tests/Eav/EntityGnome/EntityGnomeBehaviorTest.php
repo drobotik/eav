@@ -15,6 +15,7 @@ use Drobotik\Eav\AttributeSet;
 use Drobotik\Eav\Entity;
 use Drobotik\Eav\EntityBag;
 use Drobotik\Eav\EntityGnome;
+use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Enum\_RESULT;
 use Drobotik\Eav\Model\EntityModel;
 use Drobotik\Eav\Result\Result;
@@ -49,24 +50,17 @@ class EntityGnomeBehaviorTest extends TestCase
         $set->expects($this->once())->method('fetchContainers');
         $set->expects($this->never())->method('setEntity');
 
-        $entityRecord = $this->getMockBuilder(EntityModel::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getDomainKey', 'getAttrSetKey'])
-            ->getMock();
-        $entityRecord->expects($this->once())
-            ->method('getDomainKey')
-            ->willReturn($domainModelKey);
-        $entityRecord->expects($this->once())
-            ->method('getAttrSetKey')
-            ->willReturn($setModelKey);
+        $entityRecord = [
+            _ENTITY::ID->column() => $entityKey,
+            _ENTITY::DOMAIN_ID->column() =>  $domainModelKey,
+            _ENTITY::ATTR_SET_ID->column() => $setModelKey
+        ];
 
         $entityModel = $this->getMockBuilder(EntityModel::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['find'])
+            ->onlyMethods(['findMe'])
             ->getMock();
         $entityModel->expects($this->once())
-            ->method('find')
-            ->with($entityKey)
+            ->method('findMe')
             ->willReturn($entityRecord);
 
         $entity = $this->getMockBuilder(Entity::class)
@@ -377,10 +371,10 @@ class EntityGnomeBehaviorTest extends TestCase
         $set->expects($this->once())->method('resetContainers');
         $set->expects($this->once())->method('setKey')->with(0);
         $record = $this->getMockBuilder(EntityModel::class)
-            ->onlyMethods(['findAndDelete'])
+            ->onlyMethods(['delete'])
             ->getMock();
         $record->expects($this->once())
-            ->method('findAndDelete')
+            ->method('delete')
             ->willReturn(true);
         $entity = $this->getMockBuilder(Entity::class)
             ->onlyMethods(['getAttributeSet', 'getKey', 'hasKey', 'setKey', 'setDomainKey'])
@@ -417,10 +411,10 @@ class EntityGnomeBehaviorTest extends TestCase
      */
     public function not_deleted() {
         $record = $this->getMockBuilder(EntityModel::class)
-            ->onlyMethods(['findAndDelete'])
+            ->onlyMethods(['delete'])
             ->getMock();
         $record->expects($this->once())
-            ->method('findAndDelete')
+            ->method('delete')
             ->willReturn(false);
         $entity = $this->getMockBuilder(Entity::class)
             ->onlyMethods(['getAttributeSet', 'getKey', 'hasKey'])

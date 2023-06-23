@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Tests\Eav\ImportManager;
 
 use Carbon\Carbon;
+use Drobotik\Eav\Database\Connection;
 use Drobotik\Eav\Driver\CsvDriver;
 use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\_ENTITY;
@@ -184,9 +185,12 @@ class ImportManagerAcceptanceTest extends TestCase
         $this->assertNotNull($textPivot);
 
         // check entities created
-        $entities = EntityModel::query()->get();
-        $this->assertEquals(100, $entities->count());
 
+        $qb = Connection::get()->createQueryBuilder();
+
+        $entities = $qb->select('*')->from(_ENTITY::table())
+            ->executeQuery()->fetchAllAssociative();
+        $this->assertEquals(100, count($entities));
 
         // check values created
         $stmt = new Statement();
@@ -202,6 +206,7 @@ class ImportManagerAcceptanceTest extends TestCase
         {
             /** @var EntityModel $entity */
             $entity = $entities[$iteration];
+            $entityKey = $entity[_ENTITY::ID->column()];
 
             /** @var ValueStringModel $stringValue */
             /** @var ValueIntegerModel $integerValue */
@@ -209,23 +214,23 @@ class ImportManagerAcceptanceTest extends TestCase
             /** @var ValueDatetimeModel $datetimeValue */
             /** @var ValueTextModel $textValue */
             $stringValue = ValueStringModel::where(_VALUE::DOMAIN_ID->column(), $domain->getKey())
-                ->where(_VALUE::ENTITY_ID->column(), $entity->getKey())
+                ->where(_VALUE::ENTITY_ID->column(), $entityKey)
                 ->where(_VALUE::ATTRIBUTE_ID->column(), $string->getKey())
                 ->first();
             $integerValue = ValueIntegerModel::where(_VALUE::DOMAIN_ID->column(), $domain->getKey())
-                ->where(_VALUE::ENTITY_ID->column(), $entity->getKey())
+                ->where(_VALUE::ENTITY_ID->column(), $entityKey)
                 ->where(_VALUE::ATTRIBUTE_ID->column(), $integer->getKey())
                 ->first();
             $decimalValue = ValueDecimalModel::where(_VALUE::DOMAIN_ID->column(), $domain->getKey())
-                ->where(_VALUE::ENTITY_ID->column(), $entity->getKey())
+                ->where(_VALUE::ENTITY_ID->column(), $entityKey)
                 ->where(_VALUE::ATTRIBUTE_ID->column(), $decimal->getKey())
                 ->first();
             $datetimeValue = ValueDatetimeModel::where(_VALUE::DOMAIN_ID->column(), $domain->getKey())
-                ->where(_VALUE::ENTITY_ID->column(), $entity->getKey())
+                ->where(_VALUE::ENTITY_ID->column(), $entityKey)
                 ->where(_VALUE::ATTRIBUTE_ID->column(), $datetime->getKey())
                 ->first();
             $textValue = ValueTextModel::where(_VALUE::DOMAIN_ID->column(), $domain->getKey())
-                ->where(_VALUE::ENTITY_ID->column(), $entity->getKey())
+                ->where(_VALUE::ENTITY_ID->column(), $entityKey)
                 ->where(_VALUE::ATTRIBUTE_ID->column(), $text->getKey())
                 ->first();
 
@@ -287,7 +292,8 @@ class ImportManagerAcceptanceTest extends TestCase
             $oldValues[] = [$entityKey, $stringValue->getValue(), $integerValue->getValue()];
         }
 
-        $this->assertEquals(6, EntityModel::query()->count());
+        $model = new EntityModel();
+        $this->assertEquals(6, $model->count());
 
         $newValues = $oldValues;
         $newValues[0] = [$oldValues[0][0], $this->faker->word, $this->faker->randomNumber(), $this->faker->randomFloat(), Carbon::now()->toISOString()];
@@ -428,8 +434,10 @@ class ImportManagerAcceptanceTest extends TestCase
         $this->assertNotNull($textPivot);
 
         // check entities created
-        $entities = EntityModel::query()->get();
-        $this->assertEquals(11, $entities->count());
+        $qb = Connection::get()->createQueryBuilder();
+        $entities = $qb->select('*')->from(_ENTITY::table())
+            ->executeQuery()->fetchAllAssociative();
+        $this->assertEquals(11, count($entities));
 
         // check values created
         $stmt = new Statement();
@@ -443,6 +451,7 @@ class ImportManagerAcceptanceTest extends TestCase
         {
             /** @var EntityModel $entity */
             $entity = $entities[$iteration];
+            $entityKey = $entity[_ENTITY::ID->column()];
 
             foreach($record as $attributeName => $value)
             {
@@ -455,7 +464,7 @@ class ImportManagerAcceptanceTest extends TestCase
                 };
 
                 $valueRecord = $attribute->getTypeEnum()->model()
-                    ->where(_VALUE::ENTITY_ID->column(), $entity->getKey())
+                    ->where(_VALUE::ENTITY_ID->column(), $entityKey)
                     ->where(_VALUE::ATTRIBUTE_ID->column(), $attribute->getKey())
                     ->first();
 

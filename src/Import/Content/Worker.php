@@ -11,15 +11,15 @@ namespace Drobotik\Eav\Import\Content;
 
 use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Exception\EntityException;
-use Drobotik\Eav\Model\EntityModel;
 use Drobotik\Eav\Trait\ImportContainerTrait;
 use Drobotik\Eav\Trait\RepositoryTrait;
-use Illuminate\Database\Eloquent\Collection;
+use Drobotik\Eav\Trait\SingletonsTrait;
 
 class Worker
 {
     use ImportContainerTrait;
     use RepositoryTrait;
+    use SingletonsTrait;
 
     private AttributeSet  $attributeSet;
     private ValueSet      $valueSet;
@@ -112,19 +112,19 @@ class Worker
         }
     }
 
-    public function createEntities() : Collection
+    public function createEntities() : array|bool
     {
-        $entityRepo = $this->makeEntityRepository();
+        $model = $this->makeEntityModel();
         $container = $this->getContainer();
 
         $domainKey = $container->getDomainKey();
         $setKey = $container->getSetKey();
 
         $amount = $this->getLineIndex();
-        $serviceKey = $entityRepo->getServiceKey();
+        $serviceKey = $model->getServiceKey();
 
-        $entityRepo->bulkCreate($amount, $domainKey, $setKey, $serviceKey);
-        return $entityRepo->getByServiceKey($serviceKey);
+        $model->bulkCreate($amount, $domainKey, $setKey, $serviceKey);
+        return $model->getByServiceKey($serviceKey);
     }
 
     public function processNewEntities(): void
@@ -134,7 +134,6 @@ class Worker
         $valueSet = $this->getValueSet();
         $domainKey = $container->getDomainKey();
         $bulkCreateSet = $this->makeBulkValuesSet();
-        /** @var EntityModel[] $entities */
         $entities = $this->createEntities();
         /**
          * @var Value $value
@@ -142,7 +141,7 @@ class Worker
         foreach($valueSet->forNewEntities() as $value)
         {
             if($value->isEmptyValue()) continue;
-            $value->setEntityKey($entities[$value->getLineIndex() - 1]->getKey());
+            $value->setEntityKey($entities[$value->getLineIndex() - 1][_ENTITY::ID->column()]);
             $bulkCreateSet->appendValue($value);
         }
         $valueRepo->bulkCreate($bulkCreateSet, $domainKey);

@@ -61,9 +61,8 @@ class EavFactory
         }
         $model = new EntityModel();
         $model->setDomainKey($domainKey);
-        $model->setAttrSetKey($setKey);
-        $model->save();
-        $model->refresh();
+        $model->setSetKey($setKey);
+        $model->create();
 
         return $model;
     }
