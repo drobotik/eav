@@ -32,7 +32,7 @@ class ModelFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Model\Model::conn
+     * @covers \Drobotik\Eav\Model\Model::connection
      */
     public function connection()
     {
@@ -93,7 +93,7 @@ class ModelFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Model\Model::create
+     * @covers \Drobotik\Eav\Model\Model::insert
      */
     public function insert_record()
     {
@@ -125,7 +125,7 @@ class ModelFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Model\Model::create
+     * @covers \Drobotik\Eav\Model\Model::update
      */
     public function update_record()
     {
