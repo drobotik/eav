@@ -49,9 +49,10 @@ class EntityGnome
             $setKey = $set->getKey();
             $this->checkAttrSetExist($setKey);
             $model = $this->makeEntityModel();
-            $model->setDomainKey($domainKey);
-            $model->setSetKey($setKey);
-            $key = $model->create();
+            $key = $model->create([
+                _ENTITY::DOMAIN_ID->column() => $domainKey,
+                _ENTITY::ATTR_SET_ID->column() => $setKey
+            ]);
             $entity->setKey($key);
 
             return 1;

@@ -117,10 +117,8 @@ class EntityGnomeFunctionalTest extends TestCase
         $this->gnome->save();
 
         $model = new EntityModel();
-        $model->setDomainKey($domainKey);
-        $model->setSetKey($attrSet->getKey());
         $this->assertEquals(1, $model->count());
-        $record = $model->getBySetAndDomain()[0];
+        $record = $model->getBySetAndDomain($domainKey, $attrSet->getKey())[0];
 
         $this->assertIsArray($record);
         $this->assertEquals($record[_ENTITY::ID->column()], $entity->getKey());
@@ -147,9 +145,10 @@ class EntityGnomeFunctionalTest extends TestCase
         $this->expectException(EntityException::class);
         $this->expectExceptionMessage(EntityException::DOMAIN_NOT_FOUND);
         $entity = new EntityModel();
-        $entity->setDomainKey(123);
-        $entity->setSetKey(123);
-        $entityKey = $entity->create();
+        $entityKey = $entity->create([
+            _ENTITY::DOMAIN_ID->column() => 123,
+            _ENTITY::ATTR_SET_ID->column() => 123
+        ]);
         $this->gnome->getEntity()->setKey($entityKey);
         $this->gnome->save();
     }
@@ -163,9 +162,10 @@ class EntityGnomeFunctionalTest extends TestCase
         $this->expectExceptionMessage(EntityException::ATTR_SET_NOT_FOUND);
         $domainKey = $this->eavFactory->createDomain();
         $entity = new EntityModel();
-        $entity->setDomainKey($domainKey);
-        $entity->setSetKey(123);
-        $entityKey = $entity->create();
+        $entityKey = $entity->create([
+            _ENTITY::DOMAIN_ID->column() => $domainKey,
+            _ENTITY::ATTR_SET_ID->column() => 123
+        ]);
         $this->gnome->getEntity()->setKey($entityKey);
         $this->gnome->save();
     }
@@ -183,12 +183,9 @@ class EntityGnomeFunctionalTest extends TestCase
 
         $this->gnome->save();
 
-
         $model = new EntityModel();
-        $model->setDomainKey($domainKey);
-        $model->setSetKey($attrSet->getKey());
         $this->assertEquals(1, $model->count());
-        $record = $model->getBySetAndDomain()[0];
+        $record = $model->getBySetAndDomain($domainKey, $attrSet->getKey())[0];
 
         $this->assertIsArray($record);
         $this->assertEquals($record[_ENTITY::ID->column()], $entity->getKey());

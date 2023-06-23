@@ -38,26 +38,6 @@ class EntityModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\EntityModel::setDomainKey
-     * @covers \Drobotik\Eav\Model\EntityModel::getDomainKey
-     */
-    public function domain_key() {
-        $this->model->setDomainKey(456);
-        $this->assertEquals(456, $this->model->getDomainKey());
-    }
-    /**
-     * @test
-     * @group functional
-     * @covers \Drobotik\Eav\Model\EntityModel::setSetKey
-     * @covers \Drobotik\Eav\Model\EntityModel::getSetKey
-     */
-    public function attr_set_key() {
-        $this->model->setSetKey(456);
-        $this->assertEquals(456, $this->model->getSetKey());
-    }
-    /**
-     * @test
-     * @group functional
      * @covers \Drobotik\Eav\Model\EntityModel::create
      */
     public function create_record()
@@ -65,11 +45,12 @@ class EntityModelFunctionalTest extends TestCase
         $domainKey = 345;
         $setKey = 567;
 
-        $this->model->setDomainKey($domainKey);
-        $this->model->setSetKey($setKey);
+        $entityKey = $this->model->create([
+            _ENTITY::DOMAIN_ID->column() => $domainKey,
+            _ENTITY::ATTR_SET_ID->column() => $setKey
+        ]);
 
-        $result = $this->model->create();
-        $this->assertEquals(1, $result);
+        $this->assertEquals(1, $entityKey);
 
         $table = _ENTITY::table();
         $connection = Connection::get()->getNativeConnection();
@@ -79,7 +60,7 @@ class EntityModelFunctionalTest extends TestCase
         $record = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $this->assertEquals([
             [
-                _ENTITY::ID->column() => 1,
+                _ENTITY::ID->column() => $entityKey,
                 _ENTITY::DOMAIN_ID->column() => $domainKey,
                 _ENTITY::ATTR_SET_ID->column() => $setKey,
                 _ENTITY::SERVICE_KEY->column() => null

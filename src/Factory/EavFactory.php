@@ -12,6 +12,7 @@ namespace Drobotik\Eav\Factory;
 
 use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\_DOMAIN;
+use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Enum\_GROUP;
 use Drobotik\Eav\Enum\_SET;
 use Drobotik\Eav\Enum\ATTR_TYPE;
@@ -56,9 +57,10 @@ class EavFactory
             $setKey = $attrSet->getKey();
         }
         $model = new EntityModel();
-        $model->setDomainKey($domainKey);
-        $model->setSetKey($setKey);
-        return $model->create();
+        return $model->create([
+            _ENTITY::DOMAIN_ID->column() => $domainKey,
+            _ENTITY::ATTR_SET_ID->column() => $setKey
+        ]);
     }
 
     public function createAttributeSet(?int $domainKey = null, array $data = []): AttributeSetModel

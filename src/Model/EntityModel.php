@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\Model;
 
+use Doctrine\DBAL\Exception;
 use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Exception\EntityException;
 use Drobotik\Eav\Trait\SingletonsTrait;
@@ -18,35 +19,11 @@ class EntityModel extends Model
 {
     use SingletonsTrait;
 
-    private int $domainKey;
-    private int $setKey;
 
     public function __construct()
     {
         $this->setTable(_ENTITY::table());
         $this->setKeyName(_ENTITY::ID->column());
-    }
-
-    public function getDomainKey(): int
-    {
-        return $this->domainKey;
-    }
-
-    public function setDomainKey(int $key) : self
-    {
-        $this->domainKey = $key;
-        return $this;
-    }
-
-    public function setSetKey(int $key) : self
-    {
-        $this->setKey = $key;
-        return $this;
-    }
-
-    public function getSetKey(): int
-    {
-        return $this->setKey;
     }
 
     public function getServiceKey(): int
@@ -57,22 +34,22 @@ class EntityModel extends Model
             : $key;
     }
 
-    public function create() : int
+    /**
+     * @throws Exception
+     */
+    public function create(array $data) : int
     {
-        return $this->insert([
-            _ENTITY::DOMAIN_ID->column() => $this->getDomainKey(),
-            _ENTITY::ATTR_SET_ID->column() => $this->getSetKey()
-        ]);
-    }
-
-    public function toArray(): array
-    {
-        $result = [];
-        if(isset($this->domainKey))
-            $result[_ENTITY::DOMAIN_ID->column()] = $this->getDomainKey();
-        if(isset($this->setKey))
-            $result[_ENTITY::ATTR_SET_ID->column()] = $this->getSetKey();
-        return $result;
+        $conn = $this->db();
+        $conn->createQueryBuilder()
+            ->insert($this->getTable())
+            ->values([
+                _ENTITY::DOMAIN_ID->column() => '?',
+                _ENTITY::ATTR_SET_ID->column() => '?'
+            ])
+            ->setParameter(0, $data[_ENTITY::DOMAIN_ID->column()])
+            ->setParameter(1, $data[_ENTITY::ATTR_SET_ID->column()])
+            ->executeQuery();
+        return (int) $conn->lastInsertId();
     }
 
     public function isServiceKey(int $key) : bool
@@ -129,13 +106,13 @@ class EntityModel extends Model
         $conn->exec($template);
     }
 
-    public function getBySetAndDomain() : array
+    public function getBySetAndDomain(int $domainKey, int $setKey) : array
     {
         return $this->db()->createQueryBuilder()
             ->select('*')
-            ->from(_ENTITY::table())
-            ->where(sprintf('%s = %s', _ENTITY::DOMAIN_ID->column(), $this->getDomainKey()))
-            ->andWhere(sprintf('%s = %s', _ENTITY::ATTR_SET_ID->column(), $this->getSetKey()))
+            ->from($this->getTable())
+            ->where(sprintf('%s = %s', _ENTITY::DOMAIN_ID->column(), $domainKey))
+            ->andWhere(sprintf('%s = %s', _ENTITY::ATTR_SET_ID->column(), $setKey))
             ->executeQuery()
             ->fetchAllAssociative();
     }
