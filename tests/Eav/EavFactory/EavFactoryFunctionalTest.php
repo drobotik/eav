@@ -107,7 +107,8 @@ class EavFactoryFunctionalTest extends TestCase
         $this->assertEquals(1, $record['c']);
 
         // attribute set created
-        $this->assertEquals(1, AttributeSetModel::query()->count());
+        $model = new AttributeSetModel();
+        $this->assertEquals(1, $model->count());
     }
 
     /**
@@ -119,12 +120,8 @@ class EavFactoryFunctionalTest extends TestCase
      */
     public function attributeSet()
     {
-        $result = $this->eavFactory->createAttributeSet();
-        $this->assertInstanceOf(AttributeSetModel::class, $result);
-        $this->assertEquals(1, $result->getKey());
-        $this->assertEquals(1, $result->getDomainKey());
-        $data = $result->toArray();
-        $this->assertArrayHasKey(_SET::NAME->column(), $data);
+        $setKey = $this->eavFactory->createAttributeSet();
+        $this->assertEquals(1, $setKey);
     }
 
     /**
@@ -139,11 +136,18 @@ class EavFactoryFunctionalTest extends TestCase
         $input = [
             _SET::NAME->column() => 'test',
         ];
-        $result = $this->eavFactory->createAttributeSet(null, $input);
-        $this->assertInstanceOf(AttributeSetModel::class, $result);
-        $this->assertEquals(1, $result->getKey());
-        $this->assertEquals(1, $result->getDomainKey());
-        $this->assertEquals($input[_SET::NAME->column()], $result->getName());
+        $setKey = $this->eavFactory->createAttributeSet(123, $input);
+
+        $qb = Connection::get()->createQueryBuilder();
+        $record = $qb->select('*')->from(_SET::table())
+            ->executeQuery()
+            ->fetchAssociative();
+
+        $this->assertEquals([
+            _SET::ID->column() => $setKey,
+            _SET::DOMAIN_ID->column() => 123,
+            _SET::NAME->column() => 'test'
+        ], $record);
     }
 
     /**
@@ -245,13 +249,13 @@ class EavFactoryFunctionalTest extends TestCase
         $this->eavFactory->createDomain();
         $domainKey = $this->eavFactory->createDomain();
         $this->eavFactory->createAttributeSet($domainKey);
-        $attrSet = $this->eavFactory->createAttributeSet($domainKey);
-        $this->eavFactory->createGroup($attrSet->getKey());
-        $group = $this->eavFactory->createGroup($attrSet->getKey());
+        $setKey = $this->eavFactory->createAttributeSet($domainKey);
+        $this->eavFactory->createGroup($setKey);
+        $group = $this->eavFactory->createGroup($setKey);
         $this->eavFactory->createAttribute($domainKey);
         $attribute = $this->eavFactory->createAttribute($domainKey);
 
-        $result = $this->eavFactory->createPivot($domainKey, $attrSet->getKey(), $group->getKey(), $attribute->getKey());
+        $result = $this->eavFactory->createPivot($domainKey, $setKey, $group->getKey(), $attribute->getKey());
         $this->assertInstanceOf(PivotModel::class, $result);
         $this->assertEquals(1, $result->getKey());
         $this->assertEquals(2, $result->getDomainKey());
@@ -404,8 +408,8 @@ class EavFactoryFunctionalTest extends TestCase
     public function createEavEntity()
     {
         $domainKey = $this->eavFactory->createDomain();
-        $set = $this->eavFactory->createAttributeSet($domainKey);
-        $group = $this->eavFactory->createGroup($set->getKey());
+        $setKey = $this->eavFactory->createAttributeSet($domainKey);
+        $group = $this->eavFactory->createGroup($setKey);
         $config = [
             [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
@@ -416,7 +420,7 @@ class EavFactoryFunctionalTest extends TestCase
                 ATTR_FACTORY::GROUP->field() => $group->getKey()
             ]
         ];
-        $result = $this->eavFactory->createEavEntity($config, $domainKey, $set->getKey());
+        $result = $this->eavFactory->createEavEntity($config, $domainKey, $setKey);
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::CREATED->code(), $result->getCode());
         $this->assertEquals(_RESULT::CREATED->message(), $result->getMessage());

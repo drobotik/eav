@@ -12,10 +12,8 @@ namespace Drobotik\Eav;
 
 use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Exception\EntityException;
-use Drobotik\Eav\Model\AttributeSetModel;
 use Drobotik\Eav\Result\Result;
 use Drobotik\Eav\Trait\SingletonsTrait;
-use Throwable;
 
 class EntityGnome
 {
@@ -214,11 +212,11 @@ class EntityGnome
             EntityException::domainNotFound();
     }
 
-    private function checkAttrSetExist(int $key): AttributeSetModel
+    private function checkAttrSetExist(int $key): void
     {
-        try {
-            return $this->makeAttributeSetModel()->findOrFail($key);
-        } catch (Throwable) {
+        $model = $this->makeAttributeSetModel();
+
+        if($model->findByKey($key) === false) {
             EntityException::attrSetNotFound();
         }
     }

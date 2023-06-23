@@ -29,8 +29,8 @@ class AttributeRepositoryFunctionalTest extends TestCase
     public function get_linked()
     {
         $domainKey = $this->eavFactory->createDomain();
-        $set = $this->eavFactory->createAttributeSet();
-        $group = $this->eavFactory->createGroup($set->getKey());
+        $setKey = $this->eavFactory->createAttributeSet();
+        $group = $this->eavFactory->createGroup($setKey);
         $fields = [
             [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
@@ -50,10 +50,10 @@ class AttributeRepositoryFunctionalTest extends TestCase
             ]
         ];
 
-        $this->eavFactory->createEavEntity($fields, $domainKey, $set->getKey());
+        $this->eavFactory->createEavEntity($fields, $domainKey, $setKey);
 
         $repository = new AttributeRepository();
-        $attributes = $repository->getLinked($domainKey, $set->getKey());
+        $attributes = $repository->getLinked($domainKey, $setKey);
 
         $this->assertEquals(2, $attributes->count());
         /** @var AttributeModel $attr1 */
@@ -62,12 +62,12 @@ class AttributeRepositoryFunctionalTest extends TestCase
         $attr2 = $attributes[1];
         $this->assertEquals('string', $attr1->getName());
         $this->assertEquals($domainKey, $attr1->getDomainKey());
-        $this->assertEquals($set->getKey(), $attr1->{_PIVOT::SET_ID->column()});
+        $this->assertEquals($setKey, $attr1->{_PIVOT::SET_ID->column()});
         $this->assertEquals($group->getKey(), $attr1->{_PIVOT::GROUP_ID->column()});
 
         $this->assertEquals('integer', $attr2->getName());
         $this->assertEquals($domainKey, $attr2->getDomainKey());
-        $this->assertEquals($set->getKey(), $attr2->{_PIVOT::SET_ID->column()});
+        $this->assertEquals($setKey, $attr2->{_PIVOT::SET_ID->column()});
         $this->assertEquals($group->getKey(), $attr2->{_PIVOT::GROUP_ID->column()});
     }
 }

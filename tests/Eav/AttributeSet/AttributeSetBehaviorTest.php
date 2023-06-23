@@ -26,9 +26,8 @@ class AttributeSetBehaviorTest extends TestCase
      */
     public function fetch_containers() {
         $key = 321;
-        $collection = new Collection();
         $attribute = new AttributeModel();
-        $collection->push($attribute);
+        $collection = [$attribute->toArray()];
         $attrSetModel = $this->getMockBuilder(AttributeSetModel::class)
             ->onlyMethods(['findAttributes'])
             ->getMock();
@@ -107,7 +106,7 @@ class AttributeSetBehaviorTest extends TestCase
             ->onlyMethods(['findAttributes'])
             ->getMock();
         $model->expects($this->once())->method('findAttributes')
-            ->willReturn(new Collection());
+            ->willReturn([]);
         $instance = $this->getMockBuilder(AttributeSet::class)
             ->onlyMethods(['makeAttributeSetModel', 'hasContainers', 'hasKey', 'getKey'])
             ->getMock();

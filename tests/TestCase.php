@@ -11,11 +11,13 @@ namespace Tests;
 
 use Drobotik\Eav\Database\Connection;
 use Drobotik\Eav\Factory\EavFactory;
+use Drobotik\Eav\Trait\SingletonsTrait;
 use Faker\Generator;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
 class TestCase extends \PHPUnit\Framework\TestCase
 {
+    use SingletonsTrait;
     protected EavFactory $eavFactory;
     protected Generator $faker;
     protected function setUp() : void

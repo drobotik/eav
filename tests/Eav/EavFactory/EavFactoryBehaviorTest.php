@@ -40,8 +40,8 @@ class EavFactoryBehaviorTest extends TestCase
         $factory->expects($this->never())
             ->method('createAttributeSet');
         $domainKey = $this->eavFactory->createDomain();
-        $attrSet = $this->eavFactory->createAttributeSet($domainKey);
-        $factory->createEntity($domainKey, $attrSet->getKey());
+        $setKey = $this->eavFactory->createAttributeSet($domainKey);
+        $factory->createEntity($domainKey, $setKey);
     }
     /**
      * @test
@@ -68,8 +68,8 @@ class EavFactoryBehaviorTest extends TestCase
             ->getMock();
         $factory->expects($this->never())
             ->method('createAttributeSet');
-        $set = $this->eavFactory->createAttributeSet();
-        $factory->createGroup($set->getKey());
+        $setKey = $this->eavFactory->createAttributeSet();
+        $factory->createGroup($setKey);
     }
     /**
      * @test

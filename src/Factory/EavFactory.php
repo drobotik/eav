@@ -53,8 +53,7 @@ class EavFactory
         }
         if (is_null($setKey))
         {
-            $attrSet = $this->createAttributeSet($domainKey);
-            $setKey = $attrSet->getKey();
+            $setKey = $this->createAttributeSet($domainKey);
         }
         $model = new EntityModel();
         return $model->create([
@@ -63,7 +62,7 @@ class EavFactory
         ]);
     }
 
-    public function createAttributeSet(?int $domainKey = null, array $data = []): AttributeSetModel
+    public function createAttributeSet(?int $domainKey = null, array $data = []): int
     {
         if (is_null($domainKey)) {
             $domainKey = $this->createDomain();
@@ -73,20 +72,16 @@ class EavFactory
         ];
         $input = array_merge($defaultData, $data);
         $model = new AttributeSetModel();
-        $model->setDomainKey($domainKey)
-            ->setName($input[_SET::NAME->column()]);
-        
-        $model->save();
-        $model->refresh();
-
-        return $model;
+        return $model->create([
+            _SET::DOMAIN_ID->column() => $domainKey,
+            _SET::NAME->column() => $input[_SET::NAME->column()]
+        ]);
     }
 
     public function createGroup(?int $setKey = null, array $data = []): AttributeGroupModel
     {
         if (is_null($setKey)) {
-            $set = $this->createAttributeSet();
-            $setKey = $set->getKey();
+            $setKey = $this->createAttributeSet();
         }
         $defaultData = [
             _GROUP::SET_ID->column() => $setKey,

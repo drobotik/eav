@@ -9,67 +9,49 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\Model;
 
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Doctrine\DBAL\Exception;
+use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\_PIVOT;
 use Drobotik\Eav\Enum\_SET;
 
 class AttributeSetModel extends Model
 {
-    public function __construct(array $attributes = [])
+    public function __construct()
     {
-        $this->table = _SET::table();
-        $this->primaryKey = _SET::ID->column();
-        $this->fillable = [
-            _SET::DOMAIN_ID->column(),
-            _SET::NAME->column()
-        ];
-        $this->timestamps = false;
-        parent::__construct($attributes);
+        $this->setTable(_SET::table());
+        $this->setPrimaryKey(_SET::ID->column());
     }
 
-    public function getDomainKey()
+    public function create(array $data) : int
     {
-        return $this->{_SET::DOMAIN_ID->column()};
+        $conn = $this->db();
+        $conn->createQueryBuilder()
+            ->insert($this->getTable())
+            ->values([
+                _SET::DOMAIN_ID->column() => '?',
+                _SET::NAME->column() => '?'
+            ])
+            ->setParameter(0, $data[_SET::DOMAIN_ID->column()])
+            ->setParameter(1, $data[_SET::NAME->column()])
+            ->executeQuery();
+        return (int) $conn->lastInsertId();
     }
 
-    public function setDomainKey(int $key) : self
+    /**
+     * @throws Exception
+     */
+    public function findAttributes(int $key) : array
     {
-        $this->{_SET::DOMAIN_ID->column()} = $key;
-        return $this;
-    }
-
-    public function getName()
-    {
-        return $this->{_SET::NAME->column()};
-    }
-
-    public function setName(string $name) : self
-    {
-        $this->{_SET::NAME->column()} = $name;
-        return $this;
-    }
-
-    public function attributes(): BelongsToMany
-    {
-        return $this->belongsToMany(
-            AttributeModel::class,
-            _PIVOT::table(),
-            _PIVOT::SET_ID->column(),
-            _PIVOT::ATTR_ID->column()
-        );
-    }
-
-    public function firstOrFail(int $key) : AttributeSetModel
-    {
-        return $this
-            ->where(_SET::ID->column(), "=", $key)
-            ->firstOrFail();
-    }
-
-    public function findAttributes(int $key) : Collection
-    {
-        return $this->firstOrFail($key)->attributes()->get();
+        return $this->db()
+            ->createQueryBuilder()
+            ->select('a.*')
+            ->from(_ATTR::table(), 'a')
+            ->innerJoin('a', _PIVOT::table(), 'p',
+                sprintf('a.%s = p.%s', _ATTR::ID->column(), _PIVOT::ATTR_ID->column())
+            )
+            ->where(sprintf('p.%s = ?', _PIVOT::SET_ID->column()))
+            ->setParameter(0, $key)
+            ->executeQuery()
+            ->fetchAllAssociative();
     }
 }

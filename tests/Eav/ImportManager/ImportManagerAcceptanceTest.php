@@ -47,10 +47,8 @@ class ImportManagerAcceptanceTest extends TestCase
     public function import_all_new()
     {
         $domainKey = $this->eavFactory->createDomain();
-        $attrSet = $this->eavFactory->createAttributeSet($domainKey);
-        $group = $this->eavFactory->createGroup($attrSet->getKey());
-
-        $setKey = $attrSet->getKey();
+        $setKey = $this->eavFactory->createAttributeSet($domainKey);
+        $group = $this->eavFactory->createGroup($setKey);
         $groupKey = $group->getKey();
 
         $stringConfig  = new ConfigAttribute();
@@ -259,10 +257,8 @@ class ImportManagerAcceptanceTest extends TestCase
     public function import_new_and_update()
     {
         $domainKey = $this->eavFactory->createDomain();
-        $attrSet = $this->eavFactory->createAttributeSet($domainKey);
-        $group = $this->eavFactory->createGroup($attrSet->getKey());
-
-        $setKey = $attrSet->getKey();
+        $setKey = $this->eavFactory->createAttributeSet($domainKey);
+        $group = $this->eavFactory->createGroup($setKey);
         $groupKey = $group->getKey();
 
         $stringAttribute = $this->eavFactory->createAttribute($domainKey, [

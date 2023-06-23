@@ -36,8 +36,7 @@ class EntityAcceptanceTest extends TestCase
      */
     public function creating_entities() {
         $domainKey = $this->eavFactory->createDomain();
-        $attrSet = $this->eavFactory->createAttributeSet($domainKey);
-        $setKey = $attrSet->getKey();
+        $setKey = $this->eavFactory->createAttributeSet($domainKey);
         $group = $this->eavFactory->createGroup($setKey);
         $stringAttribute = $this->eavFactory->createAttribute($domainKey, [
             _ATTR::NAME->column() => "string",
@@ -76,7 +75,7 @@ class EntityAcceptanceTest extends TestCase
             ];
             $entity = new Entity();
             $entity->setDomainKey($domainKey);
-            $entity->getAttributeSet()->setKey($attrSet->getKey());
+            $entity->getAttributeSet()->setKey($setKey);
             $entity->getBag()->setFields($data);
             $entity->save();
 
@@ -133,8 +132,8 @@ class EntityAcceptanceTest extends TestCase
      */
     public function find_and_update() {
         $domainKey = $this->eavFactory->createDomain();
-        $attrSet = $this->eavFactory->createAttributeSet($domainKey);
-        $group = $this->eavFactory->createGroup($attrSet->getKey());
+        $setKey = $this->eavFactory->createAttributeSet($domainKey);
+        $group = $this->eavFactory->createGroup($setKey);
         $fields = [
             [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
@@ -178,14 +177,14 @@ class EntityAcceptanceTest extends TestCase
             ]
         ];
         /** @var EntityFactoryResult $result */
-        $result = $this->eavFactory->createEavEntity($fields, $domainKey, $attrSet->getKey())->getData();
+        $result = $this->eavFactory->createEavEntity($fields, $domainKey, $setKey)->getData();
         $entityKey = $result->getEntityKey();
 
         $entity = new Entity();
         $entity
             ->setKey($entityKey)
             ->setDomainKey($domainKey)
-            ->getAttributeSet()->setKey($attrSet->getKey());
+            ->getAttributeSet()->setKey($setKey);
         $entity->find();
 
         $stringValue = "new string value";
@@ -234,8 +233,8 @@ class EntityAcceptanceTest extends TestCase
      */
     public function delete() {
         $domainKey = $this->eavFactory->createDomain();
-        $attrSet = $this->eavFactory->createAttributeSet($domainKey);
-        $group = $this->eavFactory->createGroup($attrSet->getKey());
+        $setKey = $this->eavFactory->createAttributeSet($domainKey);
+        $group = $this->eavFactory->createGroup($setKey);
         $fields = [
             [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
@@ -279,14 +278,14 @@ class EntityAcceptanceTest extends TestCase
             ]
         ];
         /** @var EntityFactoryResult $result */
-        $result = $this->eavFactory->createEavEntity($fields, $domainKey, $attrSet->getKey())->getData();
+        $result = $this->eavFactory->createEavEntity($fields, $domainKey, $setKey)->getData();
         $entityKey = $result->getEntityKey();
 
         $entity = new Entity();
         $entity
             ->setKey($entityKey)
             ->setDomainKey($domainKey);
-        $entity->getAttributeSet()->setKey($attrSet->getKey());
+        $entity->getAttributeSet()->setKey($setKey);
 
         $entity->delete();
 
@@ -316,8 +315,8 @@ class EntityAcceptanceTest extends TestCase
      */
     public function find_and_delete() {
         $domainKey = $this->eavFactory->createDomain();
-        $attrSet = $this->eavFactory->createAttributeSet($domainKey);
-        $group = $this->eavFactory->createGroup($attrSet->getKey());
+        $setKey = $this->eavFactory->createAttributeSet($domainKey);
+        $group = $this->eavFactory->createGroup($setKey);
         $fields = [
             [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
@@ -361,14 +360,14 @@ class EntityAcceptanceTest extends TestCase
             ]
         ];
         /** @var EntityFactoryResult $result */
-        $result = $this->eavFactory->createEavEntity($fields, $domainKey, $attrSet->getKey())->getData();
+        $result = $this->eavFactory->createEavEntity($fields, $domainKey, $setKey)->getData();
         $entityKey = $result->getEntityKey();
 
         $entity = new Entity();
         $entity
             ->setKey($entityKey)
             ->setDomainKey($domainKey)
-            ->getAttributeSet()->setKey($attrSet->getKey());
+            ->getAttributeSet()->setKey($setKey);
         $entity->find();
 
         $this->assertSameSize($fields, $entity->toArray());

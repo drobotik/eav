@@ -15,7 +15,6 @@ use Drobotik\Eav\AttributeSet;
 use Drobotik\Eav\AttributeSetAction;
 use Drobotik\Eav\Entity;
 use Drobotik\Eav\EntityBag;
-use Drobotik\Eav\Model\AttributeModel;
 use Drobotik\Eav\Strategy;
 use Drobotik\Eav\Value\ValueManager;
 use PHPUnit\Framework\TestCase;
@@ -77,16 +76,16 @@ class AttributeSetActionBehaviorTest extends TestCase
      * @covers \Drobotik\Eav\AttributeSetAction::initialize
      */
     public function initialize() {
-        $attributeModel = new AttributeModel;
+        $attributeRecord = [123];
         $action = $this->getMockBuilder(AttributeSetAction::class)
             ->onlyMethods(['initializeAttribute','initializeStrategy','initializeValueManager'])
             ->getMock();
         $action->expects($this->once())->method('initializeValueManager');
         $attribute = new Attribute();
         $action->expects($this->once())->method('initializeAttribute')
-            ->with($attributeModel)->willReturn($attribute);
+            ->with($attributeRecord)->willReturn($attribute);
         $action->expects($this->once())->method('initializeStrategy')
             ->with($attribute);
-        $action->initialize($attributeModel);
+        $action->initialize($attributeRecord);
     }
 }

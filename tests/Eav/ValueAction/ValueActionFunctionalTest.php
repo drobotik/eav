@@ -105,10 +105,10 @@ class ValueActionFunctionalTest extends TestCase
     public function find() {
         $domainKey = $this->eavFactory->createDomain();
         $entityKey = $this->eavFactory->createEntity($domainKey);
-        $setModel = $this->eavFactory->createAttributeSet($domainKey);
-        $groupModel = $this->eavFactory->createGroup($setModel->getKey());
+        $setKey = $this->eavFactory->createAttributeSet($domainKey);
+        $groupModel = $this->eavFactory->createGroup($setKey);
         $attributeModel = $this->eavFactory->createAttribute($domainKey);
-        $this->eavFactory->createPivot($domainKey, $setModel->getKey(), $groupModel->getKey(), $attributeModel->getKey());
+        $this->eavFactory->createPivot($domainKey, $setKey, $groupModel->getKey(), $attributeModel->getKey());
         $valueModel = $this->eavFactory->createValue(
             ATTR_TYPE::STRING, $domainKey, $entityKey, $attributeModel->getKey(), "test");
 
@@ -116,7 +116,7 @@ class ValueActionFunctionalTest extends TestCase
         $entity->setKey($entityKey);
         $entity->setDomainKey($domainKey);
         $attrSet = new AttributeSet();
-        $attrSet->setKey($setModel->getKey());
+        $attrSet->setKey($setKey);
         $attrSet->setEntity($entity);
         $attribute = new Attribute();
         $attribute->getBag()->setFields($attributeModel->toArray());

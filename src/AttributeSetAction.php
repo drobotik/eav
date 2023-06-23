@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav;
 
-use Drobotik\Eav\Model\AttributeModel;
 use Drobotik\Eav\Trait\ContainerTrait;
 use Drobotik\Eav\Value\ValueManager;
 
@@ -18,12 +17,11 @@ class AttributeSetAction
 {
     use ContainerTrait;
 
-    public function initializeAttribute(AttributeModel $record): Attribute
+    public function initializeAttribute(array $record): Attribute
     {
         $container = $this->getAttributeContainer();
         $attribute = new Attribute();
-        $data = $record->makeHidden('pivot')->toArray();
-        $attribute->getBag()->setFields($data);
+        $attribute->getBag()->setFields($record);
         $container->setAttribute($attribute);
 
         return $attribute;
@@ -58,9 +56,9 @@ class AttributeSetAction
         return $valueManager;
     }
 
-    public function initialize(AttributeModel $attributeModel): self
+    public function initialize(array $attributeRecord): self
     {
-        $attribute = $this->initializeAttribute($attributeModel);
+        $attribute = $this->initializeAttribute($attributeRecord);
         $this->initializeStrategy($attribute);
         $this->initializeValueManager();
 

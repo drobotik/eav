@@ -35,7 +35,7 @@ class AttributeSetActionFunctionalTest extends TestCase
      */
     public function initialize_attribute() {
         $attribute = $this->eavFactory->createAttribute();
-        $result = $this->action->initializeAttribute($attribute);
+        $result = $this->action->initializeAttribute($attribute->toArray());
         $this->assertInstanceOf(Attribute::class, $result);
         $this->assertEquals($attribute->toArray(),  $result->getBag()->getFields());
         $this->assertSame($result, $this->container->getAttribute());
@@ -47,12 +47,11 @@ class AttributeSetActionFunctionalTest extends TestCase
      */
     public function initialized_attribute_without_pivot() {
         $domainKey = $this->eavFactory->createDomain();
-        $setModel = $this->eavFactory->createAttributeSet($domainKey);
-        $groupModel = $this->eavFactory->createGroup($setModel->getKey());
+        $setKey = $this->eavFactory->createAttributeSet($domainKey);
+        $groupModel = $this->eavFactory->createGroup($setKey);
         $attributeModel = $this->eavFactory->createAttribute($domainKey);
-        $this->eavFactory->createPivot($domainKey, $setModel->getKey(), $groupModel->getKey(), $attributeModel->getKey());
-        $attribute = $setModel->attributes()->get()->first();
-        $result = $this->action->initializeAttribute($attribute);
+        $this->eavFactory->createPivot($domainKey, $setKey, $groupModel->getKey(), $attributeModel->getKey());
+        $result = $this->action->initializeAttribute($attributeModel->toArray());
         $this->assertEquals($attributeModel->toArray(), $result->getBag()->getFields());
         $this->assertSame($result, $this->container->getAttribute());
     }
@@ -75,10 +74,10 @@ class AttributeSetActionFunctionalTest extends TestCase
     public function initialize() {
         $domainKey = $this->eavFactory->createDomain();
         $entityKey = $this->eavFactory->createEntity($domainKey);
-        $setModel = $this->eavFactory->createAttributeSet($domainKey);
-        $groupModel = $this->eavFactory->createGroup($setModel->getKey());
+        $setKey = $this->eavFactory->createAttributeSet($domainKey);
+        $groupModel = $this->eavFactory->createGroup($setKey);
         $attributeModel = $this->eavFactory->createAttribute($domainKey);
-        $this->eavFactory->createPivot($domainKey, $setModel->getKey(), $groupModel->getKey(), $attributeModel->getKey());
+        $this->eavFactory->createPivot($domainKey, $setKey, $groupModel->getKey(), $attributeModel->getKey());
         $valueModel = $this->eavFactory->createValue(
             ATTR_TYPE::STRING, $domainKey, $entityKey, $attributeModel->getKey(), "test");
 
@@ -89,7 +88,7 @@ class AttributeSetActionFunctionalTest extends TestCase
         $attrSet->setEntity($entity);
 
         $this->container->setAttributeSet($attrSet);
-        $this->action->initialize($attributeModel);
+        $this->action->initialize($attributeModel->toArray());
 
         // attribute
         $attribute = $this->container->getAttribute();
