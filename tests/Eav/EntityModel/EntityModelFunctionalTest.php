@@ -72,7 +72,7 @@ class EntityModelFunctionalTest extends TestCase
         $this->assertEquals(1, $result);
 
         $table = _ENTITY::table();
-        $connection = Connection::pdo();
+        $connection = Connection::get()->getNativeConnection();
 
         $stmt = $connection->prepare("SELECT * FROM $table");
         $stmt->execute();
@@ -116,7 +116,7 @@ class EntityModelFunctionalTest extends TestCase
     public function is_service_key()
     {
         $table = _ENTITY::table();
-        $connection = Connection::pdo();
+        $connection = Connection::get()->getNativeConnection();
 
         $domainKey = 1;
         $setKey = 2;
@@ -141,7 +141,7 @@ class EntityModelFunctionalTest extends TestCase
     public function get_by_service_key()
     {
         $table = _ENTITY::table();
-        $connection = Connection::pdo();
+        $connection = Connection::get()->getNativeConnection();
 
         $domainKey = 1;
         $setKey = 2;
@@ -199,7 +199,7 @@ class EntityModelFunctionalTest extends TestCase
     public function existing_service_key()
     {
         $table = _ENTITY::table();
-        $connection = Connection::pdo();
+        $connection = Connection::get()->getNativeConnection();
 
         $domainKey = 1;
         $setKey = 2;

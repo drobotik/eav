@@ -19,9 +19,7 @@ class ConnectionFunctionalTest extends TestCase
     {
         parent::setUp();
         Connection::reset();
-        Connection::resetPdo();
     }
-
     /**
      * @test
      *
@@ -71,52 +69,5 @@ class ConnectionFunctionalTest extends TestCase
         $this->expectException(ConnectionException::class);
         $this->expectExceptionMessage(ConnectionException::UNDEFINED);
         Connection::get();
-    }
-
-    /**
-     * @test
-     *
-     * @group functional
-     *
-     * @covers \Drobotik\Eav\Database\Connection::pdo
-     */
-    public function no_pdo_connection()
-    {
-        $this->expectException(ConnectionException::class);
-        $this->expectExceptionMessage(ConnectionException::UNDEFINED);
-        Connection::pdo();
-    }
-
-    /**
-     * @test
-     *
-     * @group functional
-     *
-     * @covers \Drobotik\Eav\Database\Connection::pdo
-     */
-    public function manual_pdo_connection()
-    {
-        $dsn = dirname(__DIR__, 2) . '/test.sqlite';
-        $connection = Connection::pdo("sqlite:".$dsn);
-        $this->assertInstanceOf(\PDO::class, $connection);
-        $this->assertInstanceOf(\PDO::class, Connection::pdo());
-    }
-
-    /**
-     * @test
-     *
-     * @group functional
-     *
-     * @covers \Drobotik\Eav\Database\Connection::resetPdo
-     * @covers \Drobotik\Eav\Database\Connection::pdo
-     */
-    public function reset_pdo()
-    {
-        $dsn = dirname(__DIR__, 2) . '/test.sqlite';
-        Connection::pdo("sqlite:".$dsn);
-        Connection::resetPdo();
-        $this->expectException(ConnectionException::class);
-        $this->expectExceptionMessage(ConnectionException::UNDEFINED);
-        Connection::pdo();
     }
 }

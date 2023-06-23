@@ -99,7 +99,7 @@ class EntityFactoryFunctionalTest extends TestCase
         $resEntityModel = $result->getEntityModel();
         $this->assertInstanceOf(EntityModel::class, $resEntityModel);
 
-        $conn = Connection::pdo();
+        $conn = Connection::get()->getNativeConnection();
         $sql = sprintf(
             "SELECT * FROM %s WHERE %s = :setKey AND %s = :domainKey",
             _ENTITY::table(),

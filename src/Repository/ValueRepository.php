@@ -53,7 +53,7 @@ class ValueRepository extends BaseRepository
 
     public function bulkCreate(ValueSet $valueSet, int $domainKey): void
     {
-        $pdo = Connection::pdo();
+        $pdo = Connection::get()->getNativeConnection();
 
         $template = "INSERT INTO %s ("._VALUE::DOMAIN_ID->column().","._VALUE::ENTITY_ID->column().","._VALUE::ATTRIBUTE_ID->column().","._VALUE::VALUE->column().")";
 

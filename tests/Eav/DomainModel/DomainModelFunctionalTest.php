@@ -55,7 +55,7 @@ class DomainModelFunctionalTest extends TestCase
         $this->assertEquals(1, $result);
 
         $table = _DOMAIN::table();
-        $connection = Connection::pdo();
+        $connection = Connection::get()->getNativeConnection();
 
         $stmt = $connection->prepare("SELECT * FROM $table");
         $stmt->execute();

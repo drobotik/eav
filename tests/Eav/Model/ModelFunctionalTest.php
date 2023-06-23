@@ -107,7 +107,7 @@ class ModelFunctionalTest extends TestCase
         $this->assertEquals(1, $result);
         $this->assertEquals(1, $this->model->getKey());
 
-        $connection = Connection::pdo();
+        $connection = Connection::get()->getNativeConnection();
 
         $stmt = $connection->prepare("SELECT * FROM $table");
 
@@ -130,7 +130,7 @@ class ModelFunctionalTest extends TestCase
     public function update_record()
     {
         $table = _DOMAIN::table();
-        $connection = Connection::pdo();
+        $connection = Connection::get()->getNativeConnection();
 
         $nameColumn = _DOMAIN::NAME->column();
         $stmt = $connection->prepare("INSERT INTO $table ($nameColumn) VALUES ('Tom')");
@@ -173,7 +173,7 @@ class ModelFunctionalTest extends TestCase
     public function delete_record()
     {
         $table = _DOMAIN::table();
-        $connection = Connection::pdo();
+        $connection = Connection::get()->getNativeConnection();
 
         $nameColumn = _DOMAIN::NAME->column();
         $stmt = $connection->prepare("INSERT INTO $table ($nameColumn) VALUES ('Tom')");
@@ -226,7 +226,7 @@ class ModelFunctionalTest extends TestCase
     public function records_count()
     {
         $table = _DOMAIN::table();
-        $connection = Connection::pdo();
+        $connection = Connection::get()->getNativeConnection();
 
         $nameColumn = _DOMAIN::NAME->column();
         $stmt = $connection->prepare("INSERT INTO $table ($nameColumn) VALUES ('Tom')");
@@ -247,7 +247,7 @@ class ModelFunctionalTest extends TestCase
     public function findMe()
     {
         $table = _DOMAIN::table();
-        $connection = Connection::pdo();
+        $connection = Connection::get()->getNativeConnection();
 
         $idColumn = _DOMAIN::ID->column();
         $nameColumn = _DOMAIN::NAME->column();

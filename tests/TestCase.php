@@ -27,7 +27,6 @@ class TestCase extends \PHPUnit\Framework\TestCase
             'path' => $sqlitePath
         ];
         Connection::get($dbParams);
-        Connection::pdo("sqlite:".$dbParams['path']);
         $capsule = new Capsule;
         $capsule->addConnection([
             'driver'   => 'sqlite',
