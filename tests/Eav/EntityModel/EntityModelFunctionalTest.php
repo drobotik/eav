@@ -90,27 +90,6 @@ class EntityModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\DomainModel::toArray
-     */
-    public function to_array()
-    {
-        $key = 123;
-        $domainKey = 345;
-        $setKey = 567;
-
-        $this->model->setKey($key);
-        $this->model->setDomainKey($domainKey);
-        $this->model->setSetKey($setKey);
-
-        $this->assertEquals([
-            _ENTITY::ID->column() => $key,
-            _ENTITY::DOMAIN_ID->column() => $domainKey,
-            _ENTITY::ATTR_SET_ID->column() => $setKey
-        ], $this->model->toArray());
-    }
-    /**
-     * @test
-     * @group functional
      * @covers \Drobotik\Eav\Model\EntityModel::isServiceKey
      */
     public function is_service_key()

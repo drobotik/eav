@@ -103,18 +103,18 @@ class ValueActionFunctionalTest extends TestCase
      * @covers \Drobotik\Eav\Value\ValueAction::find
      */
     public function find() {
-        $domainModel = $this->eavFactory->createDomain();
-        $entityModel = $this->eavFactory->createEntity($domainModel->getKey());
-        $setModel = $this->eavFactory->createAttributeSet($domainModel->getKey());
+        $domainKey = $this->eavFactory->createDomain();
+        $entityKey = $this->eavFactory->createEntity($domainKey);
+        $setModel = $this->eavFactory->createAttributeSet($domainKey);
         $groupModel = $this->eavFactory->createGroup($setModel->getKey());
-        $attributeModel = $this->eavFactory->createAttribute($domainModel->getKey());
-        $this->eavFactory->createPivot($domainModel->getKey(), $setModel->getKey(), $groupModel->getKey(), $attributeModel->getKey());
+        $attributeModel = $this->eavFactory->createAttribute($domainKey);
+        $this->eavFactory->createPivot($domainKey, $setModel->getKey(), $groupModel->getKey(), $attributeModel->getKey());
         $valueModel = $this->eavFactory->createValue(
-            ATTR_TYPE::STRING, $domainModel->getKey(), $entityModel->getKey(), $attributeModel->getKey(), "test");
+            ATTR_TYPE::STRING, $domainKey, $entityKey, $attributeModel->getKey(), "test");
 
         $entity = new Entity();
-        $entity->setKey($entityModel->getKey());
-        $entity->setDomainKey($domainModel->getKey());
+        $entity->setKey($entityKey);
+        $entity->setDomainKey($domainKey);
         $attrSet = new AttributeSet();
         $attrSet->setKey($setModel->getKey());
         $attrSet->setEntity($entity);

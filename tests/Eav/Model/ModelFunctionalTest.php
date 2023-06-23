@@ -32,11 +32,11 @@ class ModelFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Model\Model::connection
+     * @covers \Drobotik\Eav\Model\Model::db
      */
-    public function connection()
+    public function db()
     {
-        $this->assertInstanceOf(DBALConnection::class, $this->model->connection());
+        $this->assertInstanceOf(DBALConnection::class, $this->model->db());
     }
 
     /**
@@ -105,7 +105,6 @@ class ModelFunctionalTest extends TestCase
         ]);
 
         $this->assertEquals(1, $result);
-        $this->assertEquals(1, $this->model->getKey());
 
         $connection = Connection::get()->getNativeConnection();
 
@@ -201,22 +200,7 @@ class ModelFunctionalTest extends TestCase
         ], $record);
     }
 
-    /**
-     * @test
-     *
-     * @group functional
-     *
-     * @covers \Drobotik\Eav\Model\Model::toArray
-     */
-    public function to_array()
-    {
-        $this->assertEquals([], $this->model->toArray());
 
-        $this->model->setKey(123);
-        $this->model->setKeyName('test');
-
-        $this->assertEquals(['test' => 123], $this->model->toArray());
-    }
 
     /**
      * @test

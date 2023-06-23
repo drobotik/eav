@@ -16,7 +16,7 @@ use Drobotik\Eav\Model\ValueBase;
 
 class EntityFactoryResult
 {
-    private EntityModel $entityModel;
+    private int $entityKey;
     /** @var PivotModel[] */
     private array $pivots = [];
     /** @var AttributeModel[] */
@@ -24,14 +24,14 @@ class EntityFactoryResult
     /** @var ValueBase[] */
     private array $values = [];
 
-    public function setEntityModel(EntityModel $entityModel): void
+    public function setEntityKey(int $entityKey): void
     {
-        $this->entityModel = $entityModel;
+        $this->entityKey = $entityKey;
     }
 
-    public function getEntityModel(): EntityModel
+    public function getEntityKey(): int
     {
-        return $this->entityModel;
+        return $this->entityKey;
     }
 
     public function addAttribute(AttributeModel $attributeModel): void

@@ -26,13 +26,12 @@ class EavFactoryResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\EntityFactoryResult::getEntityModel
-     * @covers \Drobotik\Eav\Result\EntityFactoryResult::setEntityModel
+     * @covers \Drobotik\Eav\Result\EntityFactoryResult::getEntityKey
+     * @covers \Drobotik\Eav\Result\EntityFactoryResult::setEntityKey
      */
     public function entity_model() {
-        $record = new EntityModel();
-        $this->result->setEntityModel($record);
-        $this->assertSame($record, $this->result->getEntityModel());
+        $this->result->setEntityKey(1);
+        $this->assertSame(1, $this->result->getEntityKey());
     }
     /**
      * @test

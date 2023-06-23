@@ -44,8 +44,8 @@ class QueryBuilderRuleAcceptanceTest extends TestCase
      */
     public function make_join()
     {
-        $domain = $this->eavFactory->createDomain();
-        $attributeModel = $this->eavFactory->createAttribute($domain->getKey(), [
+        $domainKey = $this->eavFactory->createDomain();
+        $attributeModel = $this->eavFactory->createAttribute($domainKey, [
             _ATTR::NAME->column() => 'price',
             _ATTR::TYPE->column() => ATTR_TYPE::DECIMAL->value()
         ]);

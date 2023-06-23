@@ -37,8 +37,8 @@ class EntityFactory
         $groupIds = array_flip(array_unique(array_column($fields, ATTR_FACTORY::GROUP->field())));
         $groupRepo->checkIsBelongsTo($setKey, $groupIds);
 
-        $entityRecord = $this->makeEavFactory()->createEntity($domainKey, $setKey);
-        $result->setEntityModel($entityRecord);
+        $entityKey = $this->makeEavFactory()->createEntity($domainKey, $setKey);
+        $result->setEntityKey($entityKey);
 
         foreach ($fields as $field) {
 
@@ -54,7 +54,7 @@ class EntityFactory
             $result->addPivot($attributeRecord->getName(), $pivotRecord);
 
             $valueRecord = isset($field[ATTR_FACTORY::VALUE->field()])
-                ? $valueRepo->updateOrCreate($domainKey, $entityRecord->getKey(), $attrKey, $type, $field[ATTR_FACTORY::VALUE->field()])
+                ? $valueRepo->updateOrCreate($domainKey, $entityKey, $attrKey, $type, $field[ATTR_FACTORY::VALUE->field()])
                 : null;
 
             if(!is_null($valueRecord)) {

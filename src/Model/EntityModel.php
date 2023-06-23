@@ -21,7 +21,6 @@ class EntityModel extends Model
     private int $domainKey;
     private int $setKey;
 
-
     public function __construct()
     {
         $this->setTable(_ENTITY::table());
@@ -68,7 +67,7 @@ class EntityModel extends Model
 
     public function toArray(): array
     {
-        $result = parent::toArray();
+        $result = [];
         if(isset($this->domainKey))
             $result[_ENTITY::DOMAIN_ID->column()] = $this->getDomainKey();
         if(isset($this->setKey))
@@ -81,7 +80,7 @@ class EntityModel extends Model
         $table = $this->getTable();
         $serviceKeyCol = _ENTITY::SERVICE_KEY->column();
 
-        $conn = $this->connection()->getNativeConnection();
+        $conn = $this->db()->getNativeConnection();
 
         $stmt = $conn->prepare("SELECT count(*) as c FROM $table WHERE $serviceKeyCol = :key");
         $stmt->bindParam(':key', $key);
@@ -97,7 +96,7 @@ class EntityModel extends Model
         $table = $this->getTable();
         $serviceKeyCol = _ENTITY::SERVICE_KEY->column();
 
-        $conn = $this->connection()->getNativeConnection();;
+        $conn = $this->db()->getNativeConnection();;
 
         $stmt = $conn->prepare("SELECT * FROM $table WHERE $serviceKeyCol = :key");
         $stmt->bindParam(':key', $key);
@@ -125,14 +124,14 @@ class EntityModel extends Model
             implode(',',$bulk)
         );
 
-        $conn = $this->connection()->getNativeConnection();
+        $conn = $this->db()->getNativeConnection();
 
         $conn->exec($template);
     }
 
     public function getBySetAndDomain() : array
     {
-        return $this->queryBuilder()
+        return $this->db()->createQueryBuilder()
             ->select('*')
             ->from(_ENTITY::table())
             ->where(sprintf('%s = %s', _ENTITY::DOMAIN_ID->column(), $this->getDomainKey()))

@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\Model;
 
-use Doctrine\DBAL\Query\QueryBuilder;
 use Drobotik\Eav\Database\Connection;
 use Doctrine\DBAL\Connection as DBALConnection;
 use PDO;
@@ -21,14 +20,9 @@ class Model
 
     protected string $table;
 
-    public function connection() : DBALConnection
+    public function db() : DBALConnection
     {
         return Connection::get();
-    }
-
-    public function queryBuilder() : QueryBuilder
-    {
-        return Connection::get()->createQueryBuilder();
     }
 
     public function isKey() : bool
@@ -68,7 +62,7 @@ class Model
 
     public function insert(array $data): int
     {
-        $conn = $this->connection()->getNativeConnection();
+        $conn = $this->db()->getNativeConnection();
         $table = $this->getTable();
 
         // Extract the column names and values from the data array
@@ -83,10 +77,7 @@ class Model
         }
         $stmt->execute();
 
-        $key = (int) $conn->lastInsertId();
-        $this->setKey($key);
-
-        return $key;
+        return (int) $conn->lastInsertId();
     }
 
     public function update(array $data) : bool
@@ -94,7 +85,7 @@ class Model
         $key =  $this->getKey();
         $keyName = $this->getKeyName();
 
-        $conn = $this->connection()->getNativeConnection();
+        $conn = $this->db()->getNativeConnection();
         $table = $this->getTable();
 
         // Prepare the update statement
@@ -120,7 +111,7 @@ class Model
         $key =  $this->getKey();
         $keyName = $this->getKeyName();
 
-        $conn = $this->connection()->getNativeConnection();
+        $conn = $this->db()->getNativeConnection();
         $table = $this->getTable();
 
         $stmt = $conn->prepare("DELETE FROM $table WHERE $keyName = :key");
@@ -129,19 +120,9 @@ class Model
         return $stmt->execute();
     }
 
-    public function toArray() : array
-    {
-        $result = [];
-        if($this->isKey())
-        {
-            $result[$this->getKeyName()] = $this->getKey();
-        }
-        return $result;
-    }
-
     public function count() : int
     {
-        $conn = $this->connection()->getNativeConnection();
+        $conn = $this->db()->getNativeConnection();
         $table = $this->getTable();
         $stmt = $conn->prepare("SELECT COUNT(*) as count FROM $table");
         $stmt->execute();
@@ -151,7 +132,7 @@ class Model
 
     public function findMe() : array|false
     {
-        $conn = $this->connection()->getNativeConnection();
+        $conn = $this->db()->getNativeConnection();
         $table = $this->getTable();
         $key = $this->getKey();
         $keyName = $this->getKeyName();

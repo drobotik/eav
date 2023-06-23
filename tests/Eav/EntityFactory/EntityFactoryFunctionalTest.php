@@ -92,12 +92,10 @@ class EntityFactoryFunctionalTest extends TestCase
      * @covers \Drobotik\Eav\Factory\EntityFactory::create
      */
     public function create_entity() {
-        $domain = $this->eavFactory->createDomain();
-        $set = $this->eavFactory->createAttributeSet($domain->getKey());
-        $result = $this->factory->create([], $domain->getKey(), $set->getKey());
+        $domainKey = $this->eavFactory->createDomain();
+        $set = $this->eavFactory->createAttributeSet($domainKey);
+        $result = $this->factory->create([], $domainKey, $set->getKey());
         $this->assertInstanceOf(EntityFactoryResult::class, $result);
-        $resEntityModel = $result->getEntityModel();
-        $this->assertInstanceOf(EntityModel::class, $resEntityModel);
 
         $conn = Connection::get()->getNativeConnection();
         $sql = sprintf(
@@ -108,7 +106,7 @@ class EntityFactoryFunctionalTest extends TestCase
         );
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':setKey', $set->getKey());
-        $stmt->bindValue(':domainKey', $domain->getKey());
+        $stmt->bindValue(':domainKey', $domainKey);
         $stmt->execute();
 
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -117,7 +115,7 @@ class EntityFactoryFunctionalTest extends TestCase
 
         $this->assertEquals([
             _ENTITY::ID->column() => 1,
-            _ENTITY::DOMAIN_ID->column() => $domain->getKey(),
+            _ENTITY::DOMAIN_ID->column() => $domainKey,
             _ENTITY::ATTR_SET_ID->column() => $set->getKey(),
             _ENTITY::SERVICE_KEY->column() => null
         ], $result[0]);
@@ -133,10 +131,10 @@ class EntityFactoryFunctionalTest extends TestCase
     public function create_attributes_no_group_exception() {
         $this->expectException(EntityFactoryException::class);
         $this->expectExceptionMessage("Group key must be provided!");
-        $domain = $this->eavFactory->createDomain();
-        $set = $this->eavFactory->createAttributeSet($domain->getKey());
+        $domainKey = $this->eavFactory->createDomain();
+        $set = $this->eavFactory->createAttributeSet($domainKey);
         $config = $this->getFactoryDefaultConfig();
-        $this->factory->create($config, $domain->getKey(), $set->getKey());
+        $this->factory->create($config, $domainKey, $set->getKey());
     }
 
     /**
@@ -149,8 +147,8 @@ class EntityFactoryFunctionalTest extends TestCase
     public function create_attributes_not_existing_group_exception() {
         $this->expectException(EntityFactoryException::class);
         $this->expectExceptionMessage('Groups not found');
-        $domain = $this->eavFactory->createDomain();
-        $set = $this->eavFactory->createAttributeSet($domain->getKey());
+        $domainKey = $this->eavFactory->createDomain();
+        $set = $this->eavFactory->createAttributeSet($domainKey);
         $config = $this->getFactoryDefaultConfig();
         $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::GROUP->field()] = 1;
         $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::GROUP->field()] = 2;
@@ -158,7 +156,7 @@ class EntityFactoryFunctionalTest extends TestCase
         $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::GROUP->field()] = 4;
         $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::GROUP->field()] = 5;
 
-        $this->factory->create($config, $domain->getKey(), $set->getKey());
+        $this->factory->create($config, $domainKey, $set->getKey());
     }
 
     /**
@@ -169,8 +167,8 @@ class EntityFactoryFunctionalTest extends TestCase
      * @covers \Drobotik\Eav\Factory\EntityFactory::create
      */
     public function create_attributes() {
-        $domain = $this->eavFactory->createDomain();
-        $set = $this->eavFactory->createAttributeSet($domain->getKey());
+        $domainKey = $this->eavFactory->createDomain();
+        $set = $this->eavFactory->createAttributeSet($domainKey);
         $group = $this->eavFactory->createGroup($set->getKey());
 
         $config = $this->getFactoryDefaultConfig();
@@ -180,7 +178,7 @@ class EntityFactoryFunctionalTest extends TestCase
         $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::GROUP->field()] = $group->getKey();
         $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::GROUP->field()] = $group->getKey();
 
-        $result = $this->factory->create($config, $domain->getKey(), $set->getKey());
+        $result = $this->factory->create($config, $domainKey, $set->getKey());
 
         // check attributes created
         /** @var AttributeModel $string */
@@ -188,19 +186,19 @@ class EntityFactoryFunctionalTest extends TestCase
         /** @var AttributeModel $decimal */
         /** @var AttributeModel $datetime */
         /** @var AttributeModel $text */
-        $string = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
+        $string = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domainKey)
             ->where(_ATTR::TYPE->column(), ATTR_TYPE::STRING->value())
             ->where(_ATTR::NAME->column(), ATTR_TYPE::STRING->value())->first();
-        $integer = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
+        $integer = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domainKey)
             ->where(_ATTR::TYPE->column(), ATTR_TYPE::INTEGER->value())
             ->where(_ATTR::NAME->column(), ATTR_TYPE::INTEGER->value())->first();
-        $decimal = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
+        $decimal = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domainKey)
             ->where(_ATTR::TYPE->column(), ATTR_TYPE::DECIMAL->value())
             ->where(_ATTR::NAME->column(), ATTR_TYPE::DECIMAL->value())->first();
-        $datetime = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
+        $datetime = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domainKey)
             ->where(_ATTR::TYPE->column(), ATTR_TYPE::DATETIME->value())
             ->where(_ATTR::NAME->column(), ATTR_TYPE::DATETIME->value())->first();
-        $text = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
+        $text = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domainKey)
             ->where(_ATTR::TYPE->column(), ATTR_TYPE::TEXT->value())
             ->where(_ATTR::NAME->column(), ATTR_TYPE::TEXT->value())->first();
 
@@ -235,8 +233,8 @@ class EntityFactoryFunctionalTest extends TestCase
     public function create_attribute_array_not_provided() {
         $this->expectException(EntityFactoryException::class);
         $this->expectExceptionMessage(EntityFactoryException::UNDEFINED_ATTRIBUTE_ARRAY);
-        $domain = $this->eavFactory->createDomain();
-        $set = $this->eavFactory->createAttributeSet($domain->getKey());
+        $domainKey = $this->eavFactory->createDomain();
+        $set = $this->eavFactory->createAttributeSet($domainKey);
         $group = $this->eavFactory->createGroup($set->getKey());
 
         $config = $this->getFactoryDefaultConfig();
@@ -244,7 +242,7 @@ class EntityFactoryFunctionalTest extends TestCase
         $field[ATTR_FACTORY::GROUP->field()] = $group->getKey();
         unset($field[ATTR_FACTORY::ATTRIBUTE->field()]);
 
-        $this->factory->create([$field], $domain->getKey(), $set->getKey());
+        $this->factory->create([$field], $domainKey, $set->getKey());
     }
 
     /**
@@ -257,8 +255,8 @@ class EntityFactoryFunctionalTest extends TestCase
     public function create_attribute_name_not_provided() {
         $this->expectException(AttributeException::class);
         $this->expectExceptionMessage(sprintf(AttributeException::UNDEFINED_NAME));
-        $domain = $this->eavFactory->createDomain();
-        $set = $this->eavFactory->createAttributeSet($domain->getKey());
+        $domainKey = $this->eavFactory->createDomain();
+        $set = $this->eavFactory->createAttributeSet($domainKey);
         $group = $this->eavFactory->createGroup($set->getKey());
 
         $config = $this->getFactoryDefaultConfig();
@@ -266,7 +264,7 @@ class EntityFactoryFunctionalTest extends TestCase
         $field[ATTR_FACTORY::GROUP->field()] = $group->getKey();
         unset($field[ATTR_FACTORY::ATTRIBUTE->field()][_ATTR::NAME->column()]);
 
-        $this->factory->create([$field], $domain->getKey(), $set->getKey());
+        $this->factory->create([$field], $domainKey, $set->getKey());
     }
 
     /**
@@ -279,8 +277,8 @@ class EntityFactoryFunctionalTest extends TestCase
     public function create_attribute_type_not_provided() {
         $this->expectException(AttributeException::class);
         $this->expectExceptionMessage(sprintf(AttributeException::UNDEFINED_TYPE));
-        $domain = $this->eavFactory->createDomain();
-        $set = $this->eavFactory->createAttributeSet($domain->getKey());
+        $domainKey = $this->eavFactory->createDomain();
+        $set = $this->eavFactory->createAttributeSet($domainKey);
         $group = $this->eavFactory->createGroup($set->getKey());
 
         $config = $this->getFactoryDefaultConfig();
@@ -288,7 +286,7 @@ class EntityFactoryFunctionalTest extends TestCase
         $field[ATTR_FACTORY::GROUP->field()] = $group->getKey();
         unset($field[ATTR_FACTORY::ATTRIBUTE->field()][_ATTR::TYPE->column()]);
 
-        $this->factory->create([$field], $domain->getKey(), $set->getKey());
+        $this->factory->create([$field], $domainKey, $set->getKey());
     }
 
     /**
@@ -301,8 +299,8 @@ class EntityFactoryFunctionalTest extends TestCase
     public function create_attribute_type_not_supported() {
         $this->expectException(AttributeException::class);
         $this->expectExceptionMessage(sprintf(AttributeException::UNSUPPORTED_TYPE, 'test'));
-        $domain = $this->eavFactory->createDomain();
-        $set = $this->eavFactory->createAttributeSet($domain->getKey());
+        $domainKey = $this->eavFactory->createDomain();
+        $set = $this->eavFactory->createAttributeSet($domainKey);
         $group = $this->eavFactory->createGroup($set->getKey());
 
         $config = $this->getFactoryDefaultConfig();
@@ -310,7 +308,7 @@ class EntityFactoryFunctionalTest extends TestCase
         $field[ATTR_FACTORY::GROUP->field()] = $group->getKey();
         $field[ATTR_FACTORY::ATTRIBUTE->field()][_ATTR::TYPE->column()] = "test";
 
-        $this->factory->create([$field], $domain->getKey(), $set->getKey());
+        $this->factory->create([$field], $domainKey, $set->getKey());
     }
 
     /**
@@ -321,8 +319,8 @@ class EntityFactoryFunctionalTest extends TestCase
      * @covers \Drobotik\Eav\Factory\EntityFactory::create
      */
     public function create_pivot_table_rows() {
-        $domain = $this->eavFactory->createDomain();
-        $set = $this->eavFactory->createAttributeSet($domain->getKey());
+        $domainKey = $this->eavFactory->createDomain();
+        $set = $this->eavFactory->createAttributeSet($domainKey);
         $groupOne = $this->eavFactory->createGroup($set->getKey());
         $groupTwo = $this->eavFactory->createGroup($set->getKey());
 
@@ -333,26 +331,26 @@ class EntityFactoryFunctionalTest extends TestCase
         $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::GROUP->field()] = $groupTwo->getKey();
         $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::GROUP->field()] = $groupTwo->getKey();
 
-        $result = $this->factory->create($config, $domain->getKey(), $set->getKey());
+        $result = $this->factory->create($config, $domainKey, $set->getKey());
 
         /** @var AttributeModel $string */
         /** @var AttributeModel $integer */
         /** @var AttributeModel $decimal */
         /** @var AttributeModel $datetime */
         /** @var AttributeModel $text */
-        $string = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
+        $string = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domainKey)
             ->where(_ATTR::TYPE->column(), ATTR_TYPE::STRING->value())
             ->where(_ATTR::NAME->column(), ATTR_TYPE::STRING->value())->firstOrFail();
-        $integer = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
+        $integer = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domainKey)
             ->where(_ATTR::TYPE->column(), ATTR_TYPE::INTEGER->value())
             ->where(_ATTR::NAME->column(), ATTR_TYPE::INTEGER->value())->firstOrFail();
-        $decimal = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
+        $decimal = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domainKey)
             ->where(_ATTR::TYPE->column(), ATTR_TYPE::DECIMAL->value())
             ->where(_ATTR::NAME->column(), ATTR_TYPE::DECIMAL->value())->firstOrFail();
-        $datetime = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
+        $datetime = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domainKey)
             ->where(_ATTR::TYPE->column(), ATTR_TYPE::DATETIME->value())
             ->where(_ATTR::NAME->column(), ATTR_TYPE::DATETIME->value())->firstOrFail();
-        $text = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
+        $text = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domainKey)
             ->where(_ATTR::TYPE->column(), ATTR_TYPE::TEXT->value())
             ->where(_ATTR::NAME->column(), ATTR_TYPE::TEXT->value())->firstOrFail();
 
@@ -361,23 +359,23 @@ class EntityFactoryFunctionalTest extends TestCase
         /** @var PivotModel $decimalPivot */
         /** @var PivotModel $datetimePivot */
         /** @var PivotModel $textPivot */
-        $stringPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domain->getKey())
+        $stringPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
             ->where(_PIVOT::SET_ID->column(), $set->getKey())
             ->where(_PIVOT::GROUP_ID->column(), $groupOne->getKey())
             ->where(_PIVOT::ATTR_ID->column(), $string->getKey())->first();
-        $integerPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domain->getKey())
+        $integerPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
             ->where(_PIVOT::SET_ID->column(), $set->getKey())
             ->where(_PIVOT::GROUP_ID->column(), $groupOne->getKey())
             ->where(_PIVOT::ATTR_ID->column(), $integer->getKey())->first();
-        $decimalPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domain->getKey())
+        $decimalPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
             ->where(_PIVOT::SET_ID->column(), $set->getKey())
             ->where(_PIVOT::GROUP_ID->column(), $groupOne->getKey())
             ->where(_PIVOT::ATTR_ID->column(), $decimal->getKey())->first();
-        $datetimePivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domain->getKey())
+        $datetimePivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
             ->where(_PIVOT::SET_ID->column(), $set->getKey())
             ->where(_PIVOT::GROUP_ID->column(), $groupTwo->getKey())
             ->where(_PIVOT::ATTR_ID->column(), $datetime->getKey())->first();
-        $textPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domain->getKey())
+        $textPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
             ->where(_PIVOT::SET_ID->column(), $set->getKey())
             ->where(_PIVOT::GROUP_ID->column(), $groupTwo->getKey())
             ->where(_PIVOT::ATTR_ID->column(), $text->getKey())->first();
@@ -405,8 +403,8 @@ class EntityFactoryFunctionalTest extends TestCase
      * @covers \Drobotik\Eav\Factory\EntityFactory::create
      */
     public function create_values() {
-        $domain = $this->eavFactory->createDomain();
-        $set = $this->eavFactory->createAttributeSet($domain->getKey());
+        $domainKey = $this->eavFactory->createDomain();
+        $set = $this->eavFactory->createAttributeSet($domainKey);
         $groupOne = $this->eavFactory->createGroup($set->getKey());
         $groupTwo = $this->eavFactory->createGroup($set->getKey());
 
@@ -429,8 +427,8 @@ class EntityFactoryFunctionalTest extends TestCase
         $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::VALUE->field()] = $datetimeValue;
         $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::VALUE->field()] = $textValue;
 
-        $result = $this->factory->create($config, $domain->getKey(), $set->getKey());
-        $entityModel = $result->getEntityModel();
+        $result = $this->factory->create($config, $domainKey, $set->getKey());
+        $entityKey = $result->getEntityKey();
         $attributes = $result->getAttributes();
 
         // check values created
@@ -439,24 +437,24 @@ class EntityFactoryFunctionalTest extends TestCase
         /** @var ValueDecimalModel $decimal */
         /** @var ValueDatetimeModel $datetime */
         /** @var ValueTextModel $text */
-        $string = ValueStringModel::where(_VALUE::DOMAIN_ID->column(), $domain->getKey())
-            ->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())
+        $string = ValueStringModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
+            ->where(_VALUE::ENTITY_ID->column(), $entityKey)
             ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::STRING->value()]->getKey())
             ->first();
-        $integer = ValueIntegerModel::where(_VALUE::DOMAIN_ID->column(), $domain->getKey())
-            ->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())
+        $integer = ValueIntegerModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
+            ->where(_VALUE::ENTITY_ID->column(), $entityKey)
             ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::INTEGER->value()]->getKey())
             ->first();
-        $decimal = ValueDecimalModel::where(_VALUE::DOMAIN_ID->column(), $domain->getKey())
-            ->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())
+        $decimal = ValueDecimalModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
+            ->where(_VALUE::ENTITY_ID->column(), $entityKey)
             ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::DECIMAL->value()]->getKey())
             ->first();
-        $datetime = ValueDatetimeModel::where(_VALUE::DOMAIN_ID->column(), $domain->getKey())
-            ->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())
+        $datetime = ValueDatetimeModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
+            ->where(_VALUE::ENTITY_ID->column(), $entityKey)
             ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::DATETIME->value()]->getKey())
             ->first();
-        $text = ValueTextModel::where(_VALUE::DOMAIN_ID->column(), $domain->getKey())
-            ->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())
+        $text = ValueTextModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
+            ->where(_VALUE::ENTITY_ID->column(), $entityKey)
             ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::TEXT->value()]->getKey())
             ->first();
 
@@ -489,8 +487,8 @@ class EntityFactoryFunctionalTest extends TestCase
      * @covers \Drobotik\Eav\Factory\EntityFactory::create
      */
     public function create_skip_creating_values() {
-        $domain = $this->eavFactory->createDomain();
-        $set = $this->eavFactory->createAttributeSet($domain->getKey());
+        $domainKey = $this->eavFactory->createDomain();
+        $set = $this->eavFactory->createAttributeSet($domainKey);
         $groupOne = $this->eavFactory->createGroup($set->getKey());
 
         $config = $this->getFactoryDefaultConfig();
@@ -500,8 +498,8 @@ class EntityFactoryFunctionalTest extends TestCase
         $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::GROUP->field()] = $groupOne->getKey();
         $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::GROUP->field()] = $groupOne->getKey();
 
-        $result = $this->factory->create($config, $domain->getKey(), $set->getKey());
-        $entityModel = $result->getEntityModel();
+        $result = $this->factory->create($config, $domainKey, $set->getKey());
+        $entityKey = $result->getEntityKey();
         $attributes = $result->getAttributes();
 
         // check values created
@@ -510,24 +508,24 @@ class EntityFactoryFunctionalTest extends TestCase
         /** @var ValueDecimalModel $decimal */
         /** @var ValueDatetimeModel $datetime */
         /** @var ValueTextModel $text */
-        $string = ValueStringModel::where(_VALUE::DOMAIN_ID->column(), $domain->getKey())
-            ->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())
+        $string = ValueStringModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
+            ->where(_VALUE::ENTITY_ID->column(), $entityKey)
             ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::STRING->value()]->getKey())
             ->first();
-        $integer = ValueIntegerModel::where(_VALUE::DOMAIN_ID->column(), $domain->getKey())
-            ->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())
+        $integer = ValueIntegerModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
+            ->where(_VALUE::ENTITY_ID->column(), $entityKey)
             ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::INTEGER->value()]->getKey())
             ->first();
-        $decimal = ValueDecimalModel::where(_VALUE::DOMAIN_ID->column(), $domain->getKey())
-            ->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())
+        $decimal = ValueDecimalModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
+            ->where(_VALUE::ENTITY_ID->column(), $entityKey)
             ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::DECIMAL->value()]->getKey())
             ->first();
-        $datetime = ValueDatetimeModel::where(_VALUE::DOMAIN_ID->column(), $domain->getKey())
-            ->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())
+        $datetime = ValueDatetimeModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
+            ->where(_VALUE::ENTITY_ID->column(), $entityKey)
             ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::DATETIME->value()]->getKey())
             ->first();
-        $text = ValueTextModel::where(_VALUE::DOMAIN_ID->column(), $domain->getKey())
-            ->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())
+        $text = ValueTextModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
+            ->where(_VALUE::ENTITY_ID->column(), $entityKey)
             ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::TEXT->value()]->getKey())
             ->first();
 

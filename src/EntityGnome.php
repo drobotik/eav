@@ -51,8 +51,8 @@ class EntityGnome
             $model = $this->makeEntityModel();
             $model->setDomainKey($domainKey);
             $model->setSetKey($setKey);
-            $model->create();
-            $entity->setKey($model->getKey());
+            $key = $model->create();
+            $entity->setKey($key);
 
             return 1;
         }

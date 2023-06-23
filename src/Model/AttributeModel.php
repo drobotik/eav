@@ -34,11 +34,6 @@ class AttributeModel extends Model
         parent::__construct($attributes);
     }
 
-    public function domain(): BelongsTo
-    {
-        return $this->belongsTo(DomainModel::class, _ATTR::DOMAIN_ID->column(), _DOMAIN::ID->column());
-    }
-
     public function getDomainKey()
     {
         return $this->{_ATTR::DOMAIN_ID->column()};

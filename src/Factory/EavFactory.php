@@ -34,25 +34,21 @@ class EavFactory
         $this->faker = \Faker\Factory::create();
     }
 
-    public function createDomain(array $data = []): DomainModel
+    public function createDomain(array $data = []): int
     {
         $defaultData = [
             _DOMAIN::NAME->column() => $this->faker->word(),
         ];
         $input = array_merge($defaultData, $data);
         $model = new DomainModel();
-        $model->setName($input[_DOMAIN::NAME->column()]);
-        $model->create();
-
-        return $model;
+        return $model->create($input);
     }
 
-    public function createEntity(?int $domainKey = null, ?int $setKey = null): EntityModel
+    public function createEntity(?int $domainKey = null, ?int $setKey = null): int
     {
         if (is_null($domainKey))
         {
-            $domain = $this->createDomain();
-            $domainKey = $domain->getKey();
+            $domainKey = $this->createDomain();
         }
         if (is_null($setKey))
         {
@@ -62,16 +58,13 @@ class EavFactory
         $model = new EntityModel();
         $model->setDomainKey($domainKey);
         $model->setSetKey($setKey);
-        $model->create();
-
-        return $model;
+        return $model->create();
     }
 
     public function createAttributeSet(?int $domainKey = null, array $data = []): AttributeSetModel
     {
         if (is_null($domainKey)) {
-            $domain = $this->createDomain();
-            $domainKey = $domain->getKey();
+            $domainKey = $this->createDomain();
         }
         $defaultData = [
             _SET::NAME->column() => $this->faker->word(),
@@ -111,8 +104,7 @@ class EavFactory
     public function createAttribute(?int $domainKey = null, array $data = []): AttributeModel
     {
         if (is_null($domainKey)) {
-            $domain = $this->createDomain();
-            $domainKey = $domain->getKey();
+            $domainKey = $this->createDomain();
         }
         $defaultData = [
             _ATTR::DOMAIN_ID->column() => $domainKey,

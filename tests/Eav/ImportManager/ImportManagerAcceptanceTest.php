@@ -46,11 +46,10 @@ class ImportManagerAcceptanceTest extends TestCase
      */
     public function import_all_new()
     {
-        $domain = $this->eavFactory->createDomain();
-        $attrSet = $this->eavFactory->createAttributeSet($domain->getKey());
+        $domainKey = $this->eavFactory->createDomain();
+        $attrSet = $this->eavFactory->createAttributeSet($domainKey);
         $group = $this->eavFactory->createGroup($attrSet->getKey());
 
-        $domainKey = $domain->getKey();
         $setKey = $attrSet->getKey();
         $groupKey = $group->getKey();
 
@@ -129,19 +128,19 @@ class ImportManagerAcceptanceTest extends TestCase
         /** @var AttributeModel $decimal */
         /** @var AttributeModel $datetime */
         /** @var AttributeModel $text */
-        $string = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
+        $string = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domainKey)
             ->where(_ATTR::TYPE->column(), ATTR_TYPE::STRING->value())
             ->where(_ATTR::NAME->column(), ATTR_TYPE::STRING->value())->first();
-        $integer = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
+        $integer = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domainKey)
             ->where(_ATTR::TYPE->column(), ATTR_TYPE::INTEGER->value())
             ->where(_ATTR::NAME->column(), ATTR_TYPE::INTEGER->value())->first();
-        $decimal = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
+        $decimal = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domainKey)
             ->where(_ATTR::TYPE->column(), ATTR_TYPE::DECIMAL->value())
             ->where(_ATTR::NAME->column(), ATTR_TYPE::DECIMAL->value())->first();
-        $datetime = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
+        $datetime = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domainKey)
             ->where(_ATTR::TYPE->column(), ATTR_TYPE::DATETIME->value())
             ->where(_ATTR::NAME->column(), ATTR_TYPE::DATETIME->value())->first();
-        $text = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
+        $text = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domainKey)
             ->where(_ATTR::TYPE->column(), ATTR_TYPE::TEXT->value())
             ->where(_ATTR::NAME->column(), ATTR_TYPE::TEXT->value())->first();
 
@@ -157,23 +156,23 @@ class ImportManagerAcceptanceTest extends TestCase
         /** @var PivotModel $decimalPivot */
         /** @var PivotModel $datetimePivot */
         /** @var PivotModel $textPivot */
-        $stringPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domain->getKey())
+        $stringPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
             ->where(_PIVOT::SET_ID->column(), $setKey)
             ->where(_PIVOT::GROUP_ID->column(), $groupKey)
             ->where(_PIVOT::ATTR_ID->column(), $string->getKey())->first();
-        $integerPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domain->getKey())
+        $integerPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
             ->where(_PIVOT::SET_ID->column(), $setKey)
             ->where(_PIVOT::GROUP_ID->column(), $groupKey)
             ->where(_PIVOT::ATTR_ID->column(), $integer->getKey())->first();
-        $decimalPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domain->getKey())
+        $decimalPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
             ->where(_PIVOT::SET_ID->column(), $setKey)
             ->where(_PIVOT::GROUP_ID->column(), $groupKey)
             ->where(_PIVOT::ATTR_ID->column(), $decimal->getKey())->first();
-        $datetimePivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domain->getKey())
+        $datetimePivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
             ->where(_PIVOT::SET_ID->column(), $setKey)
             ->where(_PIVOT::GROUP_ID->column(), $groupKey)
             ->where(_PIVOT::ATTR_ID->column(), $datetime->getKey())->first();
-        $textPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domain->getKey())
+        $textPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
             ->where(_PIVOT::SET_ID->column(), $setKey)
             ->where(_PIVOT::GROUP_ID->column(), $groupKey)
             ->where(_PIVOT::ATTR_ID->column(), $text->getKey())->first();
@@ -213,23 +212,23 @@ class ImportManagerAcceptanceTest extends TestCase
             /** @var ValueDecimalModel $decimalValue */
             /** @var ValueDatetimeModel $datetimeValue */
             /** @var ValueTextModel $textValue */
-            $stringValue = ValueStringModel::where(_VALUE::DOMAIN_ID->column(), $domain->getKey())
+            $stringValue = ValueStringModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
                 ->where(_VALUE::ENTITY_ID->column(), $entityKey)
                 ->where(_VALUE::ATTRIBUTE_ID->column(), $string->getKey())
                 ->first();
-            $integerValue = ValueIntegerModel::where(_VALUE::DOMAIN_ID->column(), $domain->getKey())
+            $integerValue = ValueIntegerModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
                 ->where(_VALUE::ENTITY_ID->column(), $entityKey)
                 ->where(_VALUE::ATTRIBUTE_ID->column(), $integer->getKey())
                 ->first();
-            $decimalValue = ValueDecimalModel::where(_VALUE::DOMAIN_ID->column(), $domain->getKey())
+            $decimalValue = ValueDecimalModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
                 ->where(_VALUE::ENTITY_ID->column(), $entityKey)
                 ->where(_VALUE::ATTRIBUTE_ID->column(), $decimal->getKey())
                 ->first();
-            $datetimeValue = ValueDatetimeModel::where(_VALUE::DOMAIN_ID->column(), $domain->getKey())
+            $datetimeValue = ValueDatetimeModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
                 ->where(_VALUE::ENTITY_ID->column(), $entityKey)
                 ->where(_VALUE::ATTRIBUTE_ID->column(), $datetime->getKey())
                 ->first();
-            $textValue = ValueTextModel::where(_VALUE::DOMAIN_ID->column(), $domain->getKey())
+            $textValue = ValueTextModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
                 ->where(_VALUE::ENTITY_ID->column(), $entityKey)
                 ->where(_VALUE::ATTRIBUTE_ID->column(), $text->getKey())
                 ->first();
@@ -259,11 +258,10 @@ class ImportManagerAcceptanceTest extends TestCase
      */
     public function import_new_and_update()
     {
-        $domain = $this->eavFactory->createDomain();
-        $attrSet = $this->eavFactory->createAttributeSet($domain->getKey());
+        $domainKey = $this->eavFactory->createDomain();
+        $attrSet = $this->eavFactory->createAttributeSet($domainKey);
         $group = $this->eavFactory->createGroup($attrSet->getKey());
 
-        $domainKey = $domain->getKey();
         $setKey = $attrSet->getKey();
         $groupKey = $group->getKey();
 
@@ -283,8 +281,7 @@ class ImportManagerAcceptanceTest extends TestCase
         $oldValues = [];
         for($i=0; $i<6; $i++)
         {
-            $entityModel = $this->eavFactory->createEntity($domainKey, $setKey);
-            $entityKey = $entityModel->getKey();
+            $entityKey = $this->eavFactory->createEntity($domainKey, $setKey);
             $stringValue = $this->eavFactory->createValue(
                 ATTR_TYPE::STRING, $domainKey, $entityKey, $stringAttribute->getKey(), $this->faker->word);
             $integerValue = $this->eavFactory->createValue(
@@ -378,19 +375,19 @@ class ImportManagerAcceptanceTest extends TestCase
         /** @var AttributeModel $decimal */
         /** @var AttributeModel $datetime */
         /** @var AttributeModel $text */
-        $string = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
+        $string = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domainKey)
             ->where(_ATTR::TYPE->column(), ATTR_TYPE::STRING->value())
             ->where(_ATTR::NAME->column(), ATTR_TYPE::STRING->value())->first();
-        $integer = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
+        $integer = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domainKey)
             ->where(_ATTR::TYPE->column(), ATTR_TYPE::INTEGER->value())
             ->where(_ATTR::NAME->column(), ATTR_TYPE::INTEGER->value())->first();
-        $decimal = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
+        $decimal = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domainKey)
             ->where(_ATTR::TYPE->column(), ATTR_TYPE::DECIMAL->value())
             ->where(_ATTR::NAME->column(), ATTR_TYPE::DECIMAL->value())->first();
-        $datetime = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
+        $datetime = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domainKey)
             ->where(_ATTR::TYPE->column(), ATTR_TYPE::DATETIME->value())
             ->where(_ATTR::NAME->column(), ATTR_TYPE::DATETIME->value())->first();
-        $text = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domain->getKey())
+        $text = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domainKey)
             ->where(_ATTR::TYPE->column(), ATTR_TYPE::TEXT->value())
             ->where(_ATTR::NAME->column(), ATTR_TYPE::TEXT->value())->first();
 
@@ -406,23 +403,23 @@ class ImportManagerAcceptanceTest extends TestCase
         /** @var PivotModel $decimalPivot */
         /** @var PivotModel $datetimePivot */
         /** @var PivotModel $textPivot */
-        $stringPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domain->getKey())
+        $stringPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
             ->where(_PIVOT::SET_ID->column(), $setKey)
             ->where(_PIVOT::GROUP_ID->column(), $groupKey)
             ->where(_PIVOT::ATTR_ID->column(), $string->getKey())->first();
-        $integerPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domain->getKey())
+        $integerPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
             ->where(_PIVOT::SET_ID->column(), $setKey)
             ->where(_PIVOT::GROUP_ID->column(), $groupKey)
             ->where(_PIVOT::ATTR_ID->column(), $integer->getKey())->first();
-        $decimalPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domain->getKey())
+        $decimalPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
             ->where(_PIVOT::SET_ID->column(), $setKey)
             ->where(_PIVOT::GROUP_ID->column(), $groupKey)
             ->where(_PIVOT::ATTR_ID->column(), $decimal->getKey())->first();
-        $datetimePivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domain->getKey())
+        $datetimePivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
             ->where(_PIVOT::SET_ID->column(), $setKey)
             ->where(_PIVOT::GROUP_ID->column(), $groupKey)
             ->where(_PIVOT::ATTR_ID->column(), $datetime->getKey())->first();
-        $textPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domain->getKey())
+        $textPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
             ->where(_PIVOT::SET_ID->column(), $setKey)
             ->where(_PIVOT::GROUP_ID->column(), $groupKey)
             ->where(_PIVOT::ATTR_ID->column(), $text->getKey())->first();

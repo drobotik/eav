@@ -35,8 +35,7 @@ class EntityAcceptanceTest extends TestCase
      * @covers \Drobotik\Eav\Entity::save()
      */
     public function creating_entities() {
-        $domain = $this->eavFactory->createDomain();
-        $domainKey = $domain->getKey();
+        $domainKey = $this->eavFactory->createDomain();
         $attrSet = $this->eavFactory->createAttributeSet($domainKey);
         $setKey = $attrSet->getKey();
         $group = $this->eavFactory->createGroup($setKey);
@@ -76,7 +75,7 @@ class EntityAcceptanceTest extends TestCase
                 "text" => $this->faker->text
             ];
             $entity = new Entity();
-            $entity->setDomainKey($domain->getKey());
+            $entity->setDomainKey($domainKey);
             $entity->getAttributeSet()->setKey($attrSet->getKey());
             $entity->getBag()->setFields($data);
             $entity->save();
@@ -99,11 +98,11 @@ class EntityAcceptanceTest extends TestCase
             $this->assertNotNull($datetimeValue, $message);
             $this->assertNotNull($textValue, $message);
 
-            $this->assertEquals($domain->getKey(), $stringValue->getDomainKey(), $message);
-            $this->assertEquals($domain->getKey(), $integerValue->getDomainKey(), $message);
-            $this->assertEquals($domain->getKey(), $decimalValue->getDomainKey(), $message);
-            $this->assertEquals($domain->getKey(), $datetimeValue->getDomainKey(), $message);
-            $this->assertEquals($domain->getKey(), $textValue->getDomainKey(), $message);
+            $this->assertEquals($domainKey, $stringValue->getDomainKey(), $message);
+            $this->assertEquals($domainKey, $integerValue->getDomainKey(), $message);
+            $this->assertEquals($domainKey, $decimalValue->getDomainKey(), $message);
+            $this->assertEquals($domainKey, $datetimeValue->getDomainKey(), $message);
+            $this->assertEquals($domainKey, $textValue->getDomainKey(), $message);
 
             $this->assertEquals($stringAttribute->getKey(), $stringValue->getAttrKey(), $message);
             $this->assertEquals($integerAttribute->getKey(), $integerValue->getAttrKey(), $message);
@@ -133,8 +132,8 @@ class EntityAcceptanceTest extends TestCase
      * @covers \Drobotik\Eav\Entity::save()
      */
     public function find_and_update() {
-        $domain = $this->eavFactory->createDomain();
-        $attrSet = $this->eavFactory->createAttributeSet($domain->getKey());
+        $domainKey = $this->eavFactory->createDomain();
+        $attrSet = $this->eavFactory->createAttributeSet($domainKey);
         $group = $this->eavFactory->createGroup($attrSet->getKey());
         $fields = [
             [
@@ -179,13 +178,13 @@ class EntityAcceptanceTest extends TestCase
             ]
         ];
         /** @var EntityFactoryResult $result */
-        $result = $this->eavFactory->createEavEntity($fields, $domain->getKey(), $attrSet->getKey())->getData();
-        $entityModel = $result->getEntityModel();
+        $result = $this->eavFactory->createEavEntity($fields, $domainKey, $attrSet->getKey())->getData();
+        $entityKey = $result->getEntityKey();
 
         $entity = new Entity();
         $entity
-            ->setKey($entityModel->getKey())
-            ->setDomainKey($domain->getKey())
+            ->setKey($entityKey)
+            ->setDomainKey($domainKey)
             ->getAttributeSet()->setKey($attrSet->getKey());
         $entity->find();
 
@@ -234,8 +233,8 @@ class EntityAcceptanceTest extends TestCase
      * @covers \Drobotik\Eav\Entity::delete()
      */
     public function delete() {
-        $domain = $this->eavFactory->createDomain();
-        $attrSet = $this->eavFactory->createAttributeSet($domain->getKey());
+        $domainKey = $this->eavFactory->createDomain();
+        $attrSet = $this->eavFactory->createAttributeSet($domainKey);
         $group = $this->eavFactory->createGroup($attrSet->getKey());
         $fields = [
             [
@@ -280,26 +279,26 @@ class EntityAcceptanceTest extends TestCase
             ]
         ];
         /** @var EntityFactoryResult $result */
-        $result = $this->eavFactory->createEavEntity($fields, $domain->getKey(), $attrSet->getKey())->getData();
-        $entityModel = $result->getEntityModel();
+        $result = $this->eavFactory->createEavEntity($fields, $domainKey, $attrSet->getKey())->getData();
+        $entityKey = $result->getEntityKey();
 
         $entity = new Entity();
         $entity
-            ->setKey($entityModel->getKey())
-            ->setDomainKey($domain->getKey());
+            ->setKey($entityKey)
+            ->setDomainKey($domainKey);
         $entity->getAttributeSet()->setKey($attrSet->getKey());
 
         $entity->delete();
 
         $m = new EntityModel();
-        $m->setKey($entityModel->getKey());
+        $m->setKey($entityKey);
 
         $this->assertEquals(false, $m->findMe());
-        $this->assertEquals(0, ValueStringModel::query()->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())->count());
-        $this->assertEquals(0, ValueIntegerModel::query()->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())->count());
-        $this->assertEquals(0, ValueDecimalModel::query()->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())->count());
-        $this->assertEquals(0, ValueDatetimeModel::query()->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())->count());
-        $this->assertEquals(0, ValueTextModel::query()->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())->count());
+        $this->assertEquals(0, ValueStringModel::query()->where(_VALUE::ENTITY_ID->column(),  $entityKey)->count());
+        $this->assertEquals(0, ValueIntegerModel::query()->where(_VALUE::ENTITY_ID->column(), $entityKey)->count());
+        $this->assertEquals(0, ValueDecimalModel::query()->where(_VALUE::ENTITY_ID->column(), $entityKey)->count());
+        $this->assertEquals(0, ValueDatetimeModel::query()->where(_VALUE::ENTITY_ID->column(), $entityKey)->count());
+        $this->assertEquals(0, ValueTextModel::query()->where(_VALUE::ENTITY_ID->column(), $entityKey)->count());
 
         $this->assertFalse($entity->hasKey());
         $this->assertEquals(0, $entity->getKey());
@@ -318,8 +317,8 @@ class EntityAcceptanceTest extends TestCase
      * @covers \Drobotik\Eav\Entity::delete()
      */
     public function find_and_delete() {
-        $domain = $this->eavFactory->createDomain();
-        $attrSet = $this->eavFactory->createAttributeSet($domain->getKey());
+        $domainKey = $this->eavFactory->createDomain();
+        $attrSet = $this->eavFactory->createAttributeSet($domainKey);
         $group = $this->eavFactory->createGroup($attrSet->getKey());
         $fields = [
             [
@@ -364,13 +363,13 @@ class EntityAcceptanceTest extends TestCase
             ]
         ];
         /** @var EntityFactoryResult $result */
-        $result = $this->eavFactory->createEavEntity($fields, $domain->getKey(), $attrSet->getKey())->getData();
-        $entityModel = $result->getEntityModel();
+        $result = $this->eavFactory->createEavEntity($fields, $domainKey, $attrSet->getKey())->getData();
+        $entityKey = $result->getEntityKey();
 
         $entity = new Entity();
         $entity
-            ->setKey($entityModel->getKey())
-            ->setDomainKey($domain->getKey())
+            ->setKey($entityKey)
+            ->setDomainKey($domainKey)
             ->getAttributeSet()->setKey($attrSet->getKey());
         $entity->find();
 
@@ -379,13 +378,13 @@ class EntityAcceptanceTest extends TestCase
         $entity->delete();
 
         $model = new EntityModel();
-        $model->setKey($entityModel->getKey());
+        $model->setKey($entityKey);
         $this->assertEquals(false, $model->findMe());
-        $this->assertEquals(0, ValueStringModel::query()->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())->count());
-        $this->assertEquals(0, ValueIntegerModel::query()->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())->count());
-        $this->assertEquals(0, ValueDecimalModel::query()->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())->count());
-        $this->assertEquals(0, ValueDatetimeModel::query()->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())->count());
-        $this->assertEquals(0, ValueTextModel::query()->where(_VALUE::ENTITY_ID->column(), $entityModel->getKey())->count());
+        $this->assertEquals(0, ValueStringModel::query()->where(_VALUE::ENTITY_ID->column(), $entityKey)->count());
+        $this->assertEquals(0, ValueIntegerModel::query()->where(_VALUE::ENTITY_ID->column(), $entityKey)->count());
+        $this->assertEquals(0, ValueDecimalModel::query()->where(_VALUE::ENTITY_ID->column(), $entityKey)->count());
+        $this->assertEquals(0, ValueDatetimeModel::query()->where(_VALUE::ENTITY_ID->column(), $entityKey)->count());
+        $this->assertEquals(0, ValueTextModel::query()->where(_VALUE::ENTITY_ID->column(), $entityKey)->count());
 
         $this->assertFalse($entity->hasKey());
         $this->assertEquals(0, $entity->getKey());
