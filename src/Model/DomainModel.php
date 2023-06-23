@@ -17,7 +17,7 @@ class DomainModel extends Model
     public function __construct()
     {
         $this->setTable(_DOMAIN::table());
-        $this->setKeyName(_DOMAIN::ID->column());
+        $this->setPrimaryKey(_DOMAIN::ID->column());
     }
     /**
      * @throws Exception

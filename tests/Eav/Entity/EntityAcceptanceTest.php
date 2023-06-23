@@ -291,9 +291,7 @@ class EntityAcceptanceTest extends TestCase
         $entity->delete();
 
         $m = new EntityModel();
-        $m->setKey($entityKey);
-
-        $this->assertEquals(false, $m->findMe());
+        $this->assertEquals(false, $m->findByKey($entityKey));
         $this->assertEquals(0, ValueStringModel::query()->where(_VALUE::ENTITY_ID->column(),  $entityKey)->count());
         $this->assertEquals(0, ValueIntegerModel::query()->where(_VALUE::ENTITY_ID->column(), $entityKey)->count());
         $this->assertEquals(0, ValueDecimalModel::query()->where(_VALUE::ENTITY_ID->column(), $entityKey)->count());
@@ -378,8 +376,7 @@ class EntityAcceptanceTest extends TestCase
         $entity->delete();
 
         $model = new EntityModel();
-        $model->setKey($entityKey);
-        $this->assertEquals(false, $model->findMe());
+        $this->assertEquals(false, $model->findByKey($entityKey));
         $this->assertEquals(0, ValueStringModel::query()->where(_VALUE::ENTITY_ID->column(), $entityKey)->count());
         $this->assertEquals(0, ValueIntegerModel::query()->where(_VALUE::ENTITY_ID->column(), $entityKey)->count());
         $this->assertEquals(0, ValueDecimalModel::query()->where(_VALUE::ENTITY_ID->column(), $entityKey)->count());

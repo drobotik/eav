@@ -57,10 +57,11 @@ class EntityGnomeBehaviorTest extends TestCase
         ];
 
         $entityModel = $this->getMockBuilder(EntityModel::class)
-            ->onlyMethods(['findMe'])
+            ->onlyMethods(['findByKey'])
             ->getMock();
         $entityModel->expects($this->once())
-            ->method('findMe')
+            ->method('findByKey')
+            ->with($entityKey)
             ->willReturn($entityRecord);
 
         $entity = $this->getMockBuilder(Entity::class)

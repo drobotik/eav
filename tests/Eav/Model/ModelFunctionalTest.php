@@ -44,34 +44,14 @@ class ModelFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Model\Model::getKey
-     * @covers \Drobotik\Eav\Model\Model::setKey
-     * @covers \Drobotik\Eav\Model\Model::isKey
-     */
-    public function key()
-    {
-        $this->assertFalse($this->model->isKey());
-        $this->model->setKey(123);
-        $this->assertTrue($this->model->isKey());
-        $this->assertEquals(123, $this->model->getKey());
-        $this->model->setKey(0);
-        $this->assertFalse($this->model->isKey());
-    }
-
-
-    /**
-     * @test
-     *
-     * @group functional
-     *
-     * @covers \Drobotik\Eav\Model\Model::getKeyName
-     * @covers \Drobotik\Eav\Model\Model::setKeyName
+     * @covers \Drobotik\Eav\Model\Model::getPrimaryKey
+     * @covers \Drobotik\Eav\Model\Model::setPrimaryKey
      */
     public function keyName()
     {
-        $this->assertEquals('id', $this->model->getKeyName());
-        $this->model->setKeyName('test');
-        $this->assertEquals('test', $this->model->getKeyName());
+        $this->assertEquals('id', $this->model->getPrimaryKey());
+        $this->model->setPrimaryKey('test');
+        $this->assertEquals('test', $this->model->getPrimaryKey());
     }
 
     /**
@@ -139,10 +119,9 @@ class ModelFunctionalTest extends TestCase
 
         $key = (int) $connection->lastInsertId();
 
-        $this->model->setKey($key);
-        $this->model->setKeyName(_DOMAIN::ID->column());
+        $this->model->setPrimaryKey(_DOMAIN::ID->column());
         $this->model->setTable($table);
-        $result = $this->model->update([
+        $result = $this->model->update($key, [
             _DOMAIN::NAME->column() => 'Jerry'
         ]);
         $this->assertTrue($result);
@@ -182,10 +161,9 @@ class ModelFunctionalTest extends TestCase
 
         $key = (int) $connection->lastInsertId();
 
-        $this->model->setKey($key);
-        $this->model->setKeyName(_DOMAIN::ID->column());
+        $this->model->setPrimaryKey(_DOMAIN::ID->column());
         $this->model->setTable($table);
-        $result = $this->model->delete();
+        $result = $this->model->delete($key);
 
         $this->assertTrue($result);
 
@@ -199,8 +177,6 @@ class ModelFunctionalTest extends TestCase
             ]
         ], $record);
     }
-
-
 
     /**
      * @test
@@ -226,9 +202,9 @@ class ModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\Model::findMe
+     * @covers \Drobotik\Eav\Model\Model::findByKey
      */
-    public function findMe()
+    public function find_by_key()
     {
         $table = _DOMAIN::table();
         $connection = Connection::get()->getNativeConnection();
@@ -241,16 +217,14 @@ class ModelFunctionalTest extends TestCase
         $stmt->execute();
 
         $this->model->setTable($table);
-        $this->model->setKeyName($idColumn);
-        $this->model->setKey(1);
-        $result = $this->model->findMe();
+        $this->model->setPrimaryKey($idColumn);
+        $result = $this->model->findByKey(1);
         $this->assertEquals([
             $idColumn => 1,
             $nameColumn => "Tom"
         ], $result);
 
-        $this->model->setKey(3);
-        $result = $this->model->findMe();
+        $result = $this->model->findByKey(3);
         $this->assertFalse($result);
     }
 

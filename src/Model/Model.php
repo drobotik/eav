@@ -15,8 +15,7 @@ use PDO;
 
 class Model
 {
-    protected int $key;
-    protected string $keyName = 'id';
+    protected string $primaryKey = 'id';
 
     protected string $table;
 
@@ -25,29 +24,14 @@ class Model
         return Connection::get();
     }
 
-    public function isKey() : bool
+    public function setPrimaryKey(string $name): void
     {
-        return isset($this->key) && $this->key > 0;
+        $this->primaryKey = $name;
     }
 
-    public function setKey($key): void
+    public function getPrimaryKey(): string
     {
-        $this->key = $key;
-    }
-
-    public function getKey(): int
-    {
-        return $this->key;
-    }
-
-    public function setKeyName(string $name): void
-    {
-        $this->keyName = $name;
-    }
-
-    public function getKeyName(): string
-    {
-        return $this->keyName;
+        return $this->primaryKey;
     }
 
     public function setTable(string $table): void
@@ -80,10 +64,9 @@ class Model
         return (int) $conn->lastInsertId();
     }
 
-    public function update(array $data) : bool
+    public function update(int $key, array $data) : bool
     {
-        $key =  $this->getKey();
-        $keyName = $this->getKeyName();
+        $keyName = $this->getPrimaryKey();
 
         $conn = $this->db()->getNativeConnection();
         $table = $this->getTable();
@@ -106,10 +89,9 @@ class Model
         return $stmt->execute();
     }
 
-    public function delete(): bool
+    public function delete(int $key): bool
     {
-        $key =  $this->getKey();
-        $keyName = $this->getKeyName();
+        $keyName = $this->getPrimaryKey();
 
         $conn = $this->db()->getNativeConnection();
         $table = $this->getTable();
@@ -130,15 +112,15 @@ class Model
         return (int) $record["count"];
     }
 
-    public function findMe() : array|false
+    public function findByKey(int $key) : array|false
     {
-        $conn = $this->db()->getNativeConnection();
-        $table = $this->getTable();
-        $key = $this->getKey();
-        $keyName = $this->getKeyName();
-        $stmt = $conn->prepare("SELECT * FROM $table WHERE $keyName = :key");
-        $stmt->bindValue(':key', $key, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        return $this->db()
+            ->createQueryBuilder()
+            ->select('*')
+            ->from($this->getTable())
+            ->where(sprintf('%s = ?', $this->getPrimaryKey()))
+            ->setParameter(0, $key, PDO::PARAM_INT)
+            ->executeQuery()
+            ->fetchAssociative();
     }
 }

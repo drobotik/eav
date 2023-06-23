@@ -82,8 +82,7 @@ class EntityGnome
         $key = $entity->getKey();
 
         $model = $this->makeEntityModel();
-        $model->setKey($key);
-        $record = $model->findMe();
+        $record = $model->findByKey($key);
 
         if ($record === false) {
             return $result->notFound();
@@ -141,8 +140,7 @@ class EntityGnome
             $deleteResults[$attribute->getName()] = $container->getStrategy()->delete();
         }
         $entityModel = $this->makeEntityModel();
-        $entityModel->setKey($entity->getKey());
-        $recordResult = $entityModel->delete();
+        $recordResult = $entityModel->delete($entity->getKey());
         if (!$recordResult) {
             return $result->notDeleted();
         }
@@ -197,10 +195,9 @@ class EntityGnome
     private function checkEntityExists(int $key): array
     {
         $entity = $this->makeEntityModel();
-        $entity->setKey($key);
 
-        $result = $entity->findMe();
-        if ($entity->findMe() === false)
+        $result = $entity->findByKey($key);
+        if ($result === false)
             EntityException::entityNotFound();
 
         return $result;
@@ -212,9 +209,8 @@ class EntityGnome
     private function checkDomainExists(int $key): void
     {
         $domain = $this->makeDomainModel();
-        $domain->setKey($key);
 
-        if ($domain->findMe() === false)
+        if ($domain->findByKey($key) === false)
             EntityException::domainNotFound();
     }
 

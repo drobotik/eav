@@ -31,7 +31,7 @@ class DomainModelFunctionalTest extends TestCase
      */
     public function defaults() {
         $this->assertEquals(_DOMAIN::table(), $this->model->getTable());
-        $this->assertEquals(_DOMAIN::ID->column(), $this->model->getKeyName());
+        $this->assertEquals(_DOMAIN::ID->column(), $this->model->getPrimaryKey());
     }
     /**
      * @test

@@ -33,7 +33,7 @@ class EntityModelFunctionalTest extends TestCase
      */
     public function defaults() {
         $this->assertEquals(_ENTITY::table(), $this->model->getTable());
-        $this->assertEquals(_ENTITY::ID->column(), $this->model->getKeyName());
+        $this->assertEquals(_ENTITY::ID->column(), $this->model->getPrimaryKey());
     }
     /**
      * @test

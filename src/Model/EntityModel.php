@@ -19,11 +19,10 @@ class EntityModel extends Model
 {
     use SingletonsTrait;
 
-
     public function __construct()
     {
         $this->setTable(_ENTITY::table());
-        $this->setKeyName(_ENTITY::ID->column());
+        $this->setPrimaryKey(_ENTITY::ID->column());
     }
 
     public function getServiceKey(): int
