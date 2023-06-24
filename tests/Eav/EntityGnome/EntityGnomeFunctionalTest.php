@@ -205,7 +205,7 @@ class EntityGnomeFunctionalTest extends TestCase
 
         $domainKey = $this->eavFactory->createDomain();
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
-        $group = $this->eavFactory->createGroup($setKey);
+        $groupKey = $this->eavFactory->createGroup($setKey);
         $attrEmail = $this->eavFactory->createAttribute($domainKey, [
             _ATTR::NAME->column() => "email"
         ]);
@@ -215,9 +215,9 @@ class EntityGnomeFunctionalTest extends TestCase
         $attrNote = $this->eavFactory->createAttribute($domainKey, [
             _ATTR::NAME->column() => "note"
         ]);
-        $this->eavFactory->createPivot($domainKey, $setKey, $group->getKey(), $attrEmail->getKey());
-        $this->eavFactory->createPivot($domainKey, $setKey, $group->getKey(), $attrPhone->getKey());
-        $this->eavFactory->createPivot($domainKey, $setKey, $group->getKey(), $attrNote->getKey());
+        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $attrEmail->getKey());
+        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $attrPhone->getKey());
+        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $attrNote->getKey());
 
         $entity = $this->gnome->getEntity();
         $entity->setDomainKey($domainKey);

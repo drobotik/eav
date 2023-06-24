@@ -61,7 +61,7 @@ class AttributeSetModelFunctionalTest extends TestCase
 
         $domainKey = $this->eavFactory->createDomain();
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
-        $groupKey = $this->eavFactory->createGroup($setKey)->getKey();
+        $groupKey = $this->eavFactory->createGroup($setKey);
         $attr1Key = $this->eavFactory->createAttribute()->getKey();
         $attr2Key = $this->eavFactory->createAttribute()->getKey();
         $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $attr1Key);

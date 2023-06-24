@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace Drobotik\Eav\Trait;
 
 use Drobotik\Eav\Repository\AttributeRepository;
-use Drobotik\Eav\Repository\GroupRepository;
 use Drobotik\Eav\Repository\PivotRepository;
 use Drobotik\Eav\Repository\ValueRepository;
 
@@ -31,8 +30,4 @@ trait RepositoryTrait
         return new ValueRepository();
     }
 
-    public function makeGroupRepository(): GroupRepository
-    {
-        return new GroupRepository();
-    }
 }

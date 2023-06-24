@@ -29,15 +29,15 @@ class AttributeRepositoryFunctionalTest extends TestCase
     public function get_linked()
     {
         $domainKey = $this->eavFactory->createDomain();
-        $setKey = $this->eavFactory->createAttributeSet();
-        $group = $this->eavFactory->createGroup($setKey);
+        $setKey = $this->eavFactory->createAttributeSet($domainKey);
+        $groupKey = $this->eavFactory->createGroup($setKey);
         $fields = [
             [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
                     _ATTR::NAME->column() => "string",
                     _ATTR::TYPE->column() => ATTR_TYPE::STRING->value()
                 ],
-                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::GROUP->field() => $groupKey,
                 ATTR_FACTORY::VALUE->field() => "string value"
             ],
             [
@@ -45,7 +45,7 @@ class AttributeRepositoryFunctionalTest extends TestCase
                     _ATTR::NAME->column() => "integer",
                     _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value()
                 ],
-                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::GROUP->field() => $groupKey,
                 ATTR_FACTORY::VALUE->field() => 123
             ]
         ];
@@ -63,11 +63,11 @@ class AttributeRepositoryFunctionalTest extends TestCase
         $this->assertEquals('string', $attr1->getName());
         $this->assertEquals($domainKey, $attr1->getDomainKey());
         $this->assertEquals($setKey, $attr1->{_PIVOT::SET_ID->column()});
-        $this->assertEquals($group->getKey(), $attr1->{_PIVOT::GROUP_ID->column()});
+        $this->assertEquals($groupKey, $attr1->{_PIVOT::GROUP_ID->column()});
 
         $this->assertEquals('integer', $attr2->getName());
         $this->assertEquals($domainKey, $attr2->getDomainKey());
         $this->assertEquals($setKey, $attr2->{_PIVOT::SET_ID->column()});
-        $this->assertEquals($group->getKey(), $attr2->{_PIVOT::GROUP_ID->column()});
+        $this->assertEquals($groupKey, $attr2->{_PIVOT::GROUP_ID->column()});
     }
 }

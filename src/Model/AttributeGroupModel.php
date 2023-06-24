@@ -9,42 +9,47 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\Model;
 
-use Illuminate\Database\Eloquent\Model;
+use Doctrine\DBAL\Exception;
 use Drobotik\Eav\Enum\_GROUP;
+use PDO;
 
 class AttributeGroupModel extends Model
 {
-    public function __construct(array $attributes = [])
+    public function __construct()
     {
-        $this->table = _GROUP::table();
-        $this->primaryKey = _GROUP::ID->column();
-        $this->fillable = [
-            _GROUP::SET_ID->column(),
-            _GROUP::NAME->column()
-        ];
-        $this->timestamps = false;
-        parent::__construct($attributes);
+        $this->setTable(_GROUP::table());
+        $this->setPrimaryKey(_GROUP::ID->column());
     }
 
-    public function getAttrSetKey()
+    /**
+     * @throws Exception
+     */
+    public function create(array $data) : int
     {
-        return $this->{_GROUP::SET_ID->column()};
+        $conn = $this->db();
+        $conn->createQueryBuilder()
+            ->insert(_GROUP::table())
+            ->values([
+                _GROUP::SET_ID->column() => '?',
+                _GROUP::NAME->column() => '?'
+            ])
+            ->setParameter(0, $data[_GROUP::SET_ID->column()])
+            ->setParameter(1, $data[_GROUP::NAME->column()])
+            ->executeQuery();
+        return (int) $conn->lastInsertId();
     }
 
-    public function setAttrSetKey(int $key) : self
+    public function checkGroupInAttributeSet(int $setKey, int $groupKey) : bool
     {
-        $this->{_GROUP::SET_ID->column()} = $key;
-        return $this;
-    }
-
-    public function getName()
-    {
-        return $this->{_GROUP::NAME->column()};
-    }
-
-    public function setName(string $name) : self
-    {
-        $this->{_GROUP::NAME->column()} = $name;
-        return $this;
+        $result = $this->db()->createQueryBuilder()
+            ->select($this->getPrimaryKey())
+            ->from($this->getTable())
+            ->where(sprintf('%s = ?', _GROUP::SET_ID->column()))
+            ->andWhere(sprintf('%s = ?', _GROUP::ID->column()))
+            ->setParameter(0, $setKey, PDO::PARAM_INT)
+            ->setParameter(1, $groupKey, PDO::PARAM_INT)
+            ->executeQuery()
+            ->fetchAssociative();
+        return $result !== false;
     }
 }

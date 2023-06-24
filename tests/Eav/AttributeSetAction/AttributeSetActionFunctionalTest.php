@@ -48,9 +48,9 @@ class AttributeSetActionFunctionalTest extends TestCase
     public function initialized_attribute_without_pivot() {
         $domainKey = $this->eavFactory->createDomain();
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
-        $groupModel = $this->eavFactory->createGroup($setKey);
+        $groupKey = $this->eavFactory->createGroup($setKey);
         $attributeModel = $this->eavFactory->createAttribute($domainKey);
-        $this->eavFactory->createPivot($domainKey, $setKey, $groupModel->getKey(), $attributeModel->getKey());
+        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $attributeModel->getKey());
         $result = $this->action->initializeAttribute($attributeModel->toArray());
         $this->assertEquals($attributeModel->toArray(), $result->getBag()->getFields());
         $this->assertSame($result, $this->container->getAttribute());
@@ -75,9 +75,9 @@ class AttributeSetActionFunctionalTest extends TestCase
         $domainKey = $this->eavFactory->createDomain();
         $entityKey = $this->eavFactory->createEntity($domainKey);
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
-        $groupModel = $this->eavFactory->createGroup($setKey);
+        $groupKey = $this->eavFactory->createGroup($setKey);
         $attributeModel = $this->eavFactory->createAttribute($domainKey);
-        $this->eavFactory->createPivot($domainKey, $setKey, $groupModel->getKey(), $attributeModel->getKey());
+        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $attributeModel->getKey());
         $valueModel = $this->eavFactory->createValue(
             ATTR_TYPE::STRING, $domainKey, $entityKey, $attributeModel->getKey(), "test");
 

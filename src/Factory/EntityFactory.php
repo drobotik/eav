@@ -27,15 +27,20 @@ class EntityFactory
         $pivotRepo = $this->makePivotRepository();
         $valueRepo = $this->makeValueRepository();
         $attributeRepo = $this->makeAttributeRepository();
-
-        $groupRepo = $this->makeGroupRepository();
+        $groupModel = $this->makeGroupModel();
         foreach($fields as $field) {
             if (!key_exists(ATTR_FACTORY::GROUP->field(), $field)) {
                 throw new EntityFactoryException("Group key must be provided!");
             }
         }
-        $groupIds = array_flip(array_unique(array_column($fields, ATTR_FACTORY::GROUP->field())));
-        $groupRepo->checkIsBelongsTo($setKey, $groupIds);
+        $groups = array_unique(array_column($fields, ATTR_FACTORY::GROUP->field()));
+        foreach($groups as $groupKey)
+        {
+            if(!$groupModel->checkGroupInAttributeSet($setKey, $groupKey))
+            {
+                throw new EntityFactoryException("This group is not belongs to attribute set");
+            }
+        }
 
         $entityKey = $this->makeEavFactory()->createEntity($domainKey, $setKey);
         $result->setEntityKey($entityKey);

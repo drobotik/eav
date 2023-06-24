@@ -145,7 +145,7 @@ class EntityFactoryFunctionalTest extends TestCase
      */
     public function create_attributes_not_existing_group_exception() {
         $this->expectException(EntityFactoryException::class);
-        $this->expectExceptionMessage('Groups not found');
+        $this->expectExceptionMessage('This group is not belongs to attribute set');
         $domainKey = $this->eavFactory->createDomain();
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
         $config = $this->getFactoryDefaultConfig();
@@ -168,14 +168,14 @@ class EntityFactoryFunctionalTest extends TestCase
     public function create_attributes() {
         $domainKey = $this->eavFactory->createDomain();
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
-        $group = $this->eavFactory->createGroup($setKey);
+        $groupKey = $this->eavFactory->createGroup($setKey);
 
         $config = $this->getFactoryDefaultConfig();
-        $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::GROUP->field()] = $group->getKey();
-        $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::GROUP->field()] = $group->getKey();
-        $config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::GROUP->field()] = $group->getKey();
-        $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::GROUP->field()] = $group->getKey();
-        $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::GROUP->field()] = $group->getKey();
+        $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::GROUP->field()] = $groupKey;
+        $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::GROUP->field()] = $groupKey;
+        $config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::GROUP->field()] = $groupKey;
+        $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::GROUP->field()] = $groupKey;
+        $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::GROUP->field()] = $groupKey;
 
         $result = $this->factory->create($config, $domainKey, $setKey);
 
@@ -234,11 +234,11 @@ class EntityFactoryFunctionalTest extends TestCase
         $this->expectExceptionMessage(EntityFactoryException::UNDEFINED_ATTRIBUTE_ARRAY);
         $domainKey = $this->eavFactory->createDomain();
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
-        $group = $this->eavFactory->createGroup($setKey);
+        $groupKey = $this->eavFactory->createGroup($setKey);
 
         $config = $this->getFactoryDefaultConfig();
         $field = $config[ATTR_TYPE::STRING->value()];
-        $field[ATTR_FACTORY::GROUP->field()] = $group->getKey();
+        $field[ATTR_FACTORY::GROUP->field()] = $groupKey;
         unset($field[ATTR_FACTORY::ATTRIBUTE->field()]);
 
         $this->factory->create([$field], $domainKey, $setKey);
@@ -256,11 +256,11 @@ class EntityFactoryFunctionalTest extends TestCase
         $this->expectExceptionMessage(sprintf(AttributeException::UNDEFINED_NAME));
         $domainKey = $this->eavFactory->createDomain();
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
-        $group = $this->eavFactory->createGroup($setKey);
+        $groupKey = $this->eavFactory->createGroup($setKey);
 
         $config = $this->getFactoryDefaultConfig();
         $field = $config[ATTR_TYPE::STRING->value()];
-        $field[ATTR_FACTORY::GROUP->field()] = $group->getKey();
+        $field[ATTR_FACTORY::GROUP->field()] = $groupKey;
         unset($field[ATTR_FACTORY::ATTRIBUTE->field()][_ATTR::NAME->column()]);
 
         $this->factory->create([$field], $domainKey, $setKey);
@@ -278,11 +278,11 @@ class EntityFactoryFunctionalTest extends TestCase
         $this->expectExceptionMessage(sprintf(AttributeException::UNDEFINED_TYPE));
         $domainKey = $this->eavFactory->createDomain();
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
-        $group = $this->eavFactory->createGroup($setKey);
+        $groupKey = $this->eavFactory->createGroup($setKey);
 
         $config = $this->getFactoryDefaultConfig();
         $field = $config[ATTR_TYPE::STRING->value()];
-        $field[ATTR_FACTORY::GROUP->field()] = $group->getKey();
+        $field[ATTR_FACTORY::GROUP->field()] = $groupKey;
         unset($field[ATTR_FACTORY::ATTRIBUTE->field()][_ATTR::TYPE->column()]);
 
         $this->factory->create([$field], $domainKey, $setKey);
@@ -300,11 +300,11 @@ class EntityFactoryFunctionalTest extends TestCase
         $this->expectExceptionMessage(sprintf(AttributeException::UNSUPPORTED_TYPE, 'test'));
         $domainKey = $this->eavFactory->createDomain();
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
-        $group = $this->eavFactory->createGroup($setKey);
+        $groupKey = $this->eavFactory->createGroup($setKey);
 
         $config = $this->getFactoryDefaultConfig();
         $field = $config[ATTR_TYPE::STRING->value()];
-        $field[ATTR_FACTORY::GROUP->field()] = $group->getKey();
+        $field[ATTR_FACTORY::GROUP->field()] = $groupKey;
         $field[ATTR_FACTORY::ATTRIBUTE->field()][_ATTR::TYPE->column()] = "test";
 
         $this->factory->create([$field], $domainKey, $setKey);
@@ -320,15 +320,15 @@ class EntityFactoryFunctionalTest extends TestCase
     public function create_pivot_table_rows() {
         $domainKey = $this->eavFactory->createDomain();
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
-        $groupOne = $this->eavFactory->createGroup($setKey);
-        $groupTwo = $this->eavFactory->createGroup($setKey);
+        $groupOneKey = $this->eavFactory->createGroup($setKey);
+        $groupTwoKey = $this->eavFactory->createGroup($setKey);
 
         $config = $this->getFactoryDefaultConfig();
-        $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::GROUP->field()] = $groupOne->getKey();
-        $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::GROUP->field()] = $groupOne->getKey();
-        $config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::GROUP->field()] = $groupOne->getKey();
-        $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::GROUP->field()] = $groupTwo->getKey();
-        $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::GROUP->field()] = $groupTwo->getKey();
+        $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::GROUP->field()] = $groupOneKey;
+        $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::GROUP->field()] = $groupOneKey;
+        $config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::GROUP->field()] = $groupOneKey;
+        $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::GROUP->field()] = $groupTwoKey;
+        $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::GROUP->field()] = $groupTwoKey;
 
         $result = $this->factory->create($config, $domainKey, $setKey);
 
@@ -360,23 +360,23 @@ class EntityFactoryFunctionalTest extends TestCase
         /** @var PivotModel $textPivot */
         $stringPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
             ->where(_PIVOT::SET_ID->column(), $setKey)
-            ->where(_PIVOT::GROUP_ID->column(), $groupOne->getKey())
+            ->where(_PIVOT::GROUP_ID->column(), $groupOneKey)
             ->where(_PIVOT::ATTR_ID->column(), $string->getKey())->first();
         $integerPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
             ->where(_PIVOT::SET_ID->column(), $setKey)
-            ->where(_PIVOT::GROUP_ID->column(), $groupOne->getKey())
+            ->where(_PIVOT::GROUP_ID->column(), $groupOneKey)
             ->where(_PIVOT::ATTR_ID->column(), $integer->getKey())->first();
         $decimalPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
             ->where(_PIVOT::SET_ID->column(), $setKey)
-            ->where(_PIVOT::GROUP_ID->column(), $groupOne->getKey())
+            ->where(_PIVOT::GROUP_ID->column(), $groupOneKey)
             ->where(_PIVOT::ATTR_ID->column(), $decimal->getKey())->first();
         $datetimePivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
             ->where(_PIVOT::SET_ID->column(), $setKey)
-            ->where(_PIVOT::GROUP_ID->column(), $groupTwo->getKey())
+            ->where(_PIVOT::GROUP_ID->column(), $groupTwoKey)
             ->where(_PIVOT::ATTR_ID->column(), $datetime->getKey())->first();
         $textPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
             ->where(_PIVOT::SET_ID->column(), $setKey)
-            ->where(_PIVOT::GROUP_ID->column(), $groupTwo->getKey())
+            ->where(_PIVOT::GROUP_ID->column(), $groupTwoKey)
             ->where(_PIVOT::ATTR_ID->column(), $text->getKey())->first();
 
         $this->assertNotNull($stringPivot);
@@ -404,15 +404,15 @@ class EntityFactoryFunctionalTest extends TestCase
     public function create_values() {
         $domainKey = $this->eavFactory->createDomain();
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
-        $groupOne = $this->eavFactory->createGroup($setKey);
-        $groupTwo = $this->eavFactory->createGroup($setKey);
+        $groupOneKey = $this->eavFactory->createGroup($setKey);
+        $groupTwoKey = $this->eavFactory->createGroup($setKey);
 
         $config = $this->getFactoryDefaultConfig();
-        $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::GROUP->field()] = $groupOne->getKey();
-        $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::GROUP->field()] = $groupOne->getKey();
-        $config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::GROUP->field()] = $groupOne->getKey();
-        $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::GROUP->field()] = $groupTwo->getKey();
-        $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::GROUP->field()] = $groupTwo->getKey();
+        $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::GROUP->field()] = $groupOneKey;
+        $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::GROUP->field()] = $groupOneKey;
+        $config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::GROUP->field()] = $groupOneKey;
+        $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::GROUP->field()] = $groupTwoKey;
+        $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::GROUP->field()] = $groupTwoKey;
 
         $stringValue = ATTR_TYPE::STRING->randomValue();
         $integerValue = ATTR_TYPE::INTEGER->randomValue();
@@ -488,14 +488,14 @@ class EntityFactoryFunctionalTest extends TestCase
     public function create_skip_creating_values() {
         $domainKey = $this->eavFactory->createDomain();
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
-        $groupOne = $this->eavFactory->createGroup($setKey);
+        $groupKey = $this->eavFactory->createGroup($setKey);
 
         $config = $this->getFactoryDefaultConfig();
-        $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::GROUP->field()] = $groupOne->getKey();
-        $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::GROUP->field()] = $groupOne->getKey();
-        $config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::GROUP->field()] = $groupOne->getKey();
-        $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::GROUP->field()] = $groupOne->getKey();
-        $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::GROUP->field()] = $groupOne->getKey();
+        $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::GROUP->field()] = $groupKey;
+        $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::GROUP->field()] = $groupKey;
+        $config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::GROUP->field()] = $groupKey;
+        $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::GROUP->field()] = $groupKey;
+        $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::GROUP->field()] = $groupKey;
 
         $result = $this->factory->create($config, $domainKey, $setKey);
         $entityKey = $result->getEntityKey();

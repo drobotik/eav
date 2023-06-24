@@ -19,7 +19,6 @@ use Drobotik\Eav\Enum\_RESULT;
 use Drobotik\Eav\Enum\_SET;
 use Drobotik\Eav\Enum\ATTR_FACTORY;
 use Drobotik\Eav\Enum\ATTR_TYPE;
-use Drobotik\Eav\Model\AttributeGroupModel;
 use Drobotik\Eav\Model\AttributeModel;
 use Drobotik\Eav\Model\AttributeSetModel;
 use Drobotik\Eav\Model\PivotModel;
@@ -159,12 +158,8 @@ class EavFactoryFunctionalTest extends TestCase
      */
     public function attributeGroup()
     {
-        $result = $this->eavFactory->createGroup();
-        $this->assertInstanceOf(AttributeGroupModel::class, $result);
-        $this->assertEquals(1, $result->getKey());
-        $this->assertEquals(1, $result->getAttrSetKey());
-        $data = $result->toArray();
-        $this->assertArrayHasKey(_GROUP::NAME->column(), $data);
+        $this->assertEquals(1, $this->eavFactory->createGroup());
+        $this->assertEquals(2, $this->eavFactory->createGroup());
     }
 
     /**
@@ -179,11 +174,19 @@ class EavFactoryFunctionalTest extends TestCase
         $input = [
             _GROUP::NAME->column() => 'test',
         ];
-        $result = $this->eavFactory->createGroup(null, $input);
-        $this->assertInstanceOf(AttributeGroupModel::class, $result);
-        $this->assertEquals(1, $result->getKey());
-        $this->assertEquals(1, $result->getAttrSetKey());
-        $this->assertEquals($input[_GROUP::NAME->column()], $result->getName());
+
+        $groupKey = $this->eavFactory->createGroup(123, $input);
+
+        $qb = Connection::get()->createQueryBuilder();
+        $record = $qb->select('*')->from(_GROUP::table())
+            ->executeQuery()
+            ->fetchAssociative();
+
+        $this->assertEquals([
+            _GROUP::ID->column() => $groupKey,
+            _GROUP::SET_ID->column() => 123,
+            _GROUP::NAME->column() => 'test'
+        ], $record);
     }
 
     /**
@@ -251,11 +254,11 @@ class EavFactoryFunctionalTest extends TestCase
         $this->eavFactory->createAttributeSet($domainKey);
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
         $this->eavFactory->createGroup($setKey);
-        $group = $this->eavFactory->createGroup($setKey);
+        $groupKey = $this->eavFactory->createGroup($setKey);
         $this->eavFactory->createAttribute($domainKey);
         $attribute = $this->eavFactory->createAttribute($domainKey);
 
-        $result = $this->eavFactory->createPivot($domainKey, $setKey, $group->getKey(), $attribute->getKey());
+        $result = $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $attribute->getKey());
         $this->assertInstanceOf(PivotModel::class, $result);
         $this->assertEquals(1, $result->getKey());
         $this->assertEquals(2, $result->getDomainKey());
@@ -409,7 +412,7 @@ class EavFactoryFunctionalTest extends TestCase
     {
         $domainKey = $this->eavFactory->createDomain();
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
-        $group = $this->eavFactory->createGroup($setKey);
+        $groupKey = $this->eavFactory->createGroup($setKey);
         $config = [
             [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
@@ -417,7 +420,7 @@ class EavFactoryFunctionalTest extends TestCase
                     _ATTR::TYPE->column() => ATTR_TYPE::STRING->value(),
                     _ATTR::DEFAULT_VALUE->column() => ATTR_TYPE::STRING->randomValue(),
                 ],
-                ATTR_FACTORY::GROUP->field() => $group->getKey()
+                ATTR_FACTORY::GROUP->field() => $groupKey
             ]
         ];
         $result = $this->eavFactory->createEavEntity($config, $domainKey, $setKey);

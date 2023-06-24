@@ -37,7 +37,7 @@ class EntityAcceptanceTest extends TestCase
     public function creating_entities() {
         $domainKey = $this->eavFactory->createDomain();
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
-        $group = $this->eavFactory->createGroup($setKey);
+        $groupKey = $this->eavFactory->createGroup($setKey);
         $stringAttribute = $this->eavFactory->createAttribute($domainKey, [
             _ATTR::NAME->column() => "string",
             _ATTR::TYPE->column() => ATTR_TYPE::STRING->value()
@@ -58,11 +58,11 @@ class EntityAcceptanceTest extends TestCase
             _ATTR::NAME->column() => "text",
             _ATTR::TYPE->column() => ATTR_TYPE::TEXT->value()
         ]);
-        $this->eavFactory->createPivot($domainKey, $setKey, $group->getKey(), $stringAttribute->getKey());
-        $this->eavFactory->createPivot($domainKey, $setKey, $group->getKey(), $integerAttribute->getKey());
-        $this->eavFactory->createPivot($domainKey, $setKey, $group->getKey(), $decimalAttribute->getKey());
-        $this->eavFactory->createPivot($domainKey, $setKey, $group->getKey(), $datetimeAttribute->getKey());
-        $this->eavFactory->createPivot($domainKey, $setKey, $group->getKey(), $textAttribute->getKey());
+        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $stringAttribute->getKey());
+        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $integerAttribute->getKey());
+        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $decimalAttribute->getKey());
+        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $datetimeAttribute->getKey());
+        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $textAttribute->getKey());
 
         for($i = 0; $i < 2; $i++) {
             $message = "Failed on iteration $i";
@@ -133,14 +133,14 @@ class EntityAcceptanceTest extends TestCase
     public function find_and_update() {
         $domainKey = $this->eavFactory->createDomain();
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
-        $group = $this->eavFactory->createGroup($setKey);
+        $groupKey = $this->eavFactory->createGroup($setKey);
         $fields = [
             [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
                     _ATTR::NAME->column() => "string",
                     _ATTR::TYPE->column() => ATTR_TYPE::STRING->value()
                 ],
-                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::GROUP->field() => $groupKey,
                 ATTR_FACTORY::VALUE->field() => "string value"
             ],
             [
@@ -148,7 +148,7 @@ class EntityAcceptanceTest extends TestCase
                     _ATTR::NAME->column() => "integer",
                     _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value()
                 ],
-                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::GROUP->field() => $groupKey,
                 ATTR_FACTORY::VALUE->field() => 123
             ],
             [
@@ -156,7 +156,7 @@ class EntityAcceptanceTest extends TestCase
                     _ATTR::NAME->column() => "decimal",
                     _ATTR::TYPE->column() => ATTR_TYPE::DECIMAL->value()
                 ],
-                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::GROUP->field() => $groupKey,
                 ATTR_FACTORY::VALUE->field() => 3.14
             ],
             [
@@ -164,7 +164,7 @@ class EntityAcceptanceTest extends TestCase
                     _ATTR::NAME->column() => "datetime",
                     _ATTR::TYPE->column() => ATTR_TYPE::DATETIME->value()
                 ],
-                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::GROUP->field() => $groupKey,
                 ATTR_FACTORY::VALUE->field() => Carbon::now()->format('Y-m-d H:i:s')
             ],
             [
@@ -172,7 +172,7 @@ class EntityAcceptanceTest extends TestCase
                     _ATTR::NAME->column() => "text",
                     _ATTR::TYPE->column() => ATTR_TYPE::TEXT->value()
                 ],
-                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::GROUP->field() => $groupKey,
                 ATTR_FACTORY::VALUE->field() => "text value"
             ]
         ];
@@ -234,14 +234,14 @@ class EntityAcceptanceTest extends TestCase
     public function delete() {
         $domainKey = $this->eavFactory->createDomain();
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
-        $group = $this->eavFactory->createGroup($setKey);
+        $groupKey = $this->eavFactory->createGroup($setKey);
         $fields = [
             [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
                     _ATTR::NAME->column() => "string",
                     _ATTR::TYPE->column() => ATTR_TYPE::STRING->value()
                 ],
-                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::GROUP->field() => $groupKey,
                 ATTR_FACTORY::VALUE->field() => "string value"
             ],
             [
@@ -249,7 +249,7 @@ class EntityAcceptanceTest extends TestCase
                     _ATTR::NAME->column() => "integer",
                     _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value()
                 ],
-                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::GROUP->field() => $groupKey,
                 ATTR_FACTORY::VALUE->field() => 123
             ],
             [
@@ -257,7 +257,7 @@ class EntityAcceptanceTest extends TestCase
                     _ATTR::NAME->column() => "decimal",
                     _ATTR::TYPE->column() => ATTR_TYPE::DECIMAL->value()
                 ],
-                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::GROUP->field() => $groupKey,
                 ATTR_FACTORY::VALUE->field() => 3.14
             ],
             [
@@ -265,7 +265,7 @@ class EntityAcceptanceTest extends TestCase
                     _ATTR::NAME->column() => "datetime",
                     _ATTR::TYPE->column() => ATTR_TYPE::DATETIME->value()
                 ],
-                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::GROUP->field() => $groupKey,
                 ATTR_FACTORY::VALUE->field() => Carbon::now()->format('Y-m-d H:i:s')
             ],
             [
@@ -273,7 +273,7 @@ class EntityAcceptanceTest extends TestCase
                     _ATTR::NAME->column() => "text",
                     _ATTR::TYPE->column() => ATTR_TYPE::TEXT->value()
                 ],
-                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::GROUP->field() =>$groupKey,
                 ATTR_FACTORY::VALUE->field() => "text value"
             ]
         ];
@@ -316,14 +316,14 @@ class EntityAcceptanceTest extends TestCase
     public function find_and_delete() {
         $domainKey = $this->eavFactory->createDomain();
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
-        $group = $this->eavFactory->createGroup($setKey);
+        $groupKey = $this->eavFactory->createGroup($setKey);
         $fields = [
             [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
                     _ATTR::NAME->column() => "string",
                     _ATTR::TYPE->column() => ATTR_TYPE::STRING->value()
                 ],
-                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::GROUP->field() => $groupKey,
                 ATTR_FACTORY::VALUE->field() => "string value"
             ],
             [
@@ -331,7 +331,7 @@ class EntityAcceptanceTest extends TestCase
                     _ATTR::NAME->column() => "integer",
                     _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value()
                 ],
-                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::GROUP->field() => $groupKey,
                 ATTR_FACTORY::VALUE->field() => 123
             ],
             [
@@ -339,7 +339,7 @@ class EntityAcceptanceTest extends TestCase
                     _ATTR::NAME->column() => "decimal",
                     _ATTR::TYPE->column() => ATTR_TYPE::DECIMAL->value()
                 ],
-                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::GROUP->field() => $groupKey,
                 ATTR_FACTORY::VALUE->field() => 3.14
             ],
             [
@@ -347,7 +347,7 @@ class EntityAcceptanceTest extends TestCase
                     _ATTR::NAME->column() => "datetime",
                     _ATTR::TYPE->column() => ATTR_TYPE::DATETIME->value()
                 ],
-                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::GROUP->field() => $groupKey,
                 ATTR_FACTORY::VALUE->field() => Carbon::now()->format('Y-m-d H:i:s')
             ],
             [
@@ -355,7 +355,7 @@ class EntityAcceptanceTest extends TestCase
                     _ATTR::NAME->column() => "text",
                     _ATTR::TYPE->column() => ATTR_TYPE::TEXT->value()
                 ],
-                ATTR_FACTORY::GROUP->field() => $group->getKey(),
+                ATTR_FACTORY::GROUP->field() => $groupKey,
                 ATTR_FACTORY::VALUE->field() => "text value"
             ]
         ];

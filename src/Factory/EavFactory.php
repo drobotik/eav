@@ -78,7 +78,7 @@ class EavFactory
         ]);
     }
 
-    public function createGroup(?int $setKey = null, array $data = []): AttributeGroupModel
+    public function createGroup(?int $setKey = null, array $data = []): int
     {
         if (is_null($setKey)) {
             $setKey = $this->createAttributeSet();
@@ -89,13 +89,11 @@ class EavFactory
         ];
         $input = array_merge($defaultData, $data);
         $model = new AttributeGroupModel();
-        $model->setAttrSetKey($setKey)
-            ->setName($input[_SET::NAME->column()]);
-        
-        $model->save();
-        $model->refresh();
 
-        return $model;
+        return $model->create([
+            _GROUP::SET_ID->column() => $setKey,
+            _GROUP::NAME->column() => $input[_SET::NAME->column()]
+        ]);
     }
 
     public function createAttribute(?int $domainKey = null, array $data = []): AttributeModel

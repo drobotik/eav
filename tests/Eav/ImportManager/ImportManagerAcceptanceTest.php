@@ -48,8 +48,7 @@ class ImportManagerAcceptanceTest extends TestCase
     {
         $domainKey = $this->eavFactory->createDomain();
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
-        $group = $this->eavFactory->createGroup($setKey);
-        $groupKey = $group->getKey();
+        $groupKey = $this->eavFactory->createGroup($setKey);
 
         $stringConfig  = new ConfigAttribute();
         $stringConfig->setFields([
@@ -258,8 +257,7 @@ class ImportManagerAcceptanceTest extends TestCase
     {
         $domainKey = $this->eavFactory->createDomain();
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
-        $group = $this->eavFactory->createGroup($setKey);
-        $groupKey = $group->getKey();
+        $groupKey = $this->eavFactory->createGroup($setKey);
 
         $stringAttribute = $this->eavFactory->createAttribute($domainKey, [
             _ATTR::DOMAIN_ID->column() => $domainKey,
