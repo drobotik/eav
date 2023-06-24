@@ -65,8 +65,7 @@ class EavFactoryResultFunctionalTest extends TestCase
      */
     public function pivots() {
         $this->assertEquals([], $this->result->getPivots());
-        $record = new PivotModel();
-        $this->result->addPivot("test", $record);
-        $this->assertEquals(["test" => $record], $this->result->getPivots());
+        $this->result->addPivot("test",1);
+        $this->assertEquals(["test" => 1], $this->result->getPivots());
     }
 }

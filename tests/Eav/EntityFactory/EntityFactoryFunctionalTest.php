@@ -358,40 +358,27 @@ class EntityFactoryFunctionalTest extends TestCase
         /** @var PivotModel $decimalPivot */
         /** @var PivotModel $datetimePivot */
         /** @var PivotModel $textPivot */
-        $stringPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
-            ->where(_PIVOT::SET_ID->column(), $setKey)
-            ->where(_PIVOT::GROUP_ID->column(), $groupOneKey)
-            ->where(_PIVOT::ATTR_ID->column(), $string->getKey())->first();
-        $integerPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
-            ->where(_PIVOT::SET_ID->column(), $setKey)
-            ->where(_PIVOT::GROUP_ID->column(), $groupOneKey)
-            ->where(_PIVOT::ATTR_ID->column(), $integer->getKey())->first();
-        $decimalPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
-            ->where(_PIVOT::SET_ID->column(), $setKey)
-            ->where(_PIVOT::GROUP_ID->column(), $groupOneKey)
-            ->where(_PIVOT::ATTR_ID->column(), $decimal->getKey())->first();
-        $datetimePivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
-            ->where(_PIVOT::SET_ID->column(), $setKey)
-            ->where(_PIVOT::GROUP_ID->column(), $groupTwoKey)
-            ->where(_PIVOT::ATTR_ID->column(), $datetime->getKey())->first();
-        $textPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
-            ->where(_PIVOT::SET_ID->column(), $setKey)
-            ->where(_PIVOT::GROUP_ID->column(), $groupTwoKey)
-            ->where(_PIVOT::ATTR_ID->column(), $text->getKey())->first();
+        $pivotModel = new PivotModel();
+        $stringPivot = $pivotModel->findOne($domainKey, $setKey, $groupOneKey, $string->getKey());
+        $integerPivot = $pivotModel->findOne($domainKey, $setKey, $groupOneKey, $integer->getKey());
+        $decimalPivot = $pivotModel->findOne($domainKey, $setKey, $groupOneKey, $decimal->getKey());
+        $datetimePivot = $pivotModel->findOne($domainKey, $setKey, $groupTwoKey, $datetime->getKey());
+        $textPivot = $pivotModel->findOne($domainKey, $setKey, $groupTwoKey, $text->getKey());
 
-        $this->assertNotNull($stringPivot);
-        $this->assertNotNull($integerPivot);
-        $this->assertNotNull($decimalPivot);
-        $this->assertNotNull($datetimePivot);
-        $this->assertNotNull($textPivot);
+        $this->assertIsArray($stringPivot);
+        $this->assertIsArray($integerPivot);
+        $this->assertIsArray($decimalPivot);
+        $this->assertIsArray($datetimePivot);
+        $this->assertIsArray($textPivot);
 
         $pivots = $result->getPivots();
         $this->assertCount(5, $pivots);
-        $this->assertEquals($stringPivot->toArray(), $pivots[ATTR_TYPE::STRING->value()]->toArray());
-        $this->assertEquals($integerPivot->toArray(), $pivots[ATTR_TYPE::INTEGER->value()]->toArray());
-        $this->assertEquals($decimalPivot->toArray(), $pivots[ATTR_TYPE::DECIMAL->value()]->toArray());
-        $this->assertEquals($datetimePivot->toArray(), $pivots[ATTR_TYPE::DATETIME->value()]->toArray());
-        $this->assertEquals($textPivot->toArray(), $pivots[ATTR_TYPE::TEXT->value()]->toArray());
+
+        $this->assertEquals($stringPivot[_PIVOT::ID->column()], $pivots[ATTR_TYPE::STRING->value()]);
+        $this->assertEquals($integerPivot[_PIVOT::ID->column()], $pivots[ATTR_TYPE::INTEGER->value()]);
+        $this->assertEquals($decimalPivot[_PIVOT::ID->column()], $pivots[ATTR_TYPE::DECIMAL->value()]);
+        $this->assertEquals($datetimePivot[_PIVOT::ID->column()], $pivots[ATTR_TYPE::DATETIME->value()]);
+        $this->assertEquals($textPivot[_PIVOT::ID->column()], $pivots[ATTR_TYPE::TEXT->value()]);
     }
 
     /**

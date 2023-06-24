@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\Factory;
 
+use Drobotik\Eav\Enum\_PIVOT;
 use Drobotik\Eav\Enum\ATTR_FACTORY;
 use Drobotik\Eav\Exception\EntityFactoryException;
 use Drobotik\Eav\Result\EntityFactoryResult;
@@ -24,10 +25,11 @@ class EntityFactory
     public function create(array $fields, int $domainKey, int $setKey): EntityFactoryResult
     {
         $result = new EntityFactoryResult();
-        $pivotRepo = $this->makePivotRepository();
         $valueRepo = $this->makeValueRepository();
         $attributeRepo = $this->makeAttributeRepository();
         $groupModel = $this->makeGroupModel();
+        $pivotModel = $this->makePivotModel();
+        $factory = $this->makeEavFactory();
         foreach($fields as $field) {
             if (!key_exists(ATTR_FACTORY::GROUP->field(), $field)) {
                 throw new EntityFactoryException("Group key must be provided!");
@@ -55,8 +57,14 @@ class EntityFactory
             $attrKey = $attributeRecord->getKey();
             $type = $attributeRecord->getTypeEnum();
             $result->addAttribute($attributeRecord);
-            $pivotRecord = $pivotRepo->createIfNotExist($domainKey, $setKey, $field[ATTR_FACTORY::GROUP->field()], $attributeRecord->getKey());
-            $result->addPivot($attributeRecord->getName(), $pivotRecord);
+
+            $pivotRecord = $pivotModel->findOne($domainKey, $setKey, $field[ATTR_FACTORY::GROUP->field()], $attributeRecord->getKey());
+            if($pivotRecord === false)
+                $pivotKey = $factory->createPivot($domainKey, $setKey, $field[ATTR_FACTORY::GROUP->field()], $attributeRecord->getKey());
+            else
+                $pivotKey = $pivotRecord[_PIVOT::ID->column()];
+
+            $result->addPivot($attributeRecord->getName(), $pivotKey);
 
             $valueRecord = isset($field[ATTR_FACTORY::VALUE->field()])
                 ? $valueRepo->updateOrCreate($domainKey, $entityKey, $attrKey, $type, $field[ATTR_FACTORY::VALUE->field()])

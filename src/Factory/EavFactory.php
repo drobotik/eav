@@ -14,6 +14,7 @@ use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\_DOMAIN;
 use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Enum\_GROUP;
+use Drobotik\Eav\Enum\_PIVOT;
 use Drobotik\Eav\Enum\_SET;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Model\AttributeGroupModel;
@@ -126,18 +127,15 @@ class EavFactory
         return $model;
     }
 
-    public function createPivot(int $domainKey, int $setKey, int $groupKey, int $attributeKey): PivotModel
+    public function createPivot(int $domainKey, int $setKey, int $groupKey, int $attributeKey): int
     {
         $model = new PivotModel();
-        $model->setDomainKey($domainKey)
-            ->setAttrSetKey($setKey)
-            ->setGroupKey($groupKey)
-            ->setAttrKey($attributeKey);
-        
-        $model->save();
-        $model->refresh();
-
-        return $model;
+        return $model->create([
+            _PIVOT::DOMAIN_ID->column() => $domainKey,
+            _PIVOT::SET_ID->column() => $setKey,
+            _PIVOT::GROUP_ID->column() => $groupKey,
+            _PIVOT::ATTR_ID->column() => $attributeKey
+        ]);
     }
 
     public function createValue(ATTR_TYPE $type, int $domainKey, int $entityKey, int $attributeKey, $value): ValueBase

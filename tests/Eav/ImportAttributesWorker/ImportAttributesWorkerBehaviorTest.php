@@ -18,7 +18,7 @@ use Drobotik\Eav\Import\Attributes\Validator;
 use Drobotik\Eav\Import\Attributes\Worker;
 use Drobotik\Eav\Import\ImportContainer;
 use Drobotik\Eav\Model\AttributeModel;
-use Drobotik\Eav\Repository\PivotRepository;
+use Drobotik\Eav\Model\PivotModel;
 use PHPUnit\Framework\TestCase;
 
 class ImportAttributesWorkerBehaviorTest extends TestCase
@@ -93,27 +93,32 @@ class ImportAttributesWorkerBehaviorTest extends TestCase
         $attributeRecord->expects($this->once())->method('getKey')->willReturn($recordKey);
 
         $factory = $this->getMockBuilder(EavFactory::class)
-            ->onlyMethods(['createAttribute'])->getMock();
+            ->onlyMethods(['createAttribute', 'createPivot'])->getMock();
         $factory->expects($this->once())->method('createAttribute')
             ->with(1, $fields)
             ->willReturn($attributeRecord);
 
-        $pivotRepo = $this->getMockBuilder(PivotRepository::class)
-            ->onlyMethods(['createIfNotExist'])
+        $factory->expects($this->once())->method('createPivot')
+            ->with($domainKey, $setKey, $groupKey, $recordKey)
+            ->willReturn(1);
+
+        $pivotModel = $this->getMockBuilder(PivotModel::class)
+            ->onlyMethods(['findOne'])
             ->getMock();
-        $pivotRepo->expects($this->once())->method('createIfNotExist')
-            ->with($domainKey, $setKey, $groupKey, $recordKey);
+        $pivotModel->expects($this->once())->method('findOne')
+            ->with($domainKey, $setKey, $groupKey, $recordKey)
+            ->willReturn(false);
 
         $worker = $this->getMockBuilder(Worker::class)
             ->onlyMethods([
                 'makeEavFactory',
-                'makePivotRepository',
+                'makePivotModel',
                 'getContainer',
             ])
             ->getMock();
 
         $worker->expects($this->once())->method('makeEavFactory')->willReturn($factory);
-        $worker->expects($this->once())->method('makePivotRepository')->willReturn($pivotRepo);
+        $worker->expects($this->once())->method('makePivotModel')->willReturn($pivotModel);
         $worker->expects($this->once())->method('getContainer')->willReturn($container);
 
         $worker->createAttribute($attribute);

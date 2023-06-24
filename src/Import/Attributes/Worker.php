@@ -54,12 +54,18 @@ class Worker
     public function createAttribute(ConfigAttribute $attribute): void
     {
         $factory = $this->makeEavFactory();
-        $pivotRepo = $this->makePivotRepository();
+        $pivotModel = $this->makePivotModel();
         $container = $this->getContainer();
         $domainKey = $container->getDomainKey();
         $setKey = $container->getSetKey();
+        $groupKey = $attribute->getGroupKey();
+
         $record = $factory->createAttribute($domainKey, $attribute->getFields());
-        $pivotRepo->createIfNotExist($domainKey, $setKey, $attribute->getGroupKey(), $record->getKey());
+        $attributeKey = $record->getKey();
+
+        $pivotRecord = $pivotModel->findOne($domainKey, $setKey, $groupKey, $attributeKey);
+        if($pivotRecord === false)
+            $factory->createPivot($domainKey, $setKey, $groupKey, $attributeKey);
     }
 
     public function createAttributes(): void

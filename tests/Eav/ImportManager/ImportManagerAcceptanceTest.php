@@ -148,37 +148,18 @@ class ImportManagerAcceptanceTest extends TestCase
         $this->assertNotNull($text);
 
         // check attributes linked
-        /** @var PivotModel $stringPivot */
-        /** @var PivotModel $integerPivot */
-        /** @var PivotModel $decimalPivot */
-        /** @var PivotModel $datetimePivot */
-        /** @var PivotModel $textPivot */
-        $stringPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
-            ->where(_PIVOT::SET_ID->column(), $setKey)
-            ->where(_PIVOT::GROUP_ID->column(), $groupKey)
-            ->where(_PIVOT::ATTR_ID->column(), $string->getKey())->first();
-        $integerPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
-            ->where(_PIVOT::SET_ID->column(), $setKey)
-            ->where(_PIVOT::GROUP_ID->column(), $groupKey)
-            ->where(_PIVOT::ATTR_ID->column(), $integer->getKey())->first();
-        $decimalPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
-            ->where(_PIVOT::SET_ID->column(), $setKey)
-            ->where(_PIVOT::GROUP_ID->column(), $groupKey)
-            ->where(_PIVOT::ATTR_ID->column(), $decimal->getKey())->first();
-        $datetimePivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
-            ->where(_PIVOT::SET_ID->column(), $setKey)
-            ->where(_PIVOT::GROUP_ID->column(), $groupKey)
-            ->where(_PIVOT::ATTR_ID->column(), $datetime->getKey())->first();
-        $textPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
-            ->where(_PIVOT::SET_ID->column(), $setKey)
-            ->where(_PIVOT::GROUP_ID->column(), $groupKey)
-            ->where(_PIVOT::ATTR_ID->column(), $text->getKey())->first();
+        $pivotModel = new PivotModel();
+        $stringPivot = $pivotModel->findOne($domainKey, $setKey, $groupKey, $string->getKey());
+        $integerPivot = $pivotModel->findOne($domainKey, $setKey, $groupKey, $integer->getKey());
+        $decimalPivot = $pivotModel->findOne($domainKey, $setKey, $groupKey, $decimal->getKey());
+        $datetimePivot = $pivotModel->findOne($domainKey, $setKey, $groupKey, $datetime->getKey());
+        $textPivot = $pivotModel->findOne($domainKey, $setKey, $groupKey, $text->getKey());
 
-        $this->assertNotNull($stringPivot);
-        $this->assertNotNull($integerPivot);
-        $this->assertNotNull($decimalPivot);
-        $this->assertNotNull($datetimePivot);
-        $this->assertNotNull($textPivot);
+        $this->assertIsArray($stringPivot);
+        $this->assertIsArray($integerPivot);
+        $this->assertIsArray($decimalPivot);
+        $this->assertIsArray($datetimePivot);
+        $this->assertIsArray($textPivot);
 
         // check entities created
 
@@ -392,37 +373,18 @@ class ImportManagerAcceptanceTest extends TestCase
         $this->assertNotNull($text);
 
         // check attributes linked
-        /** @var PivotModel $stringPivot */
-        /** @var PivotModel $integerPivot */
-        /** @var PivotModel $decimalPivot */
-        /** @var PivotModel $datetimePivot */
-        /** @var PivotModel $textPivot */
-        $stringPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
-            ->where(_PIVOT::SET_ID->column(), $setKey)
-            ->where(_PIVOT::GROUP_ID->column(), $groupKey)
-            ->where(_PIVOT::ATTR_ID->column(), $string->getKey())->first();
-        $integerPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
-            ->where(_PIVOT::SET_ID->column(), $setKey)
-            ->where(_PIVOT::GROUP_ID->column(), $groupKey)
-            ->where(_PIVOT::ATTR_ID->column(), $integer->getKey())->first();
-        $decimalPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
-            ->where(_PIVOT::SET_ID->column(), $setKey)
-            ->where(_PIVOT::GROUP_ID->column(), $groupKey)
-            ->where(_PIVOT::ATTR_ID->column(), $decimal->getKey())->first();
-        $datetimePivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
-            ->where(_PIVOT::SET_ID->column(), $setKey)
-            ->where(_PIVOT::GROUP_ID->column(), $groupKey)
-            ->where(_PIVOT::ATTR_ID->column(), $datetime->getKey())->first();
-        $textPivot = PivotModel::where(_PIVOT::DOMAIN_ID->column(), $domainKey)
-            ->where(_PIVOT::SET_ID->column(), $setKey)
-            ->where(_PIVOT::GROUP_ID->column(), $groupKey)
-            ->where(_PIVOT::ATTR_ID->column(), $text->getKey())->first();
+        $pivotModel = new PivotModel();
+        $stringPivot = $pivotModel->findOne($domainKey, $setKey, $groupKey, $string->getKey());
+        $integerPivot = $pivotModel->findOne($domainKey, $setKey, $groupKey, $integer->getKey());
+        $decimalPivot = $pivotModel->findOne($domainKey, $setKey, $groupKey, $decimal->getKey());
+        $datetimePivot = $pivotModel->findOne($domainKey, $setKey, $groupKey, $datetime->getKey());
+        $textPivot = $pivotModel->findOne($domainKey, $setKey, $groupKey, $text->getKey());
 
-        $this->assertNotNull($stringPivot);
-        $this->assertNotNull($integerPivot);
-        $this->assertNotNull($decimalPivot);
-        $this->assertNotNull($datetimePivot);
-        $this->assertNotNull($textPivot);
+        $this->assertIsArray($stringPivot);
+        $this->assertIsArray($integerPivot);
+        $this->assertIsArray($decimalPivot);
+        $this->assertIsArray($datetimePivot);
+        $this->assertIsArray($textPivot);
 
         // check entities created
         $qb = Connection::get()->createQueryBuilder();

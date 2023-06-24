@@ -9,66 +9,54 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\Model;
 
-use Illuminate\Database\Eloquent\Model;
+use Doctrine\DBAL\Exception;
 use Drobotik\Eav\Enum\_PIVOT;
+use PDO;
 
 class PivotModel extends Model
 {
-    public function __construct(array $attributes = [])
+    public function __construct()
     {
-        $this->table = _PIVOT::table();
-        $this->primaryKey = _PIVOT::ID->column();
-        $this->fillable = [
-            _PIVOT::DOMAIN_ID->column(),
-            _PIVOT::SET_ID->column(),
-            _PIVOT::GROUP_ID->column(),
-            _PIVOT::ATTR_ID->column()
-        ];
-        $this->timestamps = false;
-        parent::__construct($attributes);
+        $this->setTable(_PIVOT::table());
+        $this->setPrimaryKey(_PIVOT::ID->column());
     }
 
-    public function getDomainKey()
+    /**
+     * @throws Exception
+     */
+    public function create(array $data) : int
     {
-        return $this->{_PIVOT::DOMAIN_ID->column()};
+        $conn = $this->db();
+        $conn->createQueryBuilder()
+            ->insert($this->getTable())
+            ->values([
+                _PIVOT::DOMAIN_ID->column() => '?',
+                _PIVOT::SET_ID->column() => '?',
+                _PIVOT::GROUP_ID->column() => '?',
+                _PIVOT::ATTR_ID->column() => '?'
+            ])
+            ->setParameter(0, $data[_PIVOT::DOMAIN_ID->column()])
+            ->setParameter(1, $data[_PIVOT::SET_ID->column()])
+            ->setParameter(2, $data[_PIVOT::GROUP_ID->column()])
+            ->setParameter(3, $data[_PIVOT::ATTR_ID->column()])
+            ->executeQuery();
+        return (int) $conn->lastInsertId();
     }
 
-    public function setDomainKey(int $key) : self
+    public function findOne(int $domainKey, int $setKey, int $groupKey, int $attributeKey) : bool|array
     {
-        $this->{_PIVOT::DOMAIN_ID->column()} = $key;
-        return $this;
-    }
-
-    public function getAttrSetKey()
-    {
-        return $this->{_PIVOT::SET_ID->column()};
-    }
-
-    public function setAttrSetKey(int $key) : self
-    {
-        $this->{_PIVOT::SET_ID->column()} = $key;
-        return $this;
-    }
-
-    public function getGroupKey()
-    {
-        return $this->{_PIVOT::GROUP_ID->column()};
-    }
-
-    public function setGroupKey(int $key) : self
-    {
-        $this->{_PIVOT::GROUP_ID->column()} = $key;
-        return $this;
-    }
-
-    public function getAttrKey()
-    {
-        return $this->{_PIVOT::ATTR_ID->column()};
-    }
-
-    public function setAttrKey(int $key) : self
-    {
-        $this->{_PIVOT::ATTR_ID->column()} = $key;
-        return $this;
+        return $this->db()->createQueryBuilder()
+            ->select($this->getPrimaryKey())
+            ->from($this->getTable())
+            ->where(sprintf('%s = ?', _PIVOT::DOMAIN_ID->column()))
+            ->andWhere(sprintf('%s = ?', _PIVOT::SET_ID->column()))
+            ->andWhere(sprintf('%s = ?', _PIVOT::GROUP_ID->column()))
+            ->andWhere(sprintf('%s = ?', _PIVOT::ATTR_ID->column()))
+            ->setParameter(0, $domainKey, PDO::PARAM_INT)
+            ->setParameter(1, $setKey, PDO::PARAM_INT)
+            ->setParameter(2, $groupKey, PDO::PARAM_INT)
+            ->setParameter(3, $attributeKey, PDO::PARAM_INT)
+            ->executeQuery()
+            ->fetchAssociative();
     }
 }

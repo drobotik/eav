@@ -15,13 +15,13 @@ use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\_DOMAIN;
 use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Enum\_GROUP;
+use Drobotik\Eav\Enum\_PIVOT;
 use Drobotik\Eav\Enum\_RESULT;
 use Drobotik\Eav\Enum\_SET;
 use Drobotik\Eav\Enum\ATTR_FACTORY;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Model\AttributeModel;
 use Drobotik\Eav\Model\AttributeSetModel;
-use Drobotik\Eav\Model\PivotModel;
 use Drobotik\Eav\Model\ValueDatetimeModel;
 use Drobotik\Eav\Model\ValueDecimalModel;
 use Drobotik\Eav\Model\ValueIntegerModel;
@@ -257,13 +257,21 @@ class EavFactoryFunctionalTest extends TestCase
         $groupKey = $this->eavFactory->createGroup($setKey);
         $this->eavFactory->createAttribute($domainKey);
         $attribute = $this->eavFactory->createAttribute($domainKey);
+        $attributeKey = $attribute->getKey();
+        $pivotKey = $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $attributeKey);
 
-        $result = $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $attribute->getKey());
-        $this->assertInstanceOf(PivotModel::class, $result);
-        $this->assertEquals(1, $result->getKey());
-        $this->assertEquals(2, $result->getDomainKey());
-        $this->assertEquals(2, $result->getAttrKey());
-        $this->assertEquals(2, $result->getGroupKey());
+        $qb = Connection::get()->createQueryBuilder();
+        $record = $qb->select('*')->from(_PIVOT::table())
+            ->executeQuery()
+            ->fetchAssociative();
+
+        $this->assertEquals([
+            _PIVOT::ID->column() => $pivotKey,
+            _PIVOT::DOMAIN_ID->column() => $domainKey,
+            _PIVOT::SET_ID->column() => $setKey,
+            _PIVOT::GROUP_ID->column() => $groupKey,
+            _PIVOT::ATTR_ID->column() => $attributeKey
+        ], $record);
     }
 
     /**

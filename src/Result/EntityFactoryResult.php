@@ -10,14 +10,11 @@ declare(strict_types=1);
 namespace Drobotik\Eav\Result;
 
 use Drobotik\Eav\Model\AttributeModel;
-use Drobotik\Eav\Model\EntityModel;
-use Drobotik\Eav\Model\PivotModel;
 use Drobotik\Eav\Model\ValueBase;
 
 class EntityFactoryResult
 {
     private int $entityKey;
-    /** @var PivotModel[] */
     private array $pivots = [];
     /** @var AttributeModel[] */
     private array $attributes = [];
@@ -54,9 +51,9 @@ class EntityFactoryResult
         return $this->values;
     }
 
-    public function addPivot(string $attrName, PivotModel $pivot): void
+    public function addPivot(string $attrName, int $pivotKey): void
     {
-        $this->pivots[$attrName] = $pivot;
+        $this->pivots[$attrName] = $pivotKey;
     }
 
     public function getPivots() : array
