@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Tests\Eav\ImportContentWorker;
 
 use Drobotik\Eav\Driver\CsvDriver;
+use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Import\Content\AttributeSet;
@@ -17,7 +18,6 @@ use Drobotik\Eav\Import\Content\Value;
 use Drobotik\Eav\Import\Content\ValueSet;
 use Drobotik\Eav\Import\Content\Worker;
 use Drobotik\Eav\Import\ImportContainer;
-use Drobotik\Eav\Model\AttributeModel;
 use Drobotik\Eav\Model\EntityModel;
 use Drobotik\Eav\Repository\ValueRepository;
 use PHPUnit\Framework\TestCase;
@@ -154,39 +154,30 @@ class ImportContentWorkerBehaviorTest extends TestCase
         $attribute1key = 5;
         $attribute2key = 15;
         $attribute3key = 21;
-        $attribute1type = ATTR_TYPE::INTEGER;
-        $attribute2type = ATTR_TYPE::TEXT;
-        $attribute3type = ATTR_TYPE::TEXT;
+        $attribute1type = ATTR_TYPE::INTEGER->value();
+        $attribute2type = ATTR_TYPE::TEXT->value();
+        $attribute3type = ATTR_TYPE::TEXT->value();
         $content1 = "content1";
         $content2 = "content2";
         $content3 = "";
 
-        $attribute1 = $this->getMockBuilder(AttributeModel::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getKey', 'getTypeEnum'])
-            ->getMock();
-        $attribute1->expects($this->once())->method('getKey')
-            ->willReturn($attribute1key);
-        $attribute1->expects($this->once())->method('getTypeEnum')
-            ->willReturn($attribute1type);
+        $attribute1 = [
+            _ATTR::ID->column() => $attribute1key,
+            _ATTR::NAME->column() => $attribute1name,
+            _ATTR::TYPE->column() => $attribute1type
+        ];
 
-        $attribute2 = $this->getMockBuilder(AttributeModel::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getKey', 'getTypeEnum'])
-            ->getMock();
-        $attribute2->expects($this->once())->method('getKey')
-            ->willReturn($attribute2key);
-        $attribute2->expects($this->once())->method('getTypeEnum')
-            ->willReturn($attribute2type);
+        $attribute2 = [
+            _ATTR::ID->column() => $attribute2key,
+            _ATTR::NAME->column() => $attribute2name,
+            _ATTR::TYPE->column() => $attribute2type
+        ];
 
-        $attribute3 = $this->getMockBuilder(AttributeModel::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getKey', 'getTypeEnum'])
-            ->getMock();
-        $attribute3->expects($this->once())->method('getKey')
-            ->willReturn($attribute3key);
-        $attribute3->expects($this->once())->method('getTypeEnum')
-            ->willReturn($attribute3type);
+        $attribute3 = [
+            _ATTR::ID->column() => $attribute3key,
+            _ATTR::NAME->column() => $attribute3name,
+            _ATTR::TYPE->column() => $attribute3type
+        ];
 
         $attrSet = $this->getMockBuilder(AttributeSet::class)
             ->onlyMethods(['getAttribute'])->getMock();
@@ -232,11 +223,11 @@ class ImportContentWorkerBehaviorTest extends TestCase
             ->onlyMethods(['updateOrCreate', 'destroy'])->getMock();
         $valueRepo->expects($this->exactly(2))->method('updateOrCreate')
             ->withConsecutive(
-                [$domainKey, $entity1Key, $attribute1key, $attribute1type, $content1],
-                [$domainKey, $entity2Key, $attribute2key, $attribute2type, $content2]
+                [$domainKey, $entity1Key, $attribute1key, ATTR_TYPE::getCase($attribute1type), $content1],
+                [$domainKey, $entity2Key, $attribute2key, ATTR_TYPE::getCase($attribute2type), $content2]
             );
         $valueRepo->expects($this->once())->method('destroy')
-            ->with($domainKey, $entity1Key, $attribute3key, $attribute3type);
+            ->with($domainKey, $entity1Key, $attribute3key, ATTR_TYPE::getCase($attribute3type));
 
         $worker = $this->getMockBuilder(Worker::class)
             ->onlyMethods([

@@ -9,15 +9,14 @@ declare(strict_types=1);
 
 namespace Tests\Eav\QueryBuilderManager;
 
+use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\ATTR_TYPE;
-use Drobotik\Eav\Model\AttributeModel;
+use Drobotik\Eav\Model\AttributeSetModel;
 use Drobotik\Eav\QueryBuilder\QueryBuilder;
 use Drobotik\Eav\QueryBuilder\QueryBuilderAttributes;
 use Drobotik\Eav\QueryBuilder\QueryBuilderGroup;
 use Drobotik\Eav\QueryBuilder\QueryBuilderManager;
 use Drobotik\Eav\QueryBuilder\QueryBuilderParser;
-use Drobotik\Eav\Repository\AttributeRepository;
-use Illuminate\Database\Eloquent\Collection;
 use Tests\QueryBuilderTestCase;
 
 class QueryBuilderManagerBehaviorTest extends QueryBuilderTestCase
@@ -33,8 +32,9 @@ class QueryBuilderManagerBehaviorTest extends QueryBuilderTestCase
     {
         $query = $this->getQuery();
 
-        $attribute = new AttributeModel;
-        $attribute->setName('name1');
+        $attribute = [
+            _ATTR::NAME->column() => 'name1'
+        ];
 
         $pivot = $this->getMockBuilder(QueryBuilderAttributes::class)
             ->onlyMethods(['setAttributeSelected'])
@@ -71,15 +71,11 @@ class QueryBuilderManagerBehaviorTest extends QueryBuilderTestCase
     {
         $query = $this->getQuery();
 
-        $attribute = $this->getMockBuilder(AttributeModel::class)
-            ->onlyMethods(['getKey', 'getName', 'getTypeEnum'])
-            ->getMock();
-        $attribute->expects($this->once())->method('getKey')
-            ->willReturn(123);
-        $attribute->expects($this->once())->method('getName')
-            ->willReturn('name1');
-        $attribute->expects($this->once())->method('getTypeEnum')
-            ->willReturn(ATTR_TYPE::STRING);
+        $attribute = [
+            _ATTR::ID->column() => 123,
+            _ATTR::NAME->column() => 'name1',
+            _ATTR::TYPE->column() => ATTR_TYPE::STRING->value()
+        ];
 
         $pivot = $this->getMockBuilder(QueryBuilderAttributes::class)
             ->onlyMethods(['setAttributeJoined'])
@@ -116,11 +112,10 @@ class QueryBuilderManagerBehaviorTest extends QueryBuilderTestCase
     public function setup_attribute()
     {
         $query = $this->getQuery();
-        $attribute = $this->getMockBuilder(AttributeModel::class)
-            ->onlyMethods(['getName'])
-            ->getMock();
-        $attribute->expects($this->once())->method('getName')
-            ->willReturn('name1');
+        $attribute = [
+            _ATTR::NAME->column() => 'name1',
+        ];
+
         $manager = $this->getMockBuilder(QueryBuilderManager::class)
             ->onlyMethods(['isManualColumn', 'markSelected', 'markJoined'])
             ->getMock();
@@ -150,7 +145,7 @@ class QueryBuilderManagerBehaviorTest extends QueryBuilderTestCase
     {
         $query = $this->getQuery();
 
-        $attribute = new AttributeModel();
+        $attribute = [_ATTR::NAME->column() => 'test'];
 
         $pivot = $this->getMockBuilder(QueryBuilderAttributes::class)
             ->onlyMethods(['getAttributes'])
@@ -181,12 +176,12 @@ class QueryBuilderManagerBehaviorTest extends QueryBuilderTestCase
     public function initialize()
     {
         $query = $this->getQuery();
-        $storedAttributes = new Collection();
+        $storedAttributes = [123];
 
-        $attributeRepo = $this->getMockBuilder(AttributeRepository::class)
-            ->onlyMethods(['getLinked'])->getMock();
+        $attributeModel = $this->getMockBuilder(AttributeSetModel::class)
+            ->onlyMethods(['findAttributes'])->getMock();
 
-        $attributeRepo->expects($this->once())->method('getLinked')
+        $attributeModel->expects($this->once())->method('findAttributes')
             ->with(8, 9)
             ->willReturn($storedAttributes);
 
@@ -200,7 +195,7 @@ class QueryBuilderManagerBehaviorTest extends QueryBuilderTestCase
             ->onlyMethods([
                 'getDomainKey',
                 'getSetKey',
-                'makeAttributeRepository',
+                'makeAttributeSetModel',
                 'makeQueryBuilderAttributes',
                 'setAttributesPivot',
                 'makeQuery',
@@ -212,8 +207,8 @@ class QueryBuilderManagerBehaviorTest extends QueryBuilderTestCase
             ->willReturn(8);
         $manager->expects($this->once())->method('getSetKey')
             ->willReturn(9);
-        $manager->expects($this->once())->method('makeAttributeRepository')
-            ->willReturn($attributeRepo);
+        $manager->expects($this->once())->method('makeAttributeSetModel')
+            ->willReturn($attributeModel);
         $manager->expects($this->once())->method('makeQueryBuilderAttributes')
             ->willReturn($pivot);
         $manager->expects($this->once())->method('setAttributesPivot')

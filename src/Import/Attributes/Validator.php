@@ -9,14 +9,16 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\Import\Attributes;
 
+use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Exception\ImportException;
 use Drobotik\Eav\Model\AttributeModel;
 use Drobotik\Eav\Trait\RepositoryTrait;
+use Drobotik\Eav\Trait\SingletonsTrait;
 
 class Validator
 {
-
+    use SingletonsTrait;
     use RepositoryTrait;
     /** @var AttributeModel[] $existingAttributes */
     private array $existingAttributes = [];
@@ -60,11 +62,10 @@ class Validator
         $worker = $this->getWorker();
         $container = $worker->getContainer();
         $domainKey = $container->getDomainKey();
-        $repository = $this->makeAttributeRepository();
-        /** @var AttributeModel $attribute */
-        foreach ($repository->getStored($domainKey) as $attribute)
+        $setModel = $this->makeAttributeSetModel();
+        foreach ($setModel->findAttributes($domainKey) as $attribute)
         {
-            $this->existingAttributes[$attribute->getName()] = $attribute;
+            $this->existingAttributes[$attribute[_ATTR::NAME->column()]] = $attribute;
         }
     }
 

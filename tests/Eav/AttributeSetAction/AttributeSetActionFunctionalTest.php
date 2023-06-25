@@ -12,7 +12,9 @@ namespace Tests\Eav\AttributeSetAction;
 use Drobotik\Eav\Attribute;
 use Drobotik\Eav\AttributeContainer;
 use Drobotik\Eav\AttributeSet;
+use Drobotik\Eav\Database\Connection;
 use Drobotik\Eav\Entity;
+use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Strategy;
 use Tests\TestCase;
@@ -34,10 +36,15 @@ class AttributeSetActionFunctionalTest extends TestCase
      * @covers \Drobotik\Eav\AttributeSetAction::initializeAttribute
      */
     public function initialize_attribute() {
-        $attribute = $this->eavFactory->createAttribute();
-        $result = $this->action->initializeAttribute($attribute->toArray());
+        $attribute = [
+            _ATTR::ID->column() => 1,
+            _ATTR::DOMAIN_ID->column() => 1,
+            _ATTR::NAME->column() => 'test',
+            _ATTR::TYPE->column() => ATTR_TYPE::STRING->value()
+        ];
+        $result = $this->action->initializeAttribute($attribute);
         $this->assertInstanceOf(Attribute::class, $result);
-        $this->assertEquals($attribute->toArray(),  $result->getBag()->getFields());
+        $this->assertEquals($attribute,  $result->getBag()->getFields());
         $this->assertSame($result, $this->container->getAttribute());
     }
     /**
@@ -45,14 +52,19 @@ class AttributeSetActionFunctionalTest extends TestCase
      * @group functional
      * @covers \Drobotik\Eav\AttributeSetAction::initializeAttribute
      */
-    public function initialized_attribute_without_pivot() {
+    public function initialized_attribute_with_pivot() {
         $domainKey = $this->eavFactory->createDomain();
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
         $groupKey = $this->eavFactory->createGroup($setKey);
-        $attributeModel = $this->eavFactory->createAttribute($domainKey);
-        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $attributeModel->getKey());
-        $result = $this->action->initializeAttribute($attributeModel->toArray());
-        $this->assertEquals($attributeModel->toArray(), $result->getBag()->getFields());
+        $attributeKey = $this->eavFactory->createAttribute($domainKey);
+        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $attributeKey);
+
+        $qb = Connection::get()->createQueryBuilder();
+        $attributeRecord = $qb->select('*')->from(_ATTR::table())
+            ->executeQuery()->fetchAssociative();
+
+        $result = $this->action->initializeAttribute($attributeRecord);
+        $this->assertEquals($attributeRecord, $result->getBag()->getFields());
         $this->assertSame($result, $this->container->getAttribute());
     }
     /**
@@ -76,10 +88,10 @@ class AttributeSetActionFunctionalTest extends TestCase
         $entityKey = $this->eavFactory->createEntity($domainKey);
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
         $groupKey = $this->eavFactory->createGroup($setKey);
-        $attributeModel = $this->eavFactory->createAttribute($domainKey);
-        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $attributeModel->getKey());
+        $attKey = $this->eavFactory->createAttribute($domainKey);
+        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $attKey);
         $valueModel = $this->eavFactory->createValue(
-            ATTR_TYPE::STRING, $domainKey, $entityKey, $attributeModel->getKey(), "test");
+            ATTR_TYPE::STRING, $domainKey, $entityKey, $attKey, "test");
 
         $entity = new Entity();
         $entity->setKey($entityKey);
@@ -88,12 +100,16 @@ class AttributeSetActionFunctionalTest extends TestCase
         $attrSet->setEntity($entity);
 
         $this->container->setAttributeSet($attrSet);
-        $this->action->initialize($attributeModel->toArray());
+
+        $qb = Connection::get()->createQueryBuilder();
+        $attributeRecord = $qb->select('*')->from(_ATTR::table())
+            ->executeQuery()->fetchAssociative();
+        $this->action->initialize($attributeRecord);
 
         // attribute
         $attribute = $this->container->getAttribute();
         $this->assertInstanceOf(Attribute::class, $attribute);
-        $this->assertEquals($attributeModel->toArray(), $attribute->getBag()->getFields());
+        $this->assertEquals($attributeRecord, $attribute->getBag()->getFields());
         // value
         $valueManager = $this->container->getValueManager();
         $this->assertEquals($valueModel->getKey(), $valueManager->getKey());

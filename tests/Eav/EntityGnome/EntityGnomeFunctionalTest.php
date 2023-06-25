@@ -206,18 +206,18 @@ class EntityGnomeFunctionalTest extends TestCase
         $domainKey = $this->eavFactory->createDomain();
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
         $groupKey = $this->eavFactory->createGroup($setKey);
-        $attrEmail = $this->eavFactory->createAttribute($domainKey, [
+        $attrEmailKey = $this->eavFactory->createAttribute($domainKey, [
             _ATTR::NAME->column() => "email"
         ]);
-        $attrPhone = $this->eavFactory->createAttribute($domainKey, [
+        $attrPhoneKey = $this->eavFactory->createAttribute($domainKey, [
             _ATTR::NAME->column() => "phone"
         ]);
-        $attrNote = $this->eavFactory->createAttribute($domainKey, [
+        $attrNoteKey = $this->eavFactory->createAttribute($domainKey, [
             _ATTR::NAME->column() => "note"
         ]);
-        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $attrEmail->getKey());
-        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $attrPhone->getKey());
-        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $attrNote->getKey());
+        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $attrEmailKey);
+        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $attrPhoneKey);
+        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $attrNoteKey);
 
         $entity = $this->gnome->getEntity();
         $entity->setDomainKey($domainKey);
@@ -228,15 +228,15 @@ class EntityGnomeFunctionalTest extends TestCase
 
         $result = $this->gnome->save();
 
-        $emailRecord = ValueStringModel::where(_VALUE::ATTRIBUTE_ID->column(), $attrEmail->getKey())
+        $emailRecord = ValueStringModel::where(_VALUE::ATTRIBUTE_ID->column(), $attrEmailKey)
             ->firstOrFail();
 
         $this->assertEquals($testData["email"], $emailRecord->getValue());
-        $phoneRecord = ValueStringModel::where(_VALUE::ATTRIBUTE_ID->column(), $attrPhone->getKey())
+        $phoneRecord = ValueStringModel::where(_VALUE::ATTRIBUTE_ID->column(), $attrPhoneKey)
             ->firstOrFail();
         $this->assertEquals($testData["phone"], $phoneRecord->getValue());
 
-        $this->assertNull(ValueStringModel::where(_VALUE::ATTRIBUTE_ID->column(), $attrNote->getKey())->first());
+        $this->assertNull(ValueStringModel::where(_VALUE::ATTRIBUTE_ID->column(), $attrNoteKey)->first());
 
         $this->assertEquals([], $entity->getBag()->getData());
 

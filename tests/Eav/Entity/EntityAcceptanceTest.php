@@ -38,31 +38,31 @@ class EntityAcceptanceTest extends TestCase
         $domainKey = $this->eavFactory->createDomain();
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
         $groupKey = $this->eavFactory->createGroup($setKey);
-        $stringAttribute = $this->eavFactory->createAttribute($domainKey, [
+        $stringAttributeKey = $this->eavFactory->createAttribute($domainKey, [
             _ATTR::NAME->column() => "string",
             _ATTR::TYPE->column() => ATTR_TYPE::STRING->value()
         ]);
-        $integerAttribute = $this->eavFactory->createAttribute($domainKey, [
+        $integerAttributeKey = $this->eavFactory->createAttribute($domainKey, [
             _ATTR::NAME->column() => "integer",
             _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value()
         ]);
-        $decimalAttribute = $this->eavFactory->createAttribute($domainKey, [
+        $decimalAttributeKey = $this->eavFactory->createAttribute($domainKey, [
             _ATTR::NAME->column() => "decimal",
             _ATTR::TYPE->column() => ATTR_TYPE::DECIMAL->value()
         ]);
-        $datetimeAttribute = $this->eavFactory->createAttribute($domainKey, [
+        $datetimeAttributeKey = $this->eavFactory->createAttribute($domainKey, [
             _ATTR::NAME->column() => "datetime",
             _ATTR::TYPE->column() => ATTR_TYPE::DATETIME->value()
         ]);
-        $textAttribute = $this->eavFactory->createAttribute($domainKey, [
+        $textAttributeKey = $this->eavFactory->createAttribute($domainKey, [
             _ATTR::NAME->column() => "text",
             _ATTR::TYPE->column() => ATTR_TYPE::TEXT->value()
         ]);
-        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $stringAttribute->getKey());
-        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $integerAttribute->getKey());
-        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $decimalAttribute->getKey());
-        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $datetimeAttribute->getKey());
-        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $textAttribute->getKey());
+        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $stringAttributeKey);
+        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $integerAttributeKey);
+        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $decimalAttributeKey);
+        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $datetimeAttributeKey);
+        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $textAttributeKey);
 
         for($i = 0; $i < 2; $i++) {
             $message = "Failed on iteration $i";
@@ -103,11 +103,11 @@ class EntityAcceptanceTest extends TestCase
             $this->assertEquals($domainKey, $datetimeValue->getDomainKey(), $message);
             $this->assertEquals($domainKey, $textValue->getDomainKey(), $message);
 
-            $this->assertEquals($stringAttribute->getKey(), $stringValue->getAttrKey(), $message);
-            $this->assertEquals($integerAttribute->getKey(), $integerValue->getAttrKey(), $message);
-            $this->assertEquals($decimalAttribute->getKey(), $decimalValue->getAttrKey(), $message);
-            $this->assertEquals($datetimeAttribute->getKey(), $datetimeValue->getAttrKey(), $message);
-            $this->assertEquals($textAttribute->getKey(), $textValue->getAttrKey(), $message);
+            $this->assertEquals($stringAttributeKey, $stringValue->getAttrKey(), $message);
+            $this->assertEquals($integerAttributeKey, $integerValue->getAttrKey(), $message);
+            $this->assertEquals($decimalAttributeKey, $decimalValue->getAttrKey(), $message);
+            $this->assertEquals($datetimeAttributeKey, $datetimeValue->getAttrKey(), $message);
+            $this->assertEquals($textAttributeKey, $textValue->getAttrKey(), $message);
 
             $this->assertEquals($data["string"], $stringValue->getValue(), $message);
             $this->assertEquals($data["integer"], $integerValue->getValue(), $message);

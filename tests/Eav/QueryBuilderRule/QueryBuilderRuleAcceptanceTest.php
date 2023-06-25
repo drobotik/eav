@@ -17,7 +17,6 @@ use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Enum\QB_OPERATOR;
 use Drobotik\Eav\QueryBuilder\QueryBuilderGroup;
 use Drobotik\Eav\QueryBuilder\QueryBuilderAttributes;
-
 use Drobotik\Eav\QueryBuilder\QueryBuilderRule;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\Grammars\MySqlGrammar as MySQLGrammar;
@@ -45,12 +44,16 @@ class QueryBuilderRuleAcceptanceTest extends TestCase
     public function make_join()
     {
         $domainKey = $this->eavFactory->createDomain();
-        $attributeModel = $this->eavFactory->createAttribute($domainKey, [
+        $attributeKey = $this->eavFactory->createAttribute($domainKey, [
             _ATTR::NAME->column() => 'price',
             _ATTR::TYPE->column() => ATTR_TYPE::DECIMAL->value()
         ]);
         $attributes = new QueryBuilderAttributes();
-        $attributes->appendAttribute($attributeModel);
+        $attributes->appendAttribute([
+            _ATTR::ID->column() => $attributeKey,
+            _ATTR::NAME->column() => 'price',
+            _ATTR::TYPE->column() => ATTR_TYPE::DECIMAL->value()
+        ]);
 
         $group = new QueryBuilderGroup();
         $group->setAttributes($attributes);

@@ -9,14 +9,13 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\Result;
 
-use Drobotik\Eav\Model\AttributeModel;
+use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Model\ValueBase;
 
 class EntityFactoryResult
 {
     private int $entityKey;
     private array $pivots = [];
-    /** @var AttributeModel[] */
     private array $attributes = [];
     /** @var ValueBase[] */
     private array $values = [];
@@ -31,9 +30,9 @@ class EntityFactoryResult
         return $this->entityKey;
     }
 
-    public function addAttribute(AttributeModel $attributeModel): void
+    public function addAttribute(array $attribute): void
     {
-        $this->attributes[$attributeModel->getName()] = $attributeModel;
+        $this->attributes[$attribute[_ATTR::NAME->column()]] = $attribute;
     }
 
     public function getAttributes(): array

@@ -19,9 +19,8 @@ use Drobotik\Eav\Import\Attributes\Validator;
 use Drobotik\Eav\Import\Attributes\Worker;
 use Drobotik\Eav\Import\ImportContainer;
 use Drobotik\Eav\Model\AttributeModel;
-use Drobotik\Eav\Repository\AttributeRepository;
+use Drobotik\Eav\Model\AttributeSetModel;
 
-use Illuminate\Database\Eloquent\Collection;
 use PHPUnit\Framework\TestCase;
 
 class ValidatorFunctionalTest extends TestCase
@@ -83,23 +82,21 @@ class ValidatorFunctionalTest extends TestCase
             ->onlyMethods(['getContainer'])->getMock();
         $worker->expects($this->once())->method('getContainer')->willReturn($container);
 
-        $attr1 = new AttributeModel();
-        $attr1->setName('test1');
-        $attr2 = new AttributeModel();
-        $attr2->setName('test2');
-        $data = [$attr1, $attr2];
-        $collection = new Collection($data);
-        $repository = $this->getMockBuilder(AttributeRepository::class)
-            ->onlyMethods(['getStored'])->getMock();
-        $repository->expects($this->once())->method('getStored')
+        $attr1 = [_ATTR::NAME->column() => 'test1'];
+        $attr2 = [_ATTR::NAME->column() => 'test2'];
+        $collection = [$attr1, $attr2];
+
+        $setModel = $this->getMockBuilder(AttributeSetModel::class)
+            ->onlyMethods(['findAttributes'])->getMock();
+        $setModel->expects($this->once())->method('findAttributes')
             ->with(123)
             ->willReturn($collection);
 
         $analyzer = $this->getMockBuilder(Validator::class)
-            ->onlyMethods(['makeAttributeRepository', 'getWorker'])
+            ->onlyMethods(['makeAttributeSetModel', 'getWorker'])
             ->getMock();
         $analyzer->expects($this->once())->method('getWorker')->willReturn($worker);
-        $analyzer->expects($this->once())->method('makeAttributeRepository')->willReturn($repository);
+        $analyzer->expects($this->once())->method('makeAttributeSetModel')->willReturn($setModel);
 
         $analyzer->fetchStoredAttributes();
         $this->assertEquals([

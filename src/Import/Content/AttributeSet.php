@@ -9,14 +9,15 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\Import\Content;
 
-use Drobotik\Eav\Model\AttributeModel;
+use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Trait\RepositoryTrait;
+use Drobotik\Eav\Trait\SingletonsTrait;
 
 class AttributeSet
 {
     use RepositoryTrait;
+    use SingletonsTrait;
 
-    /** @var AttributeModel[]  */
     private array $attributes = [];
     private Worker $worker;
 
@@ -31,12 +32,12 @@ class AttributeSet
     }
 
 
-    public function appendAttribute(AttributeModel $attributeModel): void
+    public function appendAttribute(array $attribute): void
     {
-        $this->attributes[$attributeModel->getName()] = $attributeModel;
+        $this->attributes[$attribute[_ATTR::NAME->column()]] = $attribute;
     }
 
-    public function getAttribute(string $name) : AttributeModel
+    public function getAttribute(string $name) : array
     {
         return $this->attributes[$name];
     }
@@ -52,11 +53,11 @@ class AttributeSet
         $container = $worker->getContainer();
         $driver = $container->getDriver();
         $columns = $driver->getHeader();
-        $repository = $this->makeAttributeRepository();
-        $attributes = $repository->getLinked($container->getDomainKey(), $container->getSetKey());
+        $attributeModel = $this->makeAttributeSetModel();
+        $attributes = $attributeModel->findAttributes($container->getDomainKey(), $container->getSetKey());
         foreach ($attributes as $attribute)
         {
-            $name = $attribute->getName();
+            $name = $attribute[_ATTR::NAME->column()];
             if(in_array($name, $columns))
             {
                 $this->appendAttribute($attribute);

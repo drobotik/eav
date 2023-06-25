@@ -9,9 +9,12 @@ declare(strict_types=1);
 
 namespace Tests\Eav\AttributeModel;
 
+use Drobotik\Eav\Database\Connection;
+use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Model\AttributeModel;
-use PHPUnit\Framework\TestCase;
+use PDO;
+use Tests\TestCase;
 
 class AttributeModelFunctionalTest extends TestCase
 {
@@ -21,84 +24,70 @@ class AttributeModelFunctionalTest extends TestCase
         parent::setUp();
         $this->model = new AttributeModel();
     }
+
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\AttributeModel::setName
-     * @covers \Drobotik\Eav\Model\AttributeModel::getName
+     * @covers \Drobotik\Eav\Model\AttributeModel::__construct
      */
-    public function name_accessor() {
-        $this->model->setName('test');
-        $this->assertEquals('test', $this->model->getName());
-    }
-    /**
-     * @test
-     * @group functional
-     * @covers \Drobotik\Eav\Model\AttributeModel::setDomainKey
-     * @covers \Drobotik\Eav\Model\AttributeModel::getDomainKey
-     */
-    public function domain_key() {
-        $this->model->setDomainKey(123);
-        $this->assertEquals(123, $this->model->getDomainKey());
-    }
-    /**
-     * @test
-     * @group functional
-     * @covers \Drobotik\Eav\Model\AttributeModel::setType
-     * @covers \Drobotik\Eav\Model\AttributeModel::getType
-     */
-    public function type() {
-        $this->model->setType('test');
-        $this->assertEquals('test', $this->model->getType());
-    }
-    /**
-     * @test
-     * @group functional
-     * @covers \Drobotik\Eav\Model\AttributeModel::setDescription
-     * @covers \Drobotik\Eav\Model\AttributeModel::getDescription
-     */
-    public function description() {
-        $this->model->setDescription('test');
-        $this->assertEquals('test', $this->model->getDescription());
-    }
-    /**
-     * @test
-     * @group functional
-     * @covers \Drobotik\Eav\Model\AttributeModel::setDefaultValue
-     * @covers \Drobotik\Eav\Model\AttributeModel::getDefaultValue
-     */
-    public function default_value() {
-        $this->model->setDefaultValue('test');
-        $this->assertEquals('test', $this->model->getDefaultValue());
-    }
-    /**
-     * @test
-     * @group functional
-     * @covers \Drobotik\Eav\Model\AttributeModel::setSource
-     * @covers \Drobotik\Eav\Model\AttributeModel::getSource
-     */
-    public function source() {
-        $this->model->setSource('test');
-        $this->assertEquals('test', $this->model->getSource());
-    }
-    /**
-     * @test
-     * @group functional
-     * @covers \Drobotik\Eav\Model\AttributeModel::setStrategy
-     * @covers \Drobotik\Eav\Model\AttributeModel::getStrategy
-     */
-    public function strategy() {
-        $this->model->setStrategy('test');
-        $this->assertEquals('test', $this->model->getStrategy());
+    public function defaults() {
+        $this->assertEquals(_ATTR::table(), $this->model->getTable());
+        $this->assertEquals(_ATTR::ID->column(), $this->model->getPrimaryKey());
     }
 
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\AttributeModel::getTypeEnum
+     * @covers \Drobotik\Eav\Model\AttributeModel::create
      */
-    public function type_enum() {
-        $this->model->setType(ATTR_TYPE::INTEGER->value());
-        $this->assertEquals(ATTR_TYPE::INTEGER, $this->model->getTypeEnum());
+    public function create_record()
+    {
+        $result = $this->model->create([
+            _ATTR::DOMAIN_ID->column() => 1,
+            _ATTR::NAME->column() => 'test',
+            _ATTR::TYPE->column() => ATTR_TYPE::STRING->value(),
+            _ATTR::STRATEGY->column() => 'strategy',
+            _ATTR::SOURCE->column() => 'source',
+            _ATTR::DEFAULT_VALUE->column() => 'default',
+            _ATTR::DESCRIPTION->column() => 'description'
+        ]);
+        $this->assertEquals(1, $result);
+
+        $table = _ATTR::table();
+        $connection = Connection::get()->getNativeConnection();
+
+        $stmt = $connection->prepare("SELECT * FROM $table");
+        $stmt->execute();
+        $record = $stmt->fetch(PDO::FETCH_ASSOC);
+        $this->assertEquals([
+            _ATTR::ID->column() => 1,
+            _ATTR::DOMAIN_ID->column() => 1,
+            _ATTR::NAME->column() => 'test',
+            _ATTR::TYPE->column() => ATTR_TYPE::STRING->value(),
+            _ATTR::STRATEGY->column() => 'strategy',
+            _ATTR::SOURCE->column() => 'source',
+            _ATTR::DEFAULT_VALUE->column() => 'default',
+            _ATTR::DESCRIPTION->column() => 'description'
+        ], $record);
+    }
+
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\Model\AttributeModel::findByName
+     */
+    public function find_by_name()
+    {
+        $domainKey = 1;
+        $name = "test";
+        $this->eavFactory->createAttribute($domainKey, [
+            _ATTR::NAME->column() => $name
+        ]);
+        $this->eavFactory->createAttribute();
+        $this->eavFactory->createAttribute();
+
+        $this->assertFalse($this->model->findByName('Tom', $domainKey));
+        $this->assertFalse($this->model->findByName('test', 123));
+        $this->assertIsArray($this->model->findByName('test', $domainKey));
     }
 }

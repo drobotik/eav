@@ -9,9 +9,10 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\QueryBuilder;
 
+use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\_VALUE;
+use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Enum\QB_OPERATOR;
-use Drobotik\Eav\Model\AttributeModel;
 use Drobotik\Eav\Trait\QueryBuilderSingletons;
 use Illuminate\Database\Query\Builder;
 
@@ -74,7 +75,7 @@ class QueryBuilderRule
         return $this->operator;
     }
 
-    public function getAttributeModel() : AttributeModel
+    public function getAttributeModel() : array
     {
         $name = $this->getName();
         $group = $this->getGroup();
@@ -85,8 +86,8 @@ class QueryBuilderRule
     public function makeJoin(Builder $query) : Builder
     {
         $attribute = $this->getAttributeModel();
-        $attributeKey = $attribute->getKey();
-        $type = $attribute->getTypeEnum();
+        $attributeKey = $attribute[_ATTR::ID->column()];
+        $type = ATTR_TYPE::getCase($attribute[_ATTR::TYPE->column()]);
         $table = $type->valueTable();
         return $this->makeQueryBuilder()->join($query, $table, $this->getName(), $attributeKey);
     }

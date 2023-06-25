@@ -97,7 +97,7 @@ class EavFactory
         ]);
     }
 
-    public function createAttribute(?int $domainKey = null, array $data = []): AttributeModel
+    public function createAttribute(?int $domainKey = null, array $data = []): int
     {
         if (is_null($domainKey)) {
             $domainKey = $this->createDomain();
@@ -113,18 +113,15 @@ class EavFactory
         ];
         $input = array_merge($defaultData, $data);
         $model = new AttributeModel();
-        $model->setName($input[_ATTR::NAME->column()])
-            ->setDomainKey($domainKey)
-            ->setType($input[_ATTR::TYPE->column()])
-            ->setStrategy($input[_ATTR::STRATEGY->column()])
-            ->setSource($input[_ATTR::SOURCE->column()])
-            ->setDefaultValue($input[_ATTR::DEFAULT_VALUE->column()])
-            ->setDescription($input[_ATTR::DESCRIPTION->column()]);
-        
-        $model->save();
-        $model->refresh();
-
-        return $model;
+        return $model->create([
+            _ATTR::DOMAIN_ID->column() => $domainKey,
+            _ATTR::NAME->column() => $input[_ATTR::NAME->column()],
+            _ATTR::TYPE->column() => $input[_ATTR::TYPE->column()],
+            _ATTR::STRATEGY->column() => $input[_ATTR::STRATEGY->column()],
+            _ATTR::SOURCE->column() => $input[_ATTR::SOURCE->column()],
+            _ATTR::DEFAULT_VALUE->column() => $input[_ATTR::DEFAULT_VALUE->column()],
+            _ATTR::DESCRIPTION->column() => $input[_ATTR::DESCRIPTION->column()],
+        ]);
     }
 
     public function createPivot(int $domainKey, int $setKey, int $groupKey, int $attributeKey): int

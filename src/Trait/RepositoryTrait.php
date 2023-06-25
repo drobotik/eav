@@ -9,22 +9,10 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\Trait;
 
-use Drobotik\Eav\Repository\AttributeRepository;
-use Drobotik\Eav\Repository\PivotRepository;
 use Drobotik\Eav\Repository\ValueRepository;
 
 trait RepositoryTrait
 {
-    public function makePivotRepository(): PivotRepository
-    {
-        return new PivotRepository();
-    }
-
-    public function makeAttributeRepository(): AttributeRepository
-    {
-        return new AttributeRepository();
-    }
-
     public function makeValueRepository(): ValueRepository
     {
         return new ValueRepository();

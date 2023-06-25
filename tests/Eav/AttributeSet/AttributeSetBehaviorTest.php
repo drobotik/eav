@@ -9,11 +9,10 @@ declare(strict_types=1);
 
 namespace Tests\Eav\AttributeSet;
 
-use Illuminate\Database\Eloquent\Collection;
+use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\AttributeContainer;
 use Drobotik\Eav\AttributeSet;
 use Drobotik\Eav\AttributeSetAction;
-use Drobotik\Eav\Model\AttributeModel;
 use Drobotik\Eav\Model\AttributeSetModel;
 use PHPUnit\Framework\TestCase;
 
@@ -26,8 +25,7 @@ class AttributeSetBehaviorTest extends TestCase
      */
     public function fetch_containers() {
         $key = 321;
-        $attribute = new AttributeModel();
-        $collection = [$attribute->toArray()];
+        $collection = [[_ATTR::NAME->column() => 'test', _ATTR::ID->column() => 1]];
         $attrSetModel = $this->getMockBuilder(AttributeSetModel::class)
             ->onlyMethods(['findAttributes'])
             ->getMock();

@@ -17,7 +17,6 @@ use Drobotik\Eav\Import\Attributes\ConfigAttribute;
 use Drobotik\Eav\Import\Attributes\Validator;
 use Drobotik\Eav\Import\Attributes\Worker;
 use Drobotik\Eav\Import\ImportContainer;
-use Drobotik\Eav\Model\AttributeModel;
 use Drobotik\Eav\Model\PivotModel;
 use PHPUnit\Framework\TestCase;
 
@@ -87,16 +86,11 @@ class ImportAttributesWorkerBehaviorTest extends TestCase
         $container->expects($this->once())->method('getSetKey')
             ->willReturn($setKey);
 
-        $attributeRecord = $this->getMockBuilder(AttributeModel::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getKey'])->getMock();
-        $attributeRecord->expects($this->once())->method('getKey')->willReturn($recordKey);
-
         $factory = $this->getMockBuilder(EavFactory::class)
             ->onlyMethods(['createAttribute', 'createPivot'])->getMock();
         $factory->expects($this->once())->method('createAttribute')
             ->with(1, $fields)
-            ->willReturn($attributeRecord);
+            ->willReturn($recordKey);
 
         $factory->expects($this->once())->method('createPivot')
             ->with($domainKey, $setKey, $groupKey, $recordKey)

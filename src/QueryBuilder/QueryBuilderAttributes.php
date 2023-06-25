@@ -9,21 +9,18 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\QueryBuilder;
 
-use Drobotik\Eav\Model\AttributeModel;
-use Illuminate\Support\Collection;
+use Drobotik\Eav\Enum\_ATTR;
 
 class QueryBuilderAttributes
 {
-    /** @var AttributeModel[] */
     private array $attributes = [];
-
     private array $joins = [];
-
     private array $selected = [];
 
-    public function setAttributes(Collection $attributes) : void
+    public function setAttributes(array $attributes) : void
     {
-        $attributes->each(fn(AttributeModel $attr) => $this->appendAttribute($attr));
+        foreach ($attributes as $attribute)
+            $this->appendAttribute($attribute);
     }
 
     public function getAttributes(): array
@@ -31,12 +28,12 @@ class QueryBuilderAttributes
         return $this->attributes;
     }
 
-    public function appendAttribute(AttributeModel $attributeModel): void
+    public function appendAttribute(array $attribute): void
     {
-        $this->attributes[$attributeModel->getName()] = $attributeModel;
+        $this->attributes[$attribute[_ATTR::NAME->column()]] = $attribute;
     }
 
-    public function getAttribute(string $name) : AttributeModel
+    public function getAttribute(string $name) : array
     {
         return $this->attributes[$name];
     }

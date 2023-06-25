@@ -40,17 +40,24 @@ class AttributeSetModel extends Model
     /**
      * @throws Exception
      */
-    public function findAttributes(int $key) : array
+    public function findAttributes(int $domainKey, int $setKey = null) : array
     {
-        return $this->db()
+        $query = $this->db()
             ->createQueryBuilder()
             ->select('a.*')
             ->from(_ATTR::table(), 'a')
             ->innerJoin('a', _PIVOT::table(), 'p',
                 sprintf('a.%s = p.%s', _ATTR::ID->column(), _PIVOT::ATTR_ID->column())
             )
-            ->where(sprintf('p.%s = ?', _PIVOT::SET_ID->column()))
-            ->setParameter(0, $key)
+            ->where(sprintf('p.%s = ?', _PIVOT::DOMAIN_ID->column()))
+            ->setParameter(0, $domainKey);
+
+        if(!is_null($setKey))
+            $query = $query
+                ->andWhere(sprintf('p.%s = ?', _PIVOT::SET_ID->column()))
+                ->setParameter(1, $setKey);
+
+        return $query
             ->executeQuery()
             ->fetchAllAssociative();
     }

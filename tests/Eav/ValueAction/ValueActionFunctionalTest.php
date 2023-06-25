@@ -12,7 +12,9 @@ namespace Tests\Eav\ValueAction;
 use Drobotik\Eav\Attribute;
 use Drobotik\Eav\AttributeContainer;
 use Drobotik\Eav\AttributeSet;
+use Drobotik\Eav\Database\Connection;
 use Drobotik\Eav\Entity;
+use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\_RESULT;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Model\ValueStringModel;
@@ -107,10 +109,12 @@ class ValueActionFunctionalTest extends TestCase
         $entityKey = $this->eavFactory->createEntity($domainKey);
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
         $groupKey = $this->eavFactory->createGroup($setKey);
-        $attributeModel = $this->eavFactory->createAttribute($domainKey);
-        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $attributeModel->getKey());
+        $attrKey = $this->eavFactory->createAttribute($domainKey);
+        $attrRecord = Connection::get()->createQueryBuilder()->select('*')
+            ->from(_ATTR::table())->executeQuery()->fetchAssociative();
+        $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $attrKey);
         $valueModel = $this->eavFactory->createValue(
-            ATTR_TYPE::STRING, $domainKey, $entityKey, $attributeModel->getKey(), "test");
+            ATTR_TYPE::STRING, $domainKey, $entityKey, $attrKey, "test");
 
         $entity = new Entity();
         $entity->setKey($entityKey);
@@ -119,7 +123,7 @@ class ValueActionFunctionalTest extends TestCase
         $attrSet->setKey($setKey);
         $attrSet->setEntity($entity);
         $attribute = new Attribute();
-        $attribute->getBag()->setFields($attributeModel->toArray());
+        $attribute->getBag()->setFields($attrRecord);
         $valueManager = new ValueManager();
         $container = new AttributeContainer();
         $container

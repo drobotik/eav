@@ -62,8 +62,8 @@ class AttributeSetModelFunctionalTest extends TestCase
         $domainKey = $this->eavFactory->createDomain();
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
         $groupKey = $this->eavFactory->createGroup($setKey);
-        $attr1Key = $this->eavFactory->createAttribute()->getKey();
-        $attr2Key = $this->eavFactory->createAttribute()->getKey();
+        $attr1Key = $this->eavFactory->createAttribute();
+        $attr2Key = $this->eavFactory->createAttribute();
         $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $attr1Key);
         $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $attr2Key);
 
@@ -78,7 +78,7 @@ class AttributeSetModelFunctionalTest extends TestCase
             ->fetchAllAssociative();
 
         $this->assertEquals(2, count($expected));
-        $result = $this->model->findAttributes($setKey);
+        $result = $this->model->findAttributes($domainKey, $setKey);
         $this->assertEquals($expected, $result);
     }
 

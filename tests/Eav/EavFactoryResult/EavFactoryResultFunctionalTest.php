@@ -9,9 +9,7 @@ declare(strict_types=1);
 
 namespace Tests\Eav\EavFactoryResult;
 
-use Drobotik\Eav\Model\AttributeModel;
-use Drobotik\Eav\Model\EntityModel;
-use Drobotik\Eav\Model\PivotModel;
+use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Model\ValueStringModel;
 use PHPUnit\Framework\TestCase;
 use Drobotik\Eav\Result\EntityFactoryResult;
@@ -41,9 +39,9 @@ class EavFactoryResultFunctionalTest extends TestCase
      */
     public function attributes() {
         $this->assertEquals([], $this->result->getAttributes());
-        $record = new AttributeModel();
+        $record = [_ATTR::NAME->column() => 'test'];
         $this->result->addAttribute($record);
-        $this->assertEquals([$record->getName() => $record], $this->result->getAttributes());
+        $this->assertEquals(['test' => $record], $this->result->getAttributes());
     }
     /**
      * @test

@@ -9,13 +9,13 @@ declare(strict_types=1);
 
 namespace Tests\Eav\ImportContentWorker;
 
+use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Exception\EntityException;
 use Drobotik\Eav\Import\Content\AttributeSet;
 use Drobotik\Eav\Import\Content\ValueSet;
 use Drobotik\Eav\Import\Content\Worker;
-use Drobotik\Eav\Model\AttributeModel;
 use PHPUnit\Framework\TestCase;
 
 class ImportContentFunctionalTest extends TestCase
@@ -99,19 +99,18 @@ class ImportContentFunctionalTest extends TestCase
     {
         $attributeKey = 123;
         $attributeName = 'test';
-        $attributeType = ATTR_TYPE::TEXT;
+        $attributeType = ATTR_TYPE::TEXT->value();
         $content = 'text';
         $lineIndex = 45;
 
-        $attributeModel = $this->getMockBuilder(AttributeModel::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getKey', 'getName', 'getTypeEnum'])->getMock();
-        $attributeModel->method('getKey')->willReturn($attributeKey);
-        $attributeModel->method('getName')->willReturn($attributeName);
-        $attributeModel->method('getTypeEnum')->willReturn($attributeType);
+        $attribute = [
+            _ATTR::ID->column() => $attributeKey,
+            _ATTR::NAME->column() => $attributeName,
+            _ATTR::TYPE->column() => $attributeType
+        ];
 
         $attrSet = new AttributeSet();
-        $attrSet->appendAttribute($attributeModel);
+        $attrSet->appendAttribute($attribute);
 
         $worker = $this->getMockBuilder(Worker::class)
             ->onlyMethods(['getAttributeSet', 'getLineIndex'])->getMock();
@@ -127,7 +126,7 @@ class ImportContentFunctionalTest extends TestCase
         $value = $values[0];
 
         $this->assertEquals($content, $value->getValue());
-        $this->assertEquals($attributeType, $value->getType());
+        $this->assertEquals($attributeType, $value->getType()->value());
         $this->assertEquals($attributeName, $value->getAttributeName());
         $this->assertEquals($attributeKey, $value->getAttributeKey());
         $this->assertEquals($lineIndex, $value->getLineIndex());
@@ -146,19 +145,18 @@ class ImportContentFunctionalTest extends TestCase
         $entityKey = 451;
         $attributeKey = 123;
         $attributeName = 'test';
-        $attributeType = ATTR_TYPE::TEXT;
+        $attributeType = ATTR_TYPE::TEXT->value();
         $content = 'text';
         $lineIndex = 45;
 
-        $attributeModel = $this->getMockBuilder(AttributeModel::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getKey', 'getName', 'getTypeEnum'])->getMock();
-        $attributeModel->method('getKey')->willReturn($attributeKey);
-        $attributeModel->method('getName')->willReturn($attributeName);
-        $attributeModel->method('getTypeEnum')->willReturn($attributeType);
+        $attribute = [
+            _ATTR::ID->column() => $attributeKey,
+            _ATTR::NAME->column() => $attributeName,
+            _ATTR::TYPE->column() => $attributeType
+        ];
 
         $attrSet = new AttributeSet();
-        $attrSet->appendAttribute($attributeModel);
+        $attrSet->appendAttribute($attribute);
 
         $worker = $this->getMockBuilder(Worker::class)
             ->onlyMethods(['getAttributeSet', 'getLineIndex'])->getMock();

@@ -9,9 +9,9 @@ declare(strict_types=1);
 
 namespace Tests\Eav\QueryBuilderRule;
 
+use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Enum\QB_OPERATOR;
-use Drobotik\Eav\Model\AttributeModel;
 use Drobotik\Eav\QueryBuilder\QueryBuilderGroup;
 use Drobotik\Eav\QueryBuilder\QueryBuilderAttributes;
 use Drobotik\Eav\QueryBuilder\QueryBuilder;
@@ -192,18 +192,16 @@ class QueryBuilderRuleFunctionalTest extends QueryBuilderTestCase
     {
         $group = new QueryBuilderGroup();
         $attributes = new QueryBuilderAttributes();
-        $attributeModel1 = new AttributeModel();
-        $attributeModel1->setName('test1');
-        $attributeModel2 = new AttributeModel();
-        $attributeModel2->setName('test2');
-        $attributes->appendAttribute($attributeModel1);
-        $attributes->appendAttribute($attributeModel2);
+        $attribute1 = [_ATTR::NAME->column() => 'test1'];
+        $attribute2 = [_ATTR::NAME->column() => 'test2'];
+        $attributes->appendAttribute($attribute1);
+        $attributes->appendAttribute($attribute2);
         $group->setAttributes($attributes);
         $this->rule->setGroup($group);
         $this->rule->setName('test2');
-        $this->assertSame($attributeModel2, $this->rule->getAttributeModel());
+        $this->assertSame($attribute2, $this->rule->getAttributeModel());
         $this->rule->setName('test1');
-        $this->assertSame($attributeModel1, $this->rule->getAttributeModel());
+        $this->assertSame($attribute1, $this->rule->getAttributeModel());
     }
 
     /**
@@ -217,13 +215,12 @@ class QueryBuilderRuleFunctionalTest extends QueryBuilderTestCase
     {
         $group = new QueryBuilderGroup();
         $attributes = new QueryBuilderAttributes();
-        $attributeModel = $this->getMockBuilder(AttributeModel::class)
-            ->onlyMethods(['getKey'])
-            ->getMock();
-        $attributeModel->method('getKey')->willReturn(32);
-        $attributeModel->setType(ATTR_TYPE::INTEGER->value());
-        $attributeModel->setName('size');
-        $attributes->appendAttribute($attributeModel);
+        $attribute = [
+            _ATTR::ID->column() => 32,
+            _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value(),
+            _ATTR::NAME->column() => 'size'
+        ];
+        $attributes->appendAttribute($attribute);
         $group->setAttributes($attributes);
         $this->rule->setGroup($group);
         $this->rule->setName('size');

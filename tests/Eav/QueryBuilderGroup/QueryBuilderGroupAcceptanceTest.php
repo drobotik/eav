@@ -9,10 +9,10 @@ declare(strict_types=1);
 
 namespace Tests\Eav\QueryBuilderGroup;
 
+use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Enum\QB_CONDITION;
 use Drobotik\Eav\Enum\QB_OPERATOR;
-use Drobotik\Eav\Model\AttributeModel;
 use Drobotik\Eav\QueryBuilder\QueryBuilder;
 use Drobotik\Eav\QueryBuilder\QueryBuilderGroup;
 use Drobotik\Eav\QueryBuilder\QueryBuilderAttributes;
@@ -30,23 +30,18 @@ class QueryBuilderGroupAcceptanceTest extends QueryBuilderTestCase
      */
     public function make_conditions()
     {
-        $nameAttr = $this->getMockBuilder(AttributeModel::class)
-            ->onlyMethods(['getKey'])
-            ->getMock();
-        $nameAttr->setName('name');
-        $nameAttr->setType(ATTR_TYPE::STRING->value());
-
-        $locationAttr = $this->getMockBuilder(AttributeModel::class)
-            ->onlyMethods(['getKey'])
-            ->getMock();
-        $locationAttr->setName('location');
-        $locationAttr->setType(ATTR_TYPE::STRING->value());
-
-        $thingAttr = $this->getMockBuilder(AttributeModel::class)
-            ->onlyMethods(['getKey'])
-            ->getMock();
-        $thingAttr->setName('thing');
-        $thingAttr->setType(ATTR_TYPE::STRING->value());
+        $nameAttr = [
+            _ATTR::NAME->column() => 'name',
+            _ATTR::TYPE->column() => ATTR_TYPE::STRING->value()
+        ];
+        $locationAttr = [
+            _ATTR::NAME->column() => 'location',
+            _ATTR::TYPE->column() => ATTR_TYPE::STRING->value()
+        ];
+        $thingAttr =[
+            _ATTR::NAME->column() => 'thing',
+            _ATTR::TYPE->column() => ATTR_TYPE::STRING->value()
+        ];
 
         $attributes = new QueryBuilderAttributes();
         $attributes->appendAttribute($nameAttr);
@@ -102,26 +97,23 @@ class QueryBuilderGroupAcceptanceTest extends QueryBuilderTestCase
      */
     public function make_joins()
     {
-        $nameAttr = $this->getMockBuilder(AttributeModel::class)
-            ->onlyMethods(['getKey'])
-            ->getMock();
-        $nameAttr->expects($this->once())->method('getKey')->willReturn(10);
-        $nameAttr->setName('name');
-        $nameAttr->setType(ATTR_TYPE::STRING->value());
+        $nameAttr = [
+            _ATTR::ID->column() => 10,
+            _ATTR::NAME->column() => 'name',
+            _ATTR::TYPE->column() => ATTR_TYPE::STRING->value()
+        ];
 
-        $locationAttr = $this->getMockBuilder(AttributeModel::class)
-            ->onlyMethods(['getKey'])
-            ->getMock();
-        $locationAttr->expects($this->once())->method('getKey')->willReturn(11);
-        $locationAttr->setName('location');
-        $locationAttr->setType(ATTR_TYPE::STRING->value());
+        $locationAttr = [
+            _ATTR::ID->column() => 11,
+            _ATTR::NAME->column() => 'location',
+            _ATTR::TYPE->column() => ATTR_TYPE::STRING->value()
+        ];
 
-        $codeAttr = $this->getMockBuilder(AttributeModel::class)
-            ->onlyMethods(['getKey'])
-            ->getMock();
-        $codeAttr->expects($this->once())->method('getKey')->willReturn(12);
-        $codeAttr->setName('code');
-        $codeAttr->setType(ATTR_TYPE::INTEGER->value());
+        $codeAttr = [
+            _ATTR::ID->column() => 12,
+            _ATTR::NAME->column() => 'code',
+            _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value()
+        ];
 
         $attributes = new QueryBuilderAttributes();
         $attributes->appendAttribute($nameAttr);

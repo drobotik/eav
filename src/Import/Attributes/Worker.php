@@ -59,13 +59,10 @@ class Worker
         $domainKey = $container->getDomainKey();
         $setKey = $container->getSetKey();
         $groupKey = $attribute->getGroupKey();
-
-        $record = $factory->createAttribute($domainKey, $attribute->getFields());
-        $attributeKey = $record->getKey();
-
-        $pivotRecord = $pivotModel->findOne($domainKey, $setKey, $groupKey, $attributeKey);
+        $attrKey = $factory->createAttribute($domainKey, $attribute->getFields());
+        $pivotRecord = $pivotModel->findOne($domainKey, $setKey, $groupKey, $attrKey);
         if($pivotRecord === false)
-            $factory->createPivot($domainKey, $setKey, $groupKey, $attributeKey);
+            $factory->createPivot($domainKey, $setKey, $groupKey, $attrKey);
     }
 
     public function createAttributes(): void

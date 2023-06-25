@@ -10,12 +10,11 @@ declare(strict_types=1);
 namespace Tests\Eav\ImportContentAttributeSet;
 
 use Drobotik\Eav\Driver\CsvDriver;
+use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Import\Content\AttributeSet;
 use Drobotik\Eav\Import\Content\Worker;
 use Drobotik\Eav\Import\ImportContainer;
-use Drobotik\Eav\Model\AttributeModel;
-use Drobotik\Eav\Repository\AttributeRepository;
-use Illuminate\Database\Eloquent\Collection;
+use Drobotik\Eav\Model\AttributeSetModel;
 use PHPUnit\Framework\TestCase;
 
 class ImportContentAttributeSetTest extends TestCase
@@ -53,8 +52,7 @@ class ImportContentAttributeSetTest extends TestCase
     public function attributes()
     {
         $this->assertFalse($this->set->hasAttribute('test'));
-        $attribute = new AttributeModel();
-        $attribute->setName('test');
+        $attribute = [_ATTR::NAME->column() => 'test'];
         $this->set->appendAttribute($attribute);
         $this->assertTrue($this->set->hasAttribute('test'));
         $this->assertSame($attribute, $this->set->getAttribute('test'));
@@ -71,11 +69,9 @@ class ImportContentAttributeSetTest extends TestCase
         $domainKey = 123;
         $setKey = 456;
         $header = ['test'];
-        $attribute1 = new AttributeModel();
-        $attribute1->setName('test');
-        $attribute2 = new AttributeModel();
-        $attribute2->setName('other');
-        $attributes = new Collection([$attribute1, $attribute2]);
+        $attribute1 = [_ATTR::NAME->column() => 'test'];
+        $attribute2 = [_ATTR::NAME->column() => 'other'];
+        $attributes = [$attribute1, $attribute2];
 
         $driver = $this->getMockBuilder(CsvDriver::class)
             ->onlyMethods(['getHeader'])->getMock();
@@ -89,18 +85,18 @@ class ImportContentAttributeSetTest extends TestCase
             ->onlyMethods(['getContainer'])->getMock();
         $worker->expects($this->once())->method('getContainer')->willReturn($container);
 
-        $repository = $this->getMockBuilder(AttributeRepository::class)
-            ->onlyMethods(['getLinked'])->getMock();
-        $repository->expects($this->once())->method('getLinked')
+        $attributeSetModel = $this->getMockBuilder(AttributeSetModel::class)
+            ->onlyMethods(['findAttributes'])->getMock();
+        $attributeSetModel->expects($this->once())->method('findAttributes')
             ->with($domainKey, $setKey)
             ->willReturn($attributes);
 
         $set = $this->getMockBuilder(AttributeSet::class)
-            ->onlyMethods(['getWorker','makeAttributeRepository', 'appendAttribute'])
+            ->onlyMethods(['getWorker', 'makeAttributeSetModel', 'appendAttribute'])
             ->getMock();
 
         $set->expects($this->once())->method('getWorker')->willReturn($worker);
-        $set->expects($this->once())->method('makeAttributeRepository')->willReturn($repository);
+        $set->expects($this->once())->method('makeAttributeSetModel')->willReturn($attributeSetModel);
         $set->expects($this->once())->method('appendAttribute')
             ->with($attribute1);
 

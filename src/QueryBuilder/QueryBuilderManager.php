@@ -9,10 +9,12 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\QueryBuilder;
 
+use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\_ENTITY;
-use Drobotik\Eav\Model\AttributeModel;
+use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Trait\QueryBuilderSingletons;
 use Drobotik\Eav\Trait\RepositoryTrait;
+use Drobotik\Eav\Trait\SingletonsTrait;
 use Illuminate\Database\Capsule\Manager;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\Grammars\MySqlGrammar as MySQLGrammar;
@@ -22,6 +24,7 @@ class QueryBuilderManager
 {
     use QueryBuilderSingletons;
     use RepositoryTrait;
+    use SingletonsTrait;
 
     private int $domainKey;
     private int $setKey;
@@ -112,29 +115,29 @@ class QueryBuilderManager
         return $query;
     }
 
-    public function markSelected(AttributeModel $attribute, Builder $query) : Builder
+    public function markSelected(array $attribute, Builder $query) : Builder
     {
         $attributes = $this->getAttributesPivot();
         $queryBuilder = $this->makeQueryBuilder();
-        $name = $attribute->getName();
+        $name = $attribute[_ATTR::NAME->column()];
         $attributes->setAttributeSelected($name);
         return $queryBuilder->select($query, $name);
     }
 
-    public function markJoined(AttributeModel $attribute, Builder $query) : Builder
+    public function markJoined(array $attribute, Builder $query) : Builder
     {
         $attributes = $this->getAttributesPivot();
         $queryBuilder = $this->makeQueryBuilder();
-        $key = $attribute->getKey();
-        $name = $attribute->getName();
-        $type = $attribute->getTypeEnum();
+        $key = $attribute[_ATTR::ID->column()];
+        $name = $attribute[_ATTR::NAME->column()];
+        $type = ATTR_TYPE::getCase($attribute[_ATTR::TYPE->column()]);
         $attributes->setAttributeJoined($name);
         return $queryBuilder->join($query, $type->valueTable(), $name, $key);
     }
 
-    public function setupAttribute(AttributeModel $attribute, Builder $query) : Builder
+    public function setupAttribute(array $attribute, Builder $query) : Builder
     {
-        $name = $attribute->getName();
+        $name = $attribute[_ATTR::NAME->column()];
         if(!$this->isManualColumn($name))
         {
             return $query;
@@ -155,8 +158,8 @@ class QueryBuilderManager
     public function initialize() : Builder
     {
         $attributes = $this->makeQueryBuilderAttributes();
-        $repository = $this->makeAttributeRepository();
-        $linkedAttrs = $repository->getLinked($this->getDomainKey(), $this->getSetKey());
+        $model = $this->makeAttributeSetModel();
+        $linkedAttrs = $model->findAttributes($this->getDomainKey(), $this->getSetKey());
         $attributes->setAttributes($linkedAttrs);
         $this->setAttributesPivot($attributes);
         $query = $this->makeQuery();

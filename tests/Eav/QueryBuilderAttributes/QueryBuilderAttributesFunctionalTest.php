@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Tests\Eav\QueryBuilderAttributes;
 
-use Drobotik\Eav\Model\AttributeModel;
+use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\QueryBuilder\QueryBuilderAttributes;
 use PHPUnit\Framework\TestCase;
 
@@ -28,8 +28,7 @@ class QueryBuilderAttributesFunctionalTest extends TestCase
     {
         $attributes = new QueryBuilderAttributes();
         $this->assertFalse($attributes->isAttribute('test'));
-        $attribute = new AttributeModel();
-        $attribute->setName('test');
+        $attribute = [_ATTR::NAME->column() => 'test'];
         $attributes->appendAttribute($attribute);
         $this->assertTrue($attributes->isAttribute('test'));
         $this->assertSame($attribute, $attributes->getAttribute('test'));

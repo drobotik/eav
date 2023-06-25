@@ -20,7 +20,6 @@ use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Exception\AttributeException;
 use Drobotik\Eav\Exception\EntityFactoryException;
 use Drobotik\Eav\Factory\EntityFactory;
-use Drobotik\Eav\Model\AttributeModel;
 use Drobotik\Eav\Model\PivotModel;
 use Drobotik\Eav\Model\ValueDatetimeModel;
 use Drobotik\Eav\Model\ValueDecimalModel;
@@ -122,9 +121,7 @@ class EntityFactoryFunctionalTest extends TestCase
 
     /**
      * @test
-     *
      * @group functional
-     *
      * @covers \Drobotik\Eav\Factory\EntityFactory::create
      */
     public function create_attributes_no_group_exception() {
@@ -138,9 +135,7 @@ class EntityFactoryFunctionalTest extends TestCase
 
     /**
      * @test
-     *
      * @group functional
-     *
      * @covers \Drobotik\Eav\Factory\EntityFactory::create
      */
     public function create_attributes_not_existing_group_exception() {
@@ -160,9 +155,7 @@ class EntityFactoryFunctionalTest extends TestCase
 
     /**
      * @test
-     *
      * @group functional
-     *
      * @covers \Drobotik\Eav\Factory\EntityFactory::create
      */
     public function create_attributes() {
@@ -171,55 +164,125 @@ class EntityFactoryFunctionalTest extends TestCase
         $groupKey = $this->eavFactory->createGroup($setKey);
 
         $config = $this->getFactoryDefaultConfig();
+
         $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::GROUP->field()] = $groupKey;
         $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::GROUP->field()] = $groupKey;
         $config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::GROUP->field()] = $groupKey;
         $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::GROUP->field()] = $groupKey;
         $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::GROUP->field()] = $groupKey;
 
+        $stringConfig = $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::ATTRIBUTE->field()];
+        $integerConfig = $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::ATTRIBUTE->field()];
+        $decimalConfig = $config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::ATTRIBUTE->field()];
+        $datetimeConfig = $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::ATTRIBUTE->field()];
+        $textConfig = $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::ATTRIBUTE->field()];
+
         $result = $this->factory->create($config, $domainKey, $setKey);
 
         // check attributes created
-        /** @var AttributeModel $string */
-        /** @var AttributeModel $integer */
-        /** @var AttributeModel $decimal */
-        /** @var AttributeModel $datetime */
-        /** @var AttributeModel $text */
-        $string = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domainKey)
-            ->where(_ATTR::TYPE->column(), ATTR_TYPE::STRING->value())
-            ->where(_ATTR::NAME->column(), ATTR_TYPE::STRING->value())->first();
-        $integer = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domainKey)
-            ->where(_ATTR::TYPE->column(), ATTR_TYPE::INTEGER->value())
-            ->where(_ATTR::NAME->column(), ATTR_TYPE::INTEGER->value())->first();
-        $decimal = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domainKey)
-            ->where(_ATTR::TYPE->column(), ATTR_TYPE::DECIMAL->value())
-            ->where(_ATTR::NAME->column(), ATTR_TYPE::DECIMAL->value())->first();
-        $datetime = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domainKey)
-            ->where(_ATTR::TYPE->column(), ATTR_TYPE::DATETIME->value())
-            ->where(_ATTR::NAME->column(), ATTR_TYPE::DATETIME->value())->first();
-        $text = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domainKey)
-            ->where(_ATTR::TYPE->column(), ATTR_TYPE::TEXT->value())
-            ->where(_ATTR::NAME->column(), ATTR_TYPE::TEXT->value())->first();
+        $qb = Connection::get()->createQueryBuilder();
+        $q = $qb->select('*')->from(_ATTR::table())
+            ->where(sprintf('%s = :domain AND %s = :type AND %s = :name',
+                _ATTR::DOMAIN_ID->column(), _ATTR::TYPE->column(), _ATTR::NAME->column()));
 
-        $this->assertNotNull($string);
-        $this->assertNotNull($integer);
-        $this->assertNotNull($decimal);
-        $this->assertNotNull($datetime);
-        $this->assertNotNull($text);
+        $string = $q->setParameters([
+                'domain' => $domainKey,
+                'type' => ATTR_TYPE::STRING->value(),
+                'name' => ATTR_TYPE::STRING->value()
+            ])->executeQuery()->fetchAssociative();
 
-        $this->assertEquals($config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::ATTRIBUTE->field()][_ATTR::DEFAULT_VALUE->column()], $string->getDefaultValue());
-        $this->assertEquals($config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::ATTRIBUTE->field()][_ATTR::DEFAULT_VALUE->column()], $integer->getDefaultValue());
-        $this->assertEquals($config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::ATTRIBUTE->field()][_ATTR::DEFAULT_VALUE->column()], $decimal->getDefaultValue());
-        $this->assertEquals($config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::ATTRIBUTE->field()][_ATTR::DEFAULT_VALUE->column()], $datetime->getDefaultValue());
-        $this->assertEquals($config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::ATTRIBUTE->field()][_ATTR::DEFAULT_VALUE->column()], $text->getDefaultValue());
+        $integer = $q->setParameters([
+            'domain' => $domainKey,
+            'type' => ATTR_TYPE::INTEGER->value(),
+            'name' => ATTR_TYPE::INTEGER->value()
+        ])->executeQuery()->fetchAssociative();
+
+        $decimal =  $q->setParameters([
+            'domain' => $domainKey,
+            'type' => ATTR_TYPE::DECIMAL->value(),
+            'name' => ATTR_TYPE::DECIMAL->value()
+        ])->executeQuery()->fetchAssociative();
+
+        $datetime = $q->setParameters([
+            'domain' => $domainKey,
+            'type' => ATTR_TYPE::DATETIME->value(),
+            'name' => ATTR_TYPE::DATETIME->value()
+        ])->executeQuery()->fetchAssociative();
+
+        $text = $q->setParameters([
+            'domain' => $domainKey,
+            'type' => ATTR_TYPE::TEXT->value(),
+            'name' => ATTR_TYPE::TEXT->value()
+        ])->executeQuery()->fetchAssociative();
+
+        $this->assertIsArray($string);
+        $this->assertIsArray($integer);
+        $this->assertIsArray($decimal);
+        $this->assertIsArray($datetime);
+        $this->assertIsArray($text);
+
+        $stringKey = $string[_ATTR::ID->column()];
+        $integerKey = $integer[_ATTR::ID->column()];
+        $decimalKey = $decimal[_ATTR::ID->column()];
+        $datetimeKey = $datetime[_ATTR::ID->column()];
+        $textKey = $text[_ATTR::ID->column()];
+
+
+        $expectedString = array_merge(
+            _ATTR::bag(),
+            $stringConfig,
+            [_ATTR::ID->column() => $stringKey, _ATTR::DOMAIN_ID->column() => $domainKey]
+        );
+        $expectedInteger = array_merge(
+            _ATTR::bag(),
+            $integerConfig,
+            [_ATTR::ID->column() => $integerKey, _ATTR::DOMAIN_ID->column() => $domainKey]
+        );
+        $expectedDecimal = array_merge(
+            _ATTR::bag(),
+            $decimalConfig,
+            [_ATTR::ID->column() => $decimalKey, _ATTR::DOMAIN_ID->column() => $domainKey]
+        );
+        $expectedDatetime = array_merge(
+            _ATTR::bag(),
+            $datetimeConfig,
+            [_ATTR::ID->column() => $datetimeKey, _ATTR::DOMAIN_ID->column() => $domainKey]
+        );
+        $expectedText = array_merge(
+            _ATTR::bag(),
+            $textConfig,
+            [_ATTR::ID->column() => $textKey, _ATTR::DOMAIN_ID->column() => $domainKey]
+        );
+
+        $this->assertEquals($expectedString, $string);
+        $this->assertEquals($expectedInteger, $integer);
+        $this->assertEquals($expectedDecimal, $decimal);
+        $this->assertEquals($expectedDatetime, $datetime);
+        $this->assertEquals($expectedText, $text);
 
         $attributes = $result->getAttributes();
-        $this->assertCount(5, $attributes);
-        $this->assertEquals($string->toArray(), $attributes[ATTR_TYPE::STRING->value()]->toArray());
-        $this->assertEquals($integer->toArray(), $attributes[ATTR_TYPE::INTEGER->value()]->toArray());
-        $this->assertEquals($decimal->toArray(), $attributes[ATTR_TYPE::DECIMAL->value()]->toArray());
-        $this->assertEquals($datetime->toArray(), $attributes[ATTR_TYPE::DATETIME->value()]->toArray());
-        $this->assertEquals($text->toArray(), $attributes[ATTR_TYPE::TEXT->value()]->toArray());
+        $this->assertEquals([
+            $string[_ATTR::NAME->column()] => [
+                _ATTR::ID->column() => $string[_ATTR::ID->column()],
+                _ATTR::NAME->column() => $string[_ATTR::NAME->column()]
+            ],
+            $integer[_ATTR::NAME->column()] => [
+                _ATTR::ID->column() => $integer[_ATTR::ID->column()],
+                _ATTR::NAME->column() => $integer[_ATTR::NAME->column()]
+            ],
+            $decimal[_ATTR::NAME->column()] => [
+                _ATTR::ID->column() => $decimal[_ATTR::ID->column()],
+                _ATTR::NAME->column() => $decimal[_ATTR::NAME->column()]
+            ],
+            $datetime[_ATTR::NAME->column()] => [
+                _ATTR::ID->column() => $datetime[_ATTR::ID->column()],
+                _ATTR::NAME->column() => $datetime[_ATTR::NAME->column()]
+            ],
+            $text[_ATTR::NAME->column()] => [
+                _ATTR::ID->column() => $text[_ATTR::ID->column()],
+                _ATTR::NAME->column() => $text[_ATTR::NAME->column()]
+            ]
+        ], $attributes);
     }
 
     /**
@@ -332,38 +395,54 @@ class EntityFactoryFunctionalTest extends TestCase
 
         $result = $this->factory->create($config, $domainKey, $setKey);
 
-        /** @var AttributeModel $string */
-        /** @var AttributeModel $integer */
-        /** @var AttributeModel $decimal */
-        /** @var AttributeModel $datetime */
-        /** @var AttributeModel $text */
-        $string = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domainKey)
-            ->where(_ATTR::TYPE->column(), ATTR_TYPE::STRING->value())
-            ->where(_ATTR::NAME->column(), ATTR_TYPE::STRING->value())->firstOrFail();
-        $integer = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domainKey)
-            ->where(_ATTR::TYPE->column(), ATTR_TYPE::INTEGER->value())
-            ->where(_ATTR::NAME->column(), ATTR_TYPE::INTEGER->value())->firstOrFail();
-        $decimal = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domainKey)
-            ->where(_ATTR::TYPE->column(), ATTR_TYPE::DECIMAL->value())
-            ->where(_ATTR::NAME->column(), ATTR_TYPE::DECIMAL->value())->firstOrFail();
-        $datetime = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domainKey)
-            ->where(_ATTR::TYPE->column(), ATTR_TYPE::DATETIME->value())
-            ->where(_ATTR::NAME->column(), ATTR_TYPE::DATETIME->value())->firstOrFail();
-        $text = AttributeModel::where(_ATTR::DOMAIN_ID->column(), $domainKey)
-            ->where(_ATTR::TYPE->column(), ATTR_TYPE::TEXT->value())
-            ->where(_ATTR::NAME->column(), ATTR_TYPE::TEXT->value())->firstOrFail();
+        $qb = Connection::get()->createQueryBuilder();
+        $q = $qb->select('*')->from(_ATTR::table())
+            ->where(sprintf('%s = :domain AND %s = :type AND %s = :name',
+                _ATTR::DOMAIN_ID->column(), _ATTR::TYPE->column(), _ATTR::NAME->column()));
 
-        /** @var PivotModel $stringPivot */
-        /** @var PivotModel $integerPivot */
-        /** @var PivotModel $decimalPivot */
-        /** @var PivotModel $datetimePivot */
-        /** @var PivotModel $textPivot */
+
+        $string = $q->setParameters([
+            'domain' => $domainKey,
+            'type' => ATTR_TYPE::STRING->value(),
+            'name' => ATTR_TYPE::STRING->value()
+        ])->executeQuery()->fetchAssociative();
+
+        $integer = $q->setParameters([
+            'domain' => $domainKey,
+            'type' => ATTR_TYPE::INTEGER->value(),
+            'name' => ATTR_TYPE::INTEGER->value()
+        ])->executeQuery()->fetchAssociative();
+
+        $decimal =  $q->setParameters([
+            'domain' => $domainKey,
+            'type' => ATTR_TYPE::DECIMAL->value(),
+            'name' => ATTR_TYPE::DECIMAL->value()
+        ])->executeQuery()->fetchAssociative();
+
+        $datetime = $q->setParameters([
+            'domain' => $domainKey,
+            'type' => ATTR_TYPE::DATETIME->value(),
+            'name' => ATTR_TYPE::DATETIME->value()
+        ])->executeQuery()->fetchAssociative();
+
+        $text = $q->setParameters([
+            'domain' => $domainKey,
+            'type' => ATTR_TYPE::TEXT->value(),
+            'name' => ATTR_TYPE::TEXT->value()
+        ])->executeQuery()->fetchAssociative();
+
+        $this->assertIsArray($string);
+        $this->assertIsArray($integer);
+        $this->assertIsArray($decimal);
+        $this->assertIsArray($datetime);
+        $this->assertIsArray($text);
+
         $pivotModel = new PivotModel();
-        $stringPivot = $pivotModel->findOne($domainKey, $setKey, $groupOneKey, $string->getKey());
-        $integerPivot = $pivotModel->findOne($domainKey, $setKey, $groupOneKey, $integer->getKey());
-        $decimalPivot = $pivotModel->findOne($domainKey, $setKey, $groupOneKey, $decimal->getKey());
-        $datetimePivot = $pivotModel->findOne($domainKey, $setKey, $groupTwoKey, $datetime->getKey());
-        $textPivot = $pivotModel->findOne($domainKey, $setKey, $groupTwoKey, $text->getKey());
+        $stringPivot = $pivotModel->findOne($domainKey, $setKey, $groupOneKey, $string[_ATTR::ID->column()]);
+        $integerPivot = $pivotModel->findOne($domainKey, $setKey, $groupOneKey, $integer[_ATTR::ID->column()]);
+        $decimalPivot = $pivotModel->findOne($domainKey, $setKey, $groupOneKey, $decimal[_ATTR::ID->column()]);
+        $datetimePivot = $pivotModel->findOne($domainKey, $setKey, $groupTwoKey, $datetime[_ATTR::ID->column()]);
+        $textPivot = $pivotModel->findOne($domainKey, $setKey, $groupTwoKey, $text[_ATTR::ID->column()]);
 
         $this->assertIsArray($stringPivot);
         $this->assertIsArray($integerPivot);
@@ -425,23 +504,23 @@ class EntityFactoryFunctionalTest extends TestCase
         /** @var ValueTextModel $text */
         $string = ValueStringModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
             ->where(_VALUE::ENTITY_ID->column(), $entityKey)
-            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::STRING->value()]->getKey())
+            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::STRING->value()])
             ->first();
         $integer = ValueIntegerModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
             ->where(_VALUE::ENTITY_ID->column(), $entityKey)
-            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::INTEGER->value()]->getKey())
+            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::INTEGER->value()])
             ->first();
         $decimal = ValueDecimalModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
             ->where(_VALUE::ENTITY_ID->column(), $entityKey)
-            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::DECIMAL->value()]->getKey())
+            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::DECIMAL->value()])
             ->first();
         $datetime = ValueDatetimeModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
             ->where(_VALUE::ENTITY_ID->column(), $entityKey)
-            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::DATETIME->value()]->getKey())
+            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::DATETIME->value()])
             ->first();
         $text = ValueTextModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
             ->where(_VALUE::ENTITY_ID->column(), $entityKey)
-            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::TEXT->value()]->getKey())
+            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::TEXT->value()])
             ->first();
 
         $this->assertNotNull($string);
@@ -496,23 +575,23 @@ class EntityFactoryFunctionalTest extends TestCase
         /** @var ValueTextModel $text */
         $string = ValueStringModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
             ->where(_VALUE::ENTITY_ID->column(), $entityKey)
-            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::STRING->value()]->getKey())
+            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::STRING->value()])
             ->first();
         $integer = ValueIntegerModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
             ->where(_VALUE::ENTITY_ID->column(), $entityKey)
-            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::INTEGER->value()]->getKey())
+            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::INTEGER->value()])
             ->first();
         $decimal = ValueDecimalModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
             ->where(_VALUE::ENTITY_ID->column(), $entityKey)
-            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::DECIMAL->value()]->getKey())
+            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::DECIMAL->value()])
             ->first();
         $datetime = ValueDatetimeModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
             ->where(_VALUE::ENTITY_ID->column(), $entityKey)
-            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::DATETIME->value()]->getKey())
+            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::DATETIME->value()])
             ->first();
         $text = ValueTextModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
             ->where(_VALUE::ENTITY_ID->column(), $entityKey)
-            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::TEXT->value()]->getKey())
+            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::TEXT->value()])
             ->first();
 
         $this->assertNull($string);

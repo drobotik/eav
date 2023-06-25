@@ -9,7 +9,9 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\Import\Content;
 
+use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\_ENTITY;
+use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Exception\EntityException;
 use Drobotik\Eav\Trait\ImportContainerTrait;
 use Drobotik\Eav\Trait\RepositoryTrait;
@@ -66,10 +68,10 @@ class Worker
         $attrSet = $this->getAttributeSet();
         $attribute = $attrSet->getAttribute($attributeName);
         $value = new Value();
-        $value->setType($attribute->getTypeEnum());
+        $value->setType(ATTR_TYPE::getCase($attribute[_ATTR::TYPE->column()]));
         $value->setValue($content);
-        $value->setAttributeKey($attribute->getKey());
-        $value->setAttributeName($attribute->getName());
+        $value->setAttributeKey($attribute[_ATTR::ID->column()]);
+        $value->setAttributeName($attribute[_ATTR::NAME->column()]);
         if(!is_null($entityKey))
         {
             $value->setEntityKey($entityKey);
@@ -162,12 +164,12 @@ class Worker
             $value = $attributeValue->getValue();
             $entityKey = $attributeValue->getEntityKey();
             $attribute = $attrSet->getAttribute($attributeValue->getAttributeName());
-            $attributeKey = $attribute->getKey();
-            $attributeType = $attribute->getTypeEnum();
+            $attributeKey = $attribute[_ATTR::ID->column()];
+            $attributeType = ATTR_TYPE::getCase($attribute[_ATTR::TYPE->column()]);
             if($value == '')
-                $repository->destroy($domainKey,$entityKey,$attributeKey,$attributeType);
+                $repository->destroy($domainKey, $entityKey, $attributeKey, $attributeType);
             else
-                $repository->updateOrCreate($domainKey,$entityKey,$attributeKey,$attributeType,$value);
+                $repository->updateOrCreate($domainKey, $entityKey, $attributeKey, $attributeType, $value);
         }
     }
 

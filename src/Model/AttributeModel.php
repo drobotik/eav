@@ -9,110 +9,53 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\Model;
 
-use Drobotik\Eav\Enum\ATTR_TYPE;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Drobotik\Eav\Enum\_ATTR;
-use Drobotik\Eav\Enum\_DOMAIN;
+use PDO;
 
 class AttributeModel extends Model
 {
-    public function __construct(array $attributes = [])
+    public function __construct()
     {
-        $this->table = _ATTR::table();
-        $this->primaryKey = _ATTR::ID->column();
-        $this->fillable = [
-            _ATTR::NAME->column(),
-            _ATTR::DOMAIN_ID->column(),
-            _ATTR::TYPE->column(),
-            _ATTR::DESCRIPTION->column(),
-            _ATTR::DEFAULT_VALUE->column(),
-            _ATTR::SOURCE->column(),
-            _ATTR::STRATEGY->column()
-        ];
-        $this->timestamps = false;
-        parent::__construct($attributes);
+        $this->setTable(_ATTR::table());
+        $this->setPrimaryKey(_ATTR::ID->column());
     }
 
-    public function getDomainKey()
+    public function create(array $data) : int
     {
-        return $this->{_ATTR::DOMAIN_ID->column()};
+        $conn = $this->db();
+        $conn->createQueryBuilder()
+            ->insert($this->getTable())
+            ->values([
+                _ATTR::DOMAIN_ID->column() => '?',
+                _ATTR::NAME->column() => '?',
+                _ATTR::TYPE->column() => '?',
+                _ATTR::STRATEGY->column() => '?',
+                _ATTR::SOURCE->column() => '?',
+                _ATTR::DEFAULT_VALUE->column() => '?',
+                _ATTR::DESCRIPTION->column() => '?'
+            ])
+            ->setParameter(0, $data[_ATTR::DOMAIN_ID->column()], PDO::PARAM_INT)
+            ->setParameter(1, $data[_ATTR::NAME->column()])
+            ->setParameter(2, $data[_ATTR::TYPE->column()])
+            ->setParameter(3, $data[_ATTR::STRATEGY->column()])
+            ->setParameter(4, $data[_ATTR::SOURCE->column()])
+            ->setParameter(5, $data[_ATTR::DEFAULT_VALUE->column()])
+            ->setParameter(6, $data[_ATTR::DESCRIPTION->column()])
+            ->executeQuery();
+        return (int) $conn->lastInsertId();
     }
 
-    public function setDomainKey(int $key) : self
+    public function findByName(string $name, int $domainKey) : bool|array
     {
-        $this->{_ATTR::DOMAIN_ID->column()} = $key;
-        return $this;
+        return $this->db()->createQueryBuilder()
+            ->select($this->getPrimaryKey())
+            ->from($this->getTable())
+            ->where(sprintf('%s = ?', _ATTR::DOMAIN_ID->column()))
+            ->andWhere(sprintf('%s = ?', _ATTR::NAME->column()))
+            ->setParameter(0, $domainKey, PDO::PARAM_INT)
+            ->setParameter(1, $name)
+            ->executeQuery()
+            ->fetchAssociative();
     }
 
-    public function getName()
-    {
-        return $this->{_ATTR::NAME->column()};
-    }
-
-    public function setName(string $name) : self
-    {
-        $this->{_ATTR::NAME->column()} = $name;
-        return $this;
-    }
-
-    public function getType()
-    {
-        return $this->{_ATTR::TYPE->column()};
-    }
-
-    public function setType(string $type) : self
-    {
-        $this->{_ATTR::TYPE->column()} = $type;
-        return $this;
-    }
-
-    public function getTypeEnum() : ATTR_TYPE
-    {
-        return ATTR_TYPE::getCase($this->getType());
-    }
-
-    public function getDescription()
-    {
-        return $this->{_ATTR::DESCRIPTION->column()};
-    }
-
-    public function setDescription(?string $description) : self
-    {
-        $this->{_ATTR::DESCRIPTION->column()} = $description;
-        return $this;
-    }
-
-    public function getDefaultValue()
-    {
-        return $this->{_ATTR::DEFAULT_VALUE->column()};
-    }
-
-    public function setDefaultValue($value) : self
-    {
-        $this->{_ATTR::DEFAULT_VALUE->column()} = $value;
-        return $this;
-    }
-
-    public function getSource()
-    {
-        return $this->{_ATTR::SOURCE->column()};
-    }
-
-    public function setSource(?string $source) : self
-    {
-        $this->{_ATTR::SOURCE->column()} = $source;
-        return $this;
-    }
-
-    public function getStrategy()
-    {
-        return $this->{_ATTR::STRATEGY->column()};
-    }
-
-    public function setStrategy(string $strategy) : self
-    {
-        $this->{_ATTR::STRATEGY->column()} = $strategy;
-        return $this;
-    }
 }

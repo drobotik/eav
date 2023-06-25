@@ -13,6 +13,7 @@ use Drobotik\Eav\AttributeContainer;
 use Drobotik\Eav\AttributeSet;
 use Drobotik\Eav\Factory\EavFactory;
 use Drobotik\Eav\Model\AttributeGroupModel;
+use Drobotik\Eav\Model\AttributeModel;
 use Drobotik\Eav\Model\AttributeSetModel;
 use Drobotik\Eav\Model\DomainModel;
 use Drobotik\Eav\Model\EntityModel;
@@ -58,6 +59,10 @@ trait SingletonsTrait
         return new PivotModel();
     }
 
+    public function makeAttributeModel() : AttributeModel
+    {
+        return new AttributeModel();
+    }
 
     public function makeEavFactory(): EavFactory
     {

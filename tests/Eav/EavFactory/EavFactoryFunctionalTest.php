@@ -20,7 +20,6 @@ use Drobotik\Eav\Enum\_RESULT;
 use Drobotik\Eav\Enum\_SET;
 use Drobotik\Eav\Enum\ATTR_FACTORY;
 use Drobotik\Eav\Enum\ATTR_TYPE;
-use Drobotik\Eav\Model\AttributeModel;
 use Drobotik\Eav\Model\AttributeSetModel;
 use Drobotik\Eav\Model\ValueDatetimeModel;
 use Drobotik\Eav\Model\ValueDecimalModel;
@@ -198,17 +197,8 @@ class EavFactoryFunctionalTest extends TestCase
      */
     public function attribute()
     {
-        $result = $this->eavFactory->createAttribute();
-        $this->assertInstanceOf(AttributeModel::class, $result);
-        $this->assertEquals(1, $result->getKey());
-        $this->assertEquals(1, $result->getDomainKey());
-        $this->assertEquals(_ATTR::TYPE->default(), $result->getType());
-        $this->assertEquals(_ATTR::STRATEGY->default(), $result->getStrategy());
-        $this->assertEquals(_ATTR::SOURCE->default(), $result->getSource());
-        $this->assertEquals(_ATTR::DEFAULT_VALUE->default(), $result->getDefaultValue());
-        $this->assertEquals(_ATTR::DESCRIPTION->default(), $result->getDescription());
-        $data = $result->toArray();
-        $this->assertArrayHasKey(_ATTR::NAME->column(), $data);
+        $this->assertEquals(1, $this->eavFactory->createAttribute());
+        $this->assertEquals(2, $this->eavFactory->createAttribute());
     }
 
     /**
@@ -220,24 +210,33 @@ class EavFactoryFunctionalTest extends TestCase
      */
     public function attributeInput()
     {
+        $domainKey = 123;
+
         $input = [
             _ATTR::NAME->column() => 'test',
-            _ATTR::TYPE->column() => 'test',
-            _ATTR::STRATEGY->column() => 'test',
-            _ATTR::SOURCE->column() => 'test',
-            _ATTR::DEFAULT_VALUE->column() => 'test',
-            _ATTR::DESCRIPTION->column() => 'test',
+            _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value(),
+            _ATTR::STRATEGY->column() => 'strategy',
+            _ATTR::SOURCE->column() => 'source',
+            _ATTR::DEFAULT_VALUE->column() => 'default',
+            _ATTR::DESCRIPTION->column() => 'description',
         ];
-        $result = $this->eavFactory->createAttribute(null, $input);
-        $this->assertInstanceOf(AttributeModel::class, $result);
-        $this->assertEquals(1, $result->getKey());
-        $this->assertEquals(1, $result->getDomainKey());
-        $this->assertEquals($input[_ATTR::NAME->column()], $result->getType());
-        $this->assertEquals($input[_ATTR::TYPE->column()], $result->getType());
-        $this->assertEquals($input[_ATTR::STRATEGY->column()], $result->getStrategy());
-        $this->assertEquals($input[_ATTR::SOURCE->column()], $result->getSource());
-        $this->assertEquals($input[_ATTR::DEFAULT_VALUE->column()], $result->getDefaultValue());
-        $this->assertEquals($input[_ATTR::DESCRIPTION->column()], $result->getDescription());
+        $key = $this->eavFactory->createAttribute($domainKey, $input);
+
+        $qb = Connection::get()->createQueryBuilder();
+        $record = $qb->select('*')->from(_ATTR::table())
+            ->executeQuery()
+            ->fetchAssociative();
+
+        $this->assertEquals([
+            _ATTR::ID->column() => $key,
+            _ATTR::DOMAIN_ID->column() => 123,
+            _ATTR::NAME->column() => 'test',
+            _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value(),
+            _ATTR::STRATEGY->column() => 'strategy',
+            _ATTR::SOURCE->column() => 'source',
+            _ATTR::DEFAULT_VALUE->column() => 'default',
+            _ATTR::DESCRIPTION->column() => 'description',
+        ], $record);
     }
 
     /**
@@ -256,8 +255,7 @@ class EavFactoryFunctionalTest extends TestCase
         $this->eavFactory->createGroup($setKey);
         $groupKey = $this->eavFactory->createGroup($setKey);
         $this->eavFactory->createAttribute($domainKey);
-        $attribute = $this->eavFactory->createAttribute($domainKey);
-        $attributeKey = $attribute->getKey();
+        $attributeKey = $this->eavFactory->createAttribute($domainKey);
         $pivotKey = $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $attributeKey);
 
         $qb = Connection::get()->createQueryBuilder();
@@ -285,12 +283,12 @@ class EavFactoryFunctionalTest extends TestCase
     {
         $domainKey = $this->eavFactory->createDomain();
         $entityKey = $this->eavFactory->createEntity($domainKey);
-        $attribute = $this->eavFactory->createAttribute($domainKey);
+        $attributeKey = $this->eavFactory->createAttribute($domainKey);
         $result = $this->eavFactory->createValue(
             ATTR_TYPE::STRING,
             $domainKey,
             $entityKey,
-            $attribute->getKey(),
+            $attributeKey,
             'test'
         );
         $this->assertInstanceOf(ValueStringModel::class, $result);
@@ -312,12 +310,12 @@ class EavFactoryFunctionalTest extends TestCase
     {
         $domainKey = $this->eavFactory->createDomain();
         $entityKey = $this->eavFactory->createEntity($domainKey);
-        $attribute = $this->eavFactory->createAttribute($domainKey);
+        $attributeKey = $this->eavFactory->createAttribute($domainKey);
         $result = $this->eavFactory->createValue(
             ATTR_TYPE::TEXT,
             $domainKey,
             $entityKey,
-            $attribute->getKey(),
+            $attributeKey,
             'test'
         );
         $this->assertInstanceOf(ValueTextModel::class, $result);
@@ -339,12 +337,12 @@ class EavFactoryFunctionalTest extends TestCase
     {
         $domainKey = $this->eavFactory->createDomain();
         $entityKey = $this->eavFactory->createEntity($domainKey);
-        $attribute = $this->eavFactory->createAttribute($domainKey);
+        $attributeKey = $this->eavFactory->createAttribute($domainKey);
         $result = $this->eavFactory->createValue(
             ATTR_TYPE::INTEGER,
             $domainKey,
             $entityKey,
-            $attribute->getKey(),
+            $attributeKey,
             123
         );
         $this->assertInstanceOf(ValueIntegerModel::class, $result);
@@ -366,12 +364,12 @@ class EavFactoryFunctionalTest extends TestCase
     {
         $domainKey = $this->eavFactory->createDomain();
         $entityKey = $this->eavFactory->createEntity($domainKey);
-        $attribute = $this->eavFactory->createAttribute($domainKey);
+        $attributeKey = $this->eavFactory->createAttribute($domainKey);
         $result = $this->eavFactory->createValue(
             ATTR_TYPE::DECIMAL,
             $domainKey,
             $entityKey,
-            $attribute->getKey(),
+            $attributeKey,
             123.123
         );
         $this->assertInstanceOf(ValueDecimalModel::class, $result);
@@ -393,13 +391,13 @@ class EavFactoryFunctionalTest extends TestCase
     {
         $domainKey = $this->eavFactory->createDomain();
         $entityKey = $this->eavFactory->createEntity($domainKey);
-        $attribute = $this->eavFactory->createAttribute($domainKey);
+        $attributeKey = $this->eavFactory->createAttribute($domainKey);
         $datetime = (new \DateTime())->format('Y-m-d H:i:s');
         $result = $this->eavFactory->createValue(
             ATTR_TYPE::DATETIME,
             $domainKey,
             $entityKey,
-            $attribute->getKey(),
+            $attributeKey,
             $datetime
         );
         $this->assertInstanceOf(ValueDatetimeModel::class, $result);
