@@ -18,6 +18,7 @@ use Drobotik\Eav\Model\AttributeSetModel;
 use Drobotik\Eav\Model\DomainModel;
 use Drobotik\Eav\Model\EntityModel;
 use Drobotik\Eav\Model\PivotModel;
+use Drobotik\Eav\Model\ValueBase;
 use Drobotik\Eav\Value\ValueParser;
 use Faker\Factory;
 use Faker\Generator;
@@ -57,6 +58,11 @@ trait SingletonsTrait
     public function makePivotModel() : PivotModel
     {
         return new PivotModel();
+    }
+
+    public function makeValueModel() : ValueBase
+    {
+        return new ValueBase();
     }
 
     public function makeAttributeModel() : AttributeModel

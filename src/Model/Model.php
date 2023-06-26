@@ -64,7 +64,7 @@ class Model
         return (int) $conn->lastInsertId();
     }
 
-    public function update(int $key, array $data) : bool
+    public function updateByArray(int $key, array $data) : bool
     {
         $keyName = $this->getPrimaryKey();
 
@@ -89,7 +89,7 @@ class Model
         return $stmt->execute();
     }
 
-    public function delete(int $key): bool
+    public function deleteByKey(int $key): bool
     {
         $keyName = $this->getPrimaryKey();
 

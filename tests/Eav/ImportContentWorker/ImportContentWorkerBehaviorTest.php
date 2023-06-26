@@ -19,7 +19,8 @@ use Drobotik\Eav\Import\Content\ValueSet;
 use Drobotik\Eav\Import\Content\Worker;
 use Drobotik\Eav\Import\ImportContainer;
 use Drobotik\Eav\Model\EntityModel;
-use Drobotik\Eav\Repository\ValueRepository;
+use Drobotik\Eav\Model\ValueBase;
+use Drobotik\Eav\Value\ValueParser;
 use PHPUnit\Framework\TestCase;
 
 class ImportContentWorkerBehaviorTest extends TestCase
@@ -110,9 +111,9 @@ class ImportContentWorkerBehaviorTest extends TestCase
             ->method('appendValue')
             ->withConsecutive([$value1], [$value2]);
 
-        $valueRepo = $this->getMockBuilder(ValueRepository::class)
+        $valueModel = $this->getMockBuilder(ValueBase::class)
             ->onlyMethods(['bulkCreate'])->getMock();
-        $valueRepo->method('bulkCreate')
+        $valueModel->method('bulkCreate')
             ->with($bulkCreateSet , $domainKey);
 
         $container = $this->getMockBuilder(ImportContainer::class)
@@ -122,13 +123,13 @@ class ImportContentWorkerBehaviorTest extends TestCase
         $worker = $this->getMockBuilder(Worker::class)
             ->onlyMethods([
                 'getContainer',
-                'makeValueRepository',
+                'makeValueModel',
                 'getValueSet',
                 'makeBulkValuesSet',
                 'createEntities'
             ])->getMock();
         $worker->method('getContainer')->willReturn($container);
-        $worker->method('makeValueRepository')->willReturn($valueRepo);
+        $worker->method('makeValueModel')->willReturn($valueModel);
         $worker->method('getValueSet')->willReturn($valueSet);
         $worker->method('makeBulkValuesSet')->willReturn($bulkCreateSet);
         $worker->method('createEntities')->willReturn($collection);
@@ -160,6 +161,8 @@ class ImportContentWorkerBehaviorTest extends TestCase
         $content1 = "content1";
         $content2 = "content2";
         $content3 = "";
+        $updatedContent1 = "updatedContent1";
+        $updatedContent2 = "updatedContent2";
 
         $attribute1 = [
             _ATTR::ID->column() => $attribute1key,
@@ -219,27 +222,45 @@ class ImportContentWorkerBehaviorTest extends TestCase
             ->onlyMethods(['getDomainKey'])->getMock();
         $container->method('getDomainKey')->willReturn($domainKey);
 
-        $valueRepo = $this->getMockBuilder(ValueRepository::class)
-            ->onlyMethods(['updateOrCreate', 'destroy'])->getMock();
-        $valueRepo->expects($this->exactly(2))->method('updateOrCreate')
+        $valueModel = $this->getMockBuilder(ValueBase::class)
+            ->onlyMethods(['find', 'update', 'destroy'])->getMock();
+        $valueModel->expects($this->exactly(2))->method('find')
             ->withConsecutive(
-                [$domainKey, $entity1Key, $attribute1key, ATTR_TYPE::getCase($attribute1type), $content1],
-                [$domainKey, $entity2Key, $attribute2key, ATTR_TYPE::getCase($attribute2type), $content2]
+                [ATTR_TYPE::getCase($attribute1type)->valueTable(), $domainKey, $entity1Key, $attribute1key],
+                [ATTR_TYPE::getCase($attribute2type)->valueTable(), $domainKey, $entity2Key, $attribute2key],
+            )
+            ->willReturn($attribute1, $attribute2);
+        $valueModel->expects($this->exactly(2))->method('update')
+            ->withConsecutive(
+                [ATTR_TYPE::getCase($attribute1type)->valueTable(), $domainKey, $entity1Key, $attribute1key, $updatedContent1],
+                [ATTR_TYPE::getCase($attribute2type)->valueTable(), $domainKey, $entity2Key, $attribute2key, $updatedContent2]
             );
-        $valueRepo->expects($this->once())->method('destroy')
-            ->with($domainKey, $entity1Key, $attribute3key, ATTR_TYPE::getCase($attribute3type));
+        $valueModel->expects($this->once())->method('destroy')
+            ->with(ATTR_TYPE::getCase($attribute3type)->valueTable(), $domainKey, $entity1Key, $attribute3key);
+
+        $valueParser = $this->getMockBuilder(ValueParser::class)
+            ->onlyMethods(['parse'])->getMock();
+
+        $valueParser->expects($this->exactly(2))
+            ->method('parse')
+            ->withConsecutive(
+                [ATTR_TYPE::getCase($attribute1type), $content1],
+                [ATTR_TYPE::getCase($attribute2type), $content2],
+            )->willReturn($updatedContent1, $updatedContent2);
 
         $worker = $this->getMockBuilder(Worker::class)
             ->onlyMethods([
                 'getContainer',
                 'getValueSet',
                 'getAttributeSet',
-                'makeValueRepository'
+                'makeValueModel',
+                'makeValueParser'
             ])->getMock();
         $worker->method('getContainer')->willReturn($container);
         $worker->method('getValueSet')->willReturn($valueSet);
         $worker->method('getAttributeSet')->willReturn($attrSet);
-        $worker->method('makeValueRepository')->willReturn($valueRepo);
+        $worker->method('makeValueModel')->willReturn($valueModel);
+        $worker->method('makeValueParser')->willReturn($valueParser);
 
         $worker->processExistingEntities();
     }

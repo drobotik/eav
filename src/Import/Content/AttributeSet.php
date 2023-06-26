@@ -10,12 +10,10 @@ declare(strict_types=1);
 namespace Drobotik\Eav\Import\Content;
 
 use Drobotik\Eav\Enum\_ATTR;
-use Drobotik\Eav\Trait\RepositoryTrait;
 use Drobotik\Eav\Trait\SingletonsTrait;
 
 class AttributeSet
 {
-    use RepositoryTrait;
     use SingletonsTrait;
 
     private array $attributes = [];

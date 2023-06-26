@@ -40,9 +40,9 @@ class EntityFactoryResult
         return $this->attributes;
     }
 
-    public function addValue(string $attrName, ValueBase $valueModel): void
+    public function addValue(string $attrName, int $valueKey): void
     {
-        $this->values[$attrName] = $valueModel;
+        $this->values[$attrName] = $valueKey;
     }
 
     public function getValues(): array

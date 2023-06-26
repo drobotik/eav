@@ -17,10 +17,10 @@ class ValueDecimalModel extends ValueBase
 {
     use SingletonsTrait;
 
-    public function __construct(array $attributes = [])
+    public function __construct()
     {
-        $this->table = ATTR_TYPE::DECIMAL->valueTable();
-        parent::__construct($attributes);
+        parent::__construct();
+        $this->setTable(ATTR_TYPE::DECIMAL->valueTable());
     }
 
     public function setValue($value) : self

@@ -13,9 +13,11 @@ namespace Drobotik\Eav\Value;
 use Drobotik\Eav\Enum\_VALUE;
 use Drobotik\Eav\Result\Result;
 use Drobotik\Eav\Trait\ContainerTrait;
+use Drobotik\Eav\Trait\SingletonsTrait;
 
 class ValueAction
 {
+    use SingletonsTrait;
     use ContainerTrait;
 
     public function create(): Result
@@ -26,21 +28,25 @@ class ValueAction
         $attribute = $container->getAttribute();
         $entity = $container->getAttributeSet()->getEntity();
         $valueManager = $container->getValueManager();
-        $model = $attribute->getValueModel();
-
+        $valueModel = $this->makeValueModel();
+        $parser = $this->makeValueParser();
         if (!$valueManager->isRuntime()) {
             return $result->empty();
         }
 
-        $model->setDomainKey($entity->getDomainKey())
-            ->setEntityKey($entity->getKey())
-            ->setAttrKey($attribute->getKey())
-            ->setValue($valueManager->getRuntime())
-            ->save();
+        $type = $attribute->getType();
+        $value = $parser->parse($type, $valueManager->getRuntime());
 
-        $model->refresh();
-        $valueManager->setStored($model->getValue())
-            ->setKey($model->getKey())
+        $valueKey = $valueModel->create(
+            $type->valueTable(),
+            $entity->getDomainKey(),
+            $entity->getKey(),
+            $attribute->getKey(),
+            $value
+        );
+
+        $valueManager->setStored($value)
+            ->setKey($valueKey)
             ->clearRuntime();
 
         return $result->created();
@@ -51,30 +57,34 @@ class ValueAction
         $result = new Result();
         $container = $this->getAttributeContainer();
         $attribute = $container->getAttribute();
+        $type = $attribute->getType();
         $attributeKey = $attribute->getKey();
         $entity = $container->getAttributeSet()->getEntity();
 
         $valueManager = $container->getValueManager();
-        $model = $attribute->getValueModel();
+        $valueModel = $this->makeValueModel();
 
         if (is_null($attributeKey) || !$entity->hasKey()) {
             return $result->empty();
         }
 
         $entityKey = $entity->getKey();
+        $domainKey = $entity->getDomainKey();
 
-        $record = $model
-            ->where(_VALUE::ENTITY_ID->column(), $entityKey)
-            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributeKey)
-            ->first();
+        $record = $valueModel->find(
+            $type->valueTable(),
+            $domainKey,
+            $entityKey,
+            $attributeKey
+        );
 
-        if (is_null($record)) {
+        if ($record === false) {
             return $result->notFound();
         }
 
         $valueManager
-            ->setKey($record->getKey())
-            ->setStored($record->getValue());
+            ->setKey($record[_VALUE::ID->column()])
+            ->setStored($record[_VALUE::VALUE->column()]);
 
         return $result->found();
     }
@@ -83,20 +93,32 @@ class ValueAction
     {
         $result = new Result();
         $container = $this->getAttributeContainer();
+        $entity = $container->getAttributeSet()->getEntity();
         $attribute = $container->getAttribute();
+        $type = $attribute->getType();
         $valueManager = $container->getValueManager();
-        $model = $attribute->getValueModel();
+        $valueModel = $this->makeValueModel();
+        $valueParser = $this->makeValueParser();
 
         if (!$valueManager->isRuntime()) {
             return $result->empty();
         }
 
-        $record = $model->findOrFail($valueManager->getKey());
-        $record->setValue($valueManager->getRuntime())
-            ->save();
+        $domainKey = $entity->getDomainKey();
+        $entityKey = $entity->getKey();
+        $attributeKey = $attribute->getKey();
 
-        $record->refresh();
-        $valueManager->setStored($record->getValue())
+        $value = $valueParser->parse($type, $valueManager->getRuntime());
+
+        $valueModel->update(
+            $type->valueTable(),
+            $domainKey,
+            $entityKey,
+            $attributeKey,
+            $value
+        );
+
+        $valueManager->setStored($value)
             ->clearRuntime();
 
         return $result->updated();
@@ -106,18 +128,23 @@ class ValueAction
     {
         $result = new Result();
         $container = $this->getAttributeContainer();
+        $entity = $container->getAttributeSet()->getEntity();
         $attribute = $container->getAttribute();
+        $type = $attribute->getType();
         $valueManager = $container->getValueManager();
-        $model = $attribute->getValueModel();
+        $valueModel = $this->makeValueModel();
 
         if (!$valueManager->hasKey()) {
             return $result->empty();
         }
 
-        $record = $model->findOrFail($valueManager->getKey());
+        $domainKey = $entity->getDomainKey();
+        $entityKey = $entity->getKey();
+        $attributeKey = $attribute->getKey();
 
-        $deleted = $record->delete();
-        if (!$deleted) {
+        $deleted = $valueModel->destroy($type->valueTable(), $domainKey, $entityKey, $attributeKey);
+
+        if ($deleted === 0) {
             return $result->notDeleted();
         }
 

@@ -13,13 +13,12 @@ use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Exception\ImportException;
 use Drobotik\Eav\Model\AttributeModel;
-use Drobotik\Eav\Trait\RepositoryTrait;
 use Drobotik\Eav\Trait\SingletonsTrait;
 
 class Validator
 {
     use SingletonsTrait;
-    use RepositoryTrait;
+
     /** @var AttributeModel[] $existingAttributes */
     private array $existingAttributes = [];
     private array $requiredAttributes = [];

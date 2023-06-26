@@ -51,9 +51,8 @@ class EavFactoryResultFunctionalTest extends TestCase
      */
     public function values() {
         $this->assertEquals([], $this->result->getValues());
-        $record = new ValueStringModel();
-        $this->result->addValue("test", $record);
-        $this->assertEquals(["test" => $record], $this->result->getValues());
+        $this->result->addValue("test", 123);
+        $this->assertEquals(["test" => 123], $this->result->getValues());
     }
     /**
      * @test

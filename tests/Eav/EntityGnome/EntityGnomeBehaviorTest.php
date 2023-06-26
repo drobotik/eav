@@ -372,10 +372,10 @@ class EntityGnomeBehaviorTest extends TestCase
         $set->expects($this->once())->method('resetContainers');
         $set->expects($this->once())->method('setKey')->with(0);
         $record = $this->getMockBuilder(EntityModel::class)
-            ->onlyMethods(['delete'])
+            ->onlyMethods(['deleteByKey'])
             ->getMock();
         $record->expects($this->once())
-            ->method('delete')
+            ->method('deleteByKey')
             ->willReturn(true);
         $entity = $this->getMockBuilder(Entity::class)
             ->onlyMethods(['getAttributeSet', 'getKey', 'hasKey', 'setKey', 'setDomainKey'])
@@ -412,10 +412,10 @@ class EntityGnomeBehaviorTest extends TestCase
      */
     public function not_deleted() {
         $record = $this->getMockBuilder(EntityModel::class)
-            ->onlyMethods(['delete'])
+            ->onlyMethods(['deleteByKey'])
             ->getMock();
         $record->expects($this->once())
-            ->method('delete')
+            ->method('deleteByKey')
             ->willReturn(false);
         $entity = $this->getMockBuilder(Entity::class)
             ->onlyMethods(['getAttributeSet', 'getKey', 'hasKey'])

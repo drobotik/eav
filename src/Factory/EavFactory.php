@@ -23,7 +23,6 @@ use Drobotik\Eav\Model\AttributeSetModel;
 use Drobotik\Eav\Model\DomainModel;
 use Drobotik\Eav\Model\EntityModel;
 use Drobotik\Eav\Model\PivotModel;
-use Drobotik\Eav\Model\ValueBase;
 use Drobotik\Eav\Result\Result;
 use Faker\Generator;
 
@@ -133,20 +132,6 @@ class EavFactory
             _PIVOT::GROUP_ID->column() => $groupKey,
             _PIVOT::ATTR_ID->column() => $attributeKey
         ]);
-    }
-
-    public function createValue(ATTR_TYPE $type, int $domainKey, int $entityKey, int $attributeKey, $value): ValueBase
-    {
-        $model = $type->model();
-        $model->setDomainKey($domainKey)
-            ->setEntityKey($entityKey)
-            ->setAttrKey($attributeKey)
-            ->setValue($value);
-        
-        $model->save();
-        $model->refresh();
-
-        return $model;
     }
 
     public function createEavEntity(array $config, int $domainKey, int $setKey): Result

@@ -16,8 +16,9 @@ use Drobotik\Eav\Database\Connection;
 use Drobotik\Eav\Entity;
 use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\_RESULT;
+use Drobotik\Eav\Enum\_VALUE;
 use Drobotik\Eav\Enum\ATTR_TYPE;
-use Drobotik\Eav\Model\ValueStringModel;
+use Drobotik\Eav\Model\ValueBase;
 use Drobotik\Eav\Result\Result;
 use Drobotik\Eav\Value\ValueAction;
 use Drobotik\Eav\Value\ValueManager;
@@ -58,19 +59,20 @@ class ValueActionFunctionalTest extends TestCase
             ->setValueManager($valueManager);
         $this->action->setAttributeContainer($container);
         $result = $this->action->create();
-
-        $this->assertEquals(1, ValueStringModel::query()->count());
-
-        $record = ValueStringModel::query()->first();
-        $this->assertNotNull($record);
-        $this->assertEquals($domainKey, $record->getDomainKey());
-        $this->assertEquals($entityKey, $record->getEntityKey());
-        $this->assertEquals($attrKey, $record->getAttrKey());
-        $this->assertEquals($valueToSave, $record->getValue());
+        $valueModel = $this->makeValueModel();
+        $valueRecord = $valueModel->find(
+            ATTR_TYPE::STRING->valueTable(),
+            $domainKey,
+            $entityKey,
+            $attrKey
+        );
+        $this->assertIsArray($valueRecord);
+        $valueKey = $valueRecord[_VALUE::ID->column()];
+        $this->assertEquals($valueToSave, $valueRecord[_VALUE::VALUE->column()]);
 
         $this->assertNull($valueManager->getRuntime());
         $this->assertEquals($valueToSave, $valueManager->getStored());
-        $this->assertEquals($record->getKey(), $valueManager->getKey());
+        $this->assertEquals($valueKey, $valueManager->getKey());
 
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::CREATED->code(), $result->getCode());
@@ -94,7 +96,11 @@ class ValueActionFunctionalTest extends TestCase
 
         $result = $this->action->create();
 
-        $this->assertEquals(0, ValueStringModel::query()->count());
+        $test = Connection::get()->createQueryBuilder()
+            ->select('*')->from(ATTR_TYPE::STRING->valueTable())
+            ->executeQuery()->fetchAssociative();
+        $this->assertFalse($test);
+
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::EMPTY->code(), $result->getCode());
         $this->assertEquals(_RESULT::EMPTY->message(), $result->getMessage());
@@ -113,8 +119,9 @@ class ValueActionFunctionalTest extends TestCase
         $attrRecord = Connection::get()->createQueryBuilder()->select('*')
             ->from(_ATTR::table())->executeQuery()->fetchAssociative();
         $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $attrKey);
-        $valueModel = $this->eavFactory->createValue(
-            ATTR_TYPE::STRING, $domainKey, $entityKey, $attrKey, "test");
+
+        $valueModel = new ValueBase();
+        $valueKey = $valueModel->create(ATTR_TYPE::STRING->valueTable(), $domainKey, $entityKey, $attrKey,"test");
 
         $entity = new Entity();
         $entity->setKey($entityKey);
@@ -136,7 +143,7 @@ class ValueActionFunctionalTest extends TestCase
 
         $this->assertNull($valueManager->getRuntime());
         $this->assertEquals("test", $valueManager->getStored());
-        $this->assertEquals($valueModel->getKey(), $valueManager->getKey());
+        $this->assertEquals($valueKey, $valueManager->getKey());
 
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::FOUND->code(), $result->getCode());
@@ -199,31 +206,45 @@ class ValueActionFunctionalTest extends TestCase
      */
     public function update_value() {
         $valueToSave = 'new';
-        $valueKey = 1;
-        $record = new ValueStringModel();
-        $record->setDomainKey(1)
-            ->setEntityKey(2)
-            ->setAttrKey(3)
-            ->setValue('old');
-        $record->save();
-        $record->refresh();
+        $domainKey = 1;
+        $entityKey = 2;
+        $attrKey = 2;
+        $attrSetKey = 4;
+
+        $valueModel = $this->makeValueModel();
+        $valueKey = $valueModel->create(ATTR_TYPE::STRING->valueTable(), $domainKey, $entityKey, $attrKey, 'old');
 
         $valueManager = new ValueManager();
         $valueManager->setKey($valueKey);
         $valueManager->setRuntime($valueToSave);
 
+        $entity = new Entity();
+        $entity->setKey($entityKey);
+        $entity->setDomainKey($domainKey);
+
+        $attrSet = new AttributeSet();
+        $attrSet->setEntity($entity);
+        $attrSet->setKey(4);
+
+        $attribute = new Attribute();
+        $attribute->setKey($attrKey);
+
         $container = new AttributeContainer();
-        $container->makeAttribute()
+        $container
+            ->setAttribute($attribute)
+            ->setAttributeSet($attrSet)
             ->setValueManager($valueManager);
+
         $this->action->setAttributeContainer($container);
         $result = $this->action->update();
 
-        $record = ValueStringModel::query()->first();
-        $this->assertEquals($valueToSave, $record->getValue());
+        $record = $valueModel->find(ATTR_TYPE::STRING->valueTable(), $domainKey, $entityKey, $attrKey);
+        $this->assertIsArray($record);
+        $this->assertEquals($valueToSave, $record[_VALUE::VALUE->column()]);
 
         $this->assertNull($valueManager->getRuntime());
         $this->assertEquals($valueToSave, $valueManager->getStored());
-        $this->assertEquals($record->getKey(), $valueManager->getKey());
+        $this->assertEquals($valueKey, $valueManager->getKey());
 
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::UPDATED->code(), $result->getCode());
@@ -238,8 +259,17 @@ class ValueActionFunctionalTest extends TestCase
         $container = new AttributeContainer();
         $valueManager = new ValueManager();
         $valueManager->setKey(1);
+        $entity = new Entity();
+        $entity->setKey(2);
+        $entity->setDomainKey(3);
+
+        $attrSet = new AttributeSet();
+        $attrSet->setEntity($entity);
+        $attrSet->setKey(3);
+
         $container
             ->makeAttribute()
+            ->setAttributeSet($attrSet)
             ->setValueManager($valueManager);
         $this->action->setAttributeContainer($container);
         $result = $this->action->update();
@@ -253,24 +283,38 @@ class ValueActionFunctionalTest extends TestCase
      * @covers \Drobotik\Eav\Value\ValueAction::delete
      */
     public function delete_value() {
-        $record = new ValueStringModel();
-        $record->setDomainKey(1)
-            ->setEntityKey(2)
-            ->setAttrKey(3)
-            ->setValue('old')
-            ->save();
+        $domainKey = 1;
+        $entityKey = 2;
+        $attrKey = 2;
+        $valueModel = $this->makeValueModel();
+        $valueKey = $valueModel->create(ATTR_TYPE::STRING->valueTable(), $domainKey, $entityKey, $attrKey, 'test');
+
         $value = new ValueManager();
-        $value->setKey($record->getKey());
-        $value->setStored($record->getValue());
+        $value->setKey($valueKey);
+        $value->setStored('test');
         $value->setRuntime('new');
+
+        $entity = new Entity();
+        $entity->setKey($entityKey);
+        $entity->setDomainKey($domainKey);
+
+        $attrSet = new AttributeSet();
+        $attrSet->setEntity($entity);
+
+        $attribute = new Attribute();
+        $attribute->setKey($attrKey);
+
         $container = new AttributeContainer();
-        $container->makeAttribute()
+        $container
+            ->setAttribute($attribute)
+            ->setAttributeSet($attrSet)
             ->setValueManager($value);
         $this->action->setAttributeContainer($container);
 
         $result = $this->action->delete();
 
-        $this->assertEquals(0, ValueStringModel::query()->count());
+        $record = $valueModel->find(ATTR_TYPE::STRING->valueTable(), $domainKey, $entityKey, $attrKey);
+        $this->assertFalse($record);
 
         $this->assertNull($value->getRuntime());
         $this->assertNull($value->getStored());
@@ -286,10 +330,26 @@ class ValueActionFunctionalTest extends TestCase
      * @covers \Drobotik\Eav\Value\ValueAction::delete
      */
     public function delete_value_no_key() {
+        $domainKey = 1;
+        $entityKey = 2;
+        $attrKey = 2;
         $valueManager = new ValueManager();
         $valueManager->setRuntime('new');
+
+        $entity = new Entity();
+        $entity->setKey($entityKey);
+        $entity->setDomainKey($domainKey);
+
+        $attrSet = new AttributeSet();
+        $attrSet->setEntity($entity);
+
+        $attribute = new Attribute();
+        $attribute->setKey($attrKey);
+
         $container = new AttributeContainer();
         $container->makeAttribute()
+            ->setAttribute($attribute)
+            ->setAttributeSet($attrSet)
             ->setValueManager($valueManager);
         $this->action->setAttributeContainer($container);
         $result = $this->action->delete();

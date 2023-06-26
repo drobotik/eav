@@ -15,9 +15,9 @@ use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Enum\_RESULT;
 use Drobotik\Eav\Enum\_VALUE;
+use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Exception\EntityException;
 use Drobotik\Eav\Model\EntityModel;
-use Drobotik\Eav\Model\ValueStringModel;
 use Drobotik\Eav\Result\Result;
 use Tests\TestCase;
 
@@ -202,7 +202,7 @@ class EntityGnomeFunctionalTest extends TestCase
             "email" => "test@email.net",
             'phone' => '1234567890',
         ];
-
+        $valueModel = $this->makeValueModel();
         $domainKey = $this->eavFactory->createDomain();
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
         $groupKey = $this->eavFactory->createGroup($setKey);
@@ -228,15 +228,31 @@ class EntityGnomeFunctionalTest extends TestCase
 
         $result = $this->gnome->save();
 
-        $emailRecord = ValueStringModel::where(_VALUE::ATTRIBUTE_ID->column(), $attrEmailKey)
-            ->firstOrFail();
+        $emailRecord = $valueModel->find(
+            ATTR_TYPE::STRING->valueTable(),
+            $domainKey,
+            $entity->getKey(),
+            $attrEmailKey
+        );
+        $this->assertIsArray($emailRecord);
+        $this->assertEquals($testData["email"], $emailRecord[_VALUE::VALUE->column()]);
 
-        $this->assertEquals($testData["email"], $emailRecord->getValue());
-        $phoneRecord = ValueStringModel::where(_VALUE::ATTRIBUTE_ID->column(), $attrPhoneKey)
-            ->firstOrFail();
-        $this->assertEquals($testData["phone"], $phoneRecord->getValue());
+        $phoneRecord = $valueModel->find(
+            ATTR_TYPE::STRING->valueTable(),
+            $domainKey,
+            $entity->getKey(),
+            $attrPhoneKey
+        );
+        $this->assertIsArray($phoneRecord);
+        $this->assertEquals($testData["phone"], $phoneRecord[_VALUE::VALUE->column()]);
 
-        $this->assertNull(ValueStringModel::where(_VALUE::ATTRIBUTE_ID->column(), $attrNoteKey)->first());
+        $noteRecord = $valueModel->find(
+            ATTR_TYPE::STRING->valueTable(),
+            $domainKey,
+            $entity->getKey(),
+            $attrNoteKey
+        );
+        $this->assertFalse($noteRecord);
 
         $this->assertEquals([], $entity->getBag()->getData());
 

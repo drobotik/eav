@@ -135,14 +135,4 @@ class AttributeFunctionalTest extends TestCase
         $this->attribute->setDescription('test');
         $this->assertEquals('test', $this->attribute->getDescription());
     }
-    /**
-     * @test
-     * @group functional
-     * @covers \Drobotik\Eav\Attribute::getValueModel
-     */
-    public function get_value_model() {
-        $this->assertInstanceOf(ValueStringModel::class, $this->attribute->getValueModel());
-        $this->attribute->setType(ATTR_TYPE::DECIMAL->value());
-        $this->assertInstanceOf(ValueDecimalModel::class, $this->attribute->getValueModel());
-    }
 }

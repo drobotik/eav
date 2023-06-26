@@ -495,53 +495,61 @@ class EntityFactoryFunctionalTest extends TestCase
         $result = $this->factory->create($config, $domainKey, $setKey);
         $entityKey = $result->getEntityKey();
         $attributes = $result->getAttributes();
+        $valueModel = $this->makeValueModel();
 
         // check values created
-        /** @var ValueStringModel $string */
-        /** @var ValueIntegerModel $integer */
-        /** @var ValueDecimalModel $decimal */
-        /** @var ValueDatetimeModel $datetime */
-        /** @var ValueTextModel $text */
-        $string = ValueStringModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
-            ->where(_VALUE::ENTITY_ID->column(), $entityKey)
-            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::STRING->value()])
-            ->first();
-        $integer = ValueIntegerModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
-            ->where(_VALUE::ENTITY_ID->column(), $entityKey)
-            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::INTEGER->value()])
-            ->first();
-        $decimal = ValueDecimalModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
-            ->where(_VALUE::ENTITY_ID->column(), $entityKey)
-            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::DECIMAL->value()])
-            ->first();
-        $datetime = ValueDatetimeModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
-            ->where(_VALUE::ENTITY_ID->column(), $entityKey)
-            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::DATETIME->value()])
-            ->first();
-        $text = ValueTextModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
-            ->where(_VALUE::ENTITY_ID->column(), $entityKey)
-            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::TEXT->value()])
-            ->first();
+        $string = $valueModel->find(
+            ATTR_TYPE::STRING->valueTable(),
+            $domainKey,
+            $entityKey,
+            $attributes[ATTR_TYPE::STRING->value()][_ATTR::ID->column()]
+        );
+        $integer = $valueModel->find(
+            ATTR_TYPE::INTEGER->valueTable(),
+            $domainKey,
+            $entityKey,
+            $attributes[ATTR_TYPE::INTEGER->value()][_ATTR::ID->column()]
+        );
+        $decimal = $valueModel->find(
+            ATTR_TYPE::DECIMAL->valueTable(),
+            $domainKey,
+            $entityKey,
+            $attributes[ATTR_TYPE::DECIMAL->value()][_ATTR::ID->column()]
+        );
+        $datetime = $valueModel->find(
+            ATTR_TYPE::DATETIME->valueTable(),
+            $domainKey,
+            $entityKey,
+            $attributes[ATTR_TYPE::DATETIME->value()][_ATTR::ID->column()]
+        );
+        $text = $valueModel->find(
+            ATTR_TYPE::TEXT->valueTable(),
+            $domainKey,
+            $entityKey,
+            $attributes[ATTR_TYPE::TEXT->value()][_ATTR::ID->column()]
+        );
 
-        $this->assertNotNull($string);
-        $this->assertNotNull($integer);
-        $this->assertNotNull($decimal);
-        $this->assertNotNull($datetime);
-        $this->assertNotNull($text);
+        $this->assertIsArray($string);
+        $this->assertIsArray($integer);
+        $this->assertIsArray($decimal);
+        $this->assertIsArray($datetime);
+        $this->assertIsArray($text);
 
-        $this->assertEquals($stringValue, $string->getValue());
-        $this->assertEquals($integerValue, $integer->getValue());
-        $this->assertEquals($decimalValue, $decimal->getValue());
-        $this->assertEquals($datetimeValue, $datetime->getValue());
-        $this->assertEquals($textValue, $text->getValue());
+        $parser = $this->makeValueParser();
+
+        $this->assertEquals($parser->parse(ATTR_TYPE::STRING, $stringValue), $string[_VALUE::VALUE->column()]);
+        $this->assertEquals($parser->parse(ATTR_TYPE::INTEGER, $integerValue), $integer[_VALUE::VALUE->column()]);
+        $this->assertEquals($parser->parse(ATTR_TYPE::DECIMAL, $decimalValue), $decimal[_VALUE::VALUE->column()]);
+        $this->assertEquals($parser->parse(ATTR_TYPE::DATETIME, $datetimeValue), $datetime[_VALUE::VALUE->column()]);
+        $this->assertEquals($parser->parse(ATTR_TYPE::TEXT, $textValue), $text[_VALUE::VALUE->column()]);
 
         $values = $result->getValues();
         $this->assertCount(5, $values);
-        $this->assertEquals($string->toArray(), $values[ATTR_TYPE::STRING->value()]->toArray());
-        $this->assertEquals($integer->toArray(), $values[ATTR_TYPE::INTEGER->value()]->toArray());
-        $this->assertEquals($decimal->toArray(), $values[ATTR_TYPE::DECIMAL->value()]->toArray());
-        $this->assertEquals($datetime->toArray(), $values[ATTR_TYPE::DATETIME->value()]->toArray());
-        $this->assertEquals($text->toArray(), $values[ATTR_TYPE::TEXT->value()]->toArray());
+        $this->assertEquals($string[_VALUE::ID->column()], $values[ATTR_TYPE::STRING->value()]);
+        $this->assertEquals($integer[_VALUE::ID->column()], $values[ATTR_TYPE::INTEGER->value()]);
+        $this->assertEquals($decimal[_VALUE::ID->column()], $values[ATTR_TYPE::DECIMAL->value()]);
+        $this->assertEquals($datetime[_VALUE::ID->column()], $values[ATTR_TYPE::DATETIME->value()]);
+        $this->assertEquals($text[_VALUE::ID->column()], $values[ATTR_TYPE::TEXT->value()]);
     }
 
     /**
@@ -566,39 +574,44 @@ class EntityFactoryFunctionalTest extends TestCase
         $result = $this->factory->create($config, $domainKey, $setKey);
         $entityKey = $result->getEntityKey();
         $attributes = $result->getAttributes();
-
+        $valueModel = $this->makeValueModel();
         // check values created
-        /** @var ValueStringModel $string */
-        /** @var ValueIntegerModel $integer */
-        /** @var ValueDecimalModel $decimal */
-        /** @var ValueDatetimeModel $datetime */
-        /** @var ValueTextModel $text */
-        $string = ValueStringModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
-            ->where(_VALUE::ENTITY_ID->column(), $entityKey)
-            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::STRING->value()])
-            ->first();
-        $integer = ValueIntegerModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
-            ->where(_VALUE::ENTITY_ID->column(), $entityKey)
-            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::INTEGER->value()])
-            ->first();
-        $decimal = ValueDecimalModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
-            ->where(_VALUE::ENTITY_ID->column(), $entityKey)
-            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::DECIMAL->value()])
-            ->first();
-        $datetime = ValueDatetimeModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
-            ->where(_VALUE::ENTITY_ID->column(), $entityKey)
-            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::DATETIME->value()])
-            ->first();
-        $text = ValueTextModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
-            ->where(_VALUE::ENTITY_ID->column(), $entityKey)
-            ->where(_VALUE::ATTRIBUTE_ID->column(), $attributes[ATTR_TYPE::TEXT->value()])
-            ->first();
+        $string = $valueModel->find(
+            ATTR_TYPE::STRING->valueTable(),
+            $domainKey,
+            $entityKey,
+            $attributes[ATTR_TYPE::STRING->value()][_ATTR::ID->column()]
+        );
+        $integer = $valueModel->find(
+            ATTR_TYPE::INTEGER->valueTable(),
+            $domainKey,
+            $entityKey,
+            $attributes[ATTR_TYPE::INTEGER->value()][_ATTR::ID->column()]
+        );
+        $decimal = $valueModel->find(
+            ATTR_TYPE::DECIMAL->valueTable(),
+            $domainKey,
+            $entityKey,
+            $attributes[ATTR_TYPE::DECIMAL->value()][_ATTR::ID->column()]
+        );
+        $datetime = $valueModel->find(
+            ATTR_TYPE::DATETIME->valueTable(),
+            $domainKey,
+            $entityKey,
+            $attributes[ATTR_TYPE::DATETIME->value()][_ATTR::ID->column()]
+        );
+        $text = $valueModel->find(
+            ATTR_TYPE::TEXT->valueTable(),
+            $domainKey,
+            $entityKey,
+            $attributes[ATTR_TYPE::TEXT->value()][_ATTR::ID->column()]
+        );
 
-        $this->assertNull($string);
-        $this->assertNull($integer);
-        $this->assertNull($decimal);
-        $this->assertNull($datetime);
-        $this->assertNull($text);
+        $this->assertFalse($string);
+        $this->assertFalse($integer);
+        $this->assertFalse($decimal);
+        $this->assertFalse($datetime);
+        $this->assertFalse($text);
 
         $this->assertEquals([], $result->getValues());
     }

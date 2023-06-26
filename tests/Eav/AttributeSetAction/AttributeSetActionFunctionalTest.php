@@ -16,6 +16,7 @@ use Drobotik\Eav\Database\Connection;
 use Drobotik\Eav\Entity;
 use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\ATTR_TYPE;
+use Drobotik\Eav\Model\ValueBase;
 use Drobotik\Eav\Strategy;
 use Tests\TestCase;
 
@@ -90,8 +91,10 @@ class AttributeSetActionFunctionalTest extends TestCase
         $groupKey = $this->eavFactory->createGroup($setKey);
         $attKey = $this->eavFactory->createAttribute($domainKey);
         $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $attKey);
-        $valueModel = $this->eavFactory->createValue(
-            ATTR_TYPE::STRING, $domainKey, $entityKey, $attKey, "test");
+
+        $value = "test";
+        $valueModel = new ValueBase();
+        $valueKey = $valueModel->create(ATTR_TYPE::STRING->valueTable(), $domainKey, $entityKey, $attKey, $value);
 
         $entity = new Entity();
         $entity->setKey($entityKey);
@@ -112,7 +115,7 @@ class AttributeSetActionFunctionalTest extends TestCase
         $this->assertEquals($attributeRecord, $attribute->getBag()->getFields());
         // value
         $valueManager = $this->container->getValueManager();
-        $this->assertEquals($valueModel->getKey(), $valueManager->getKey());
-        $this->assertEquals($valueModel->getValue(), $valueManager->getStored());
+        $this->assertEquals($valueKey, $valueManager->getKey());
+        $this->assertEquals($value, $valueManager->getStored());
     }
 }

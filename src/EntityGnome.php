@@ -138,7 +138,7 @@ class EntityGnome
             $deleteResults[$attribute->getName()] = $container->getStrategy()->delete();
         }
         $entityModel = $this->makeEntityModel();
-        $recordResult = $entityModel->delete($entity->getKey());
+        $recordResult = $entityModel->deleteByKey($entity->getKey());
         if (!$recordResult) {
             return $result->notDeleted();
         }

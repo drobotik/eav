@@ -10,12 +10,10 @@ declare(strict_types=1);
 namespace Drobotik\Eav\Import\Attributes;
 
 use Drobotik\Eav\Trait\ImportContainerTrait;
-use Drobotik\Eav\Trait\RepositoryTrait;
 use Drobotik\Eav\Trait\SingletonsTrait;
 
 class Worker
 {
-    use RepositoryTrait;
     use SingletonsTrait;
     use ImportContainerTrait;
 

@@ -13,7 +13,6 @@ use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Trait\QueryBuilderSingletons;
-use Drobotik\Eav\Trait\RepositoryTrait;
 use Drobotik\Eav\Trait\SingletonsTrait;
 use Illuminate\Database\Capsule\Manager;
 use Illuminate\Database\Query\Builder;
@@ -23,7 +22,6 @@ use Illuminate\Database\Query\Processors\MySqlProcessor as MySQLProcessor;
 class QueryBuilderManager
 {
     use QueryBuilderSingletons;
-    use RepositoryTrait;
     use SingletonsTrait;
 
     private int $domainKey;

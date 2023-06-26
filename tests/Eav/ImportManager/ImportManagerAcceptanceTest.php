@@ -14,21 +14,15 @@ use Drobotik\Eav\Database\Connection;
 use Drobotik\Eav\Driver\CsvDriver;
 use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\_ENTITY;
-use Drobotik\Eav\Enum\_PIVOT;
 use Drobotik\Eav\Enum\_VALUE;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Import\Attributes\Config;
 use Drobotik\Eav\Import\Attributes\ConfigAttribute;
 use Drobotik\Eav\Import\ImportContainer;
 use Drobotik\Eav\Import\ImportManager;
-use Drobotik\Eav\Model\AttributeModel;
 use Drobotik\Eav\Model\EntityModel;
 use Drobotik\Eav\Model\PivotModel;
-use Drobotik\Eav\Model\ValueDatetimeModel;
-use Drobotik\Eav\Model\ValueDecimalModel;
-use Drobotik\Eav\Model\ValueIntegerModel;
-use Drobotik\Eav\Model\ValueStringModel;
-use Drobotik\Eav\Model\ValueTextModel;
+use Drobotik\Eav\Model\ValueBase;
 use Drobotik\Eav\Value\ValueParser;
 use League\Csv\Reader;
 use League\Csv\Statement;
@@ -191,6 +185,7 @@ class ImportManagerAcceptanceTest extends TestCase
         $this->assertEquals(100, $outputSize);
 
         $valueParser = new ValueParser();
+        $valueModel = $this->makeValueModel();
 
         $iteration = 0;
         foreach ($records as $record)
@@ -199,43 +194,49 @@ class ImportManagerAcceptanceTest extends TestCase
             $entity = $entities[$iteration];
             $entityKey = $entity[_ENTITY::ID->column()];
 
-            /** @var ValueStringModel $stringValue */
-            /** @var ValueIntegerModel $integerValue */
-            /** @var ValueDecimalModel $decimalValue */
-            /** @var ValueDatetimeModel $datetimeValue */
-            /** @var ValueTextModel $textValue */
-            $stringValue = ValueStringModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
-                ->where(_VALUE::ENTITY_ID->column(), $entityKey)
-                ->where(_VALUE::ATTRIBUTE_ID->column(), $string[_ATTR::ID->column()])
-                ->first();
-            $integerValue = ValueIntegerModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
-                ->where(_VALUE::ENTITY_ID->column(), $entityKey)
-                ->where(_VALUE::ATTRIBUTE_ID->column(), $integer[_ATTR::ID->column()])
-                ->first();
-            $decimalValue = ValueDecimalModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
-                ->where(_VALUE::ENTITY_ID->column(), $entityKey)
-                ->where(_VALUE::ATTRIBUTE_ID->column(), $decimal[_ATTR::ID->column()])
-                ->first();
-            $datetimeValue = ValueDatetimeModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
-                ->where(_VALUE::ENTITY_ID->column(), $entityKey)
-                ->where(_VALUE::ATTRIBUTE_ID->column(), $datetime[_ATTR::ID->column()])
-                ->first();
-            $textValue = ValueTextModel::where(_VALUE::DOMAIN_ID->column(), $domainKey)
-                ->where(_VALUE::ENTITY_ID->column(), $entityKey)
-                ->where(_VALUE::ATTRIBUTE_ID->column(), $text[_ATTR::ID->column()])
-                ->first();
+            // check values created
+            $stringValue = $valueModel->find(
+                ATTR_TYPE::STRING->valueTable(),
+                $domainKey,
+                $entityKey,
+                $string[_ATTR::ID->column()]
+            );
+            $integerValue = $valueModel->find(
+                ATTR_TYPE::INTEGER->valueTable(),
+                $domainKey,
+                $entityKey,
+                $integer[_ATTR::ID->column()]
+            );
+            $decimalValue = $valueModel->find(
+                ATTR_TYPE::DECIMAL->valueTable(),
+                $domainKey,
+                $entityKey,
+                $decimal[_ATTR::ID->column()]
+            );
+            $datetimeValue = $valueModel->find(
+                ATTR_TYPE::DATETIME->valueTable(),
+                $domainKey,
+                $entityKey,
+                $datetime[_ATTR::ID->column()]
+            );
+            $textValue = $valueModel->find(
+                ATTR_TYPE::TEXT->valueTable(),
+                $domainKey,
+                $entityKey,
+                $text[_ATTR::ID->column()]
+            );
 
-            $this->assertNotNull($stringValue);
-            $this->assertNotNull($integerValue);
-            $this->assertNotNull($decimalValue);
-            $this->assertNotNull($datetimeValue);
-            $this->assertNotNull($textValue);
+            $this->assertIsArray($stringValue);
+            $this->assertIsArray($integerValue);
+            $this->assertIsArray($decimalValue);
+            $this->assertIsArray($datetimeValue);
+            $this->assertIsArray($textValue);
 
-            $this->assertEquals($record[$string[_ATTR::NAME->column()]], $stringValue->getValue(), "Iteration:$iteration");
-            $this->assertEquals($record[$integer[_ATTR::NAME->column()]], $integerValue->getValue(), "Iteration:$iteration");
-            $this->assertEquals($valueParser->parseDecimal($record[$decimal[_ATTR::NAME->column()]]), $decimalValue->getValue(), "Iteration:$iteration");
-            $this->assertEquals($record[$datetime[_ATTR::NAME->column()]], $datetimeValue->getValue(), "Iteration:$iteration");
-            $this->assertEquals($record[$text[_ATTR::NAME->column()]], $textValue->getValue(), "Iteration:$iteration");
+            $this->assertEquals($valueParser->parse(ATTR_TYPE::STRING, $record[$string[_ATTR::NAME->column()]]), $stringValue[_VALUE::VALUE->column()], "Iteration:$iteration");
+            $this->assertEquals($valueParser->parse(ATTR_TYPE::INTEGER, $record[$integer[_ATTR::NAME->column()]]), $integerValue[_VALUE::VALUE->column()], "Iteration:$iteration");
+            $this->assertEquals($valueParser->parse(ATTR_TYPE::DECIMAL, $record[$decimal[_ATTR::NAME->column()]]), $decimalValue[_VALUE::VALUE->column()], "Iteration:$iteration");
+            $this->assertEquals($valueParser->parse(ATTR_TYPE::DATETIME, $record[$datetime[_ATTR::NAME->column()]]), $datetimeValue[_VALUE::VALUE->column()], "Iteration:$iteration");
+            $this->assertEquals($valueParser->parse(ATTR_TYPE::TEXT, $record[$text[_ATTR::NAME->column()]]), $textValue[_VALUE::VALUE->column()], "Iteration:$iteration");
 
             $iteration++;
         }
@@ -268,14 +269,14 @@ class ImportManagerAcceptanceTest extends TestCase
         $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $integerAttributeKey);
 
         $oldValues = [];
+
+        $valueModel = new ValueBase();
         for($i=0; $i<6; $i++)
         {
             $entityKey = $this->eavFactory->createEntity($domainKey, $setKey);
-            $stringValue = $this->eavFactory->createValue(
-                ATTR_TYPE::STRING, $domainKey, $entityKey, $stringAttributeKey, $this->faker->word);
-            $integerValue = $this->eavFactory->createValue(
-                ATTR_TYPE::STRING, $domainKey, $entityKey, $integerAttributeKey, $this->faker->randomNumber());
-            $oldValues[] = [$entityKey, $stringValue->getValue(), $integerValue->getValue()];
+            $stringValueKey = $valueModel->create(ATTR_TYPE::STRING->valueTable(), $domainKey, $entityKey, $stringAttributeKey, ATTR_TYPE::STRING->randomValue());
+            $integerValueKey = $valueModel->create(ATTR_TYPE::STRING->valueTable(), $domainKey, $entityKey, $integerAttributeKey, ATTR_TYPE::INTEGER->randomValue());
+            $oldValues[] = [$entityKey, $stringValueKey, $integerValueKey];
         }
 
         $model = new EntityModel();
@@ -426,6 +427,7 @@ class ImportManagerAcceptanceTest extends TestCase
         $outputSize = $records->count();
 
         $this->assertEquals(11, $outputSize);
+        $parser = $this->makeValueParser();
 
         $iteration = 0;
         foreach ($records as $record)
@@ -444,28 +446,18 @@ class ImportManagerAcceptanceTest extends TestCase
                     ATTR_TYPE::DATETIME->value() => $datetime,
                 };
 
-                $valueRecord = ATTR_TYPE::getCase($attribute[_ATTR::TYPE->column()])->model()
-                    ->where(_VALUE::ENTITY_ID->column(), $entityKey)
-                    ->where(_VALUE::ATTRIBUTE_ID->column(), $attribute[_ATTR::ID->column()])
-                    ->first();
+                $attrType = ATTR_TYPE::getCase($attribute[_ATTR::TYPE->column()]);
+                $valueTable = $attrType->valueTable();
+                $valueRecord = $valueModel->find($valueTable, $domainKey, $entityKey, $attribute[_ATTR::ID->column()]);
 
                 if($value == '')
                 {
-                    $this->assertNull($valueRecord, "Unexpected value! Iteration:$iteration,Attribute:$attributeName");
+                    $this->assertFalse($valueRecord, "Unexpected value! Iteration:$iteration,Attribute:$attributeName");
                 }
                 else
                 {
-                    $this->assertNotNull($valueRecord);
-
-                    // truncated decimals
-                    if($attributeName == ATTR_TYPE::DECIMAL->value())
-                    {
-                        $model = new ValueDecimalModel();
-                        $model->setValue($value);
-                        $value = $model->getValue();
-                    }
-
-                    $this->assertEquals($value, $valueRecord->getValue());
+                    $this->assertIsArray($valueRecord);
+                    $this->assertEquals($parser->parse($attrType, $value), $valueRecord[_VALUE::VALUE->column()]);
                 }
             }
             $iteration++;

@@ -104,7 +104,7 @@ class ModelFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Model\Model::update
+     * @covers \Drobotik\Eav\Model\Model::updateByArray
      */
     public function update_record()
     {
@@ -121,7 +121,7 @@ class ModelFunctionalTest extends TestCase
 
         $this->model->setPrimaryKey(_DOMAIN::ID->column());
         $this->model->setTable($table);
-        $result = $this->model->update($key, [
+        $result = $this->model->updateByArray($key, [
             _DOMAIN::NAME->column() => 'Jerry'
         ]);
         $this->assertTrue($result);
@@ -146,7 +146,7 @@ class ModelFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Model\Model::delete
+     * @covers \Drobotik\Eav\Model\Model::deleteByKey
      */
     public function delete_record()
     {
@@ -163,7 +163,7 @@ class ModelFunctionalTest extends TestCase
 
         $this->model->setPrimaryKey(_DOMAIN::ID->column());
         $this->model->setTable($table);
-        $result = $this->model->delete($key);
+        $result = $this->model->deleteByKey($key);
 
         $this->assertTrue($result);
 

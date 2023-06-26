@@ -14,13 +14,11 @@ use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Exception\EntityException;
 use Drobotik\Eav\Trait\ImportContainerTrait;
-use Drobotik\Eav\Trait\RepositoryTrait;
 use Drobotik\Eav\Trait\SingletonsTrait;
 
 class Worker
 {
     use ImportContainerTrait;
-    use RepositoryTrait;
     use SingletonsTrait;
 
     private AttributeSet  $attributeSet;
@@ -131,7 +129,7 @@ class Worker
 
     public function processNewEntities(): void
     {
-        $valueRepo = $this->makeValueRepository();
+        $valueModel = $this->makeValueModel();
         $container = $this->getContainer();
         $valueSet = $this->getValueSet();
         $domainKey = $container->getDomainKey();
@@ -146,7 +144,7 @@ class Worker
             $value->setEntityKey($entities[$value->getLineIndex() - 1][_ENTITY::ID->column()]);
             $bulkCreateSet->appendValue($value);
         }
-        $valueRepo->bulkCreate($bulkCreateSet, $domainKey);
+        $valueModel->bulkCreate($bulkCreateSet, $domainKey);
     }
 
     public function processExistingEntities(): void
@@ -155,7 +153,8 @@ class Worker
         $domainKey = $container->getDomainKey();
         $valueSet = $this->getValueSet();
         $attrSet = $this->getAttributeSet();
-        $repository = $this->makeValueRepository();
+        $valueModel = $this->makeValueModel();
+        $valueParser = $this->makeValueParser();
         /**
          * @var Value $value
          */
@@ -166,10 +165,21 @@ class Worker
             $attribute = $attrSet->getAttribute($attributeValue->getAttributeName());
             $attributeKey = $attribute[_ATTR::ID->column()];
             $attributeType = ATTR_TYPE::getCase($attribute[_ATTR::TYPE->column()]);
+            $valueTable = $attributeType->valueTable();
             if($value == '')
-                $repository->destroy($domainKey, $entityKey, $attributeKey, $attributeType);
+                $valueModel->destroy($valueTable, $domainKey, $entityKey, $attributeKey);
             else
-                $repository->updateOrCreate($domainKey, $entityKey, $attributeKey, $attributeType, $value);
+            {
+                $value = $valueParser->parse($attributeType, $value);
+                $record = $valueModel->find($valueTable, $domainKey, $entityKey, $attributeKey);
+                if($record === false)
+                {
+                    $valueModel->create($valueTable, $domainKey, $entityKey, $attributeKey, $value);
+                } else
+                {
+                    $valueModel->update($valueTable, $domainKey, $entityKey, $attributeKey, $value);
+                }
+            }
         }
     }
 
