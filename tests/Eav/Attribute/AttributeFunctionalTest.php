@@ -13,8 +13,6 @@ use Drobotik\Eav\Attribute;
 use Drobotik\Eav\AttributeBag;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Exception\AttributeException;
-use Drobotik\Eav\Model\ValueDecimalModel;
-use Drobotik\Eav\Model\ValueStringModel;
 use PHPUnit\Framework\TestCase;
 
 class AttributeFunctionalTest extends TestCase

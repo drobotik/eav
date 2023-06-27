@@ -12,12 +12,6 @@ namespace Drobotik\Eav\Enum;
 use Carbon\Carbon;
 use Doctrine\DBAL\Types\Types;
 use Drobotik\Eav\Exception\AttributeException;
-use Drobotik\Eav\Model\ValueBase;
-use Drobotik\Eav\Model\ValueDatetimeModel;
-use Drobotik\Eav\Model\ValueDecimalModel;
-use Drobotik\Eav\Model\ValueIntegerModel;
-use Drobotik\Eav\Model\ValueStringModel;
-use Drobotik\Eav\Model\ValueTextModel;
 
 enum ATTR_TYPE
 {
@@ -55,17 +49,6 @@ enum ATTR_TYPE
             self::DECIMAL => sprintf(_VALUE::table(), self::DECIMAL->value()),
             self::STRING => sprintf(_VALUE::table(), self::STRING->value()),
             self::TEXT => sprintf(_VALUE::table(), self::TEXT->value())
-        };
-    }
-
-    public function model(): ValueBase
-    {
-        return match ($this) {
-            self::INTEGER => new ValueIntegerModel,
-            self::DATETIME => new ValueDatetimeModel,
-            self::DECIMAL => new ValueDecimalModel,
-            self::STRING => new ValueStringModel,
-            self::TEXT => new ValueTextModel
         };
     }
 

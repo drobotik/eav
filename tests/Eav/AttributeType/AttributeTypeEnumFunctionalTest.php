@@ -14,11 +14,6 @@ use Doctrine\DBAL\Types\Types;
 use Drobotik\Eav\Enum\_VALUE;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Exception\AttributeException;
-use Drobotik\Eav\Model\ValueDatetimeModel;
-use Drobotik\Eav\Model\ValueDecimalModel;
-use Drobotik\Eav\Model\ValueIntegerModel;
-use Drobotik\Eav\Model\ValueStringModel;
-use Drobotik\Eav\Model\ValueTextModel;
 use PHPUnit\Framework\TestCase;
 
 class AttributeTypeEnumFunctionalTest extends TestCase
@@ -61,18 +56,6 @@ class AttributeTypeEnumFunctionalTest extends TestCase
         $this->assertEquals(sprintf(_VALUE::table(), ATTR_TYPE::DECIMAL->value()), ATTR_TYPE::DECIMAL->valueTable());
         $this->assertEquals(sprintf(_VALUE::table(), ATTR_TYPE::STRING->value()), ATTR_TYPE::STRING->valueTable());
         $this->assertEquals(sprintf(_VALUE::table(), ATTR_TYPE::TEXT->value()), ATTR_TYPE::TEXT->valueTable());
-    }
-    /**
-     * @test
-     * @group functional
-     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::model
-     */
-    public function model() {
-        $this->assertInstanceOf(ValueIntegerModel::class, ATTR_TYPE::INTEGER->model());
-        $this->assertInstanceOf(ValueDatetimeModel::class, ATTR_TYPE::DATETIME->model());
-        $this->assertInstanceOf(ValueDecimalModel::class, ATTR_TYPE::DECIMAL->model());
-        $this->assertInstanceOf(ValueStringModel::class, ATTR_TYPE::STRING->model());
-        $this->assertInstanceOf(ValueTextModel::class, ATTR_TYPE::TEXT->model());
     }
     /**
      * @test

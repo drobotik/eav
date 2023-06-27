@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace Tests\Eav\EavFactoryResult;
 
 use Drobotik\Eav\Enum\_ATTR;
-use Drobotik\Eav\Model\ValueStringModel;
 use PHPUnit\Framework\TestCase;
 use Drobotik\Eav\Result\EntityFactoryResult;
 

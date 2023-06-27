@@ -21,11 +21,6 @@ use Drobotik\Eav\Exception\AttributeException;
 use Drobotik\Eav\Exception\EntityFactoryException;
 use Drobotik\Eav\Factory\EntityFactory;
 use Drobotik\Eav\Model\PivotModel;
-use Drobotik\Eav\Model\ValueDatetimeModel;
-use Drobotik\Eav\Model\ValueDecimalModel;
-use Drobotik\Eav\Model\ValueIntegerModel;
-use Drobotik\Eav\Model\ValueStringModel;
-use Drobotik\Eav\Model\ValueTextModel;
 use Drobotik\Eav\Result\EntityFactoryResult;
 use PDO;
 use Tests\TestCase;
@@ -33,7 +28,6 @@ use Tests\TestCase;
 class EntityFactoryFunctionalTest extends TestCase
 {
     private EntityFactory $factory;
-
 
     public function setUp(): void
     {

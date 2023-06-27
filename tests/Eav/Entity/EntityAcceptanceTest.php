@@ -10,19 +10,12 @@ declare(strict_types=1);
 namespace Tests\Eav\Entity;
 
 use Carbon\Carbon;
-use Drobotik\Eav\Database\Connection;
 use Drobotik\Eav\Entity;
 use Drobotik\Eav\Enum\_ATTR;
-use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Enum\_VALUE;
 use Drobotik\Eav\Enum\ATTR_FACTORY;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Model\EntityModel;
-use Drobotik\Eav\Model\ValueDatetimeModel;
-use Drobotik\Eav\Model\ValueDecimalModel;
-use Drobotik\Eav\Model\ValueIntegerModel;
-use Drobotik\Eav\Model\ValueStringModel;
-use Drobotik\Eav\Model\ValueTextModel;
 use Drobotik\Eav\Result\EntityFactoryResult;
 use Tests\TestCase;
 

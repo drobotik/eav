@@ -14,7 +14,6 @@ use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Exception\AttributeException;
 use Drobotik\Eav\Interface\StrategyInterface;
-use Drobotik\Eav\Model\ValueBase;
 use Drobotik\Eav\Trait\ContainerTrait;
 
 class Attribute
@@ -140,10 +139,5 @@ class Attribute
         $this->getBag()->setField(_ATTR::DESCRIPTION, $value);
 
         return $this;
-    }
-
-    public function getValueModel(): ValueBase
-    {
-        return $this->getType()->model();
     }
 }
