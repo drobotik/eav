@@ -32,12 +32,13 @@ class DomainBehaviorTest extends TestCase
             ->onlyMethods(['run'])
             ->getMock();
         $manager->expects($this->once())->method('run')
+            ->with(1, 2, [1], [2])
             ->willReturn($result);
         $domain = $this->getMockBuilder(Domain::class)
             ->onlyMethods(['getExportManager'])->getMock();
         $domain->expects($this->once())->method('getExportManager')
             ->willReturn($manager);
-        $this->assertSame($result, $domain->export());
+        $this->assertSame($result, $domain->export(1, 2, [1], [2]));
     }
 
     /**

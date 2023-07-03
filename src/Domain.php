@@ -46,8 +46,8 @@ class Domain
         return $this->getImportManager()->run();
     }
 
-    public function export(): Result
+    public function export(int $domainKey, int $setKey, array $filters, array $columns): Result
     {
-        return $this->getExportManager()->run();
+        return $this->getExportManager()->run($domainKey, $setKey, $filters, $columns);
     }
 }

@@ -13,7 +13,6 @@ use Drobotik\Eav\Database\Connection;
 use Drobotik\Eav\Factory\EavFactory;
 use Drobotik\Eav\Trait\SingletonsTrait;
 use Faker\Generator;
-use Illuminate\Database\Capsule\Manager as Capsule;
 
 class TestCase extends \PHPUnit\Framework\TestCase
 {
@@ -29,14 +28,6 @@ class TestCase extends \PHPUnit\Framework\TestCase
             'path' => $sqlitePath
         ];
         Connection::get($dbParams);
-        $capsule = new Capsule;
-        $capsule->addConnection([
-            'driver'   => 'sqlite',
-            'database' => $sqlitePath,
-        ]);
-        $this->capsule = $capsule;
-        $capsule->setAsGlobal();
-        $capsule->bootEloquent();
         $migrator = new Migrator();
         $migrator->rollback();
         $migrator->migrate();

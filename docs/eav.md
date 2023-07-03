@@ -53,18 +53,6 @@ $config = [
 $connection = Connection::get($config)
 ```
 Choose a [driver](https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#driver) that best suits your requirements.
-### Laravel connection
-The library currently utilizes Laravel models, which means it uses Laravel Capsule for database connections. By default, the library will use the default connection within a Laravel application. However, for other cases, you need to initialize a Capsule instance.
-For the CLI app, you can add the following code to the connections.php file:
-```php
-$capsule = new Capsule;
-$capsule->addConnection([
-    // connection settings
-]);
-$capsule->setAsGlobal();
-$capsule->bootEloquent();
-```
-
 ### DBAL migrations
 Migrate:
 ```bash
@@ -74,31 +62,6 @@ Rollback:
 ```bash
 $ php eav migrations:migrate first
 ```
-### Laravel migrations
-Publishing on Laravel app. 
-Add EavServiceProvider to app config.
-```php
-\Drobotik\Eav\Database\Support\Laravel\EavServiceProvider::class
-```
-Publish migrations by vendor:publish.
-### Laravel models
-
-Currently, the library is dependent on Laravel's Illuminate\Database and utilizes Laravel models for the following table structure:
-
-- eav_domains
-- eav_entities
-- eav_attribute_sets
-- eav_attribute_groups
-- eav_attributes
-- eav_pivot
-- eav_value_string
-- eav_value_integer
-- eav_value_decimal
-- eav_value_datetime
-- eav_value_text
-
-These Laravel models are used to interact with these tables and perform various database operations.
-
 ## Objects
 
 ### Domain
@@ -527,7 +490,7 @@ use SplFileObject;
 use League\Csv\Writer;
 use Drobotik\Eav\Driver\CsvDriver;
 use Drobotik\Eav\Export\ExportManager;
-use Drobotik\Eav\QueryBuilder\QueryBuilderManager;
+use Drobotik\Eav\QueryBuilder\QueryBuilder;
 
 // specify where to write
 $file = new SplFileObject(d'/dir/data.csv','w');
@@ -539,16 +502,16 @@ $manager = new ExportManager();
 $manager->setDriver($driver);
 
 // query builder config
-$config = [
+$filters = [
     QB_CONFIG::CONDITION => QB_CONDITION::AND,
     QB_CONFIG::RULES => [
         [
             QB_CONFIG::NAME => "size",
             QB_CONFIG::OPERATOR => QB_OPERATOR::LESS->name(),
             QB_CONFIG::VALUE => 10000
-        ], // size < 10000
-        [ // size < 10000 and ( name like '%sit quisquam%' or name = 'et dolores'
-            QB_CONFIG::CONDITION => QB_CONDITION::OR,
+        ], 
+        [
+            QB_CONFIG::CONDITION => QB_CONDITION::OR->name(),
             QB_CONFIG::RULES => [
                 [
                     QB_CONFIG::NAME => "name",
@@ -567,17 +530,8 @@ $config = [
 
 $domainKey = 1;
 $setKey = 2;
-
-$qbManager = new QueryBuilderManager();
-$qbManager->setDomainKey($domainKey);
-$qbManager->setSetKey($setKey);
-$qbManager->setFilters($config);
-// Specify the columns that should be included in the dataset.
-// Only existing attributes linked to the attribute set will be considered.
-$qbManager->setColumns(["name", "size", "color"]);
-
-$manager->setQueryBuilderManager($qbManager);
-
+$resultColumns = ["size", "name"]
+$manager->run(domainKey, $setKey, $filters, $resultColumns)
 $manager->run(); // file created
 
 ```

@@ -9,20 +9,18 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use Illuminate\Database\Capsule\Manager as Capsule;
+use Drobotik\Eav\Database\Connection;
 
 class PerformanceTestCase extends \PHPUnit\Framework\TestCase
 {
     public function setUp(): void
     {
         parent::setUp();
-        $capsule = new Capsule;
-        $capsule->addConnection([
-            'driver'   => 'sqlite',
-            'database' => __DIR__.'/large.sqlite',
-        ]);
-        $capsule->setAsGlobal();
-        $capsule->bootEloquent();
+        $dbParams = [
+            'driver' => 'pdo_sqlite',
+            'memory' => true,
+        ];
+        Connection::get($dbParams);
     }
 
     public function tearDown(): void

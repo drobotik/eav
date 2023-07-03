@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4527845a6493e9dbd8a0c7867cfee3b6",
+    "content-hash": "361fc80954555493cf63eb8049456c01",
     "packages": [
         {
             "name": "brick/math",
@@ -541,75 +541,6 @@
                 "source": "https://github.com/laravel/framework"
             },
             "time": "2023-04-17T16:01:53+00:00"
-        },
-        {
-            "name": "illuminate/database",
-            "version": "10.x-dev",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/illuminate/database.git",
-                "reference": "0da9d1fa8cf3926f6a8fbe9ebd1a76b6aba0b630"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/database/zipball/0da9d1fa8cf3926f6a8fbe9ebd1a76b6aba0b630",
-                "reference": "0da9d1fa8cf3926f6a8fbe9ebd1a76b6aba0b630",
-                "shasum": ""
-            },
-            "require": {
-                "brick/math": "^0.9.3|^0.10.2|^0.11",
-                "ext-pdo": "*",
-                "illuminate/collections": "^10.0",
-                "illuminate/container": "^10.0",
-                "illuminate/contracts": "^10.0",
-                "illuminate/macroable": "^10.0",
-                "illuminate/support": "^10.0",
-                "php": "^8.1"
-            },
-            "suggest": {
-                "doctrine/dbal": "Required to rename columns and drop SQLite columns (^3.5.1).",
-                "ext-filter": "Required to use the Postgres database driver.",
-                "fakerphp/faker": "Required to use the eloquent factory builder (^1.21).",
-                "illuminate/console": "Required to use the database commands (^10.0).",
-                "illuminate/events": "Required to use the observers with Eloquent (^10.0).",
-                "illuminate/filesystem": "Required to use the migrations (^10.0).",
-                "illuminate/pagination": "Required to paginate the result set (^10.0).",
-                "symfony/finder": "Required to use Eloquent model factories (^6.2)."
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "10.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Illuminate\\Database\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Taylor Otwell",
-                    "email": "taylor@laravel.com"
-                }
-            ],
-            "description": "The Illuminate Database package.",
-            "homepage": "https://laravel.com",
-            "keywords": [
-                "database",
-                "laravel",
-                "orm",
-                "sql"
-            ],
-            "support": {
-                "issues": "https://github.com/laravel/framework/issues",
-                "source": "https://github.com/laravel/framework"
-            },
-            "time": "2023-04-18T19:06:23+00:00"
         },
         {
             "name": "illuminate/filesystem",
@@ -5774,7 +5705,8 @@
     "prefer-lowest": false,
     "platform": {
         "php": "^8.1",
-        "ext-pdo": "*"
+        "ext-pdo": "*",
+        "ext-bcmath": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"

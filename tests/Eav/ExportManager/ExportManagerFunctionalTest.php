@@ -11,7 +11,6 @@ namespace Tests\Eav\ExportManager;
 
 use Drobotik\Eav\Domain;
 use Drobotik\Eav\Export\ExportManager;
-use Drobotik\Eav\QueryBuilder\QueryBuilderManager;
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\DriverFixture;
 
@@ -56,20 +55,5 @@ class ExportManagerFunctionalTest extends TestCase
         $this->manager->setDriver($driver);
         $this->assertSAME($driver, $this->manager->getDriver());
         $this->assertTrue($this->manager->hasDriver());
-    }
-
-    /**
-     * @test
-     *
-     * @group functional
-     *
-     * @covers \Drobotik\Eav\Export\ExportManager::getQueryBuilderManager
-     * @covers \Drobotik\Eav\Export\ExportManager::setQueryBuilderManager
-     */
-    public function query_builder_manager()
-    {
-        $manager = new QueryBuilderManager();
-        $this->manager->setQueryBuilderManager($manager);
-        $this->assertSAME($manager, $this->manager->getQueryBuilderManager());
     }
 }

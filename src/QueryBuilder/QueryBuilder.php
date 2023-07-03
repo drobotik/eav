@@ -9,82 +9,129 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\QueryBuilder;
 
+use Drobotik\Eav\Database\Connection;
 use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Enum\_VALUE;
 use Drobotik\Eav\Enum\QB_CONDITION;
-use Drobotik\Eav\Enum\QB_OPERATOR;
-use Illuminate\Database\Query\Builder;
-use Illuminate\Database\Query\JoinClause;
+use Drobotik\Eav\Enum\QB_JOIN;
+use Drobotik\Eav\Exception\QueryBuilderException;
+use Doctrine\DBAL\Query\QueryBuilder as Query;
+
 
 class QueryBuilder
 {
-    public function select(Builder $query, string $name) : Builder
+    private Config $config;
+    private Query $query;
+
+    public function __construct()
     {
-        return $query->addSelect(sprintf('%1$s.%2$s as %1$s', $name, _VALUE::VALUE->column()));
+        $this->query = Connection::get()->createQueryBuilder();
     }
 
-    public function join(Builder $query, $table, $name, $attributeKey): Builder
+    public function getQuery(): Query
     {
-        return $query
-            ->join(sprintf('%s as %s', $table, $name), function(JoinClause $j) use($name, $attributeKey) {
-                $j->on(
-                    sprintf('e.%s', _ENTITY::ID->column()),
-                    '=',
-                    sprintf('%s.%s', $name, _VALUE::ENTITY_ID->column())
-                )->where(
-                    sprintf('%s.%s', $name, _VALUE::ATTRIBUTE_ID->column()),
-                    '=',
-                    $attributeKey
-                );
-            });
+        return $this->query;
     }
 
-    public function condition(
-        Builder $query,
-        string $name,
-        QB_OPERATOR $operator,
-        QB_CONDITION $condition,
-        mixed $value = null
-    )
-    : Builder
+    public function setConfig(Config $config) : void
     {
-        $condition = $condition->sql();
-        if ($operator->isNeedsArray()) {
-            if ($operator == QB_OPERATOR::IN)
-            {
-                return $query->whereIn($name, $value, $condition);
-            }
-            else if ($operator == QB_OPERATOR::NOT_IN)
-            {
-                return $query->whereNotIn($name, $value, $condition);
-            }
-            else if($operator == QB_OPERATOR::BETWEEN)
-            {
-                return $query->whereBetween($name, $value, $condition);
-            }
-            else if($operator == QB_OPERATOR::NOT_BETWEEN)
-            {
-                return $query->whereNotBetween($name, $value, $condition);
+        $this->config = $config;
+    }
+
+    public function getConfig() : Config
+    {
+        return $this->config;
+    }
+
+    public function startQuery(): void
+    {
+        $this->query->from(_ENTITY::table(), 'e');
+        $this->query->addSelect('e.'._ENTITY::ID->column());
+        $config = $this->getConfig();
+        foreach($config->getSelected() as $selected) {
+            $this->select($selected);
+        }
+        foreach ($config->getJoins() as $join) {
+            $this->join($join[QB_JOIN::NAME]);
+        }
+    }
+
+    public function endQuery(): void
+    {
+        $config = $this->getConfig();
+        $query = $this->getQuery();
+        $query->andwhere(sprintf('e.%s = :%s', _ENTITY::DOMAIN_ID->column(), $config->getDomainKeyParam()));
+        $query->andWhere(sprintf('e.%s = :%s', _ENTITY::ATTR_SET_ID->column(), $config->getSetKeyParam()));
+    }
+
+
+    public function run() : Query
+    {
+        $this->startQuery();
+        $this->applyExpressions($this->getConfig()->getExpressions(), QB_CONDITION::AND);
+        $this->endQuery();
+        $this->applyParams();
+        return $this->getQuery();
+    }
+
+    /**
+     * @throws QueryBuilderException
+     */
+    public function applyExpressions(array $expressions, ?QB_CONDITION $condition = null) : void
+    {
+        $query = $this->getQuery();
+        $expr = $query->expr();
+        $executed = [];
+        foreach ($expressions as $expression) {
+            if ($expression instanceof QB_CONDITION) {
+                $condition = $expression;
+            } else if ($expression instanceof Expression) {
+                $executed[] = $expression->execute();
+            } elseif (is_array($expression)) {
+                $subOperator = $expression[0] ?? throw new QueryBuilderException('must have condition');
+                $ee = array_slice($expression, 1);
+                $this->applyExpressions($ee, $subOperator);
             }
         }
-        else if($operator->isNull())
-        {
-            if ($operator == QB_OPERATOR::IS_NULL)
-            {
-                return $query->whereNull($name, $condition);
-            }
-            else if($operator == QB_OPERATOR::IS_NOT_NULL)
-            {
-                return $query->whereNotNull($name, $condition);
+
+        if (count($executed) > 0) {
+            if ($condition === QB_CONDITION::AND) {
+                $query->andWhere($expr->and(...$executed));
+            } elseif ($condition === QB_CONDITION::OR) {
+                $query->orWhere($expr->or(...$executed));
             }
         }
-        $value = match($operator) {
-            QB_OPERATOR::BEGINS_WITH, QB_OPERATOR::NOT_BEGINS_WITH => '%'.$value,
-            QB_OPERATOR::CONTAINS, QB_OPERATOR::NOT_CONTAINS => '%'.$value.'%',
-            QB_OPERATOR::ENDS_WITH, QB_OPERATOR::NOT_ENDS_WITH => $value.'%',
-            default => $value
-        };
-        return $query->where($name, $operator->sql(), $value, $condition);
     }
 
+    public function applyParams(): void
+    {
+        $parameters = $this->getConfig()->getParameters();
+        $this->getQuery()->setParameters($parameters);
+    }
+
+    public function select(string $name) : Query
+    {
+        return $this->getQuery()->addSelect(sprintf('%1$s.%2$s as %1$s', $name, _VALUE::VALUE->column()));
+    }
+
+    public function join(string $name): Query
+    {
+        $config = $this->getConfig();
+        [
+            QB_JOIN::NAME => $name,
+            QB_JOIN::TABLE => $table,
+            QB_JOIN::ATTR_PARAM => $paramName
+        ] = $config->getJoin($name);
+        return
+            $this->getQuery()->innerJoin('e', $table, $name,
+                sprintf('e.%s = %s.%s AND %s.%s = :%s',
+                    _ENTITY::ID->column(),
+                    $name,
+                    _VALUE::ENTITY_ID->column(),
+                    $name,
+                    _VALUE::ATTRIBUTE_ID->column(),
+                    $paramName
+                )
+            );
+    }
 }

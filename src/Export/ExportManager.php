@@ -11,26 +11,18 @@ namespace Drobotik\Eav\Export;
 
 use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Driver;
-use Drobotik\Eav\QueryBuilder\QueryBuilderManager;
+use Drobotik\Eav\QueryBuilder\Config;
+use Drobotik\Eav\QueryBuilder\QueryBuilder;
 use Drobotik\Eav\Result\Result;
 use Drobotik\Eav\Trait\DomainTrait;
+use Drobotik\Eav\Trait\SingletonsTrait;
 
 class ExportManager
 {
     use DomainTrait;
+    use SingletonsTrait;
 
-    private Driver              $driver;
-    private QueryBuilderManager $queryBuilderManager;
-
-    public function setQueryBuilderManager(QueryBuilderManager $manager): void
-    {
-        $this->queryBuilderManager = $manager;
-    }
-
-    public function getQueryBuilderManager() : QueryBuilderManager
-    {
-        return $this->queryBuilderManager;
-    }
+    private Driver $driver;
 
     public function setDriver(Driver $driver): void
     {
@@ -47,18 +39,20 @@ class ExportManager
         return isset($this->driver);
     }
 
-    public function run(): Result
+    public function run(int $domainKey, int $setKey, array $filters, array $columns): Result
     {
-        $qbManager = $this->getQueryBuilderManager();
-        $records = $qbManager
-            ->run()
-            ->get()
-            ->map(function ($value) {
-                // query builder return not Arrayable items (stdClass)
-                return json_decode(json_encode($value), true);
-            })
-            ->toArray();
-        $columns = $qbManager->getColumns();
+        $qb = new QueryBuilder();
+        $config = new Config();
+        $config->setDomainKey($domainKey);
+        $config->setSetKey($setKey);
+        $config->addAttributes($this->makeAttributeSetModel()->findAttributes($domainKey, $setKey));
+        $config->addColumns($columns);
+        $config->parse($filters);
+        $qb->setConfig($config);
+        $records = $qb->run()
+            ->executeQuery()
+            ->fetchAllAssociative();
+
         $header = array_merge([_ENTITY::ID->column()], $columns);
         $driver = $this->getDriver();
         $driver->setHeader($header);

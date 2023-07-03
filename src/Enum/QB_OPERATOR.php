@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\Enum;
 
-use Drobotik\Eav\Exception\EntityFactoryException;
 use Drobotik\Eav\Exception\QueryBuilderException;
 
 enum QB_OPERATOR
@@ -61,7 +60,7 @@ enum QB_OPERATOR
         };
     }
     /**
-     * @throws EntityFactoryException
+     * @throws QueryBuilderException
      */
     public static function getCase(string $case)
     {
@@ -112,7 +111,6 @@ enum QB_OPERATOR
             self::IS_NOT_EMPTY,
             self::IS_NULL,
             self::IS_NOT_NULL => false,
-
         };
     }
 
@@ -138,9 +136,6 @@ enum QB_OPERATOR
              ATTR_TYPE::DATETIME],
         };
     }
-
-
-
     public function sql(): string {
         return match ($this) {
             self::EQUAL,
@@ -168,8 +163,8 @@ enum QB_OPERATOR
 
     public function prepend(): string|bool {
         return match ($this) {
-            self::BEGINS_WITH,
-            self::NOT_BEGINS_WITH,
+            self::ENDS_WITH,
+            self::NOT_ENDS_WITH,
             self::CONTAINS,
             self::NOT_CONTAINS => '%',
             default => false
@@ -178,8 +173,8 @@ enum QB_OPERATOR
 
     public function append(): string|bool {
         return match ($this) {
-            self::ENDS_WITH,
-            self::NOT_ENDS_WITH,
+            self::BEGINS_WITH,
+            self::NOT_BEGINS_WITH,
             self::CONTAINS,
             self::NOT_CONTAINS => '%',
             default => false
@@ -211,6 +206,19 @@ enum QB_OPERATOR
         return match ($this) {
             self::BETWEEN,
             self::NOT_BETWEEN => true,
+            default => false
+        };
+    }
+
+    public function isLike() : bool
+    {
+        return match ($this) {
+            self::BEGINS_WITH,
+            self::CONTAINS,
+            self::ENDS_WITH,
+            self::NOT_BEGINS_WITH,
+            self::NOT_ENDS_WITH,
+            self::NOT_CONTAINS => true,
             default => false
         };
     }

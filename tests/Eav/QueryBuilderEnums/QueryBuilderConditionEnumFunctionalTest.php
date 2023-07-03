@@ -24,7 +24,7 @@ class QueryBuilderConditionEnumFunctionalTest extends TestCase
      */
     public function sql()
     {
-        $this->assertEquals('and', QB_CONDITION::AND->sql());
-        $this->assertEquals('or', QB_CONDITION::OR->sql());
+        $this->assertEquals('and', QB_CONDITION::AND->name());
+        $this->assertEquals('or', QB_CONDITION::OR->name());
     }
 }

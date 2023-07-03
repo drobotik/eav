@@ -10,9 +10,10 @@ declare(strict_types=1);
 namespace Tests\Eav\QueryBuilderEnums;
 
 use Drobotik\Eav\Enum\QB_CONFIG;
+use Drobotik\Eav\Enum\QB_JOIN;
 use PHPUnit\Framework\TestCase;
 
-class QueryBuilderConfigEnumFunctionalTest extends TestCase
+class QueryBuilderBaseEnumsFunctionalTest extends TestCase
 {
     /**
      * @test
@@ -21,7 +22,7 @@ class QueryBuilderConfigEnumFunctionalTest extends TestCase
      *
      * @covers \Drobotik\Eav\Enum\QB_CONFIG
      */
-    public function sql()
+    public function config()
     {
         $this->assertEquals("condition", QB_CONFIG::CONDITION);
         $this->assertEquals("rules", QB_CONFIG::RULES);
@@ -29,5 +30,19 @@ class QueryBuilderConfigEnumFunctionalTest extends TestCase
         $this->assertEquals("type", QB_CONFIG::TYPE);
         $this->assertEquals("value", QB_CONFIG::VALUE);
         $this->assertEquals("operator", QB_CONFIG::OPERATOR);
+    }
+
+    /**
+     * @test
+     *
+     * @group functional
+     *
+     * @covers \Drobotik\Eav\Enum\QB_JOIN
+     */
+    public function join()
+    {
+        $this->assertEquals("table", QB_JOIN::TABLE);
+        $this->assertEquals("name", QB_JOIN::NAME);
+        $this->assertEquals("attr_param", QB_JOIN::ATTR_PARAM);
     }
 }

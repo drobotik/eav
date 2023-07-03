@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace Tests;
 
 use Drobotik\Eav\Database\Connection;
-use Illuminate\Database\Capsule\Manager as Capsule;
 
 class QueryingDataTestCase extends \PHPUnit\Framework\TestCase
 {
@@ -23,14 +22,6 @@ class QueryingDataTestCase extends \PHPUnit\Framework\TestCase
             'path' => $sqlitePath
         ];
         Connection::get($dbParams);
-        $capsule = new Capsule;
-        $capsule->addConnection([
-            'driver'   => 'sqlite',
-            'database' => $sqlitePath,
-        ]);
-        $this->capsule = $capsule;
-        $capsule->setAsGlobal();
-        $capsule->bootEloquent();
     }
 
     public function tearDown(): void

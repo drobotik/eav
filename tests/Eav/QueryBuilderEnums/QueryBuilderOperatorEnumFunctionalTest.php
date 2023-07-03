@@ -12,25 +12,13 @@ namespace Tests\Eav\QueryBuilderEnums;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Enum\QB_OPERATOR;
 use Drobotik\Eav\Exception\QueryBuilderException;
-use Illuminate\Database\Connection as Connection;
-use Illuminate\Database\Query\Builder;
-use Illuminate\Database\Query\Grammars\MySqlGrammar as MySQLGrammar;
-use Illuminate\Database\Query\Processors\MySqlProcessor as MySQLProcessor;
 use PHPUnit\Framework\TestCase;
 
 class QueryBuilderOperatorEnumFunctionalTest extends TestCase
 {
-
-    private function getQuery() : Builder
-    {
-        $pdo = new \PDO('sqlite::memory:');
-        return new Builder(new Connection($pdo), new MySQLGrammar(), new MySQLProcessor());
-    }
     /**
      * @test
-     *
      * @group functional
-     *
      * @covers \Drobotik\Eav\Enum\QB_OPERATOR::name
      */
     public function name()
@@ -59,9 +47,7 @@ class QueryBuilderOperatorEnumFunctionalTest extends TestCase
 
     /**
      * @test
-     *
      * @group functional
-     *
      * @covers \Drobotik\Eav\Enum\QB_OPERATOR::getCase
      */
     public function get_case()
@@ -90,9 +76,7 @@ class QueryBuilderOperatorEnumFunctionalTest extends TestCase
 
     /**
      * @test
-     *
      * @group functional
-     *
      * @covers \Drobotik\Eav\Enum\QB_OPERATOR::getCase
      */
     public function get_unsupported_case()
@@ -106,9 +90,7 @@ class QueryBuilderOperatorEnumFunctionalTest extends TestCase
 
     /**
      * @test
-     *
      * @group functional
-     *
      * @covers \Drobotik\Eav\Enum\QB_OPERATOR::isValueRequired
      */
     public function is_value_required()
@@ -137,9 +119,7 @@ class QueryBuilderOperatorEnumFunctionalTest extends TestCase
 
     /**
      * @test
-     *
      * @group functional
-     *
      * @covers \Drobotik\Eav\Enum\QB_OPERATOR::applyTo
      */
     public function apply_to()
@@ -184,9 +164,7 @@ class QueryBuilderOperatorEnumFunctionalTest extends TestCase
 
     /**
      * @test
-     *
      * @group functional
-     *
      * @covers \Drobotik\Eav\Enum\QB_OPERATOR::sql
      */
     public function sql()
@@ -213,44 +191,36 @@ class QueryBuilderOperatorEnumFunctionalTest extends TestCase
 
     /**
      * @test
-     *
      * @group functional
-     *
      * @covers \Drobotik\Eav\Enum\QB_OPERATOR::prepend
      */
     public function prepend()
     {
-        $this->assertSame('%', QB_OPERATOR::BEGINS_WITH->prepend());
+        $this->assertSame('%', QB_OPERATOR::ENDS_WITH->prepend());
+        $this->assertSame('%', QB_OPERATOR::NOT_ENDS_WITH->prepend());
         $this->assertSame('%', QB_OPERATOR::NOT_CONTAINS->prepend());
         $this->assertSame('%', QB_OPERATOR::CONTAINS->prepend());
-        $this->assertSame('%', QB_OPERATOR::NOT_BEGINS_WITH->prepend());
         $this->assertFalse(QB_OPERATOR::EQUAL->prepend());
         $this->assertFalse(QB_OPERATOR::IS_NULL->prepend());
     }
 
     /**
      * @test
-     *
      * @group functional
-     *
      * @covers \Drobotik\Eav\Enum\QB_OPERATOR::append
      */
     public function append()
     {
-        $this->assertSame('%', QB_OPERATOR::ENDS_WITH->append());
-        $this->assertSame('%', QB_OPERATOR::NOT_ENDS_WITH->append());
+        $this->assertSame('%', QB_OPERATOR::BEGINS_WITH->append());
+        $this->assertSame('%', QB_OPERATOR::NOT_BEGINS_WITH->append());
         $this->assertSame('%', QB_OPERATOR::CONTAINS->append());
         $this->assertSame('%', QB_OPERATOR::NOT_CONTAINS->append());
         $this->assertFalse(QB_OPERATOR::EQUAL->append());
         $this->assertFalse(QB_OPERATOR::IS_NULL->append());
     }
-
-
     /**
      * @test
-     *
      * @group functional
-     *
      * @covers \Drobotik\Eav\Enum\QB_OPERATOR::isNeedsArray
      */
     public function is_needs_array()
@@ -265,9 +235,7 @@ class QueryBuilderOperatorEnumFunctionalTest extends TestCase
 
     /**
      * @test
-     *
      * @group functional
-     *
      * @covers \Drobotik\Eav\Enum\QB_OPERATOR::isNull
      */
     public function is_null()
@@ -277,12 +245,9 @@ class QueryBuilderOperatorEnumFunctionalTest extends TestCase
         $this->assertFalse(QB_OPERATOR::EQUAL->isNull());
         $this->assertFalse(QB_OPERATOR::IS_EMPTY->isNull());
     }
-
     /**
      * @test
-     *
      * @group functional
-     *
      * @covers \Drobotik\Eav\Enum\QB_OPERATOR::isBetween
      */
     public function is_between()

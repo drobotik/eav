@@ -16,10 +16,10 @@ use Drobotik\Eav\Enum\QB_CONDITION;
 use Drobotik\Eav\Enum\QB_CONFIG;
 use Drobotik\Eav\Enum\QB_OPERATOR;
 use Drobotik\Eav\Export\ExportManager;
-use Drobotik\Eav\QueryBuilder\QueryBuilderManager;
 use League\Csv\Reader;
 use League\Csv\Statement;
 use League\Csv\Writer;
+use SplFileObject;
 use Tests\QueryingDataTestCase;
 
 class ExportManagerAcceptanceTest extends QueryingDataTestCase
@@ -27,19 +27,19 @@ class ExportManagerAcceptanceTest extends QueryingDataTestCase
     /**
      * @test
      *
-     * @group behavior
+     * @group acceptance
      *
      * @covers \Drobotik\Eav\Export\ExportManager::run
      */
     public function export_query_builder()
     {
-        $file = new \SplFileObject(dirname(__DIR__, 2) . '/Data/csv.csv','w');
+        $file = new SplFileObject(dirname(__DIR__, 2) . '/Data/csv.csv','w');
         $writer = Writer::createFromFileObject($file);
         $driver = new CsvDriver();
         $driver->setWriter($writer);
 
         $filters = [
-            QB_CONFIG::CONDITION => QB_CONDITION::AND,
+            QB_CONFIG::CONDITION => QB_CONDITION::AND->name(),
             QB_CONFIG::RULES => [
                 [
                     QB_CONFIG::NAME => ATTR_TYPE::DECIMAL->value(),
@@ -47,7 +47,7 @@ class ExportManagerAcceptanceTest extends QueryingDataTestCase
                     QB_CONFIG::VALUE => 10000
                 ],
                 [
-                    QB_CONFIG::CONDITION => QB_CONDITION::OR,
+                    QB_CONFIG::CONDITION => QB_CONDITION::OR->name(),
                     QB_CONFIG::RULES => [
                         [
                             QB_CONFIG::NAME => ATTR_TYPE::STRING->value(),
@@ -64,18 +64,14 @@ class ExportManagerAcceptanceTest extends QueryingDataTestCase
             ],
         ];
 
-        $qbManager = new QueryBuilderManager();
-        $qbManager->setDomainKey(1);
-        $qbManager->setSetKey(1);
-        $qbManager->setFilters($filters);
-        $qbManager->setColumns([ATTR_TYPE::STRING->value(), ATTR_TYPE::DECIMAL->value()]);
-
+        $domainKey = 1;
+        $setKey = 1;
+        $columns = [ATTR_TYPE::STRING->value(), ATTR_TYPE::DECIMAL->value()];
         $manager = new ExportManager();
         $manager->setDriver($driver);
-        $manager->setQueryBuilderManager($qbManager);
-        $manager->run();
+        $manager->run($domainKey, $setKey, $filters, $columns);
 
-        $file = new \SplFileObject(dirname(__DIR__, 2) . '/Data/csv.csv','r');
+        $file = new SplFileObject(dirname(__DIR__, 2) . '/Data/csv.csv','r');
         $reader = Reader::createFromFileObject($file);
 
         $stmt = new Statement();
@@ -95,5 +91,4 @@ class ExportManagerAcceptanceTest extends QueryingDataTestCase
             ['19738','sit quisquam','180.63']
         ], $output);
     }
-
 }
