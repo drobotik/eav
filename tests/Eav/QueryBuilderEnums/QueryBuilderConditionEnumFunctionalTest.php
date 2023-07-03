@@ -20,9 +20,9 @@ class QueryBuilderConditionEnumFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Enum\QB_CONDITION::sql
+     * @covers \Drobotik\Eav\Enum\QB_CONDITION::name
      */
-    public function sql()
+    public function name()
     {
         $this->assertEquals('and', QB_CONDITION::AND->name());
         $this->assertEquals('or', QB_CONDITION::OR->name());
