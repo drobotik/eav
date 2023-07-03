@@ -23,27 +23,14 @@ The EAV library is designed to manage and manipulate EAV data across multiple do
 
 ### Installation
 ```bash
-composer require drobotik/eav
-```
-
-### Development
-```bash
-$ git clone git@github.com:drobotik/eav.git 
-$ cd eav/docker 
-# if docker
-$ docker-compose up -d
-$ docker-compose exec app bash
-# 
-$ composer install
-# check cli app output
-$ php eav 
+$ composer require drobotik/eav
 ```
 
 ### Planned features 
 
 :heavy_check_mark: Domain import/export csv
 <br>:pushpin: Attribute props and strategy improvements
-<br>:pushpin: Going out from Laravel models, impl folder
+<br>:heavy_check_mark: Removed Laravel support
 
 ### Contributing
 
