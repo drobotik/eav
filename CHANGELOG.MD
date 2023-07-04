@@ -2,7 +2,7 @@
 
 #### Added
 - new eav Query Builder compatible with DBAL expressions
-- symphony validation
+- symfony validation
 
 #### Deprecated
 

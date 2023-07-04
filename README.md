@@ -28,7 +28,7 @@ $ composer require drobotik/eav
 
 :heavy_check_mark: Domain import/export csv
 <br>:pushpin: Attribute props and strategy improvements
-<br>:heavy_check_mark: Switch to Symphony components
+<br>:heavy_check_mark: Switch to Symfony components
 
 ### Contributing
 
