@@ -243,7 +243,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Transporter::setField
+     * @covers \Drobotik\Eav\Transporter::__unset
      */
     public function unsetRemovesFieldFromDataArray(): void
     {
@@ -261,7 +261,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Transporter::__toArray
+     * @covers \Drobotik\Eav\Transporter::__toString
      */
     public function toStringReturnsJsonEncodedDataArray(): void
     {
