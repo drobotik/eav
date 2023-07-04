@@ -357,4 +357,45 @@ class ValueActionFunctionalTest extends TestCase
         $this->assertEquals(_RESULT::EMPTY->code(), $result->getCode());
         $this->assertEquals(_RESULT::EMPTY->message(), $result->getMessage());
     }
+
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\Value\ValueAction::delete
+     */
+    public function delete_not_deleted_status() {
+        $valueModel = $this->getMockBuilder(ValueBase::class)
+            ->onlyMethods(['destroy'])->getMock();
+        $valueModel->method('destroy')->willReturn(0);
+
+        $valueAction = $this->getMockBuilder(ValueAction::class)
+            ->onlyMethods(['makeValueModel'])->getMock();
+        $valueAction->method('makeValueModel')->willReturn($valueModel);
+
+        $valueManager = new ValueManager();
+        $valueManager->setRuntime('new');
+        $valueManager->setKey(1);
+
+        $entity = new Entity();
+        $entity->setKey(1);
+        $entity->setDomainKey(2);
+
+        $attrSet = new AttributeSet();
+        $attrSet->setEntity($entity);
+
+        $attribute = new Attribute();
+        $attribute->setKey(3);
+
+        $container = new AttributeContainer();
+        $container->makeAttribute()
+            ->setAttribute($attribute)
+            ->setAttributeSet($attrSet)
+            ->setValueManager($valueManager)
+            ->setValueAction($valueAction);
+
+        $result = $valueAction->delete();
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals(_RESULT::NOT_DELETED->code(), $result->getCode());
+        $this->assertEquals(_RESULT::NOT_DELETED->message(), $result->getMessage());
+    }
 }
