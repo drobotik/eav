@@ -59,10 +59,14 @@ class QueryBuilderExpressionFunctionalTest extends QueryingDataTestCase
      *
      * @covers \Drobotik\Eav\QueryBuilder\Expression::setParam1
      * @covers \Drobotik\Eav\QueryBuilder\Expression::getParam1
+     * @covers \Drobotik\Eav\QueryBuilder\Expression::isParam1
      */
     public function param1()
     {
         $this->assertEquals(':param1', $this->expression->getParam1());
+        $this->assertTrue($this->expression->isParam1());
+        $expression = new Expression();
+        $this->assertFalse($expression->isParam1());
     }
     /**
      * @test
@@ -71,16 +75,21 @@ class QueryBuilderExpressionFunctionalTest extends QueryingDataTestCase
      *
      * @covers \Drobotik\Eav\QueryBuilder\Expression::setParam2
      * @covers \Drobotik\Eav\QueryBuilder\Expression::getParam2
+     * @covers \Drobotik\Eav\QueryBuilder\Expression::isParam2
      */
     public function param2()
     {
         $this->assertEquals(':param2', $this->expression->getParam2());
+        $this->assertTrue($this->expression->isParam2());
+        $expression = new Expression();
+        $this->assertFalse($expression->isParam2());
     }
     /**
      * @test
      *
      * @group functional
      *
+     * @covers \Drobotik\Eav\QueryBuilder\Expression::__construct()
      * @covers \Drobotik\Eav\QueryBuilder\Expression::execute
      */
     public function execute()
@@ -123,11 +132,11 @@ class QueryBuilderExpressionFunctionalTest extends QueryingDataTestCase
         $this->expression->setOperator(QB_OPERATOR::NOT_BEGINS_WITH);
         $this->assertEquals('test NOT LIKE :param1', $this->expression->execute());
         $this->expression->setOperator(QB_OPERATOR::IS_EMPTY);
-        $this->assertEquals('test IS NULL', $this->expression->execute());
+        $this->assertEquals('test = :param1', $this->expression->execute());
         $this->expression->setOperator(QB_OPERATOR::IS_NOT_NULL);
         $this->assertEquals('test IS NOT NULL', $this->expression->execute());
         $this->expression->setOperator(QB_OPERATOR::IS_NOT_EMPTY);
-        $this->assertEquals('test IS NOT NULL', $this->expression->execute());
+        $this->assertEquals('test <> :param1', $this->expression->execute());
         $this->expression->setOperator(QB_OPERATOR::IS_NULL);
         $this->assertEquals('test IS NULL', $this->expression->execute());
     }

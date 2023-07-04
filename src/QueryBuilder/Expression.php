@@ -21,6 +21,13 @@ class Expression
     private string      $param1;
     private string $param2;
 
+    private ExpressionBuilder $exprBuilder;
+
+    public function __construct()
+    {
+        $this->exprBuilder = new ExpressionBuilder(Connection::get());
+    }
+
     public function setOperator(QB_OPERATOR $operator): void
     {
         $this->operator = $operator;
@@ -51,6 +58,11 @@ class Expression
         return ':'.$this->param1;
     }
 
+    public function isParam1() : bool
+    {
+        return isset($this->param1);
+    }
+
     public function setParam2(string $name): void
     {
         $this->param2 = $name;
@@ -61,84 +73,41 @@ class Expression
         return ':'.$this->param2;
     }
 
+    public function isParam2() : bool
+    {
+        return isset($this->param2);
+    }
+
+    private function between(): CompositeExpression
+    {
+        $field = $this->getField();
+        return new CompositeExpression(CompositeExpression::TYPE_AND, [
+            $this->exprBuilder->gte($field, $this->getParam1()),
+            $this->exprBuilder->lte($field, $this->getParam2())
+        ]);
+    }
+
+    private function notBetween(): CompositeExpression
+    {
+        $field = $this->getField();
+        return new CompositeExpression(CompositeExpression::TYPE_OR, [
+            $this->exprBuilder->lt($field, $this->getParam1()),
+            $this->exprBuilder->gt($field, $this->getParam2())
+        ]);
+    }
 
     public function execute() : string|CompositeExpression
     {
-        $expr = new ExpressionBuilder(Connection::get());
-
-        switch ($this->getOperator()) {
-            case QB_OPERATOR::EQUAL:
-
-                return $expr->eq($this->getField(), $this->getParam1());
-
-            case QB_OPERATOR::NOT_EQUAL:
-
-                return $expr->neq($this->getField(), $this->getParam1());
-
-            case QB_OPERATOR::IN:
-
-                return $expr->in($this->getField(), $this->getParam1());
-
-            case QB_OPERATOR::NOT_IN:
-
-                return $expr->notIn($this->getField(), $this->getParam1());
-
-            case QB_OPERATOR::LESS:
-
-                return $expr->lt($this->getField(), $this->getParam1());
-
-            case QB_OPERATOR::LESS_OR_EQUAL:
-
-                return $expr->lte($this->getField(), $this->getParam1());
-
-            case QB_OPERATOR::GREATER:
-
-                return $expr->gt($this->getField(), $this->getParam1());
-
-            case QB_OPERATOR::GREATER_OR_EQUAL:
-
-                return $expr->gte($this->getField(), $this->getParam1());
-
-            case QB_OPERATOR::BETWEEN:
-
-                $field = $this->getField();
-                return new CompositeExpression(CompositeExpression::TYPE_AND, [
-                    $expr->gte($field, $this->getParam1()),
-                    $expr->lte($field, $this->getParam2())
-                ]);
-
-            case QB_OPERATOR::NOT_BETWEEN:
-
-                $field = $this->getField();
-                return new CompositeExpression(CompositeExpression::TYPE_OR, [
-                    $expr->lt($field, $this->getParam1()),
-                    $expr->gt($field, $this->getParam2())
-                ]);
-
-            case QB_OPERATOR::CONTAINS:
-            case QB_OPERATOR::ENDS_WITH:
-            case QB_OPERATOR::BEGINS_WITH:
-
-                return $expr->like($this->getField(), $this->getParam1());
-
-            case QB_OPERATOR::NOT_CONTAINS:
-            case QB_OPERATOR::NOT_ENDS_WITH:
-            case QB_OPERATOR::NOT_BEGINS_WITH:
-
-                return $expr->notLike($this->getField(), $this->getParam1());
-
-            case QB_OPERATOR::IS_NULL:
-            case QB_OPERATOR::IS_EMPTY:
-
-                return $expr->isNull($this->getField());
-
-            case QB_OPERATOR::IS_NOT_NULL:
-            case QB_OPERATOR::IS_NOT_EMPTY:
-
-                return $expr->isNotNull($this->getField());
-
+        $operator = $this->getOperator();
+        $method = $operator->expr();
+        // when need to call custom methods
+        if($operator->isBetween()) {
+            return call_user_func([$this, $method]);
         }
-
-        return '';
+        // when need to call basic ExpressionBuilder methods
+        $args = [$this->getField()];
+        if(!$operator->isNull())
+            $args[] = $this->getParam1();
+        return call_user_func_array([$this->exprBuilder, $method], $args);
     }
 }

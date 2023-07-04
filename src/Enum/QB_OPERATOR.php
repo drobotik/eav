@@ -201,6 +201,16 @@ enum QB_OPERATOR
         };
     }
 
+    public function isEmpty() : bool
+    {
+        return match ($this) {
+            self::IS_EMPTY,
+            self::IS_NOT_EMPTY => true,
+            default => false
+        };
+    }
+
+
     public function isBetween() : bool
     {
         return match ($this) {
@@ -220,6 +230,27 @@ enum QB_OPERATOR
             self::NOT_ENDS_WITH,
             self::NOT_CONTAINS => true,
             default => false
+        };
+    }
+
+
+    public function expr(): string
+    {
+        return match($this) {
+            self::EQUAL, self::IS_EMPTY => 'eq',
+            self::NOT_EQUAL, self::IS_NOT_EMPTY => 'neq',
+            self::IN => 'in',
+            self::NOT_IN => 'notIn',
+            self::LESS => 'lt',
+            self::LESS_OR_EQUAL => 'lte',
+            self::GREATER => 'gt',
+            self::GREATER_OR_EQUAL => 'gte',
+            self::BETWEEN => 'between',
+            self::NOT_BETWEEN => 'notBetween',
+            self::BEGINS_WITH, self::CONTAINS, self::ENDS_WITH => 'like',
+            self::NOT_BEGINS_WITH, self::NOT_CONTAINS, self::NOT_ENDS_WITH => 'notLike',
+            self::IS_NULL => 'isNull',
+            self::IS_NOT_NULL => 'isNotNull',
         };
     }
 }

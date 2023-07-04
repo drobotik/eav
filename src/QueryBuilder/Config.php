@@ -215,16 +215,9 @@ class Config
         return $result;
     }
 
-    public function handleRule(array $rule) : Expression
+    public function createExpression(string $field, QB_OPERATOR $operator, mixed $value) : Expression
     {
-        $field = $rule[QB_CONFIG::NAME];
-        $operator = QB_OPERATOR::getCase($rule[QB_CONFIG::OPERATOR]);
-        $value = key_exists(QB_CONFIG::VALUE, $rule)
-            ? $rule[QB_CONFIG::VALUE]
-            : new ValueEmpty();
-
         $expression = new Expression();
-
         $expression->setField($field);
         $expression->setOperator($operator);
 
@@ -236,28 +229,56 @@ class Config
             $expression->setParam1($param1);
             $expression->setParam2($param2);
 
+        } else if($operator->isEmpty()) {
+            $param = $this->createParameter($field .'_cond', '');
+            $expression->setParam1($param);
+
         } else if(!$operator->isNull()) {
             if($operator->isLike()) {
-                $value = $operator->prepend().$value.$operator->append();
+                $value = match($operator) {
+                    QB_OPERATOR::BEGINS_WITH, QB_OPERATOR::NOT_BEGINS_WITH => $value.'%',
+                    QB_OPERATOR::CONTAINS, QB_OPERATOR::NOT_CONTAINS => '%'.$value.'%',
+                    QB_OPERATOR::ENDS_WITH ,QB_OPERATOR::NOT_ENDS_WITH => '%'.$value
+                };
+
             }
             $param = $this->createParameter($field .'_cond', $value);
             $expression->setParam1($param);
         }
 
-        if(!$this->isSelected($field)) {
-            $this->addSelect($field);
-        }
-
-        if(!$this->hasJoin($field)) {
-            $attribute = $this->getAttribute($field);
-            $attributeKey = $attribute[_ATTR::ID->column()];
-            $table = ATTR_TYPE::getCase($attribute[_ATTR::TYPE->column()])->valueTable();
-            $this->addJoin($table, $field, $attributeKey);
-        }
-
         return $expression;
     }
 
+    public function registerSelect(string $field) : void
+    {
+        if(!$this->isSelected($field)) {
+            $this->addSelect($field);
+        }
+    }
+
+    public function registerJoin(string $field) : void
+    {
+        if(!$this->hasJoin($field)) {
+            $attribute = $this->getAttribute($field);
+            $table = ATTR_TYPE::getCase($attribute[_ATTR::TYPE->column()])->valueTable();
+            $attributeKey = $attribute[_ATTR::ID->column()];
+            $this->addJoin($table, $field, $attributeKey);
+        }
+    }
+
+    public function handleRule(array $rule) : Expression
+    {
+        $field = $rule[QB_CONFIG::NAME];
+        $operator = QB_OPERATOR::getCase($rule[QB_CONFIG::OPERATOR]);
+        $value = key_exists(QB_CONFIG::VALUE, $rule)
+            ? $rule[QB_CONFIG::VALUE]
+            : new ValueEmpty();
+
+        $this->registerSelect($field);
+        $this->registerJoin($field);
+
+        return $this->createExpression($field, $operator, $value);
+    }
 
     public function parse(array $config) : void
     {

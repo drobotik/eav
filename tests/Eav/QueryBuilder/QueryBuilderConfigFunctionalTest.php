@@ -19,9 +19,10 @@ use Drobotik\Eav\Exception\AttributeException;
 use Drobotik\Eav\Exception\QueryBuilderException;
 use Drobotik\Eav\QueryBuilder\Config;
 use Drobotik\Eav\QueryBuilder\Expression;
-use PHPUnit\Framework\TestCase;
+use Drobotik\Eav\Value\ValueEmpty;
+use Tests\QueryingDataTestCase;
 
-class QueryBuilderConfigFunctionalTest extends TestCase
+class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
 {
     private Config $config;
 
@@ -350,46 +351,8 @@ class QueryBuilderConfigFunctionalTest extends TestCase
         $this->expectExceptionMessage(sprintf(QueryBuilderException::UNSUPPORTED_OPERATOR, 'test'));
         $this->config->handleRule($rule);
     }
-
     /**
      * @test
-     *
-     * @group functional
-     * @covers \Drobotik\Eav\QueryBuilder\Config::handleRule
-     */
-    public function handle_rule_between()
-    {
-        $rule = [
-            QB_CONFIG::NAME => 'size',
-            QB_CONFIG::OPERATOR => QB_OPERATOR::BETWEEN->name(),
-            QB_CONFIG::VALUE => [1, 2]
-        ];
-
-        $attribute = [
-            _ATTR::ID->column() => 1,
-            _ATTR::NAME->column() => 'size',
-            _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value()
-        ];
-        $this->config->addAttribute($attribute);
-
-        $expression = new Expression();
-        $expression->setField('size');
-        $expression->setOperator(QB_OPERATOR::BETWEEN);
-        $expression->setParam1('size_cond_1');
-        $expression->setParam2('size_cond_2');
-
-        $this->assertEquals($expression,$this->config->handleRule($rule));
-
-        $this->assertEquals([
-            'size_cond_1' => 1,
-            'size_cond_2' => 2,
-            'size_join_'.QB_JOIN::ATTR_PARAM => 1
-        ], $this->config->getParameters());
-    }
-
-    /**
-     * @test
-     *
      * @group functional
      * @covers \Drobotik\Eav\QueryBuilder\Config::handleRule
      */
@@ -399,27 +362,21 @@ class QueryBuilderConfigFunctionalTest extends TestCase
             QB_CONFIG::NAME => 'size',
             QB_CONFIG::OPERATOR => QB_OPERATOR::IS_NULL->name(),
         ];
-        $attribute = [
-            _ATTR::ID->column() => 1,
-            _ATTR::NAME->column() => 'size',
-            _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value()
-        ];
-        $this->config->addAttribute($attribute);
-
-        $expression = new Expression();
-        $expression->setField('size');
-        $expression->setOperator(QB_OPERATOR::IS_NULL);
-
-        $this->assertEquals($expression,$this->config->handleRule($rule));
-
-        $this->assertEquals([
-           'size_join_'.QB_JOIN::ATTR_PARAM => 1
-        ], $this->config->getParameters());
+        $config = $this->getMockBuilder(Config::class)
+            ->onlyMethods(['createExpression', 'registerSelect', 'registerJoin'])
+            ->getMock();
+        $config
+            ->expects($this->once())
+            ->method('createExpression')
+            ->with(
+                'size',
+                QB_OPERATOR::IS_NULL,
+                $this->isInstanceOf(ValueEmpty::class)
+            );
+        $config->handleRule($rule);
     }
-
     /**
      * @test
-     *
      * @group functional
      * @covers \Drobotik\Eav\QueryBuilder\Config::handleRule
      */
@@ -430,66 +387,240 @@ class QueryBuilderConfigFunctionalTest extends TestCase
             QB_CONFIG::OPERATOR => QB_OPERATOR::EQUAL->name(),
             QB_CONFIG::VALUE => 12
         ];
-        $attribute = [
-            _ATTR::ID->column() => 1,
-            _ATTR::NAME->column() => 'size',
-            _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value()
-        ];
-        $this->config->addAttribute($attribute);
 
-        $expression = new Expression();
-        $expression->setField('size');
-        $expression->setOperator(QB_OPERATOR::EQUAL);
-        $expression->setParam1('size_cond');
+        $config = $this->getMockBuilder(Config::class)
+            ->onlyMethods(['createExpression', 'registerSelect', 'registerJoin'])
+            ->getMock();
+        $config
+            ->expects($this->once())
+            ->method('createExpression')
+            ->with('size', QB_OPERATOR::EQUAL, 12);
+        $config
+            ->expects($this->once())
+            ->method('registerJoin')
+            ->with('size');
+        $config
+            ->expects($this->once())
+            ->method('registerSelect')
+            ->with('size');
 
-        $this->assertEquals($expression,$this->config->handleRule($rule));
-
-        $this->assertEquals([
-            'size_cond' => 12,
-            'size_join_'.QB_JOIN::ATTR_PARAM => 1
-        ], $this->config->getParameters());
-
-        $this->assertEquals(['size'], $this->config->getSelected());
-    }
-
-    private function checkParamValue(QB_OPERATOR $op, $expected)
-    {
-        $config = [
-            QB_CONFIG::NAME => 'size',
-            QB_CONFIG::OPERATOR => $op->name(),
-            QB_CONFIG::VALUE => 'test'
-        ];
-        $attribute = [
-            _ATTR::ID->column() => 1,
-            _ATTR::NAME->column() => 'size',
-            _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value()
-        ];
-
-        $instance = new Config();
-        $instance->addAttribute($attribute);
-        $instance->handleRule($config);
-        $value = $instance->getParameters()['size_cond'];
-        $this->assertEquals($expected, $value, $op->name());
+        $config->handleRule($rule);
     }
     /**
      * @test
-     *
      * @group functional
-     * @covers \Drobotik\Eav\QueryBuilder\Config::handleRule
+     * @covers \Drobotik\Eav\QueryBuilder\Config::createExpression
      */
-    public function handle_rule_value_for_operators_with_percent()
+    public function create_expression()
     {
-        $this->checkParamValue(QB_OPERATOR::BEGINS_WITH, 'test%');
-        $this->checkParamValue(QB_OPERATOR::NOT_BEGINS_WITH, 'test%');
-        $this->checkParamValue(QB_OPERATOR::CONTAINS, '%test%');
-        $this->checkParamValue(QB_OPERATOR::NOT_CONTAINS, '%test%');
-        $this->checkParamValue(QB_OPERATOR::ENDS_WITH, '%test');
-        $this->checkParamValue(QB_OPERATOR::NOT_ENDS_WITH, '%test');
-    }
+        $field = 'size';
+        $fieldParam = $field.'_cond';
+        $operator = QB_OPERATOR::EQUAL;
+        $value = 2;
 
+        $result = $this->config->createExpression($field, $operator, $value);
+        $this->assertInstanceOf(Expression::class, $result);
+        $this->assertEquals($field, $result->getField());
+        $this->assertEquals($operator, $result->getOperator());
+        $this->assertEquals(':'.$fieldParam, $result->getParam1());
+        $this->assertEquals($value, $this->config->getParameterValue($fieldParam));
+        $this->assertFalse($result->isParam2());
+    }
     /**
      * @test
-     *
+     * @group functional
+     * @covers \Drobotik\Eav\QueryBuilder\Config::createExpression
+     */
+    public function create_expression_between()
+    {
+        $field = 'size';
+        $fieldParam1 = $field.'_cond_1';
+        $fieldParam2 = $field.'_cond_2';
+        $value = [2, 4];
+
+        foreach ([QB_OPERATOR::BETWEEN, QB_OPERATOR::NOT_BETWEEN] as $operator)
+        {
+            $config = new Config();
+            $result = $config->createExpression($field, $operator, $value);
+            $this->assertInstanceOf(Expression::class, $result);
+            $this->assertEquals($field, $result->getField());
+            $this->assertEquals($operator, $result->getOperator());
+            $this->assertEquals(':'.$fieldParam1, $result->getParam1());
+            $this->assertEquals(':'.$fieldParam2, $result->getParam2());
+            $this->assertEquals($value[0], $config->getParameterValue($fieldParam1));
+            $this->assertEquals($value[1], $config->getParameterValue($fieldParam2));
+        }
+    }
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\QueryBuilder\Config::createExpression
+     */
+    public function create_expression_empty()
+    {
+        $field = 'size';
+        $fieldParam = $field.'_cond';
+        $value = new ValueEmpty();
+
+        foreach ([QB_OPERATOR::IS_EMPTY, QB_OPERATOR::IS_NOT_EMPTY] as $operator)
+        {
+            $config = new Config();
+            $result = $config->createExpression($field, $operator, $value);
+            $this->assertInstanceOf(Expression::class, $result);
+            $this->assertEquals($field, $result->getField());
+            $this->assertEquals($operator, $result->getOperator());
+            $this->assertEquals(':'.$fieldParam, $result->getParam1());
+            $this->assertEquals('', $config->getParameterValue($fieldParam));
+            $this->assertFalse($result->isParam2());
+        }
+    }
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\QueryBuilder\Config::createExpression
+     */
+    public function create_expression_null()
+    {
+        $field = 'size';
+        $value = new ValueEmpty();
+
+        foreach ([QB_OPERATOR::IS_NULL, QB_OPERATOR::IS_NOT_NULL] as $operator)
+        {
+            $config = new Config();
+            $result = $config->createExpression($field, $operator, $value);
+            $this->assertInstanceOf(Expression::class, $result);
+            $this->assertEquals($field, $result->getField());
+            $this->assertEquals($operator, $result->getOperator());
+            $this->assertFalse($result->isParam1());
+            $this->assertFalse($result->isParam2());
+        }
+    }
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\QueryBuilder\Config::createExpression
+     */
+    public function create_expression_like()
+    {
+        $field = 'size';
+        $fieldParam = $field.'_cond';
+
+        foreach ([QB_OPERATOR::BEGINS_WITH,
+                  QB_OPERATOR::NOT_BEGINS_WITH,
+                  QB_OPERATOR::CONTAINS,
+                  QB_OPERATOR::NOT_CONTAINS,
+                  QB_OPERATOR::ENDS_WITH,
+                  QB_OPERATOR::NOT_ENDS_WITH] as $operator)
+        {
+            $value = 'test';
+            $config = new Config();
+            $result = $config->createExpression($field, $operator, $value);
+            $this->assertInstanceOf(Expression::class, $result);
+            $this->assertEquals($field, $result->getField());
+            $this->assertEquals($operator, $result->getOperator());
+            $this->assertEquals(':'.$fieldParam, $result->getParam1());
+            $value = match($operator) {
+                QB_OPERATOR::BEGINS_WITH => 'test%',
+                QB_OPERATOR::NOT_BEGINS_WITH => 'test%',
+                QB_OPERATOR::CONTAINS => '%test%',
+                QB_OPERATOR::NOT_CONTAINS => '%test%',
+                QB_OPERATOR::ENDS_WITH => '%test',
+                QB_OPERATOR::NOT_ENDS_WITH => '%test'
+            };
+            $this->assertEquals($value, $config->getParameterValue($fieldParam), $operator->name());
+            $this->assertFalse($result->isParam2());
+        }
+    }
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\QueryBuilder\Config::registerJoin
+     */
+    public function register_join()
+    {
+        $attribute = [
+            _ATTR::ID->column() => 2,
+            _ATTR::NAME->column() => 'size',
+            _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value()
+        ];
+
+        $config = $this->getMockBuilder(Config::class)
+            ->onlyMethods(['addJoin'])->getMock();
+
+        $config->addAttribute($attribute);
+
+        $config->expects($this->once())
+            ->method('addJoin')
+            ->with(ATTR_TYPE::INTEGER->valueTable(), 'size', 2);
+
+        $config->registerJoin('size');
+    }
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\QueryBuilder\Config::registerJoin
+     */
+    public function registerJoin_skip()
+    {
+        $field = 'size';
+        $config = $this->getMockBuilder(Config::class)
+            ->onlyMethods(['addJoin', 'hasJoin'])->getMock();
+        $config->expects($this->never())->method('addJoin');
+        $config->expects($this->once())->method('hasJoin')
+            ->with($field)->willReturn(true);
+        $config->registerJoin($field);
+    }
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\QueryBuilder\Config::registerJoin
+     */
+    public function registerJoin_attribute_type_exception()
+    {
+        $field = 'size';
+        $config = $this->getMockBuilder(Config::class)
+            ->onlyMethods(['hasJoin'])->getMock();
+        $config->addAttribute([
+            _ATTR::NAME->column() => 'size',
+            _ATTR::TYPE->column() => 'test'
+        ]);
+        $config->expects($this->once())->method('hasJoin')
+            ->with($field)->willReturn(false);
+        $this->expectException(AttributeException::class);
+        $this->expectExceptionMessage(sprintf(AttributeException::UNSUPPORTED_TYPE, 'test'));
+        $config->registerJoin($field);
+    }
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\QueryBuilder\Config::registerSelect
+     */
+    public function registerSelect()
+    {
+        $field = 'size';
+        $config = $this->getMockBuilder(Config::class)
+            ->onlyMethods(['addSelect'])->getMock();
+        $config->expects($this->once())->method('addSelect')
+            ->with($field);
+        $config->registerSelect($field);
+    }
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\QueryBuilder\Config::registerSelect
+     */
+    public function registerSelect_skip()
+    {
+        $field = 'size';
+        $config = $this->getMockBuilder(Config::class)
+            ->onlyMethods(['addSelect', 'isSelected'])->getMock();
+        $config->expects($this->never())->method('addSelect');
+        $config->expects($this->once())->method('isSelected')
+            ->with($field)->willReturn(true);
+        $config->registerSelect($field);
+    }
+    /**
+     * @test
      * @group functional
      * @covers \Drobotik\Eav\QueryBuilder\Config::parse
      */

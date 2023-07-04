@@ -245,6 +245,18 @@ class QueryBuilderOperatorEnumFunctionalTest extends TestCase
         $this->assertFalse(QB_OPERATOR::EQUAL->isNull());
         $this->assertFalse(QB_OPERATOR::IS_EMPTY->isNull());
     }
+
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\Enum\QB_OPERATOR::isEmpty
+     */
+    public function is_empty()
+    {
+        $this->assertTrue(QB_OPERATOR::IS_EMPTY->isEmpty());
+        $this->assertTrue(QB_OPERATOR::IS_NOT_EMPTY->isEmpty());
+        $this->assertFalse(QB_OPERATOR::EQUAL->isEmpty());
+    }
     /**
      * @test
      * @group functional
@@ -256,5 +268,34 @@ class QueryBuilderOperatorEnumFunctionalTest extends TestCase
         $this->assertTrue(QB_OPERATOR::NOT_BETWEEN->isBetween());
         $this->assertFalse(QB_OPERATOR::EQUAL->isBetween());
         $this->assertFalse(QB_OPERATOR::IS_EMPTY->isBetween());
+    }
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\Enum\QB_OPERATOR::expr
+     */
+    public function expr()
+    {
+        $this->assertEquals('eq', QB_OPERATOR::EQUAL->expr());
+        $this->assertEquals('neq', QB_OPERATOR::NOT_EQUAL->expr());
+        $this->assertEquals('in', QB_OPERATOR::IN->expr());
+        $this->assertEquals('notIn', QB_OPERATOR::NOT_IN->expr());
+        $this->assertEquals('lt', QB_OPERATOR::LESS->expr());
+        $this->assertEquals('lte', QB_OPERATOR::LESS_OR_EQUAL->expr());
+        $this->assertEquals('gt', QB_OPERATOR::GREATER->expr());
+        $this->assertEquals('gte', QB_OPERATOR::GREATER_OR_EQUAL->expr());
+        $this->assertEquals('between', QB_OPERATOR::BETWEEN->expr());
+        $this->assertEquals('notBetween', QB_OPERATOR::NOT_BETWEEN->expr());
+        $this->assertEquals('like', QB_OPERATOR::BEGINS_WITH->expr());
+        $this->assertEquals('notLike', QB_OPERATOR::NOT_BEGINS_WITH->expr());
+        $this->assertEquals('like', QB_OPERATOR::CONTAINS->expr());
+        $this->assertEquals('notLike', QB_OPERATOR::NOT_CONTAINS->expr());
+        $this->assertEquals('like', QB_OPERATOR::ENDS_WITH->expr());
+        $this->assertEquals('notLike', QB_OPERATOR::NOT_ENDS_WITH->expr());
+        $this->assertEquals('eq', QB_OPERATOR::IS_EMPTY->expr());
+        $this->assertEquals('neq', QB_OPERATOR::IS_NOT_EMPTY->expr());
+        $this->assertEquals('isNull', QB_OPERATOR::IS_NULL->expr());
+        $this->assertEquals('isNotNull', QB_OPERATOR::IS_NOT_NULL->expr());
+
     }
 }
