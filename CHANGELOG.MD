@@ -1,4 +1,4 @@
-### 1.7.5 - 2023-07-03
+### 1.7.5 - 2023-07-04
 
 #### Added
 - new eav Query Builder compatible with DBAL expressions
