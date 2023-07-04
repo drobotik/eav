@@ -152,7 +152,6 @@ class Worker
         $container = $this->getContainer();
         $domainKey = $container->getDomainKey();
         $valueSet = $this->getValueSet();
-        $attrSet = $this->getAttributeSet();
         $valueModel = $this->makeValueModel();
         $valueParser = $this->makeValueParser();
         /**
@@ -162,9 +161,8 @@ class Worker
         {
             $value = $attributeValue->getValue();
             $entityKey = $attributeValue->getEntityKey();
-            $attribute = $attrSet->getAttribute($attributeValue->getAttributeName());
-            $attributeKey = $attribute[_ATTR::ID->column()];
-            $attributeType = ATTR_TYPE::getCase($attribute[_ATTR::TYPE->column()]);
+            $attributeKey = $attributeValue->getAttributeKey();
+            $attributeType = $attributeValue->getType();
             $valueTable = $attributeType->valueTable();
             if($value == '')
                 $valueModel->destroy($valueTable, $domainKey, $entityKey, $attributeKey);

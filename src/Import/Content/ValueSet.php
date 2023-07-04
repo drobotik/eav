@@ -34,7 +34,7 @@ class ValueSet
     {
         return array_values(array_filter($this->values, fn(Value $value) => $value->isLineIndex()));
     }
-
+    /** @return Value[] */
     public function forExistingEntities() : array
     {
         return array_values(array_filter($this->values, fn(Value $value) => $value->isEntityKey()));

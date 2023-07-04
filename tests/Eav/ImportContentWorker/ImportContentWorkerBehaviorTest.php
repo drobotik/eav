@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace Tests\Eav\ImportContentWorker;
 
 use Drobotik\Eav\Driver\CsvDriver;
-use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Import\Content\AttributeSet;
@@ -144,14 +143,11 @@ class ImportContentWorkerBehaviorTest extends TestCase
      *
      * @covers \Drobotik\Eav\Import\Content\Worker::processExistingEntities
      */
-    public function process_existing_entities()
+    public function process_existing_entities_empty_or_updating_or_destroying_values()
     {
         $domainKey = 1;
         $entity1Key = 10;
         $entity2Key = 20;
-        $attribute1name = "name";
-        $attribute2name = "type";
-        $attribute3name = "description";
         $attribute1key = 5;
         $attribute2key = 15;
         $attribute3key = 21;
@@ -164,54 +160,36 @@ class ImportContentWorkerBehaviorTest extends TestCase
         $updatedContent1 = "updatedContent1";
         $updatedContent2 = "updatedContent2";
 
-        $attribute1 = [
-            _ATTR::ID->column() => $attribute1key,
-            _ATTR::NAME->column() => $attribute1name,
-            _ATTR::TYPE->column() => $attribute1type
-        ];
-
-        $attribute2 = [
-            _ATTR::ID->column() => $attribute2key,
-            _ATTR::NAME->column() => $attribute2name,
-            _ATTR::TYPE->column() => $attribute2type
-        ];
-
-        $attribute3 = [
-            _ATTR::ID->column() => $attribute3key,
-            _ATTR::NAME->column() => $attribute3name,
-            _ATTR::TYPE->column() => $attribute3type
-        ];
-
-        $attrSet = $this->getMockBuilder(AttributeSet::class)
-            ->onlyMethods(['getAttribute'])->getMock();
-        $attrSet->expects($this->exactly(3))->method('getAttribute')
-            ->withConsecutive([$attribute1name], [$attribute2name], [$attribute3name])
-            ->willReturn($attribute1, $attribute2, $attribute3);
-
         $value1 = $this->getMockBuilder(Value::class)
-            ->onlyMethods(['getEntityKey', 'getAttributeName', 'getValue'])->getMock();
+            ->onlyMethods(['getEntityKey', 'getAttributeKey', 'getValue', 'getType'])->getMock();
         $value1->expects($this->once())->method('getEntityKey')
             ->willReturn($entity1Key);
-        $value1->expects($this->once())->method('getAttributeName')
-            ->willReturn($attribute1name);
+        $value1->expects($this->once())->method('getAttributeKey')
+            ->willReturn($attribute1key);
         $value1->expects($this->once())->method('getValue')
             ->willReturn($content1);
+        $value1->expects($this->once())->method('getType')
+            ->willReturn(ATTR_TYPE::INTEGER);
         $value2 = $this->getMockBuilder(Value::class)
-            ->onlyMethods(['getEntityKey', 'getAttributeName', 'getValue'])->getMock();
+            ->onlyMethods(['getEntityKey', 'getAttributeKey', 'getValue', 'getType'])->getMock();
         $value2->expects($this->once())->method('getEntityKey')
             ->willReturn($entity2Key);
-        $value2->expects($this->once())->method('getAttributeName')
-            ->willReturn($attribute2name);
+        $value2->expects($this->once())->method('getAttributeKey')
+            ->willReturn($attribute2key);
         $value2->expects($this->once())->method('getValue')
             ->willReturn($content2);
+        $value2->expects($this->once())->method('getType')
+            ->willReturn(ATTR_TYPE::TEXT);
         $value3 = $this->getMockBuilder(Value::class)
-            ->onlyMethods(['getEntityKey', 'getAttributeName', 'getValue'])->getMock();
+            ->onlyMethods(['getEntityKey', 'getAttributeKey', 'getValue', 'getType'])->getMock();
         $value3->expects($this->once())->method('getEntityKey')
             ->willReturn($entity1Key);
-        $value3->expects($this->once())->method('getAttributeName')
-            ->willReturn($attribute3name);
+        $value3->expects($this->once())->method('getAttributeKey')
+            ->willReturn($attribute3key);
         $value3->expects($this->once())->method('getValue')
             ->willReturn($content3);
+        $value3->expects($this->once())->method('getType')
+            ->willReturn(ATTR_TYPE::TEXT);
 
         $valueSet = $this->getMockBuilder(ValueSet::class)
             ->onlyMethods(['forExistingEntities'])->getMock();
@@ -229,7 +207,7 @@ class ImportContentWorkerBehaviorTest extends TestCase
                 [ATTR_TYPE::getCase($attribute1type)->valueTable(), $domainKey, $entity1Key, $attribute1key],
                 [ATTR_TYPE::getCase($attribute2type)->valueTable(), $domainKey, $entity2Key, $attribute2key],
             )
-            ->willReturn($attribute1, $attribute2);
+            ->willReturn([], []);
         $valueModel->expects($this->exactly(2))->method('update')
             ->withConsecutive(
                 [ATTR_TYPE::getCase($attribute1type)->valueTable(), $domainKey, $entity1Key, $attribute1key, $updatedContent1],
@@ -252,15 +230,52 @@ class ImportContentWorkerBehaviorTest extends TestCase
             ->onlyMethods([
                 'getContainer',
                 'getValueSet',
-                'getAttributeSet',
                 'makeValueModel',
                 'makeValueParser'
             ])->getMock();
         $worker->method('getContainer')->willReturn($container);
         $worker->method('getValueSet')->willReturn($valueSet);
-        $worker->method('getAttributeSet')->willReturn($attrSet);
         $worker->method('makeValueModel')->willReturn($valueModel);
         $worker->method('makeValueParser')->willReturn($valueParser);
+
+        $worker->processExistingEntities();
+    }
+
+    /**
+     * @test
+     *
+     * @group behavior
+     *
+     * @covers \Drobotik\Eav\Import\Content\Worker::processExistingEntities
+     */
+    public function process_existing_entities_creating_values()
+    {
+        $container = new ImportContainer;
+        $container->setDomainKey(1);
+        $container->setSetKey(2);
+
+        $valueModel = $this->getMockBuilder(ValueBase::class)
+            ->onlyMethods(['find', 'create'])->getMock();
+        $valueModel->method('find')->willReturn(false);
+        $valueSet = new ValueSet();
+        $value = new Value();
+        $value->setType(ATTR_TYPE::INTEGER);
+        $value->setValue(123);
+        $value->setAttributeName('test');
+        $value->setAttributeKey(3);
+        $value->setEntityKey(4);
+        $valueSet->appendValue($value);
+
+        $valueModel->expects($this->once())
+            ->method('create')
+            ->with(ATTR_TYPE::INTEGER->valueTable(), 1, 4, 3, 123);
+
+        $worker = $this->getMockBuilder(Worker::class)
+            ->onlyMethods(['getContainer','getValueSet','makeValueModel'])->getMock();
+
+        $worker->method('getContainer')->willReturn($container);
+        $worker->method('getValueSet')->willReturn($valueSet);
+        $worker->method('makeValueModel')->willReturn($valueModel);
 
         $worker->processExistingEntities();
     }
