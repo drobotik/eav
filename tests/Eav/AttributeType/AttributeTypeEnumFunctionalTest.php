@@ -14,7 +14,9 @@ use Doctrine\DBAL\Types\Types;
 use Drobotik\Eav\Enum\_VALUE;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Exception\AttributeException;
+use Drobotik\Eav\Validation\Assert;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Validator\Constraints;
 
 class AttributeTypeEnumFunctionalTest extends TestCase
 {
@@ -91,11 +93,11 @@ class AttributeTypeEnumFunctionalTest extends TestCase
      * @covers \Drobotik\Eav\Enum\ATTR_TYPE::validationRule
      */
     public function validation_rule() {
-        $this->assertEquals(["integer"], ATTR_TYPE::INTEGER->validationRule());
-        $this->assertEquals(["date"], ATTR_TYPE::DATETIME->validationRule());
-        $this->assertEquals(["regex:/^[0-9]{1,11}(?:\.[0-9]{1,3})?$/"], ATTR_TYPE::DECIMAL->validationRule());
-        $this->assertEquals(["string","min:1","max:191"], ATTR_TYPE::STRING->validationRule());
-        $this->assertEquals(["min:1","max:1000"], ATTR_TYPE::TEXT->validationRule());
+        $this->assertEquals([Assert::integer()], ATTR_TYPE::INTEGER->validationRule());
+        $this->assertEquals([new Constraints\Date], ATTR_TYPE::DATETIME->validationRule());
+        $this->assertEquals([new Constraints\Regex('/^[0-9]{1,11}(?:\.[0-9]{1,3})?$/')], ATTR_TYPE::DECIMAL->validationRule());
+        $this->assertEquals([new Constraints\Length(['min' => 1,'max' => 191])], ATTR_TYPE::STRING->validationRule());
+        $this->assertEquals([new Constraints\Length(['min' => 1,'max' => 10000])], ATTR_TYPE::TEXT->validationRule());
     }
     /**
      * @test

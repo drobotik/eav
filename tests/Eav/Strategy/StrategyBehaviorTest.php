@@ -9,18 +9,20 @@ declare(strict_types=1);
 
 namespace Tests\Eav\Strategy;
 
-use Illuminate\Support\MessageBag;
-use Illuminate\Validation\Validator;
 use Drobotik\Eav\AttributeContainer;
 use Drobotik\Eav\AttributeSet;
 use Drobotik\Eav\Entity;
 use Drobotik\Eav\Enum\_RESULT;
 use Drobotik\Eav\Result\Result;
 use Drobotik\Eav\Strategy;
+use Drobotik\Eav\Validation\Assert;
 use Drobotik\Eav\Value\ValueAction;
 use Drobotik\Eav\Value\ValueManager;
 use Drobotik\Eav\Value\ValueValidator;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Constraints;
+
 
 class StrategyBehaviorTest extends TestCase
 {
@@ -221,25 +223,23 @@ class StrategyBehaviorTest extends TestCase
      * @covers \Drobotik\Eav\Strategy::validate
      */
     public function validate_fails_action() {
-        $validator = $this->getMockBuilder(Validator::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['fails', 'errors'])
-            ->getMock();
-        $validator->expects($this->once())
-            ->method('fails')
-            ->willReturn(true);
-        $messageBag = new MessageBag();
-        $messageBag->add('test', 'test');
-        $validator->expects($this->once())
-            ->method('errors')
-            ->willReturn($messageBag);
+
+        $validator = Validation::createValidator();
         $valueValidator = $this->getMockBuilder(ValueValidator::class)
-            ->onlyMethods(['getValidator'])
+            ->onlyMethods(['getValidator', 'getValidatedData'])
             ->getMock();
+        $valueValidator->expects($this->once())
+            ->method('getValidatedData')
+            ->willReturn([]);
         $valueValidator->expects($this->once())
             ->method('getValidator')
             ->willReturn($validator);
         $container = new AttributeContainer();
+        $strategy = $this->getMockBuilder(Strategy::class)
+        ->onlyMethods(['rules'])->getMock();
+        $strategy->expects($this->once())
+            ->method('rules')->willReturn([new Constraints\NotBlank(), Assert::integer()]);
+        $container->setStrategy($strategy);
         $container->setValueValidator($valueValidator);
         $strategy = $this->getMockBuilder(Strategy::class)
             ->onlyMethods(['getAttributeContainer'])
@@ -251,7 +251,8 @@ class StrategyBehaviorTest extends TestCase
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::VALIDATION_FAILS->code(), $result->getCode());
         $this->assertEquals(_RESULT::VALIDATION_FAILS->message(), $result->getMessage());
-        $this->assertSame($messageBag, $result->getData());
+        $data = $result->getData();
+        $this->assertEquals(4, count($data));
     }
     /**
      * @test
@@ -259,27 +260,19 @@ class StrategyBehaviorTest extends TestCase
      * @covers \Drobotik\Eav\Strategy::validate
      */
     public function validate_passed_action() {
-        $validator = $this->getMockBuilder(Validator::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['fails', 'errors'])
-            ->getMock();
-        $validator->expects($this->once())
-            ->method('fails')
-            ->willReturn(false);
         $valueValidator = $this->getMockBuilder(ValueValidator::class)
-            ->onlyMethods(['getValidator'])
+            ->onlyMethods(['getValidator', 'getValidatedData'])
             ->getMock();
         $valueValidator->expects($this->once())
-            ->method('getValidator')
-            ->willReturn($validator);
+            ->method('getValidatedData')
+            ->willReturn([]);
         $container = new AttributeContainer();
-        $container->setValueValidator($valueValidator);
         $strategy = $this->getMockBuilder(Strategy::class)
-            ->onlyMethods(['getAttributeContainer'])
-            ->getMock();
+            ->onlyMethods(['rules'])->getMock();
         $strategy->expects($this->once())
-            ->method('getAttributeContainer')
-            ->willReturn($container);
+            ->method('rules')->willReturn([]);
+        $container->setStrategy($strategy);
+        $container->setValueValidator($valueValidator);
         $result = $strategy->validate();
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::VALIDATION_PASSED->code(), $result->getCode());

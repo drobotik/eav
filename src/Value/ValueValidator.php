@@ -10,11 +10,13 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\Value;
 
-use Drobotik\Eav\DependencyManager;
 use Drobotik\Eav\Enum\_RESULT;
 use Drobotik\Eav\Enum\_VALUE;
 use Drobotik\Eav\Trait\ContainerTrait;
-use Illuminate\Validation\Validator;
+use Drobotik\Eav\Validation\Assert;
+use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Constraints;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ValueValidator
 {
@@ -25,22 +27,20 @@ class ValueValidator
         return $this->getAttributeContainer()
             ->getAttribute()
             ->getType()
-            ->validationRule()
-        ;
+            ->validationRule();
     }
 
-    public function getRules(): array
+    public function getRules(): Constraints\Collection
     {
         $rules = $this->getAttributeContainer()->getStrategy()->rules();
-
-        return [
-            _VALUE::ENTITY_ID->column() => ['required', 'integer'],
-            _VALUE::DOMAIN_ID->column() => ['required', 'integer'],
-            _VALUE::ATTRIBUTE_ID->column() => ['required', 'integer'],
+        return new Constraints\Collection([
+            _VALUE::ENTITY_ID->column() => [new Constraints\NotBlank(), Assert::integer()],
+            _VALUE::DOMAIN_ID->column() => [new Constraints\NotBlank(), Assert::integer()],
+            _VALUE::ATTRIBUTE_ID->column() => [new Constraints\NotBlank(), Assert::integer()],
             _VALUE::VALUE->column() => is_null($rules)
                 ? $this->getDefaultValueRule()
                 : $rules,
-        ];
+        ]);
     }
 
     public function getValidatedData(): array
@@ -58,12 +58,9 @@ class ValueValidator
         ];
     }
 
-    public function getValidator(): Validator
+    public function getValidator(): ValidatorInterface
     {
-        return DependencyManager::getContainer()->getValidator()->make(
-            $this->getValidatedData(),
-            $this->getRules()
-        );
+        return Validation::createValidator();
     }
 
     public function validateField(): null|array

@@ -16,9 +16,12 @@ use Drobotik\Eav\Entity;
 use Drobotik\Eav\Enum\_VALUE;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Strategy;
+use Drobotik\Eav\Validation\Assert;
 use Drobotik\Eav\Value\ValueManager;
 use Drobotik\Eav\Value\ValueValidator;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Validator\Constraints;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ValueValidatorFunctionalTest extends TestCase
 {
@@ -57,12 +60,12 @@ class ValueValidatorFunctionalTest extends TestCase
             ->makeStrategy();
         $this->validator->setAttributeContainer($container);
         $this->assertEquals(
-            [
-                _VALUE::ENTITY_ID->column() => ['required', 'integer'],
-                _VALUE::DOMAIN_ID->column() => ['required','integer'],
-                _VALUE::ATTRIBUTE_ID->column() => ['required','integer'],
-                _VALUE::VALUE->column() => $this->validator->getDefaultValueRule()
-            ],
+            new Constraints\Collection([
+                _VALUE::ENTITY_ID->column() => [new Constraints\NotBlank(), Assert::integer()],
+                _VALUE::DOMAIN_ID->column() => [new Constraints\NotBlank(), Assert::integer()],
+                _VALUE::ATTRIBUTE_ID->column() => [new Constraints\NotBlank(), Assert::integer()],
+                _VALUE::VALUE->column() => $this->validator->getDefaultValueRule(),
+            ]),
             $this->validator->getRules()
         );
     }
@@ -79,13 +82,17 @@ class ValueValidatorFunctionalTest extends TestCase
             ->getMock();
         $strategy->expects($this->once())
             ->method('rules')
-            ->willReturn(['new_rule']);
+            ->willReturn([new Constraints\NotBlank()]);
         $container = new AttributeContainer();
         $container->setAttribute($attribute)
             ->setStrategy($strategy);
         $this->validator->setAttributeContainer($container);
         $result = $this->validator->getRules();
-        $this->assertEquals(['new_rule'], $result[_VALUE::VALUE->column()]);
+        /** @var \Symfony\Component\Validator\Constraints\Required $valueRule */
+        $valueRule = $result->fields[_VALUE::VALUE->column()];
+        $constraints = $valueRule->getNestedConstraints();
+        $this->assertCount(1, $constraints);
+        $this->assertInstanceOf(Constraints\NotBlank::class,  $constraints[0]);
     }
     /**
      * @test
@@ -144,7 +151,6 @@ class ValueValidatorFunctionalTest extends TestCase
             ->setValueManager($valueManager);
         $this->validator->setAttributeContainer($container);
         $validator = $this->validator->getValidator();
-        $this->assertEquals($this->validator->getRules(), $validator->getRules());
-        $this->assertEquals($this->validator->getValidatedData(), $validator->getData());
+        $this->assertInstanceOf(ValidatorInterface::class, $validator);
     }
 }

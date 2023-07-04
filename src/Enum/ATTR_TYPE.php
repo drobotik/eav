@@ -12,6 +12,8 @@ namespace Drobotik\Eav\Enum;
 use Carbon\Carbon;
 use Doctrine\DBAL\Types\Types;
 use Drobotik\Eav\Exception\AttributeException;
+use Drobotik\Eav\Validation\Assert;
+use Symfony\Component\Validator\Constraints;
 
 enum ATTR_TYPE
 {
@@ -80,22 +82,25 @@ enum ATTR_TYPE
     public function validationRule() {
         return match ($this) {
             self::INTEGER => [
-                "integer"
+                Assert::integer()
             ],
             self::DATETIME => [
-                "date"
+                new Constraints\Date
             ],
             self::DECIMAL => [
-                "regex:/^[0-9]{1,11}(?:\.[0-9]{1,3})?$/"
+                new Constraints\Regex('/^[0-9]{1,11}(?:\.[0-9]{1,3})?$/')
             ],
             self::STRING => [
-                "string",
-                "min:1",
-                "max:191"
+                new Constraints\Length([
+                    'min' => 1,
+                    'max' => 191
+                ])
             ],
             self::TEXT => [
-                "min:1",
-                "max:1000"
+                new Constraints\Length([
+                    'min' => 1,
+                    'max' => 10000
+                ])
             ]
         };
     }

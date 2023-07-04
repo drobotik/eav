@@ -81,10 +81,17 @@ class Strategy implements StrategyInterface, EavStrategyInterface
     public function validate(): Result
     {
         $result = new Result();
-        $validator = $this->getAttributeContainer()->getValueValidator()->getValidator();
-        if ($validator->fails()) {
+        $valueValidator = $this->getAttributeContainer()->getValueValidator();
+        $validator = $valueValidator->getValidator();
+        $violations = $validator->validate($valueValidator->getValidatedData(), $valueValidator->getRules());
+        if (count($violations) > 0) {
+            $violationData = [];
+            foreach($violations as $violation) {
+                print_r($violation->getPropertyPath());
+                $violationData[$violation->getPropertyPath()] = $violation->getMessage();
+            }
             return $result->validationFails()
-                ->setData($validator->errors());
+                ->setData($violationData);
         }
 
         return $result->setCode(_RESULT::VALIDATION_PASSED->code())

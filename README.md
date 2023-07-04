@@ -16,8 +16,6 @@ The EAV library is designed to manage and manipulate EAV data across multiple do
 - PHP >=8.1
 - ext-pdo
 - ext-bcmath
-- Illuminate\validator ^9.0|^10.0
-- Illuminate\translation ^9.0|^10.0
 
 [Documentation](./docs/eav.md)
 
@@ -30,7 +28,7 @@ $ composer require drobotik/eav
 
 :heavy_check_mark: Domain import/export csv
 <br>:pushpin: Attribute props and strategy improvements
-<br>:heavy_check_mark: Removed Laravel support
+<br>:heavy_check_mark: Switch to Symphony components
 
 ### Contributing
 

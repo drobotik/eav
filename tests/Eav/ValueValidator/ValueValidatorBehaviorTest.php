@@ -11,15 +11,13 @@ namespace Tests\Eav\ValueValidator;
 
 use Drobotik\Eav\Attribute;
 use Drobotik\Eav\AttributeContainer;
-use Drobotik\Eav\AttributeSet;
-use Drobotik\Eav\Entity;
 use Drobotik\Eav\Enum\_VALUE;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Result\Result;
 use Drobotik\Eav\Strategy;
-use Drobotik\Eav\Value\ValueManager;
 use Drobotik\Eav\Value\ValueValidator;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Validator\Constraints;
 
 class ValueValidatorBehaviorTest extends TestCase
 {
@@ -41,15 +39,20 @@ class ValueValidatorBehaviorTest extends TestCase
         $strategy = $this->getMockBuilder(Strategy::class)
             ->onlyMethods(['rules'])
             ->getMock();
+        $collection = [
+            new Constraints\Regex('/nd/')
+        ];
         $strategy->expects($this->once())
             ->method('rules')
-            ->willReturn(['new_rule']);
+            ->willReturn($collection);
         $container = new AttributeContainer();
         $container->setAttribute($attribute)
             ->setStrategy($strategy);
         $this->validator->setAttributeContainer($container);
         $result = $this->validator->getRules();
-        $this->assertEquals(['new_rule'], $result[_VALUE::VALUE->column()]);
+        /** @var \Symfony\Component\Validator\Constraints\Required  $t */
+        $t = $result->fields[_VALUE::VALUE->column()];
+        $this->assertEquals($collection, $t->getNestedConstraints());
     }
     /**
      * @test

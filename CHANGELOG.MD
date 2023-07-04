@@ -1,3 +1,24 @@
+### 1.7.5 - 2023-07-03
+
+#### Added
+- new eav Query Builder compatible with DBAL expressions
+- symphony validation
+
+#### Deprecated
+
+- Nothing
+
+#### Fixed
+
+- Decimal truncating behaviour
+
+#### Removed
+
+- illuminate/database dependency
+- eav Query builder dependent on eloquent
+- illuminate/validation, illuminate/translation dependencies
+- docker folder
+
 ### 1.4.3 - 2023-06-21
 
 #### Added
@@ -14,5 +35,3 @@
 - ValueDecimal migration value column size
 
 #### Removed
-
-- Generate dataset command
