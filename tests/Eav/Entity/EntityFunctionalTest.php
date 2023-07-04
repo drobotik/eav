@@ -76,9 +76,13 @@ class EntityFunctionalTest extends TestCase
      * @group functional
      * @covers \Drobotik\Eav\Entity::setAttributeSet
      * @covers \Drobotik\Eav\Entity::getAttributeSet
+     * @covers \Drobotik\Eav\Entity::__construct
      */
     public function attribute_set() {
+        $attributeSet = $this->entity->getAttributeSet();
         $this->assertInstanceOf(AttributeSet::class, $this->entity->getAttributeSet());
+        $this->assertSame($this->entity, $attributeSet->getEntity());
+
         $attributeSet = new AttributeSet();
         $this->entity->setAttributeSet($attributeSet);
         $this->assertSame($attributeSet, $this->entity->getAttributeSet());
@@ -88,6 +92,7 @@ class EntityFunctionalTest extends TestCase
      * @test
      * @group functional
      * @covers \Drobotik\Eav\Entity::getBag
+     * @covers \Drobotik\Eav\Entity::__construct
      */
     public function bag() {
         $this->assertInstanceOf(EntityBag::class, $this->entity->getBag());
@@ -96,6 +101,7 @@ class EntityFunctionalTest extends TestCase
      * @test
      * @group functional
      * @covers \Drobotik\Eav\Entity::getGnome
+     * @covers \Drobotik\Eav\Entity::__construct
      */
     public function gnome() {
         $gnome = $this->entity->getGnome();

@@ -68,6 +68,7 @@ class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
      * @covers \Drobotik\Eav\QueryBuilder\Config::hasJoin
      * @covers \Drobotik\Eav\QueryBuilder\Config::addJoin
      * @covers \Drobotik\Eav\QueryBuilder\Config::getJoins
+     * @covers \Drobotik\Eav\QueryBuilder\Config::getJoin
      */
     public function joins()
     {
@@ -79,11 +80,13 @@ class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
         $this->assertFalse($this->config->hasJoin($name));
         $this->config->addJoin($table, $name, $attrKey);
         $this->assertTrue($this->config->hasJoin($name));
-        $this->assertEquals([$name => [
+        $join = [
             QB_JOIN::TABLE => $table,
             QB_JOIN::NAME => $name,
             QB_JOIN::ATTR_PARAM => $param
-        ]], $this->config->getJoins());
+        ];
+        $this->assertEquals([$name => $join], $this->config->getJoins());
+        $this->assertEquals($join, $this->config->getJoin('test'));
 
         $this->assertEquals([
             $param => $attrKey
@@ -125,6 +128,7 @@ class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
      * @covers \Drobotik\Eav\QueryBuilder\Config::addAttribute
      * @covers \Drobotik\Eav\QueryBuilder\Config::getAttribute
      * @covers \Drobotik\Eav\QueryBuilder\Config::getAttributes
+     * @covers \Drobotik\Eav\QueryBuilder\Config::addAttributes
      */
     public function attributes()
     {
@@ -135,6 +139,16 @@ class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
         $this->assertTrue($this->config->hasAttribute('test'));
         $this->assertSame($attribute, $this->config->getAttribute('test'));
         $this->assertEquals(['test' => $attribute], $this->config->getAttributes());
+
+        $extraAttr1 = [_ATTR::NAME->column() => 'test2'];
+        $extraAttr2 = [_ATTR::NAME->column() => 'test3'];
+        $this->config->addAttributes([$extraAttr1, $extraAttr2]);
+        $this->assertEquals([
+            'test' => $attribute,
+            'test2' => $extraAttr1,
+            'test3' => $extraAttr2
+        ], $this->config->getAttributes());
+
     }
     /**
      * @test
@@ -208,7 +222,7 @@ class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
      * @test
      *
      * @group functional
-     * @covers \Drobotik\Eav\QueryBuilder\Config::parse
+     * @covers \Drobotik\Eav\QueryBuilder\Config::handleColumns
      */
     public function handle_columns_has_no_attribute_exception()
     {
@@ -224,7 +238,7 @@ class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
      * @test
      *
      * @group functional
-     * @covers \Drobotik\Eav\QueryBuilder\Config::parse
+     * @covers \Drobotik\Eav\QueryBuilder\Config::handleColumns
      */
     public function handle_columns_attribute__type_exception()
     {
@@ -247,7 +261,7 @@ class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
      * @test
      *
      * @group functional
-     * @covers \Drobotik\Eav\QueryBuilder\Config::parse
+     * @covers \Drobotik\Eav\QueryBuilder\Config::handleColumns
      */
     public function handle_columns()
     {

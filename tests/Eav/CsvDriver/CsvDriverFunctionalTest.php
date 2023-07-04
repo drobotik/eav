@@ -52,8 +52,8 @@ class CsvDriverFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Driver\CsvDriver::setReader
-     * @covers \Drobotik\Eav\Driver\CsvDriver::getReader
+     * @covers \Drobotik\Eav\Driver\CsvDriver::setWriter
+     * @covers \Drobotik\Eav\Driver\CsvDriver::getWriter
      */
     public function writer()
     {

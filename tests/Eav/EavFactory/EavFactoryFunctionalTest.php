@@ -23,6 +23,8 @@ use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Model\AttributeSetModel;
 use Drobotik\Eav\Result\EntityFactoryResult;
 use Drobotik\Eav\Result\Result;
+use Faker\Generator;
+use ReflectionClass;
 use Tests\TestCase;
 
 /**
@@ -32,6 +34,22 @@ use Tests\TestCase;
  */
 class EavFactoryFunctionalTest extends TestCase
 {
+    /**
+     * @test
+     *
+     * @group functional
+     *
+     * @covers \Drobotik\Eav\Factory\EavFactory::__construct
+     */
+    public function faker()
+    {
+        $reflectionClass = new ReflectionClass($this->eavFactory);
+        $reflectionProperty = $reflectionClass->getProperty('faker');
+        $reflectionProperty->setAccessible(true); // Make the private property accessible
+        $propertyValue = $reflectionProperty->getValue($this->eavFactory);
+        $this->assertInstanceOf(Generator::class, $reflectionProperty->getValue($this->eavFactory));
+
+    }
     /**
      * @test
      *

@@ -29,6 +29,7 @@ class AttributeFunctionalTest extends TestCase
      * @group functional
      * @covers \Drobotik\Eav\Attribute::getBag
      * @covers \Drobotik\Eav\Attribute::setBag
+     * @covers \Drobotik\Eav\Attribute::__construct()
      */
     public function bag() {
         $this->assertInstanceOf(AttributeBag::class, $this->attribute->getBag());

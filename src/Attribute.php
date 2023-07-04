@@ -13,7 +13,6 @@ namespace Drobotik\Eav;
 use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Exception\AttributeException;
-use Drobotik\Eav\Interface\StrategyInterface;
 use Drobotik\Eav\Trait\ContainerTrait;
 
 class Attribute
@@ -21,8 +20,6 @@ class Attribute
     use ContainerTrait;
 
     private AttributeBag      $bag;
-    private AttributeSet      $attributeSet;
-    private StrategyInterface $strategy;
 
     public function __construct()
     {

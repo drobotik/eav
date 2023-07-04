@@ -30,6 +30,16 @@ class AttributeSetModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
+     * @covers \Drobotik\Eav\Model\AttributeSetModel::__construct
+     */
+    public function defaults()
+    {
+        $this->assertEquals(_SET::table(), $this->model->getTable());
+        $this->assertEquals(_SET::ID->column(), $this->model->getPrimaryKey());
+    }
+    /**
+     * @test
+     * @group functional
      * @covers \Drobotik\Eav\Model\AttributeSetModel::create
      */
     public function create_record()

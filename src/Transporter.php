@@ -29,16 +29,6 @@ class Transporter
         return $this->hasField($field);
     }
 
-    public function __unset(string $field): void
-    {
-        $this->removeField($field);
-    }
-
-    public function __toString(): string
-    {
-        return json_encode($this->data);
-    }
-
     public function __toArray(): array
     {
         return $this->data;

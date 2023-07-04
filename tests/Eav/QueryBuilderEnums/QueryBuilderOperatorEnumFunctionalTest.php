@@ -296,6 +296,20 @@ class QueryBuilderOperatorEnumFunctionalTest extends TestCase
         $this->assertEquals('neq', QB_OPERATOR::IS_NOT_EMPTY->expr());
         $this->assertEquals('isNull', QB_OPERATOR::IS_NULL->expr());
         $this->assertEquals('isNotNull', QB_OPERATOR::IS_NOT_NULL->expr());
+    }
 
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\Enum\QB_OPERATOR::isLike
+     */
+    public function isLike()
+    {
+        $this->assertTrue(QB_OPERATOR::BEGINS_WITH->isLike());
+        $this->assertTrue(QB_OPERATOR::NOT_BEGINS_WITH->isLike());
+        $this->assertTrue(QB_OPERATOR::CONTAINS->isLike());
+        $this->assertTrue(QB_OPERATOR::NOT_CONTAINS->isLike());
+        $this->assertTrue(QB_OPERATOR::ENDS_WITH->isLike());
+        $this->assertTrue(QB_OPERATOR::NOT_ENDS_WITH->isLike());
     }
 }
