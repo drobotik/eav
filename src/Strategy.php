@@ -87,7 +87,6 @@ class Strategy implements StrategyInterface, EavStrategyInterface
         if (count($violations) > 0) {
             $violationData = [];
             foreach($violations as $violation) {
-                print_r($violation->getPropertyPath());
                 $violationData[$violation->getPropertyPath()] = $violation->getMessage();
             }
             return $result->validationFails()
