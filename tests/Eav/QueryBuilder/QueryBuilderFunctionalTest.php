@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Tests\Eav\QueryBuilder;
 
+use Drobotik\Eav\Database\Connection;
 use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Enum\_VALUE;
 use Drobotik\Eav\Enum\ATTR_TYPE;
@@ -30,6 +31,18 @@ class QueryBuilderFunctionalTest extends QueryingDataTestCase
     {
         parent::setUp();
         $this->qb = new QueryBuilder();
+    }
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\QueryBuilder\QueryBuilder::setConfig
+     * @covers \Drobotik\Eav\QueryBuilder\QueryBuilder::getConfig
+     */
+    public function config()
+    {
+        $config = new Config();
+        $this->qb->setConfig($config);
+        $this->assertSame($config, $this->qb->getConfig());
     }
     /**
      * @test
@@ -342,5 +355,51 @@ class QueryBuilderFunctionalTest extends QueryingDataTestCase
                 ATTR_TYPE::DECIMAL->value() => 180.63
             ]
         ], $qb->run()->executeQuery()->fetchAllAssociative());
+    }
+
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\QueryBuilder\QueryBuilder::select
+     */
+    public function select()
+    {
+        $this->qb->select('test');
+        $this->assertEquals('SELECT test.value as test', $this->qb->getQuery()->getSQL());
+    }
+
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\QueryBuilder\QueryBuilder::join
+     */
+    public function join()
+    {
+        $table = 'test_table';
+        $field = 'test_field';
+        $config = new Config();
+        $config->addJoin($table, $field, 1);
+        $join = $config->getJoin($field);
+        $paramName = $join[QB_JOIN::ATTR_PARAM];
+
+        $qb = $this->getMockBuilder(QueryBuilder::class)
+            ->onlyMethods(['getQuery'])->getMock();
+
+        $query = Connection::get()->createQueryBuilder()->from('entity', 'e');
+        $qb->method('getQuery')->willReturn($query);
+
+        $qb->setConfig($config);
+
+        $q = $qb->join($field);
+        $on = sprintf('e.%s = %s.%s AND %s.%s = :%s',
+            _ENTITY::ID->column(),
+            $field,
+            _VALUE::ENTITY_ID->column(),
+            $field,
+            _VALUE::ATTRIBUTE_ID->column(),
+            $paramName
+        );
+        $join = "SELECT  FROM entity e INNER JOIN $table $field ON ";
+        $this->assertEquals($join.$on, $q->getSQL());
     }
 }

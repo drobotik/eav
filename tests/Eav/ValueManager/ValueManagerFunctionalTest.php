@@ -50,6 +50,7 @@ class ValueManagerFunctionalTest extends TestCase
      * @test
      * @group functional
      * @covers \Drobotik\Eav\Value\ValueManager::getRuntime
+     * @covers \Drobotik\Eav\Value\ValueManager::__construct
      */
     public function get_runtime_value() {
         $this->assertEquals(null, $this->value->getRuntime());
@@ -89,6 +90,7 @@ class ValueManagerFunctionalTest extends TestCase
      * @test
      * @group functional
      * @covers \Drobotik\Eav\Value\ValueManager::getStored
+     * @covers \Drobotik\Eav\Value\ValueManager::__construct
      */
     public function get_stored_value() {
         $this->assertEquals(null, $this->value->getStored());
@@ -136,6 +138,9 @@ class ValueManagerFunctionalTest extends TestCase
      * @test
      * @group functional
      * @covers \Drobotik\Eav\Value\ValueManager::setValue
+     * @covers \Drobotik\Eav\Value\ValueManager::clearStored
+     * @covers \Drobotik\Eav\Value\ValueManager::clearRuntime
+     * @covers \Drobotik\Eav\Value\ValueManager::clearValue
      */
     public function set_value() {
         $this->value->setValue(1);
@@ -173,6 +178,7 @@ class ValueManagerFunctionalTest extends TestCase
      * @test
      * @group functional
      * @covers \Drobotik\Eav\Value\ValueManager::isClean
+     * @covers \Drobotik\Eav\Value\ValueManager::isEquivalent
      */
     public function is_clean() {
         $this->assertTrue($this->value->isClean());

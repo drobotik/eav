@@ -56,6 +56,7 @@ class EntityGnomeFunctionalTest extends TestCase
      * @test
      * @group functional
      * @covers \Drobotik\Eav\EntityGnome::save
+     * @covers \Drobotik\Eav\EntityGnome::beforeSave
      */
     public function save_no_entity_key_no_domain() {
         $this->expectException(EntityException::class);
@@ -66,6 +67,7 @@ class EntityGnomeFunctionalTest extends TestCase
      * @test
      * @group functional
      * @covers \Drobotik\Eav\EntityGnome::save
+     * @covers \Drobotik\Eav\EntityGnome::beforeSave
      */
     public function save_no_entity_key_no_attr_set_key() {
         $this->expectException(EntityException::class);
@@ -77,6 +79,8 @@ class EntityGnomeFunctionalTest extends TestCase
      * @test
      * @group functional
      * @covers \Drobotik\Eav\EntityGnome::save
+     * @covers \Drobotik\Eav\EntityGnome::beforeSave
+     * @covers \Drobotik\Eav\EntityGnome::checkDomainExists
      */
     public function save_no_entity_key_domain_not_in_db() {
         $this->expectException(EntityException::class);
@@ -90,6 +94,8 @@ class EntityGnomeFunctionalTest extends TestCase
      * @test
      * @group functional
      * @covers \Drobotik\Eav\EntityGnome::save
+     * @covers \Drobotik\Eav\EntityGnome::beforeSave
+     * @covers \Drobotik\Eav\EntityGnome::checkAttrSetExist
      */
     public function save_no_entity_key_attr_set_not_in_db() {
         $this->expectException(EntityException::class);
@@ -104,6 +110,7 @@ class EntityGnomeFunctionalTest extends TestCase
      * @test
      * @group functional
      * @covers \Drobotik\Eav\EntityGnome::save
+     * @covers \Drobotik\Eav\EntityGnome::beforeSave
      */
     public function save_no_entity_key_creating_record() {
         $this->eavFactory->createDomain();
@@ -129,6 +136,7 @@ class EntityGnomeFunctionalTest extends TestCase
      * @test
      * @group functional
      * @covers \Drobotik\Eav\EntityGnome::save
+     * @covers \Drobotik\Eav\EntityGnome::beforeSave
      */
     public function save_with_entity_key_no_record_in_db() {
         $this->expectException(EntityException::class);
@@ -140,6 +148,7 @@ class EntityGnomeFunctionalTest extends TestCase
      * @test
      * @group functional
      * @covers \Drobotik\Eav\EntityGnome::save
+     * @covers \Drobotik\Eav\EntityGnome::beforeSave
      */
     public function save_with_entity_key_no_domain_in_db() {
         $this->expectException(EntityException::class);
@@ -156,6 +165,7 @@ class EntityGnomeFunctionalTest extends TestCase
      * @test
      * @group functional
      * @covers \Drobotik\Eav\EntityGnome::save
+     * @covers \Drobotik\Eav\EntityGnome::beforeSave
      */
     public function save_with_entity_key_no_attr_set_in_db() {
         $this->expectException(EntityException::class);
@@ -173,6 +183,7 @@ class EntityGnomeFunctionalTest extends TestCase
      * @test
      * @group functional
      * @covers \Drobotik\Eav\EntityGnome::save
+     * @covers \Drobotik\Eav\EntityGnome::beforeSave
      */
     public function save_with_entity_key_fetching_record() {
         $domainKey = $this->eavFactory->createDomain();
@@ -196,6 +207,7 @@ class EntityGnomeFunctionalTest extends TestCase
      * @test
      * @group functional
      * @covers \Drobotik\Eav\EntityGnome::save
+     * @covers \Drobotik\Eav\EntityGnome::beforeSave
      */
     public function save_results() {
         $testData = [

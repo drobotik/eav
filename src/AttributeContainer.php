@@ -13,6 +13,7 @@ namespace Drobotik\Eav;
 use Drobotik\Eav\Value\ValueAction;
 use Drobotik\Eav\Value\ValueManager;
 use Drobotik\Eav\Value\ValueValidator;
+use Exception;
 
 class AttributeContainer
 {
@@ -36,7 +37,7 @@ class AttributeContainer
     public function make(string $className)
     {
         if (!in_array($className, $this->supported)) {
-            return false;
+            throw new Exception('not supported');
         }
         $instance = new $className();
         $instance->setAttributeContainer($this);

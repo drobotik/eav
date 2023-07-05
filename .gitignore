@@ -12,3 +12,4 @@ connection.php
 /coverage
 arch.dia.autosave
 .php-cs-fixer.cache
+architecture.dia.autosave

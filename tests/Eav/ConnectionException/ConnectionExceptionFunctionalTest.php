@@ -17,7 +17,7 @@ class ConnectionExceptionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Exception\EntityFactoryException::undefinedAttributeArray
+     * @covers \Drobotik\Eav\Exception\ConnectionException::undefined
      */
     public function undefined()
     {

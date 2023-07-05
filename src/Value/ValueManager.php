@@ -45,10 +45,10 @@ class ValueManager
 
     public function isClean(): bool
     {
-        return $this->IsEquivalent();
+        return $this->isEquivalent();
     }
 
-    public function IsEquivalent(): bool
+    private function isEquivalent(): bool
     {
         $orig = $this->getStored();
         $runtime = $this->getRuntime();

@@ -219,4 +219,23 @@ class EntityModelFunctionalTest extends TestCase
         $this->expectExceptionMessage(EntityException::MUST_BE_POSITIVE_AMOUNT);
         $this->model->bulkCreate(0, 1, 1, 1);
     }
+
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\Model\EntityModel::getBySetAndDomain
+     */
+    public function get_by_setKey_and_domainKey()
+    {
+        $this->eavFactory->createEntity(2, 3);
+        $this->assertEquals([], $this->model->getBySetAndDomain(1, 2));
+        $result = $this->model->getBySetAndDomain(2,3);
+        $this->assertEquals(1, count($result));
+        $entity = $result[0];
+        $this->assertEquals(1, $entity[_ENTITY::ID->column()]);
+        $this->assertEquals(2, $entity[_ENTITY::DOMAIN_ID->column()]);
+        $this->assertEquals(3, $entity[_ENTITY::ATTR_SET_ID->column()]);
+        $this->assertEquals(null, $entity[_ENTITY::SERVICE_KEY->column()]);
+    }
+
 }

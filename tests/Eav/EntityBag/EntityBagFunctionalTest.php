@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace Tests\Eav\EntityBag;
 
 use Drobotik\Eav\Entity;
-use Drobotik\Eav\EntityBag;
 use PHPUnit\Framework\TestCase;
 
 class EntityBagFunctionalTest extends TestCase
@@ -19,6 +18,7 @@ class EntityBagFunctionalTest extends TestCase
      * @test
      * @group functional
      * @covers \Drobotik\Eav\EntityBag::getEntity
+     * @covers \Drobotik\Eav\EntityBag::setEntity
      */
     public function entity() {
         $entity = new Entity();

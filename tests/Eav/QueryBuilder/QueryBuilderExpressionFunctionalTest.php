@@ -91,6 +91,8 @@ class QueryBuilderExpressionFunctionalTest extends QueryingDataTestCase
      *
      * @covers \Drobotik\Eav\QueryBuilder\Expression::__construct()
      * @covers \Drobotik\Eav\QueryBuilder\Expression::execute
+     * @covers \Drobotik\Eav\QueryBuilder\Expression::between
+     * @covers \Drobotik\Eav\QueryBuilder\Expression::notBetween
      */
     public function execute()
     {

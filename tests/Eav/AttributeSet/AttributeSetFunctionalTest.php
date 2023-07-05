@@ -12,6 +12,7 @@ namespace Tests\Eav\AttributeSet;
 use Drobotik\Eav\Attribute;
 use Drobotik\Eav\AttributeContainer;
 use Drobotik\Eav\AttributeSet;
+use Drobotik\Eav\Entity;
 use PHPUnit\Framework\TestCase;
 
 class AttributeSetFunctionalTest extends TestCase
@@ -45,6 +46,18 @@ class AttributeSetFunctionalTest extends TestCase
         $this->instance->setKey(0);
         $this->assertEquals(0, $this->instance->getKey());
         $this->assertFalse($this->instance->hasKey());
+    }
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\AttributeSet::setEntity
+     * @covers \Drobotik\Eav\AttributeSet::getEntity
+     */
+    public function entity()
+    {
+        $entity = new Entity();
+        $this->instance->setEntity($entity);
+        $this->assertSame($entity, $this->instance->getEntity());
     }
     /**
      * @test
@@ -125,5 +138,19 @@ class AttributeSetFunctionalTest extends TestCase
         $container->setAttribute($attribute);
         $this->instance->pushContainer($container);
         $this->assertTrue($this->instance->hasContainers());
+    }
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\AttributeSet::resetContainers
+     */
+    public function reset_containers() {
+        $attribute = new Attribute();
+        $attribute->setName('test');
+        $container = new AttributeContainer();
+        $container->setAttribute($attribute);
+        $this->instance->pushContainer($container);
+        $this->instance->resetContainers();
+        $this->assertFalse($this->instance->hasContainers());
     }
 }

@@ -14,9 +14,12 @@ use Drobotik\Eav\AttributeContainer;
 use Drobotik\Eav\AttributeSet;
 use Drobotik\Eav\AttributeSetAction;
 use Drobotik\Eav\Strategy;
+use Drobotik\Eav\Value\ValueAction;
 use Drobotik\Eav\Value\ValueManager;
 use Drobotik\Eav\Value\ValueValidator;
+use Exception;
 use PHPUnit\Framework\TestCase;
+use SplFileObject;
 
 class AttributeContainerFunctionalTest extends TestCase
 {
@@ -26,6 +29,17 @@ class AttributeContainerFunctionalTest extends TestCase
     {
         parent::setUp();
         $this->container = new AttributeContainer();
+    }
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\AttributeContainer::make
+     */
+    public function make_exception() {
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('not supported');
+        $this->container->make(SplFileObject::class);
     }
     /**
      * @test
@@ -44,6 +58,7 @@ class AttributeContainerFunctionalTest extends TestCase
      * @test
      * @group functional
      * @covers \Drobotik\Eav\AttributeContainer::makeAttributeSet
+     * @covers \Drobotik\Eav\AttributeContainer::make
      */
     public function makeAttributeSet() {
         $instance = $this->container->make(AttributeSet::class);
@@ -54,6 +69,7 @@ class AttributeContainerFunctionalTest extends TestCase
      * @test
      * @group functional
      * @covers \Drobotik\Eav\AttributeContainer::makeAttributeSet
+     * @covers \Drobotik\Eav\AttributeContainer::make
      */
     public function makeAttributeSetAlias() {
         $result = $this->container->makeAttributeSet();
@@ -77,6 +93,7 @@ class AttributeContainerFunctionalTest extends TestCase
      * @test
      * @group functional
      * @covers \Drobotik\Eav\AttributeContainer::makeAttributeSetAction
+     * @covers \Drobotik\Eav\AttributeContainer::make
      */
     public function makeAttributeSetAction() {
         $instance = $this->container->make(AttributeSetAction::class);
@@ -87,6 +104,7 @@ class AttributeContainerFunctionalTest extends TestCase
      * @test
      * @group functional
      * @covers \Drobotik\Eav\AttributeContainer::makeAttributeSetAction
+     * @covers \Drobotik\Eav\AttributeContainer::make
      */
     public function makeAttributeSetActionAlias() {
         $result = $this->container->makeAttributeSetAction();
@@ -110,6 +128,7 @@ class AttributeContainerFunctionalTest extends TestCase
      * @test
      * @group functional
      * @covers \Drobotik\Eav\AttributeContainer::makeAttribute
+     * @covers \Drobotik\Eav\AttributeContainer::make
      */
     public function makeAttribute() {
         $instance = $this->container->make(Attribute::class);
@@ -120,6 +139,7 @@ class AttributeContainerFunctionalTest extends TestCase
      * @test
      * @group functional
      * @covers \Drobotik\Eav\AttributeContainer::makeAttribute
+     * @covers \Drobotik\Eav\AttributeContainer::make
      */
     public function makeAttributeAlias() {
         $result = $this->container->makeAttribute();
@@ -143,6 +163,7 @@ class AttributeContainerFunctionalTest extends TestCase
      * @test
      * @group functional
      * @covers \Drobotik\Eav\AttributeContainer::makeStrategy
+     * @covers \Drobotik\Eav\AttributeContainer::make
      */
     public function makeStrategy() {
         $instance = $this->container->make(Strategy::class);
@@ -153,6 +174,7 @@ class AttributeContainerFunctionalTest extends TestCase
      * @test
      * @group functional
      * @covers \Drobotik\Eav\AttributeContainer::makeStrategy
+     * @covers \Drobotik\Eav\AttributeContainer::make
      */
     public function makeStrategyAlias() {
         $result = $this->container->makeStrategy();
@@ -176,6 +198,7 @@ class AttributeContainerFunctionalTest extends TestCase
      * @test
      * @group functional
      * @covers \Drobotik\Eav\AttributeContainer::makeValueManager
+     * @covers \Drobotik\Eav\AttributeContainer::make
      */
     public function makeValueManager() {
         $instance = $this->container->make(ValueManager::class);
@@ -186,6 +209,7 @@ class AttributeContainerFunctionalTest extends TestCase
      * @test
      * @group functional
      * @covers \Drobotik\Eav\AttributeContainer::makeValueManager
+     * @covers \Drobotik\Eav\AttributeContainer::make
      */
     public function makeValueManagerAlias() {
         $result = $this->container->makeValueManager();
@@ -209,6 +233,7 @@ class AttributeContainerFunctionalTest extends TestCase
      * @test
      * @group functional
      * @covers \Drobotik\Eav\AttributeContainer::makeValueValidator
+     * @covers \Drobotik\Eav\AttributeContainer::make
      */
     public function makeValueValidator() {
         $instance = $this->container->make(ValueValidator::class);
@@ -219,10 +244,47 @@ class AttributeContainerFunctionalTest extends TestCase
      * @test
      * @group functional
      * @covers \Drobotik\Eav\AttributeContainer::makeValueValidator
+     * @covers \Drobotik\Eav\AttributeContainer::make
      */
     public function makeValueValidatorAlias() {
         $result = $this->container->makeValueValidator();
         $this->assertSame($result, $this->container);
         $this->assertInstanceOf(ValueValidator::class, $this->container->getValueValidator());
     }
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\AttributeContainer::setValueAction
+     * @covers \Drobotik\Eav\AttributeContainer::setValueAction
+     */
+    public function value_action() {
+        $valueAction = new ValueAction();
+        $result = $this->container->setValueAction($valueAction);
+        $this->assertSame($result, $this->container);
+        $this->assertSame($valueAction, $this->container->getValueAction());
+        $this->assertSame($this->container, $this->container->getValueAction()->getAttributeContainer());
+    }
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\AttributeContainer::makeValueAction
+     * @covers \Drobotik\Eav\AttributeContainer::make
+     */
+    public function makeValueAction() {
+        $instance = $this->container->make(ValueAction::class);
+        $this->assertSame($this->container, $instance->getAttributeContainer());
+        $this->assertInstanceOf(ValueAction::class, $instance);
+    }
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\AttributeContainer::makeValueAction
+     * @covers \Drobotik\Eav\AttributeContainer::make
+     */
+    public function makeValueActionAlias() {
+        $result = $this->container->makeValueAction();
+        $this->assertSame($result, $this->container);
+        $this->assertInstanceOf(ValueAction::class, $this->container->getValueAction());
+    }
+
 }

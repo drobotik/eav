@@ -10,15 +10,18 @@ declare(strict_types=1);
 namespace Drobotik\Eav\Validation;
 
 use Symfony\Component\Validator\Constraints;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+
 class Assert
 {
-    public static function integer(): Constraints\IsTrue
+    public static function integer(): Constraints\Callback
     {
-        return new Constraints\IsTrue([
-            'message' => 'Should be an integer',
-            'payload' => function ($value) {
-                return is_numeric($value) && (int)$value == $value;
+        return new Constraints\Callback(function($value, ExecutionContextInterface $context) {
+            if (!is_int($value) || $value < 0) {
+                $context->buildViolation('The value "{{ value }}" is not a valid integer.')
+                    ->setParameter('{{ value }}', (string) $value)
+                    ->addViolation();
             }
-        ]);
+        });
     }
 }

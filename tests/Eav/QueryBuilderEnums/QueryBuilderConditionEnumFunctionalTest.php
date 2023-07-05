@@ -17,14 +17,22 @@ class QueryBuilderConditionEnumFunctionalTest extends TestCase
 {
     /**
      * @test
-     *
      * @group functional
-     *
      * @covers \Drobotik\Eav\Enum\QB_CONDITION::name
      */
     public function name()
     {
         $this->assertEquals('and', QB_CONDITION::AND->name());
         $this->assertEquals('or', QB_CONDITION::OR->name());
+    }
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\Enum\QB_CONDITION::getCase
+     */
+    public function getCase()
+    {
+        $this->assertEquals(QB_CONDITION::AND, QB_CONDITION::getCase(QB_CONDITION::AND->name()));
+        $this->assertEquals(QB_CONDITION::OR, QB_CONDITION::getCase(QB_CONDITION::OR->name()));
     }
 }

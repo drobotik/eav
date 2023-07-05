@@ -23,6 +23,26 @@ class EavFactoryResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
+     * @covers \Drobotik\Eav\Result\EntityFactoryResult::getDomainKey
+     * @covers \Drobotik\Eav\Result\EntityFactoryResult::setDomainKey
+     */
+    public function domain_key() {
+        $this->result->setDomainKey(1);
+        $this->assertSame(1, $this->result->getDomainKey());
+    }
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\Result\EntityFactoryResult::getSetKey
+     * @covers \Drobotik\Eav\Result\EntityFactoryResult::setSetKey
+     */
+    public function set_key() {
+        $this->result->setSetKey(1);
+        $this->assertSame(1, $this->result->getSetKey());
+    }
+    /**
+     * @test
+     * @group functional
      * @covers \Drobotik\Eav\Result\EntityFactoryResult::getEntityKey
      * @covers \Drobotik\Eav\Result\EntityFactoryResult::setEntityKey
      */

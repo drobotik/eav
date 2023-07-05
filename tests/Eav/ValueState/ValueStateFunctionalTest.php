@@ -24,17 +24,24 @@ class ValueStateFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueState::get
+     * @covers \Drobotik\Eav\Value\ValueState::__construct(
      */
-    public function getter() {
-        $this->assertEquals(null, $this->state->get());
+    public function constructor()
+    {
+        $mock = $this->getMockBuilder(ValueState::class)
+            ->onlyMethods(['clear'])->getMock();
+        $mock->expects($this->once())->method('clear');
+        $mock->__construct();
     }
+
     /**
      * @test
      * @group functional
+     * @covers \Drobotik\Eav\Value\ValueState::get
      * @covers \Drobotik\Eav\Value\ValueState::set
      */
-    public function setter() {
+    public function getter_setter() {
+        $this->assertEquals(null, $this->state->get());
         $this->state->set(1);
         $this->assertEquals(1, $this->state->get());
     }

@@ -42,6 +42,7 @@ class AttributeBagFunctionalTest extends TestCase
      * @test
      * @group functional
      * @covers \Drobotik\Eav\AttributeBag::getFields
+     * @covers \Drobotik\Eav\AttributeBag::__construct
      */
     public function get_fields() {
         $this->assertSame(_ATTR::bag(), $this->bag->getFields());

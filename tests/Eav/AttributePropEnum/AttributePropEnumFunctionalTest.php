@@ -25,9 +25,9 @@ class AttributePropEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Enum\_ATTR::column
+     * @covers \Drobotik\Eav\Enum\_ATTR_PROP::column
      */
-    public function columns() {
+    public function column() {
         $cases = [];
         foreach (_ATTR_PROP::cases() as $case) {
             $cases[$case->column()] = $case->column();

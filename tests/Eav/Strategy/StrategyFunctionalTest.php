@@ -30,6 +30,35 @@ class StrategyFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
+     * @covers \Drobotik\Eav\Strategy::afterCreate
+     * @covers \Drobotik\Eav\Strategy::beforeCreate
+     * @covers \Drobotik\Eav\Strategy::beforeUpdate
+     * @covers \Drobotik\Eav\Strategy::afterUpdate
+     * @covers \Drobotik\Eav\Strategy::beforeDelete
+     * @covers \Drobotik\Eav\Strategy::afterDelete
+     */
+    public function empty_methods()
+    {
+        $this->assertTrue(method_exists($this->strategy, 'afterCreate'));
+        $this->assertTrue(method_exists($this->strategy, 'beforeCreate'));
+        $this->assertTrue(method_exists($this->strategy, 'beforeUpdate'));
+        $this->assertTrue(method_exists($this->strategy, 'afterUpdate'));
+        $this->assertTrue(method_exists($this->strategy, 'beforeDelete'));
+        $this->assertTrue(method_exists($this->strategy, 'afterDelete'));
+    }
+
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\Strategy::rules
+     */
+    public function rules()
+    {
+        $this->assertNull($this->strategy->rules());
+    }
+    /**
+     * @test
+     * @group functional
      * @covers \Drobotik\Eav\Strategy::create
      */
     public function create_action_order() {
