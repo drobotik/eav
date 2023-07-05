@@ -400,30 +400,35 @@ class EntityFactoryFunctionalTest extends TestCase
             'type' => ATTR_TYPE::STRING->value(),
             'name' => ATTR_TYPE::STRING->value()
         ])->executeQuery()->fetchAssociative();
+        $stringKey = $string[_ATTR::ID->column()];
 
         $integer = $q->setParameters([
             'domain' => $domainKey,
             'type' => ATTR_TYPE::INTEGER->value(),
             'name' => ATTR_TYPE::INTEGER->value()
         ])->executeQuery()->fetchAssociative();
+        $integerKey = $integer[_ATTR::ID->column()];
 
         $decimal =  $q->setParameters([
             'domain' => $domainKey,
             'type' => ATTR_TYPE::DECIMAL->value(),
             'name' => ATTR_TYPE::DECIMAL->value()
         ])->executeQuery()->fetchAssociative();
+        $decimalKey = $decimal[_ATTR::ID->column()];
 
         $datetime = $q->setParameters([
             'domain' => $domainKey,
             'type' => ATTR_TYPE::DATETIME->value(),
             'name' => ATTR_TYPE::DATETIME->value()
         ])->executeQuery()->fetchAssociative();
+        $datetimeKey = $datetime[_ATTR::ID->column()];
 
         $text = $q->setParameters([
             'domain' => $domainKey,
             'type' => ATTR_TYPE::TEXT->value(),
             'name' => ATTR_TYPE::TEXT->value()
         ])->executeQuery()->fetchAssociative();
+        $textKey = $text[_ATTR::ID->column()];
 
         $this->assertIsArray($string);
         $this->assertIsArray($integer);
@@ -447,11 +452,11 @@ class EntityFactoryFunctionalTest extends TestCase
         $pivots = $result->getPivots();
         $this->assertCount(5, $pivots);
 
-        $this->assertEquals($stringPivot[_PIVOT::ID->column()], $pivots[ATTR_TYPE::STRING->value()]);
-        $this->assertEquals($integerPivot[_PIVOT::ID->column()], $pivots[ATTR_TYPE::INTEGER->value()]);
-        $this->assertEquals($decimalPivot[_PIVOT::ID->column()], $pivots[ATTR_TYPE::DECIMAL->value()]);
-        $this->assertEquals($datetimePivot[_PIVOT::ID->column()], $pivots[ATTR_TYPE::DATETIME->value()]);
-        $this->assertEquals($textPivot[_PIVOT::ID->column()], $pivots[ATTR_TYPE::TEXT->value()]);
+        $this->assertEquals($stringPivot[_PIVOT::ID->column()], $pivots[$stringKey]);
+        $this->assertEquals($integerPivot[_PIVOT::ID->column()], $pivots[$integerKey]);
+        $this->assertEquals($decimalPivot[_PIVOT::ID->column()], $pivots[$decimalKey]);
+        $this->assertEquals($datetimePivot[_PIVOT::ID->column()], $pivots[$datetimeKey]);
+        $this->assertEquals($textPivot[_PIVOT::ID->column()], $pivots[$textKey]);
     }
 
     /**
@@ -492,35 +497,45 @@ class EntityFactoryFunctionalTest extends TestCase
         $valueModel = $this->makeValueModel();
 
         // check values created
+        $stringKey = $attributes[ATTR_TYPE::STRING->value()][_ATTR::ID->column()];
         $string = $valueModel->find(
             ATTR_TYPE::STRING->valueTable(),
             $domainKey,
             $entityKey,
-            $attributes[ATTR_TYPE::STRING->value()][_ATTR::ID->column()]
+            $stringKey
         );
+
+
+        $integerKey = $attributes[ATTR_TYPE::INTEGER->value()][_ATTR::ID->column()];
         $integer = $valueModel->find(
             ATTR_TYPE::INTEGER->valueTable(),
             $domainKey,
             $entityKey,
-            $attributes[ATTR_TYPE::INTEGER->value()][_ATTR::ID->column()]
+            $integerKey
         );
+
+        $decimalKey = $attributes[ATTR_TYPE::DECIMAL->value()][_ATTR::ID->column()];
         $decimal = $valueModel->find(
             ATTR_TYPE::DECIMAL->valueTable(),
             $domainKey,
             $entityKey,
-            $attributes[ATTR_TYPE::DECIMAL->value()][_ATTR::ID->column()]
+            $decimalKey
         );
+
+        $datetimeKey = $attributes[ATTR_TYPE::DATETIME->value()][_ATTR::ID->column()];
         $datetime = $valueModel->find(
             ATTR_TYPE::DATETIME->valueTable(),
             $domainKey,
             $entityKey,
-            $attributes[ATTR_TYPE::DATETIME->value()][_ATTR::ID->column()]
+            $datetimeKey
         );
+
+        $textKey = $attributes[ATTR_TYPE::TEXT->value()][_ATTR::ID->column()];
         $text = $valueModel->find(
             ATTR_TYPE::TEXT->valueTable(),
             $domainKey,
             $entityKey,
-            $attributes[ATTR_TYPE::TEXT->value()][_ATTR::ID->column()]
+            $textKey
         );
 
         $this->assertIsArray($string);
@@ -539,11 +554,11 @@ class EntityFactoryFunctionalTest extends TestCase
 
         $values = $result->getValues();
         $this->assertCount(5, $values);
-        $this->assertEquals($string[_VALUE::ID->column()], $values[ATTR_TYPE::STRING->value()]);
-        $this->assertEquals($integer[_VALUE::ID->column()], $values[ATTR_TYPE::INTEGER->value()]);
-        $this->assertEquals($decimal[_VALUE::ID->column()], $values[ATTR_TYPE::DECIMAL->value()]);
-        $this->assertEquals($datetime[_VALUE::ID->column()], $values[ATTR_TYPE::DATETIME->value()]);
-        $this->assertEquals($text[_VALUE::ID->column()], $values[ATTR_TYPE::TEXT->value()]);
+        $this->assertEquals($string[_VALUE::ID->column()], $values[$stringKey]);
+        $this->assertEquals($integer[_VALUE::ID->column()], $values[$integerKey]);
+        $this->assertEquals($decimal[_VALUE::ID->column()], $values[$decimalKey]);
+        $this->assertEquals($datetime[_VALUE::ID->column()], $values[$datetimeKey]);
+        $this->assertEquals($text[_VALUE::ID->column()], $values[$textKey]);
     }
 
     /**

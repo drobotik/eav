@@ -50,8 +50,8 @@ class EavFactoryResultFunctionalTest extends TestCase
      */
     public function values() {
         $this->assertEquals([], $this->result->getValues());
-        $this->result->addValue("test", 123);
-        $this->assertEquals(["test" => 123], $this->result->getValues());
+        $this->result->addValue(321, 123);
+        $this->assertEquals([321 => 123], $this->result->getValues());
     }
     /**
      * @test
@@ -61,7 +61,7 @@ class EavFactoryResultFunctionalTest extends TestCase
      */
     public function pivots() {
         $this->assertEquals([], $this->result->getPivots());
-        $this->result->addPivot("test",1);
-        $this->assertEquals(["test" => 1], $this->result->getPivots());
+        $this->result->addPivot(2,1);
+        $this->assertEquals([2 => 1], $this->result->getPivots());
     }
 }

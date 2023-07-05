@@ -20,6 +20,30 @@ class EntityFactoryResult
     /** @var ValueBase[] */
     private array $values = [];
 
+    private int $domainKey;
+    private int $setKey;
+
+
+    public function setDomainKey(int $key) : void
+    {
+        $this->domainKey = $key;
+    }
+
+    public function setSetKey(int $key) : void
+    {
+        $this->setKey = $key;
+    }
+
+    public function getSetKey() : int
+    {
+        return $this->setKey;
+    }
+
+    public function getDomainKey() : int
+    {
+        return $this->domainKey;
+    }
+
     public function setEntityKey(int $entityKey): void
     {
         $this->entityKey = $entityKey;
@@ -40,9 +64,9 @@ class EntityFactoryResult
         return $this->attributes;
     }
 
-    public function addValue(string $attrName, int $valueKey): void
+    public function addValue(int $attrKey, int $valueKey): void
     {
-        $this->values[$attrName] = $valueKey;
+        $this->values[$attrKey] = $valueKey;
     }
 
     public function getValues(): array
@@ -50,9 +74,9 @@ class EntityFactoryResult
         return $this->values;
     }
 
-    public function addPivot(string $attrName, int $pivotKey): void
+    public function addPivot(int $attrKey, int $pivotKey): void
     {
-        $this->pivots[$attrName] = $pivotKey;
+        $this->pivots[$attrKey] = $pivotKey;
     }
 
     public function getPivots() : array

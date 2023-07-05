@@ -24,16 +24,38 @@ class EntityFactory
 {
     use SingletonsTrait;
 
+    private EntityFactoryResult $result;
+
+    private function makeNewResult() : EntityFactoryResult
+    {
+        $this->result = new EntityFactoryResult();
+        return $this->result;
+    }
+
+    private function getResult() : EntityFactoryResult
+    {
+        return $this->result;
+    }
+
     public function create(array $fields, int $domainKey, int $setKey): EntityFactoryResult
     {
-        $result = new EntityFactoryResult();
-        $attributeModel = $this->makeAttributeModel();
-        $groupModel = $this->makeGroupModel();
-        $pivotModel = $this->makePivotModel();
-        $valueModel = $this->makeValueModel();
-        $valueParser = $this->makeValueParser();
-        $factory = $this->makeEavFactory();
+        $result = $this->makeNewResult();
+        $result->setDomainKey($domainKey);
+        $result->setSetKey($setKey);
+        $this->validateFields($fields);
+        $entityKey = $this->makeEavFactory()->createEntity($domainKey, $setKey);
+        $result->setEntityKey($entityKey);
+        foreach ($fields as $field) {
+            $this->handleField($field);
+        }
+        return $result;
+    }
 
+    private function validateFields(array $fields) : void
+    {
+        $result = $this->getResult();
+        $groupModel = $this->makeGroupModel();
+        $setKey = $result->getSetKey();
         foreach($fields as $field) {
             if (!key_exists(ATTR_FACTORY::GROUP->field(), $field)) {
                 throw new EntityFactoryException("Group key must be provided!");
@@ -47,75 +69,93 @@ class EntityFactory
                 throw new EntityFactoryException("This group is not belongs to attribute set");
             }
         }
+    }
 
-        $entityKey = $this->makeEavFactory()->createEntity($domainKey, $setKey);
-        $result->setEntityKey($entityKey);
+    private function handleAttribute($config) : int
+    {
+        $result = $this->getResult();
+        $domainKey = $result->getDomainKey();
+        $factory = $this->makeEavFactory();
+        $attributeModel = $this->makeAttributeModel();
+        $record = $attributeModel->findByName($config[_ATTR::NAME->column()], $domainKey);
+        if (!is_bool($record)) {
+            $attrKey = $record[_ATTR::ID->column()];
+            $attrData = array_intersect_key([
+                _ATTR::NAME->column() => null,
+                _ATTR::TYPE->column() => null,
+                _ATTR::STRATEGY->column() => null,
+                _ATTR::SOURCE->column() => null,
+                _ATTR::DEFAULT_VALUE->column() => null,
+                _ATTR::DESCRIPTION->column() => null
+            ], $config);
+            $attributeModel->updateByArray($attrKey, $attrData);
+        } else {
+            $attrKey = $factory->createAttribute($domainKey, $config);
+        }
+        $result->addAttribute([
+            _ATTR::ID->column() => $attrKey,
+            _ATTR::NAME->column() => $config[_ATTR::NAME->column()]
+        ]);
 
-        foreach ($fields as $field) {
+        return $attrKey;
+    }
 
-            if (!key_exists(ATTR_FACTORY::ATTRIBUTE->field(), $field)) {
-                EntityFactoryException::undefinedAttributeArray();
-            }
-            $attrConfig = $field[ATTR_FACTORY::ATTRIBUTE->field()];
-            if (!key_exists(_ATTR::NAME->column(), $attrConfig)) {
-                AttributeException::undefinedAttributeName();
-            }
-            if (!key_exists(_ATTR::TYPE->column(), $attrConfig)) {
-                AttributeException::undefinedAttributeType();
-            }
+    private function handlePivot(int $attrKey, int $groupKey) : int
+    {
+        $result = $this->getResult();
+        $domainKey = $result->getDomainKey();
+        $setKey = $result->getSetKey();
+        $pivotModel = $this->makePivotModel();
+        $factory = $this->makeEavFactory();
+        $pivotRecord = $pivotModel->findOne($domainKey, $setKey, $groupKey, $attrKey);
+        if($pivotRecord === false)
+            $pivotKey = $factory->createPivot($domainKey, $setKey, $groupKey, $attrKey);
+        else
+            $pivotKey = $pivotRecord[_PIVOT::ID->column()];
+        $result->addPivot($attrKey, $pivotKey);
+        return $pivotKey;
+    }
 
-            $attrName = $attrConfig[_ATTR::NAME->column()];
-            $attrType = ATTR_TYPE::getCase($attrConfig[_ATTR::TYPE->column()]);
-            $attrRecord = $attributeModel->findByName($attrConfig[_ATTR::NAME->column()], $domainKey);
+    private function handleValue(ATTR_TYPE $type, int $entityKey, int $attrKey, mixed $value)
+    {
+        $result = $this->getResult();
+        $valueModel = $this->makeValueModel();
+        $valueParser = $this->makeValueParser();
+        $domainKey = $result->getDomainKey();
+        $valueTable = $type->valueTable();
 
-            if ($attrRecord !== false) {
-                $attrKey = $attrRecord[_ATTR::ID->column()];
-                $attrData = array_intersect_key([
-                    _ATTR::NAME->column() => null,
-                    _ATTR::TYPE->column() => null,
-                    _ATTR::STRATEGY->column() => null,
-                    _ATTR::SOURCE->column() => null,
-                    _ATTR::DEFAULT_VALUE->column() => null,
-                    _ATTR::DESCRIPTION->column() => null
-                ], $attrConfig);
-                $attributeModel->updateByArray($attrKey, $attrData);
-            } else {
-                $attrKey = $factory->createAttribute($domainKey, $attrConfig);
-            }
+        $record = $valueModel->find($valueTable, $domainKey, $entityKey, $attrKey);
+        if($record === false) {
+            $key = $valueModel->create($valueTable, $domainKey, $entityKey, $attrKey, $valueParser->parse($type, $value));
+        } else {
+            $key = $record[_VALUE::ID->column()];
+            $valueModel->update($valueTable, $domainKey, $entityKey, $attrKey, $valueParser->parse($type, $value));
+        }
+        $result->addValue($attrKey, $key);
+        return $key;
+    }
 
-            $result->addAttribute([
-                _ATTR::ID->column() => $attrKey,
-                _ATTR::NAME->column() => $attrConfig[_ATTR::NAME->column()]
-            ]);
+    private function handleField(array $field)
+    {
+        $result = $this->getResult();
+        $entityKey = $result->getEntityKey();
 
-            $pivotRecord = $pivotModel->findOne($domainKey, $setKey, $field[ATTR_FACTORY::GROUP->field()], $attrKey);
-            if($pivotRecord === false)
-                $pivotKey = $factory->createPivot($domainKey, $setKey, $field[ATTR_FACTORY::GROUP->field()], $attrKey);
-            else
-                $pivotKey = $pivotRecord[_PIVOT::ID->column()];
-
-            $result->addPivot($attrName, $pivotKey);
-
-            $valueKey = null;
-            $valueTable = $attrType->valueTable();
-            if(isset($field[ATTR_FACTORY::VALUE->field()]))
-            {
-                $record = $valueModel->find($valueTable, $domainKey, $entityKey, $attrKey, );
-                if($record === false)
-                {
-                    $valueKey = $valueModel->create($valueTable, $domainKey, $entityKey, $attrKey, $valueParser->parse($attrType, $field[ATTR_FACTORY::VALUE->field()]));
-                } else
-                {
-                    $valueKey = $record[_VALUE::ID->column()];
-                    $valueModel->update($valueTable, $domainKey, $entityKey, $attrKey, $valueParser->parse($attrType, $field[ATTR_FACTORY::VALUE->field()]));
-                }
-            }
-
-            if(!is_null($valueKey)) {
-                $result->addValue($attrName, $valueKey);
-            }
+        if (!key_exists(ATTR_FACTORY::ATTRIBUTE->field(), $field)) {
+            EntityFactoryException::undefinedAttributeArray();
+        }
+        $attrConfig = $field[ATTR_FACTORY::ATTRIBUTE->field()];
+        if (!key_exists(_ATTR::NAME->column(), $attrConfig)) {
+            AttributeException::undefinedAttributeName();
+        }
+        if (!key_exists(_ATTR::TYPE->column(), $attrConfig)) {
+            AttributeException::undefinedAttributeType();
         }
 
-        return $result;
+        $attrType = ATTR_TYPE::getCase($attrConfig[_ATTR::TYPE->column()]);
+        $attrKey = $this->handleAttribute($attrConfig);
+        $this->handlePivot($attrKey, $field[ATTR_FACTORY::GROUP->field()]);
+
+        if(isset($field[ATTR_FACTORY::VALUE->field()]))
+            $this->handleValue($attrType, $entityKey, $attrKey, $field[ATTR_FACTORY::VALUE->field()]);
     }
 }
