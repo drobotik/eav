@@ -20,8 +20,11 @@ use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Exception\AttributeException;
 use Drobotik\Eav\Exception\EntityFactoryException;
 use Drobotik\Eav\Factory\EntityFactory;
+use Drobotik\Eav\Model\AttributeModel;
 use Drobotik\Eav\Model\PivotModel;
+use Drobotik\Eav\Model\ValueBase;
 use Drobotik\Eav\Result\EntityFactoryResult;
+use Drobotik\Eav\Value\ValueParser;
 use PDO;
 use Tests\TestCase;
 
@@ -335,7 +338,6 @@ class EntityFactoryFunctionalTest extends TestCase
 
         $this->factory->create([$field], $domainKey, $setKey);
     }
-
     /**
      * @test
      *
@@ -693,5 +695,130 @@ class EntityFactoryFunctionalTest extends TestCase
         $this->assertFalse($text);
 
         $this->assertEquals([], $result->getValues());
+    }
+
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\Factory\EntityFactory::handleAttribute
+     */
+    public function handleAttribute_update()
+    {
+        $domainKey = 11;
+        $attrName = 'test1';
+        $attrKey = 22;
+        $config = [
+            _ATTR::NAME->column() => $attrName,
+            'not_exist' => 'field',
+            _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value(),
+            _ATTR::STRATEGY->column() => 'test_STRATEGY',
+            _ATTR::SOURCE->column() => 'test_SOURCE',
+            _ATTR::DEFAULT_VALUE->column() => 'test_DEFAULT_VALUE',
+            _ATTR::DESCRIPTION->column() => 'test_DESCRIPTION',
+        ];
+        $record = [
+            _ATTR::ID->column() => $attrKey,
+            _ATTR::NAME->column() => $attrName
+        ];
+        $attrModel = $this->getMockBuilder(AttributeModel::class)
+            ->onlyMethods(['findByName', 'updateByArray'])->getMock();
+        $attrModel->method('findByName')->with($attrName, $domainKey)->willReturn($record);
+        $attrModel->expects($this->once())->method('updateByArray')
+            ->with($attrKey, [
+                _ATTR::NAME->column() => $attrName,
+                _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value(),
+                _ATTR::STRATEGY->column() => 'test_STRATEGY',
+                _ATTR::SOURCE->column() => 'test_SOURCE',
+                _ATTR::DEFAULT_VALUE->column() => 'test_DEFAULT_VALUE',
+                _ATTR::DESCRIPTION->column() => 'test_DESCRIPTION',
+            ]);
+
+        $entityResult = $this->getMockBuilder(EntityFactoryResult::class)
+            ->onlyMethods(['getDomainKey'])->getMock();
+        $entityResult->method('getDomainKey')->willReturn($domainKey);
+
+        $entityFactory = $this->getMockBuilder(EntityFactory::class)
+            ->onlyMethods(['makeAttributeModel', 'getResult'])->getMock();
+        $entityFactory->method('getResult')->willReturn($entityResult);
+        $entityFactory->method('makeAttributeModel')->willReturn($attrModel);
+
+        $entityFactory->handleAttribute($config);
+    }
+
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\Factory\EntityFactory::handlePivot
+     */
+    public function handlePivot_using_old_pivot_record()
+    {
+        $pivotKey = 33;
+        $domainKey = 1;
+        $setKey = 2;
+        $groupKey = 3;
+        $attrKey = 4;
+        $pivotRecord = [
+            _PIVOT::ID->column() => $pivotKey,
+            _PIVOT::DOMAIN_ID->column() => $domainKey,
+            _PIVOT::SET_ID->column() => $setKey,
+            _PIVOT::GROUP_ID->column() => $groupKey,
+            _PIVOT::ATTR_ID->column() => $attrKey
+        ];
+        $entityResult = $this->getMockBuilder(EntityFactoryResult::class)
+            ->onlyMethods(['getDomainKey', 'getSetKey'])->getMock();
+        $entityResult->method('getDomainKey')->willReturn($domainKey);
+        $entityResult->method('getSetKey')->willReturn($setKey);
+        $pivotModel = $this->getMockBuilder(PivotModel::class)
+            ->onlyMethods(['findOne'])->getMock();
+        $pivotModel->method('findOne')->willReturn($pivotRecord);
+
+        $entityFactory = $this->getMockBuilder(EntityFactory::class)
+            ->onlyMethods(['makePivotModel', 'getResult'])->getMock();
+        $entityFactory->method('makePivotModel')->willReturn($pivotModel);
+        $entityFactory->method('getResult')->willReturn($entityResult);
+
+        $this->assertEquals($pivotKey, $entityFactory->handlePivot($attrKey, $groupKey));
+    }
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\Factory\EntityFactory::handleValue
+     */
+    public function handleValue_update()
+    {
+        $domainKey = 1;
+        $entityKey = 2;
+        $attrKey = 4;
+        $attrType = ATTR_TYPE::INTEGER;
+        $valueKey = 5;
+        $record = [
+            _VALUE::ID->column() => $valueKey
+        ];
+        $value = 432;
+        $parsedValue = 433;
+
+        $entityResult = $this->getMockBuilder(EntityFactoryResult::class)
+            ->onlyMethods(['getDomainKey', 'getSetKey'])->getMock();
+        $entityResult->method('getDomainKey')->willReturn($domainKey);
+
+        $valueParser = $this->getMockBuilder(ValueParser::class)
+            ->onlyMethods(['parse'])->getMock();
+        $valueParser->expects($this->once())
+            ->method('parse')
+            ->with($attrType, $value)->willReturn($parsedValue);
+
+        $valueModel = $this->getMockBuilder(ValueBase::class)
+            ->onlyMethods(['find', 'update'])->getMock();
+        $valueModel->method('find')->willReturn($record);
+        $valueModel->expects($this->once())->method('update')
+            ->with($attrType->valueTable(), $domainKey, $entityKey, $attrKey, $parsedValue);
+
+        $entityFactory = $this->getMockBuilder(EntityFactory::class)
+            ->onlyMethods(['makeValueModel', 'makeValueParser', 'getResult'])->getMock();
+        $entityFactory->method('makeValueModel')->willReturn($valueModel);
+        $entityFactory->method('makeValueParser')->willReturn($valueParser);
+        $entityFactory->method('getResult')->willReturn($entityResult);
+
+        $this->assertEquals($valueKey, $entityFactory->handleValue($attrType, $entityKey, $attrKey, $value));
     }
 }

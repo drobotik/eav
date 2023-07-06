@@ -72,7 +72,7 @@ class EntityExceptionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Exception\EntityException::undefinedEntityKey
+     * @covers \Drobotik\Eav\Exception\EntityException::entityNotFound
      */
     public function entityNotFound()
     {

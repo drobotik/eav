@@ -32,7 +32,7 @@ class EntityFactory
         return $this->result;
     }
 
-    private function getResult() : EntityFactoryResult
+    public function getResult() : EntityFactoryResult
     {
         return $this->result;
     }
@@ -71,7 +71,7 @@ class EntityFactory
         }
     }
 
-    private function handleAttribute($config) : int
+    public function handleAttribute($config) : int
     {
         $result = $this->getResult();
         $domainKey = $result->getDomainKey();
@@ -80,14 +80,14 @@ class EntityFactory
         $record = $attributeModel->findByName($config[_ATTR::NAME->column()], $domainKey);
         if (!is_bool($record)) {
             $attrKey = $record[_ATTR::ID->column()];
-            $attrData = array_intersect_key([
+            $attrData = array_intersect_key($config, [
                 _ATTR::NAME->column() => null,
                 _ATTR::TYPE->column() => null,
                 _ATTR::STRATEGY->column() => null,
                 _ATTR::SOURCE->column() => null,
                 _ATTR::DEFAULT_VALUE->column() => null,
                 _ATTR::DESCRIPTION->column() => null
-            ], $config);
+            ]);
             $attributeModel->updateByArray($attrKey, $attrData);
         } else {
             $attrKey = $factory->createAttribute($domainKey, $config);
@@ -100,7 +100,7 @@ class EntityFactory
         return $attrKey;
     }
 
-    private function handlePivot(int $attrKey, int $groupKey) : int
+    public function handlePivot(int $attrKey, int $groupKey) : int
     {
         $result = $this->getResult();
         $domainKey = $result->getDomainKey();
@@ -116,7 +116,7 @@ class EntityFactory
         return $pivotKey;
     }
 
-    private function handleValue(ATTR_TYPE $type, int $entityKey, int $attrKey, mixed $value)
+    public function handleValue(ATTR_TYPE $type, int $entityKey, int $attrKey, mixed $value)
     {
         $result = $this->getResult();
         $valueModel = $this->makeValueModel();

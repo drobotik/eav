@@ -32,6 +32,18 @@ class EntityGnomeFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
+     * @covers \Drobotik\Eav\EntityGnome::getEntity
+     * @covers \Drobotik\Eav\EntityGnome::__construct
+     */
+    public function entity()
+    {
+        $entity = new Entity();
+        $gnome = new EntityGnome($entity);
+        $this->assertSame($entity, $gnome->getEntity());
+    }
+    /**
+     * @test
+     * @group functional
      * @covers \Drobotik\Eav\EntityGnome::find
      */
     public function find_no_key() {

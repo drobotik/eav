@@ -45,6 +45,13 @@ class StrategyFunctionalTest extends TestCase
         $this->assertTrue(method_exists($this->strategy, 'afterUpdate'));
         $this->assertTrue(method_exists($this->strategy, 'beforeDelete'));
         $this->assertTrue(method_exists($this->strategy, 'afterDelete'));
+
+        $this->strategy->afterCreate();
+        $this->strategy->beforeCreate();
+        $this->strategy->beforeUpdate();
+        $this->strategy->afterUpdate();
+        $this->strategy->beforeDelete();
+        $this->strategy->afterDelete();
     }
 
     /**

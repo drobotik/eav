@@ -80,8 +80,8 @@ class ImportContentValueFunctionalTest extends TestCase
      */
     public function attribute_key()
     {
-        $this->value->setAttributeName('test');
-        $this->assertEquals('test', $this->value->getAttributeName());
+        $this->value->setAttributeKey(123);
+        $this->assertEquals(123, $this->value->getAttributeKey());
     }
     /**
      * @test
@@ -93,8 +93,8 @@ class ImportContentValueFunctionalTest extends TestCase
      */
     public function attribute_name()
     {
-        $this->value->setAttributeKey(123);
-        $this->assertEquals(123, $this->value->getAttributeKey());
+        $this->value->setAttributeName('test');
+        $this->assertEquals('test', $this->value->getAttributeName());
     }
     /**
      * @test

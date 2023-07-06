@@ -133,6 +133,8 @@ class ValueManagerFunctionalTest extends TestCase
      */
     public function get_value() {
         $this->assertEquals(null, $this->value->getValue());
+        $this->value->setRuntime(123);
+        $this->assertEquals(123, $this->value->getValue());
     }
     /**
      * @test

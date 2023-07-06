@@ -254,7 +254,7 @@ class AttributeContainerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\AttributeContainer::setValueAction
+     * @covers \Drobotik\Eav\AttributeContainer::getValueAction
      * @covers \Drobotik\Eav\AttributeContainer::setValueAction
      */
     public function value_action() {
