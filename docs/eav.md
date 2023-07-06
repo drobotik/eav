@@ -70,7 +70,7 @@ The Domain is used solely as a wrapper for performing import and export operatio
 ```php
 use Drobotik\Eav\Domain;
 use Drobotik\Eav\Export\ExportManager();
-use Drobotik\Eav\Export\ImportManager();
+use Drobotik\Eav\Import\ImportManager();
 
 $domain = new Domain();
 $domain->setExportManager(new ExportManager());
@@ -80,7 +80,12 @@ $exportManager = $domain->getExportManager();
 $importManager = $domain->getImportManager();
 
 $domain->import();
-$domain->export();
+
+$domainKey = 1;
+$attributeSetKey = 2;
+$filters = [];
+$columns = ['name', 'size', 'weight']
+$domain->export($domainKey, $attributeSetKey, $filters, $columns);
 ```
 
 ### Entity
@@ -234,7 +239,6 @@ $bag->setField(_ATTR::STRATEGY->column(), Strategy::class);
 
 
 $type = $attribute->getType(); // ATTR_TYPE::DECIMAL
-$valueModel = $type->model(); // ATTR_TYPE::DECIMAL->model()
 $valueModelTable = $type->valueTable(); // ATTR_TYPE::DECIMAL->valueTable()
 $typeName = $type->value(); // ATTR_TYPE::DECIMAL->value()
 // ...
@@ -371,13 +375,23 @@ Before working with EAV (Entity-Attribute-Value) data, it is necessary to specif
 
 ```php
 use Drobotik\Eav\Model\PivotModel;
+use \Drobotik\Eav\Enum\_PIVOT;
+
+$domainKey = 1
+$setKey = 2 
+$groupKey = 3
+$attributeKey = 4
 
 $model = new PivotModel();
-$model->setDomainKey(1);
-$model->setAttrSetKey(2);
-$model->setGroupKey(3);
-$model->setAttrKey(4);
-$model->save();
+$model->findOne($domainKey, $setKey, $groupKey, $attributeKey);
+
+$model->create([
+    _PIVOT::DOMAIN_ID->column() => $domainKey,
+    _PIVOT::SET_ID->column() => $setKey,
+    _PIVOT::GROUP_ID->column() => $groupKey,
+    _PIVOT::ATTR_ID->column() => $attributeKey
+]);
+
 ```
 
 ## Import
@@ -531,9 +545,7 @@ $filters = [
 $domainKey = 1;
 $setKey = 2;
 $resultColumns = ["size", "name"]
-$manager->run(domainKey, $setKey, $filters, $resultColumns)
-$manager->run(); // file created
-
+$manager->run(domainKey, $setKey, $filters, $resultColumns); // file created
 ```
 
 ### Factory
