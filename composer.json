@@ -26,13 +26,13 @@
         "ext-bcmath": "*",
         "league/csv": "^9.0",
         "symfony/validator": "6.4.x-dev",
-        "nesbot/carbon": "3.x-dev"
+        "nesbot/carbon": "3.x-dev",
+        "doctrine/dbal": "^3.6",
+        "doctrine/migrations": "4.0.x-dev"
     },
     "require-dev": {
         "fakerphp/faker": "^1.21",
         "phpunit/phpunit": "9.6.5",
-        "doctrine/dbal": "^3.6",
-        "doctrine/migrations": "4.0.x-dev",
         "symfony/yaml": "6.3.x-dev",
         "doctrine/orm": "2.14.1",
         "symfony/cache": "6.3.x-dev"
