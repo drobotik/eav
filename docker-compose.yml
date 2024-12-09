@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: php_app
+    volumes:
+      - ./:/var/www/html
+      - ./php.ini:/usr/local/etc/php/php.ini # Custom PHP configuration
+    ports:
+      - "9000:9000"
+    environment:
+      - PHP_OPCACHE_VALIDATE_TIMESTAMPS=1
+    networks:
+      - app_network
+  db:
+    image: mysql:8
+    container_name: eav_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: eav
+      MYSQL_USER: eav
+      MYSQL_PASSWORD: eav
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - app_network
+networks:
+  app_network:
+    driver: bridge
+
+volumes:
+  db_data:
