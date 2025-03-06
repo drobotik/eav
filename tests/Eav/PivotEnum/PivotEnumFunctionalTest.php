@@ -29,20 +29,18 @@ class PivotEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Enum\_PIVOT::column
+     * @covers \Drobotik\Eav\Enum\_PIVOT::ID
+     * @covers \Drobotik\Eav\Enum\_PIVOT::DOMAIN_ID
+     * @covers \Drobotik\Eav\Enum\_PIVOT::SET_ID
+     * @covers \Drobotik\Eav\Enum\_PIVOT::GROUP_ID
+     * @covers \Drobotik\Eav\Enum\_PIVOT::ATTR_ID
      */
     public function columns() {
-        $cases = [];
-        foreach (_PIVOT::cases() as $case) {
-            $cases[$case->column()] = $case->column();
-        }
-        $this->assertEquals([
-            _PIVOT::ID->column() => 'pivot_id',
-            _PIVOT::DOMAIN_ID->column() => _DOMAIN::ID->column(),
-            _PIVOT::SET_ID->column() => _SET::ID->column(),
-            _PIVOT::GROUP_ID->column() => _GROUP::ID->column(),
-            _PIVOT::ATTR_ID->column() => _ATTR::ID->column()
-        ], $cases);
+        $this->assertEquals('pivot_id', _PIVOT::ID);
+        $this->assertEquals(_DOMAIN::ID, _PIVOT::DOMAIN_ID);
+        $this->assertEquals( _SET::ID, _PIVOT::SET_ID);
+        $this->assertEquals(_GROUP::ID, _PIVOT::GROUP_ID);
+        $this->assertEquals(_ATTR::ID, _PIVOT::ATTR_ID);
     }
 
 }

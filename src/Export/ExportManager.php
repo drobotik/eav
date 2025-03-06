@@ -53,7 +53,7 @@ class ExportManager
             ->executeQuery()
             ->fetchAllAssociative();
 
-        $header = array_merge([_ENTITY::ID->column()], $columns);
+        $header = array_merge([_ENTITY::ID], $columns);
         $driver = $this->getDriver();
         $driver->setHeader($header);
         return $driver->writeAll($records);

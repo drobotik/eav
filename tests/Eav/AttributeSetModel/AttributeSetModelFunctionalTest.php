@@ -35,7 +35,7 @@ class AttributeSetModelFunctionalTest extends TestCase
     public function defaults()
     {
         $this->assertEquals(_SET::table(), $this->model->getTable());
-        $this->assertEquals(_SET::ID->column(), $this->model->getPrimaryKey());
+        $this->assertEquals(_SET::ID, $this->model->getPrimaryKey());
     }
     /**
      * @test
@@ -45,8 +45,8 @@ class AttributeSetModelFunctionalTest extends TestCase
     public function create_record()
     {
         $result = $this->model->create([
-            _SET::DOMAIN_ID->column() => 1,
-            _SET::NAME->column() => 'test'
+            _SET::DOMAIN_ID => 1,
+            _SET::NAME => 'test'
         ]);
         $this->assertEquals(1, $result);
 
@@ -57,9 +57,9 @@ class AttributeSetModelFunctionalTest extends TestCase
         $stmt->execute();
         $record = $stmt->fetch(PDO::FETCH_ASSOC);
         $this->assertEquals([
-            _SET::ID->column() => 1,
-            _SET::DOMAIN_ID->column() => 1,
-            _SET::NAME->column() => 'test',
+            _SET::ID => 1,
+            _SET::DOMAIN_ID => 1,
+            _SET::NAME => 'test',
         ], $record);
     }
     /**

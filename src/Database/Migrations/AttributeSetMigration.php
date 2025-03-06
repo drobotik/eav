@@ -24,11 +24,11 @@ final class AttributeSetMigration extends AbstractMigration
     public function up(Schema $schema): void
     {
         $table = $schema->createTable(_SET::table());
-        $table->addColumn(_SET::ID->column(), Types::INTEGER , ['Autoincrement' => true,'unsigned' => true]);
-        $table->addColumn(_SET::DOMAIN_ID->column(), Types::INTEGER, ['unsigned' => true]);
-        $table->addColumn(_SET::NAME->column(), Types::INTEGER);
-        $table->setPrimaryKey([_SET::ID->column()]);
-        $table->addIndex([_SET::DOMAIN_ID->column()]);
+        $table->addColumn(_SET::ID, Types::INTEGER , ['Autoincrement' => true,'unsigned' => true]);
+        $table->addColumn(_SET::DOMAIN_ID, Types::INTEGER, ['unsigned' => true]);
+        $table->addColumn(_SET::NAME, Types::INTEGER);
+        $table->setPrimaryKey([_SET::ID]);
+        $table->addIndex([_SET::DOMAIN_ID]);
     }
 
     public function down(Schema $schema): void

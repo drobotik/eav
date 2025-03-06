@@ -28,9 +28,9 @@ enum _VALUE implements DefineTableInterface
     {
         return match ($this) {
             self::ID => 'value_id',
-            self::DOMAIN_ID => _DOMAIN::ID->column(),
-            self::ENTITY_ID => _ENTITY::ID->column(),
-            self::ATTRIBUTE_ID => _ATTR::ID->column(),
+            self::DOMAIN_ID => _DOMAIN::ID,
+            self::ENTITY_ID => _ENTITY::ID,
+            self::ATTRIBUTE_ID => _ATTR::ID,
             self::VALUE => "value",
         };
     }

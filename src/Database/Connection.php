@@ -12,6 +12,7 @@ namespace Drobotik\Eav\Database;
 use Doctrine\DBAL\Connection as DBALConnection;
 use Doctrine\DBAL\DriverManager;
 use Drobotik\Eav\Exception\ConnectionException;
+use PDO;
 
 class Connection
 {
@@ -32,6 +33,11 @@ class Connection
             return self::$conn;
         }
         ConnectionException::undefined();
+    }
+
+    public static function getNativeConnection() : PDO
+    {
+        return Connection::$conn->getNativeConnection();
     }
 
 }

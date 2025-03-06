@@ -46,36 +46,36 @@ class ImportManagerAcceptanceTest extends TestCase
 
         $stringConfig  = new ConfigAttribute();
         $stringConfig->setFields([
-            _ATTR::NAME->column() =>  ATTR_TYPE::STRING->value(),
-            _ATTR::TYPE->column() => ATTR_TYPE::STRING->value()
+            _ATTR::NAME =>  ATTR_TYPE::STRING->value(),
+            _ATTR::TYPE => ATTR_TYPE::STRING->value()
         ]);
         $stringConfig->setGroupKey($groupKey);
 
         $integerConfig  = new ConfigAttribute();
         $integerConfig->setFields([
-            _ATTR::NAME->column() => ATTR_TYPE::INTEGER->value(),
-            _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value()
+            _ATTR::NAME => ATTR_TYPE::INTEGER->value(),
+            _ATTR::TYPE => ATTR_TYPE::INTEGER->value()
         ]);
         $integerConfig->setGroupKey($groupKey);
 
         $decimalConfig  = new ConfigAttribute();
         $decimalConfig->setFields([
-            _ATTR::NAME->column() => ATTR_TYPE::DECIMAL->value(),
-            _ATTR::TYPE->column() => ATTR_TYPE::DECIMAL->value()
+            _ATTR::NAME => ATTR_TYPE::DECIMAL->value(),
+            _ATTR::TYPE => ATTR_TYPE::DECIMAL->value()
         ]);
         $decimalConfig->setGroupKey($groupKey);
 
         $datetimeConfig  = new ConfigAttribute();
         $datetimeConfig->setFields([
-            _ATTR::NAME->column() => ATTR_TYPE::DATETIME->value(),
-            _ATTR::TYPE->column() => ATTR_TYPE::DATETIME->value()
+            _ATTR::NAME => ATTR_TYPE::DATETIME->value(),
+            _ATTR::TYPE => ATTR_TYPE::DATETIME->value()
         ]);
         $datetimeConfig->setGroupKey($groupKey);
 
         $textConfig  = new ConfigAttribute();
         $textConfig->setFields([
-            _ATTR::NAME->column() => ATTR_TYPE::TEXT->value(),
-            _ATTR::TYPE->column() => ATTR_TYPE::TEXT->value()
+            _ATTR::NAME => ATTR_TYPE::TEXT->value(),
+            _ATTR::TYPE => ATTR_TYPE::TEXT->value()
         ]);
         $textConfig->setGroupKey($groupKey);
 
@@ -117,7 +117,7 @@ class ImportManagerAcceptanceTest extends TestCase
         $qb = Connection::get()->createQueryBuilder();
         $q = $qb->select('*')->from(_ATTR::table())
             ->where(sprintf('%s = :domain AND %s = :type AND %s = :name',
-                _ATTR::DOMAIN_ID->column(), _ATTR::TYPE->column(), _ATTR::NAME->column()));
+                _ATTR::DOMAIN_ID, _ATTR::TYPE, _ATTR::NAME));
 
         $string = $q->setParameters([
             'domain' => $domainKey,
@@ -157,11 +157,11 @@ class ImportManagerAcceptanceTest extends TestCase
 
         // check attributes linked
         $pivotModel = new PivotModel();
-        $stringPivot = $pivotModel->findOne($domainKey, $setKey, $groupKey, $string[_ATTR::ID->column()]);
-        $integerPivot = $pivotModel->findOne($domainKey, $setKey, $groupKey, $integer[_ATTR::ID->column()]);
-        $decimalPivot = $pivotModel->findOne($domainKey, $setKey, $groupKey, $decimal[_ATTR::ID->column()]);
-        $datetimePivot = $pivotModel->findOne($domainKey, $setKey, $groupKey, $datetime[_ATTR::ID->column()]);
-        $textPivot = $pivotModel->findOne($domainKey, $setKey, $groupKey, $text[_ATTR::ID->column()]);
+        $stringPivot = $pivotModel->findOne($domainKey, $setKey, $groupKey, $string[_ATTR::ID]);
+        $integerPivot = $pivotModel->findOne($domainKey, $setKey, $groupKey, $integer[_ATTR::ID]);
+        $decimalPivot = $pivotModel->findOne($domainKey, $setKey, $groupKey, $decimal[_ATTR::ID]);
+        $datetimePivot = $pivotModel->findOne($domainKey, $setKey, $groupKey, $datetime[_ATTR::ID]);
+        $textPivot = $pivotModel->findOne($domainKey, $setKey, $groupKey, $text[_ATTR::ID]);
 
         $this->assertIsArray($stringPivot);
         $this->assertIsArray($integerPivot);
@@ -192,38 +192,38 @@ class ImportManagerAcceptanceTest extends TestCase
         {
             /** @var EntityModel $entity */
             $entity = $entities[$iteration];
-            $entityKey = $entity[_ENTITY::ID->column()];
+            $entityKey = $entity[_ENTITY::ID];
 
             // check values created
             $stringValue = $valueModel->find(
                 ATTR_TYPE::STRING->valueTable(),
                 $domainKey,
                 $entityKey,
-                $string[_ATTR::ID->column()]
+                $string[_ATTR::ID]
             );
             $integerValue = $valueModel->find(
                 ATTR_TYPE::INTEGER->valueTable(),
                 $domainKey,
                 $entityKey,
-                $integer[_ATTR::ID->column()]
+                $integer[_ATTR::ID]
             );
             $decimalValue = $valueModel->find(
                 ATTR_TYPE::DECIMAL->valueTable(),
                 $domainKey,
                 $entityKey,
-                $decimal[_ATTR::ID->column()]
+                $decimal[_ATTR::ID]
             );
             $datetimeValue = $valueModel->find(
                 ATTR_TYPE::DATETIME->valueTable(),
                 $domainKey,
                 $entityKey,
-                $datetime[_ATTR::ID->column()]
+                $datetime[_ATTR::ID]
             );
             $textValue = $valueModel->find(
                 ATTR_TYPE::TEXT->valueTable(),
                 $domainKey,
                 $entityKey,
-                $text[_ATTR::ID->column()]
+                $text[_ATTR::ID]
             );
 
             $this->assertIsArray($stringValue);
@@ -232,11 +232,11 @@ class ImportManagerAcceptanceTest extends TestCase
             $this->assertIsArray($datetimeValue);
             $this->assertIsArray($textValue);
 
-            $this->assertEquals($valueParser->parse(ATTR_TYPE::STRING, $record[$string[_ATTR::NAME->column()]]), $stringValue[_VALUE::VALUE->column()], "Iteration:$iteration");
-            $this->assertEquals($valueParser->parse(ATTR_TYPE::INTEGER, $record[$integer[_ATTR::NAME->column()]]), $integerValue[_VALUE::VALUE->column()], "Iteration:$iteration");
-            $this->assertEquals($valueParser->parse(ATTR_TYPE::DECIMAL, $record[$decimal[_ATTR::NAME->column()]]), $decimalValue[_VALUE::VALUE->column()], "Iteration:$iteration");
-            $this->assertEquals($valueParser->parse(ATTR_TYPE::DATETIME, $record[$datetime[_ATTR::NAME->column()]]), $datetimeValue[_VALUE::VALUE->column()], "Iteration:$iteration");
-            $this->assertEquals($valueParser->parse(ATTR_TYPE::TEXT, $record[$text[_ATTR::NAME->column()]]), $textValue[_VALUE::VALUE->column()], "Iteration:$iteration");
+            $this->assertEquals($valueParser->parse(ATTR_TYPE::STRING, $record[$string[_ATTR::NAME]]), $stringValue[_VALUE::VALUE->column()], "Iteration:$iteration");
+            $this->assertEquals($valueParser->parse(ATTR_TYPE::INTEGER, $record[$integer[_ATTR::NAME]]), $integerValue[_VALUE::VALUE->column()], "Iteration:$iteration");
+            $this->assertEquals($valueParser->parse(ATTR_TYPE::DECIMAL, $record[$decimal[_ATTR::NAME]]), $decimalValue[_VALUE::VALUE->column()], "Iteration:$iteration");
+            $this->assertEquals($valueParser->parse(ATTR_TYPE::DATETIME, $record[$datetime[_ATTR::NAME]]), $datetimeValue[_VALUE::VALUE->column()], "Iteration:$iteration");
+            $this->assertEquals($valueParser->parse(ATTR_TYPE::TEXT, $record[$text[_ATTR::NAME]]), $textValue[_VALUE::VALUE->column()], "Iteration:$iteration");
 
             $iteration++;
         }
@@ -256,15 +256,15 @@ class ImportManagerAcceptanceTest extends TestCase
         $groupKey = $this->eavFactory->createGroup($setKey);
 
         $stringAttributeKey = $this->eavFactory->createAttribute($domainKey, [
-            _ATTR::DOMAIN_ID->column() => $domainKey,
-            _ATTR::NAME->column() => ATTR_TYPE::STRING->value(),
-            _ATTR::TYPE->column() => ATTR_TYPE::STRING->value(),
+            _ATTR::DOMAIN_ID => $domainKey,
+            _ATTR::NAME => ATTR_TYPE::STRING->value(),
+            _ATTR::TYPE => ATTR_TYPE::STRING->value(),
         ]);
         $this->eavFactory->createPivot($domainKey, $setKey, $groupKey,$stringAttributeKey);
         $integerAttributeKey = $this->eavFactory->createAttribute($domainKey, [
-            _ATTR::DOMAIN_ID->column() => $domainKey,
-            _ATTR::NAME->column() => ATTR_TYPE::INTEGER->value(),
-            _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value(),
+            _ATTR::DOMAIN_ID => $domainKey,
+            _ATTR::NAME => ATTR_TYPE::INTEGER->value(),
+            _ATTR::TYPE => ATTR_TYPE::INTEGER->value(),
         ]);
         $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $integerAttributeKey);
 
@@ -298,7 +298,7 @@ class ImportManagerAcceptanceTest extends TestCase
         $file = new \SplFileObject(dirname(__DIR__, 2).'/Data/csv.csv', 'w');
         $writer = Writer::createFromFileObject($file);
         $writer->insertOne([
-            _ENTITY::ID->column(),
+            _ENTITY::ID,
             ATTR_TYPE::STRING->value(),
             ATTR_TYPE::INTEGER->value(),
             ATTR_TYPE::DECIMAL->value(),
@@ -308,22 +308,22 @@ class ImportManagerAcceptanceTest extends TestCase
 
         $decimalConfig  = new ConfigAttribute();
         $decimalConfig->setFields([
-            _ATTR::NAME->column() => ATTR_TYPE::DECIMAL->value(),
-            _ATTR::TYPE->column() => ATTR_TYPE::DECIMAL->value()
+            _ATTR::NAME => ATTR_TYPE::DECIMAL->value(),
+            _ATTR::TYPE => ATTR_TYPE::DECIMAL->value()
         ]);
         $decimalConfig->setGroupKey($groupKey);
 
         $datetimeConfig  = new ConfigAttribute();
         $datetimeConfig->setFields([
-            _ATTR::NAME->column() => ATTR_TYPE::DATETIME->value(),
-            _ATTR::TYPE->column() => ATTR_TYPE::DATETIME->value()
+            _ATTR::NAME => ATTR_TYPE::DATETIME->value(),
+            _ATTR::TYPE => ATTR_TYPE::DATETIME->value()
         ]);
         $datetimeConfig->setGroupKey($groupKey);
 
         $textConfig  = new ConfigAttribute();
         $textConfig->setFields([
-            _ATTR::NAME->column() => ATTR_TYPE::TEXT->value(),
-            _ATTR::TYPE->column() => ATTR_TYPE::TEXT->value()
+            _ATTR::NAME => ATTR_TYPE::TEXT->value(),
+            _ATTR::TYPE => ATTR_TYPE::TEXT->value()
         ]);
         $textConfig->setGroupKey($groupKey);
 
@@ -363,7 +363,7 @@ class ImportManagerAcceptanceTest extends TestCase
         $qb = Connection::get()->createQueryBuilder();
         $q = $qb->select('*')->from(_ATTR::table())
             ->where(sprintf('%s = :domain AND %s = :type AND %s = :name',
-                _ATTR::DOMAIN_ID->column(), _ATTR::TYPE->column(), _ATTR::NAME->column()));
+                _ATTR::DOMAIN_ID, _ATTR::TYPE, _ATTR::NAME));
 
         $string = $q->setParameters([
             'domain' => $domainKey,
@@ -403,11 +403,11 @@ class ImportManagerAcceptanceTest extends TestCase
 
         // check attributes linked
         $pivotModel = new PivotModel();
-        $stringPivot = $pivotModel->findOne($domainKey, $setKey, $groupKey, $string[_ATTR::ID->column()]);
-        $integerPivot = $pivotModel->findOne($domainKey, $setKey, $groupKey, $integer[_ATTR::ID->column()]);
-        $decimalPivot = $pivotModel->findOne($domainKey, $setKey, $groupKey, $decimal[_ATTR::ID->column()]);
-        $datetimePivot = $pivotModel->findOne($domainKey, $setKey, $groupKey, $datetime[_ATTR::ID->column()]);
-        $textPivot = $pivotModel->findOne($domainKey, $setKey, $groupKey, $text[_ATTR::ID->column()]);
+        $stringPivot = $pivotModel->findOne($domainKey, $setKey, $groupKey, $string[_ATTR::ID]);
+        $integerPivot = $pivotModel->findOne($domainKey, $setKey, $groupKey, $integer[_ATTR::ID]);
+        $decimalPivot = $pivotModel->findOne($domainKey, $setKey, $groupKey, $decimal[_ATTR::ID]);
+        $datetimePivot = $pivotModel->findOne($domainKey, $setKey, $groupKey, $datetime[_ATTR::ID]);
+        $textPivot = $pivotModel->findOne($domainKey, $setKey, $groupKey, $text[_ATTR::ID]);
 
         $this->assertIsArray($stringPivot);
         $this->assertIsArray($integerPivot);
@@ -434,11 +434,11 @@ class ImportManagerAcceptanceTest extends TestCase
         {
             /** @var EntityModel $entity */
             $entity = $entities[$iteration];
-            $entityKey = $entity[_ENTITY::ID->column()];
+            $entityKey = $entity[_ENTITY::ID];
 
             foreach($record as $attributeName => $value)
             {
-                if($attributeName == _ENTITY::ID->column()) continue;
+                if($attributeName == _ENTITY::ID) continue;
                 $attribute = match ($attributeName) {
                     ATTR_TYPE::STRING->value() => $string,
                     ATTR_TYPE::INTEGER->value() => $integer,
@@ -446,9 +446,9 @@ class ImportManagerAcceptanceTest extends TestCase
                     ATTR_TYPE::DATETIME->value() => $datetime,
                 };
 
-                $attrType = ATTR_TYPE::getCase($attribute[_ATTR::TYPE->column()]);
+                $attrType = ATTR_TYPE::getCase($attribute[_ATTR::TYPE]);
                 $valueTable = $attrType->valueTable();
-                $valueRecord = $valueModel->find($valueTable, $domainKey, $entityKey, $attribute[_ATTR::ID->column()]);
+                $valueRecord = $valueModel->find($valueTable, $domainKey, $entityKey, $attribute[_ATTR::ID]);
 
                 if($value == '')
                 {

@@ -81,7 +81,7 @@ class ModelFunctionalTest extends TestCase
 
         $this->model->setTable($table);
         $result = $this->model->insert([
-            _DOMAIN::NAME->column() => 'test'
+            _DOMAIN::NAME => 'test'
         ]);
 
         $this->assertEquals(1, $result);
@@ -94,8 +94,8 @@ class ModelFunctionalTest extends TestCase
         $record = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $this->assertEquals([
-            _DOMAIN::ID->column() => 1,
-            _DOMAIN::NAME->column() => 'test'
+            _DOMAIN::ID => 1,
+            _DOMAIN::NAME => 'test'
         ], $record);
     }
 
@@ -111,7 +111,7 @@ class ModelFunctionalTest extends TestCase
         $table = _DOMAIN::table();
         $connection = Connection::get()->getNativeConnection();
 
-        $nameColumn = _DOMAIN::NAME->column();
+        $nameColumn = _DOMAIN::NAME;
         $stmt = $connection->prepare("INSERT INTO $table ($nameColumn) VALUES ('Tom')");
         $stmt->execute();
         $stmt = $connection->prepare("INSERT INTO $table ($nameColumn) VALUES ('Tom')");
@@ -119,10 +119,10 @@ class ModelFunctionalTest extends TestCase
 
         $key = (int) $connection->lastInsertId();
 
-        $this->model->setPrimaryKey(_DOMAIN::ID->column());
+        $this->model->setPrimaryKey(_DOMAIN::ID);
         $this->model->setTable($table);
         $result = $this->model->updateByArray($key, [
-            _DOMAIN::NAME->column() => 'Jerry'
+            _DOMAIN::NAME => 'Jerry'
         ]);
         $this->assertTrue($result);
 
@@ -131,12 +131,12 @@ class ModelFunctionalTest extends TestCase
         $record = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $this->assertEquals([
             [
-                _DOMAIN::ID->column() => 1,
-                _DOMAIN::NAME->column() => 'Tom',
+                _DOMAIN::ID => 1,
+                _DOMAIN::NAME => 'Tom',
             ],
             [
-                _DOMAIN::ID->column() => $key,
-                _DOMAIN::NAME->column() => 'Jerry',
+                _DOMAIN::ID => $key,
+                _DOMAIN::NAME => 'Jerry',
             ]
         ], $record);
     }
@@ -153,7 +153,7 @@ class ModelFunctionalTest extends TestCase
         $table = _DOMAIN::table();
         $connection = Connection::get()->getNativeConnection();
 
-        $nameColumn = _DOMAIN::NAME->column();
+        $nameColumn = _DOMAIN::NAME;
         $stmt = $connection->prepare("INSERT INTO $table ($nameColumn) VALUES ('Tom')");
         $stmt->execute();
         $stmt = $connection->prepare("INSERT INTO $table ($nameColumn) VALUES ('Tom')");
@@ -161,7 +161,7 @@ class ModelFunctionalTest extends TestCase
 
         $key = (int) $connection->lastInsertId();
 
-        $this->model->setPrimaryKey(_DOMAIN::ID->column());
+        $this->model->setPrimaryKey(_DOMAIN::ID);
         $this->model->setTable($table);
         $result = $this->model->deleteByKey($key);
 
@@ -172,8 +172,8 @@ class ModelFunctionalTest extends TestCase
         $record = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $this->assertEquals([
             [
-                _DOMAIN::ID->column() => 1,
-                _DOMAIN::NAME->column() => 'Tom',
+                _DOMAIN::ID => 1,
+                _DOMAIN::NAME => 'Tom',
             ]
         ], $record);
     }
@@ -188,7 +188,7 @@ class ModelFunctionalTest extends TestCase
         $table = _DOMAIN::table();
         $connection = Connection::get()->getNativeConnection();
 
-        $nameColumn = _DOMAIN::NAME->column();
+        $nameColumn = _DOMAIN::NAME;
         $stmt = $connection->prepare("INSERT INTO $table ($nameColumn) VALUES ('Tom')");
         $stmt->execute();
         $stmt = $connection->prepare("INSERT INTO $table ($nameColumn) VALUES ('Tom')");
@@ -209,8 +209,8 @@ class ModelFunctionalTest extends TestCase
         $table = _DOMAIN::table();
         $connection = Connection::get()->getNativeConnection();
 
-        $idColumn = _DOMAIN::ID->column();
-        $nameColumn = _DOMAIN::NAME->column();
+        $idColumn = _DOMAIN::ID;
+        $nameColumn = _DOMAIN::NAME;
         $stmt = $connection->prepare("INSERT INTO $table ($nameColumn) VALUES ('Tom')");
         $stmt->execute();
         $stmt = $connection->prepare("INSERT INTO $table ($nameColumn) VALUES ('Jerry')");

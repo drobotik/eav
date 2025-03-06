@@ -67,7 +67,7 @@ class QueryBuilderFunctionalTest extends QueryingDataTestCase
         $config = new Config();
         $this->qb->setConfig($config);
         $this->qb->startQuery();
-        $sql = sprintf("SELECT e.%s FROM %s e", _ENTITY::ID->column(), _ENTITY::table());
+        $sql = sprintf("SELECT e.%s FROM %s e", _ENTITY::ID, _ENTITY::table());
         $query = $this->qb->getQuery();
         $this->assertEquals($sql, $query->getSQL());
         $this->assertEquals([], $query->getParameters());
@@ -114,9 +114,9 @@ class QueryBuilderFunctionalTest extends QueryingDataTestCase
         $this->qb->setConfig($config);
         $this->qb->endQuery();
         $sql = sprintf("SELECT  WHERE (e.%s = :%s) AND (e.%s = :%s)",
-            _ENTITY::DOMAIN_ID->column(),
+            _ENTITY::DOMAIN_ID,
             $domainParam,
-            _ENTITY::ATTR_SET_ID->column(),
+            _ENTITY::ATTR_SET_ID,
             $setParam
         );
 
@@ -254,9 +254,9 @@ class QueryBuilderFunctionalTest extends QueryingDataTestCase
         $this->qb->setConfig($config);
         $this->qb->run();
 
-        $entityCol = _ENTITY::ID->column();
-        $entitySetCol = _ENTITY::ATTR_SET_ID->column();
-        $entityDomainCol = _ENTITY::DOMAIN_ID->column();
+        $entityCol = _ENTITY::ID;
+        $entitySetCol = _ENTITY::ATTR_SET_ID;
+        $entityDomainCol = _ENTITY::DOMAIN_ID;
         $attributeCol = _VALUE::ATTRIBUTE_ID->column();
 
         $query = $this->qb->getQuery();
@@ -340,17 +340,17 @@ class QueryBuilderFunctionalTest extends QueryingDataTestCase
         $qb->setConfig($config);
         $this->assertSame([
             [
-                _ENTITY::ID->column() => 1822,
+                _ENTITY::ID => 1822,
                 ATTR_TYPE::STRING->value() => 'et dolores',
                 ATTR_TYPE::DECIMAL->value() => 170.359
             ],
             [
-                _ENTITY::ID->column() => 18795,
+                _ENTITY::ID => 18795,
                 ATTR_TYPE::STRING->value() => 'sit quisquam',
                 ATTR_TYPE::DECIMAL->value() => 3685.969
             ],
             [
-                _ENTITY::ID->column() => 19738,
+                _ENTITY::ID => 19738,
                 ATTR_TYPE::STRING->value() => 'sit quisquam',
                 ATTR_TYPE::DECIMAL->value() => 180.63
             ]
@@ -392,7 +392,7 @@ class QueryBuilderFunctionalTest extends QueryingDataTestCase
 
         $q = $qb->join($field);
         $on = sprintf('e.%s = %s.%s AND %s.%s = :%s',
-            _ENTITY::ID->column(),
+            _ENTITY::ID,
             $field,
             _VALUE::ENTITY_ID->column(),
             $field,

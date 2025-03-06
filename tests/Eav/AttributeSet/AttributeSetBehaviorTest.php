@@ -25,7 +25,7 @@ class AttributeSetBehaviorTest extends TestCase
      */
     public function fetch_containers() {
         $key = 321;
-        $collection = [[_ATTR::NAME->column() => 'test', _ATTR::ID->column() => 1]];
+        $collection = [[_ATTR::NAME => 'test', _ATTR::ID => 1]];
         $attrSetModel = $this->getMockBuilder(AttributeSetModel::class)
             ->onlyMethods(['findAttributes'])
             ->getMock();

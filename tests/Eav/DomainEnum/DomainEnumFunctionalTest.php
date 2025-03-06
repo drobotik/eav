@@ -25,17 +25,12 @@ class DomainEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Enum\_DOMAIN::column
+     * @covers \Drobotik\Eav\Enum\_DOMAIN::ID
+     * @covers \Drobotik\Eav\Enum\_DOMAIN::NAME
      */
     public function columns() {
-        $cases = [];
-        foreach (_DOMAIN::cases() as $case) {
-            $cases[$case->column()] = $case->column();
-        }
-        $this->assertEquals([
-            _DOMAIN::ID->column() => 'domain_id',
-            _DOMAIN::NAME->column() => 'name',
-        ], $cases);
+        $this->assertEquals('domain_id', _DOMAIN::ID);
+        $this->assertEquals('name', _DOMAIN::NAME);
     }
 
 }

@@ -64,14 +64,14 @@ class Validator
         $setModel = $this->makeAttributeSetModel();
         foreach ($setModel->findAttributes($domainKey) as $attribute)
         {
-            $this->existingAttributes[$attribute[_ATTR::NAME->column()]] = $attribute;
+            $this->existingAttributes[$attribute[_ATTR::NAME]] = $attribute;
         }
     }
 
     public function analyseAttribute(string $name): void
     {
         $attributes = $this->getExistingAttributes();
-        if (!key_exists($name, $attributes) && $name !== _ENTITY::ID->column())
+        if (!key_exists($name, $attributes) && $name !== _ENTITY::ID)
         {
             $this->requiredAttributes[] = $name;
         }

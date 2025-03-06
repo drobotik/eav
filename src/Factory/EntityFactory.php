@@ -77,24 +77,24 @@ class EntityFactory
         $domainKey = $result->getDomainKey();
         $factory = $this->makeEavFactory();
         $attributeModel = $this->makeAttributeModel();
-        $record = $attributeModel->findByName($config[_ATTR::NAME->column()], $domainKey);
+        $record = $attributeModel->findByName($config[_ATTR::NAME], $domainKey);
         if (!is_bool($record)) {
-            $attrKey = $record[_ATTR::ID->column()];
+            $attrKey = $record[_ATTR::ID];
             $attrData = array_intersect_key($config, [
-                _ATTR::NAME->column() => null,
-                _ATTR::TYPE->column() => null,
-                _ATTR::STRATEGY->column() => null,
-                _ATTR::SOURCE->column() => null,
-                _ATTR::DEFAULT_VALUE->column() => null,
-                _ATTR::DESCRIPTION->column() => null
+                _ATTR::NAME => null,
+                _ATTR::TYPE => null,
+                _ATTR::STRATEGY => null,
+                _ATTR::SOURCE => null,
+                _ATTR::DEFAULT_VALUE => null,
+                _ATTR::DESCRIPTION => null
             ]);
             $attributeModel->updateByArray($attrKey, $attrData);
         } else {
             $attrKey = $factory->createAttribute($domainKey, $config);
         }
         $result->addAttribute([
-            _ATTR::ID->column() => $attrKey,
-            _ATTR::NAME->column() => $config[_ATTR::NAME->column()]
+            _ATTR::ID => $attrKey,
+            _ATTR::NAME => $config[_ATTR::NAME]
         ]);
 
         return $attrKey;
@@ -111,7 +111,7 @@ class EntityFactory
         if($pivotRecord === false)
             $pivotKey = $factory->createPivot($domainKey, $setKey, $groupKey, $attrKey);
         else
-            $pivotKey = $pivotRecord[_PIVOT::ID->column()];
+            $pivotKey = $pivotRecord[_PIVOT::ID];
         $result->addPivot($attrKey, $pivotKey);
         return $pivotKey;
     }
@@ -144,14 +144,14 @@ class EntityFactory
             EntityFactoryException::undefinedAttributeArray();
         }
         $attrConfig = $field[ATTR_FACTORY::ATTRIBUTE->field()];
-        if (!key_exists(_ATTR::NAME->column(), $attrConfig)) {
+        if (!key_exists(_ATTR::NAME, $attrConfig)) {
             AttributeException::undefinedAttributeName();
         }
-        if (!key_exists(_ATTR::TYPE->column(), $attrConfig)) {
+        if (!key_exists(_ATTR::TYPE, $attrConfig)) {
             AttributeException::undefinedAttributeType();
         }
 
-        $attrType = ATTR_TYPE::getCase($attrConfig[_ATTR::TYPE->column()]);
+        $attrType = ATTR_TYPE::getCase($attrConfig[_ATTR::TYPE]);
         $attrKey = $this->handleAttribute($attrConfig);
         $this->handlePivot($attrKey, $field[ATTR_FACTORY::GROUP->field()]);
 

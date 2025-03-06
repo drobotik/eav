@@ -34,24 +34,24 @@ class EntityAcceptanceTest extends TestCase
         $valueModel = $this->makeValueModel();
 
         $stringAttributeKey = $this->eavFactory->createAttribute($domainKey, [
-            _ATTR::NAME->column() => "string",
-            _ATTR::TYPE->column() => ATTR_TYPE::STRING->value()
+            _ATTR::NAME => "string",
+            _ATTR::TYPE => ATTR_TYPE::STRING->value()
         ]);
         $integerAttributeKey = $this->eavFactory->createAttribute($domainKey, [
-            _ATTR::NAME->column() => "integer",
-            _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value()
+            _ATTR::NAME => "integer",
+            _ATTR::TYPE => ATTR_TYPE::INTEGER->value()
         ]);
         $decimalAttributeKey = $this->eavFactory->createAttribute($domainKey, [
-            _ATTR::NAME->column() => "decimal",
-            _ATTR::TYPE->column() => ATTR_TYPE::DECIMAL->value()
+            _ATTR::NAME => "decimal",
+            _ATTR::TYPE => ATTR_TYPE::DECIMAL->value()
         ]);
         $datetimeAttributeKey = $this->eavFactory->createAttribute($domainKey, [
-            _ATTR::NAME->column() => "datetime",
-            _ATTR::TYPE->column() => ATTR_TYPE::DATETIME->value()
+            _ATTR::NAME => "datetime",
+            _ATTR::TYPE => ATTR_TYPE::DATETIME->value()
         ]);
         $textAttributeKey = $this->eavFactory->createAttribute($domainKey, [
-            _ATTR::NAME->column() => "text",
-            _ATTR::TYPE->column() => ATTR_TYPE::TEXT->value()
+            _ATTR::NAME => "text",
+            _ATTR::TYPE => ATTR_TYPE::TEXT->value()
         ]);
         $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $stringAttributeKey);
         $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $integerAttributeKey);
@@ -117,40 +117,40 @@ class EntityAcceptanceTest extends TestCase
         $fields = [
             [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
-                    _ATTR::NAME->column() => ATTR_TYPE::STRING->value(),
-                    _ATTR::TYPE->column() => ATTR_TYPE::STRING->value()
+                    _ATTR::NAME => ATTR_TYPE::STRING->value(),
+                    _ATTR::TYPE => ATTR_TYPE::STRING->value()
                 ],
                 ATTR_FACTORY::GROUP->field() => $groupKey,
                 ATTR_FACTORY::VALUE->field() => "string value"
             ],
             [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
-                    _ATTR::NAME->column() => ATTR_TYPE::INTEGER->value(),
-                    _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value()
+                    _ATTR::NAME => ATTR_TYPE::INTEGER->value(),
+                    _ATTR::TYPE => ATTR_TYPE::INTEGER->value()
                 ],
                 ATTR_FACTORY::GROUP->field() => $groupKey,
                 ATTR_FACTORY::VALUE->field() => 123
             ],
             [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
-                    _ATTR::NAME->column() => ATTR_TYPE::DECIMAL->value(),
-                    _ATTR::TYPE->column() => ATTR_TYPE::DECIMAL->value()
+                    _ATTR::NAME => ATTR_TYPE::DECIMAL->value(),
+                    _ATTR::TYPE => ATTR_TYPE::DECIMAL->value()
                 ],
                 ATTR_FACTORY::GROUP->field() => $groupKey,
                 ATTR_FACTORY::VALUE->field() => 3.14
             ],
             [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
-                    _ATTR::NAME->column() => ATTR_TYPE::DATETIME->value(),
-                    _ATTR::TYPE->column() => ATTR_TYPE::DATETIME->value()
+                    _ATTR::NAME => ATTR_TYPE::DATETIME->value(),
+                    _ATTR::TYPE => ATTR_TYPE::DATETIME->value()
                 ],
                 ATTR_FACTORY::GROUP->field() => $groupKey,
                 ATTR_FACTORY::VALUE->field() => Carbon::now()->format('Y-m-d H:i:s')
             ],
             [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
-                    _ATTR::NAME->column() => ATTR_TYPE::TEXT->value(),
-                    _ATTR::TYPE->column() => ATTR_TYPE::TEXT->value()
+                    _ATTR::NAME => ATTR_TYPE::TEXT->value(),
+                    _ATTR::TYPE => ATTR_TYPE::TEXT->value()
                 ],
                 ATTR_FACTORY::GROUP->field() => $groupKey,
                 ATTR_FACTORY::VALUE->field() => "text value"
@@ -185,11 +185,11 @@ class EntityAcceptanceTest extends TestCase
         $attrSet = $entity->getAttributeSet();
         $attributes = $result->getAttributes();
 
-        $stringAttrKey = $attributes[ATTR_TYPE::STRING->value()][_ATTR::ID->column()];
-        $integerAttrKey = $attributes[ATTR_TYPE::INTEGER->value()][_ATTR::ID->column()];
-        $decimalAttrKey = $attributes[ATTR_TYPE::DECIMAL->value()][_ATTR::ID->column()];
-        $datetimeAttrKey = $attributes[ATTR_TYPE::DATETIME->value()][_ATTR::ID->column()];
-        $textAttrKey = $attributes[ATTR_TYPE::TEXT->value()][_ATTR::ID->column()];
+        $stringAttrKey = $attributes[ATTR_TYPE::STRING->value()][_ATTR::ID];
+        $integerAttrKey = $attributes[ATTR_TYPE::INTEGER->value()][_ATTR::ID];
+        $decimalAttrKey = $attributes[ATTR_TYPE::DECIMAL->value()][_ATTR::ID];
+        $datetimeAttrKey = $attributes[ATTR_TYPE::DATETIME->value()][_ATTR::ID];
+        $textAttrKey = $attributes[ATTR_TYPE::TEXT->value()][_ATTR::ID];
         // check string
         $stringRecord = $valueModel->find(ATTR_TYPE::STRING->valueTable(), $domainKey, $entityKey, $stringAttrKey);
         $this->assertEquals($stringValue, $stringRecord[_VALUE::VALUE->column()]);
@@ -224,40 +224,40 @@ class EntityAcceptanceTest extends TestCase
         $fields = [
             [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
-                    _ATTR::NAME->column() => ATTR_TYPE::STRING->value(),
-                    _ATTR::TYPE->column() => ATTR_TYPE::STRING->value()
+                    _ATTR::NAME => ATTR_TYPE::STRING->value(),
+                    _ATTR::TYPE => ATTR_TYPE::STRING->value()
                 ],
                 ATTR_FACTORY::GROUP->field() => $groupKey,
                 ATTR_FACTORY::VALUE->field() => "string value"
             ],
             [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
-                    _ATTR::NAME->column() => ATTR_TYPE::INTEGER->value(),
-                    _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value()
+                    _ATTR::NAME => ATTR_TYPE::INTEGER->value(),
+                    _ATTR::TYPE => ATTR_TYPE::INTEGER->value()
                 ],
                 ATTR_FACTORY::GROUP->field() => $groupKey,
                 ATTR_FACTORY::VALUE->field() => 123
             ],
             [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
-                    _ATTR::NAME->column() => ATTR_TYPE::DECIMAL->value(),
-                    _ATTR::TYPE->column() => ATTR_TYPE::DECIMAL->value()
+                    _ATTR::NAME => ATTR_TYPE::DECIMAL->value(),
+                    _ATTR::TYPE => ATTR_TYPE::DECIMAL->value()
                 ],
                 ATTR_FACTORY::GROUP->field() => $groupKey,
                 ATTR_FACTORY::VALUE->field() => 3.14
             ],
             [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
-                    _ATTR::NAME->column() => ATTR_TYPE::DATETIME->value(),
-                    _ATTR::TYPE->column() => ATTR_TYPE::DATETIME->value()
+                    _ATTR::NAME => ATTR_TYPE::DATETIME->value(),
+                    _ATTR::TYPE => ATTR_TYPE::DATETIME->value()
                 ],
                 ATTR_FACTORY::GROUP->field() => $groupKey,
                 ATTR_FACTORY::VALUE->field() => Carbon::now()->format('Y-m-d H:i:s')
             ],
             [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
-                    _ATTR::NAME->column() => ATTR_TYPE::TEXT->value(),
-                    _ATTR::TYPE->column() => ATTR_TYPE::TEXT->value()
+                    _ATTR::NAME => ATTR_TYPE::TEXT->value(),
+                    _ATTR::TYPE => ATTR_TYPE::TEXT->value()
                 ],
                 ATTR_FACTORY::GROUP->field() =>$groupKey,
                 ATTR_FACTORY::VALUE->field() => "text value"
@@ -283,11 +283,11 @@ class EntityAcceptanceTest extends TestCase
 
         $entityModel = new EntityModel();
         $this->assertEquals(false, $entityModel->findByKey($entityKey));
-        $this->assertFalse($valueModel->find(ATTR_TYPE::STRING->valueTable(), $domainKey, $entityKey, $attributes[ATTR_TYPE::STRING->value()][_ATTR::ID->column()]));
-        $this->assertFalse($valueModel->find(ATTR_TYPE::INTEGER->valueTable(), $domainKey, $entityKey, $attributes[ATTR_TYPE::INTEGER->value()][_ATTR::ID->column()]));
-        $this->assertFalse($valueModel->find(ATTR_TYPE::DECIMAL->valueTable(), $domainKey, $entityKey, $attributes[ATTR_TYPE::DECIMAL->value()][_ATTR::ID->column()]));
-        $this->assertFalse($valueModel->find(ATTR_TYPE::DATETIME->valueTable(), $domainKey, $entityKey, $attributes[ATTR_TYPE::DATETIME->value()][_ATTR::ID->column()]));
-        $this->assertFalse($valueModel->find(ATTR_TYPE::TEXT->valueTable(), $domainKey, $entityKey, $attributes[ATTR_TYPE::TEXT->value()][_ATTR::ID->column()]));
+        $this->assertFalse($valueModel->find(ATTR_TYPE::STRING->valueTable(), $domainKey, $entityKey, $attributes[ATTR_TYPE::STRING->value()][_ATTR::ID]));
+        $this->assertFalse($valueModel->find(ATTR_TYPE::INTEGER->valueTable(), $domainKey, $entityKey, $attributes[ATTR_TYPE::INTEGER->value()][_ATTR::ID]));
+        $this->assertFalse($valueModel->find(ATTR_TYPE::DECIMAL->valueTable(), $domainKey, $entityKey, $attributes[ATTR_TYPE::DECIMAL->value()][_ATTR::ID]));
+        $this->assertFalse($valueModel->find(ATTR_TYPE::DATETIME->valueTable(), $domainKey, $entityKey, $attributes[ATTR_TYPE::DATETIME->value()][_ATTR::ID]));
+        $this->assertFalse($valueModel->find(ATTR_TYPE::TEXT->valueTable(), $domainKey, $entityKey, $attributes[ATTR_TYPE::TEXT->value()][_ATTR::ID]));
 
         $this->assertFalse($entity->hasKey());
         $this->assertEquals(0, $entity->getKey());
@@ -312,40 +312,40 @@ class EntityAcceptanceTest extends TestCase
         $fields = [
             [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
-                    _ATTR::NAME->column() => ATTR_TYPE::STRING->value(),
-                    _ATTR::TYPE->column() => ATTR_TYPE::STRING->value()
+                    _ATTR::NAME => ATTR_TYPE::STRING->value(),
+                    _ATTR::TYPE => ATTR_TYPE::STRING->value()
                 ],
                 ATTR_FACTORY::GROUP->field() => $groupKey,
                 ATTR_FACTORY::VALUE->field() => "string value"
             ],
             [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
-                    _ATTR::NAME->column() => ATTR_TYPE::INTEGER->value(),
-                    _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value()
+                    _ATTR::NAME => ATTR_TYPE::INTEGER->value(),
+                    _ATTR::TYPE => ATTR_TYPE::INTEGER->value()
                 ],
                 ATTR_FACTORY::GROUP->field() => $groupKey,
                 ATTR_FACTORY::VALUE->field() => 123
             ],
             [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
-                    _ATTR::NAME->column() => ATTR_TYPE::DECIMAL->value(),
-                    _ATTR::TYPE->column() => ATTR_TYPE::DECIMAL->value()
+                    _ATTR::NAME => ATTR_TYPE::DECIMAL->value(),
+                    _ATTR::TYPE => ATTR_TYPE::DECIMAL->value()
                 ],
                 ATTR_FACTORY::GROUP->field() => $groupKey,
                 ATTR_FACTORY::VALUE->field() => 3.14
             ],
             [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
-                    _ATTR::NAME->column() => ATTR_TYPE::DATETIME->value(),
-                    _ATTR::TYPE->column() => ATTR_TYPE::DATETIME->value()
+                    _ATTR::NAME => ATTR_TYPE::DATETIME->value(),
+                    _ATTR::TYPE => ATTR_TYPE::DATETIME->value()
                 ],
                 ATTR_FACTORY::GROUP->field() => $groupKey,
                 ATTR_FACTORY::VALUE->field() => Carbon::now()->format('Y-m-d H:i:s')
             ],
             [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
-                    _ATTR::NAME->column() => ATTR_TYPE::TEXT->value(),
-                    _ATTR::TYPE->column() => ATTR_TYPE::TEXT->value()
+                    _ATTR::NAME => ATTR_TYPE::TEXT->value(),
+                    _ATTR::TYPE => ATTR_TYPE::TEXT->value()
                 ],
                 ATTR_FACTORY::GROUP->field() => $groupKey,
                 ATTR_FACTORY::VALUE->field() => "text value"
@@ -371,11 +371,11 @@ class EntityAcceptanceTest extends TestCase
         $valueModel = $this->makeValueModel();
         $model = new EntityModel();
         $this->assertEquals(false, $model->findByKey($entityKey));
-        $this->assertFalse($valueModel->find(ATTR_TYPE::STRING->valueTable(), $domainKey, $entityKey, $attributes[ATTR_TYPE::STRING->value()][_ATTR::ID->column()]));
-        $this->assertFalse($valueModel->find(ATTR_TYPE::INTEGER->valueTable(), $domainKey, $entityKey, $attributes[ATTR_TYPE::INTEGER->value()][_ATTR::ID->column()]));
-        $this->assertFalse($valueModel->find(ATTR_TYPE::DECIMAL->valueTable(), $domainKey, $entityKey, $attributes[ATTR_TYPE::DECIMAL->value()][_ATTR::ID->column()]));
-        $this->assertFalse($valueModel->find(ATTR_TYPE::DATETIME->valueTable(), $domainKey, $entityKey, $attributes[ATTR_TYPE::DATETIME->value()][_ATTR::ID->column()]));
-        $this->assertFalse($valueModel->find(ATTR_TYPE::TEXT->valueTable(), $domainKey, $entityKey, $attributes[ATTR_TYPE::TEXT->value()][_ATTR::ID->column()]));
+        $this->assertFalse($valueModel->find(ATTR_TYPE::STRING->valueTable(), $domainKey, $entityKey, $attributes[ATTR_TYPE::STRING->value()][_ATTR::ID]));
+        $this->assertFalse($valueModel->find(ATTR_TYPE::INTEGER->valueTable(), $domainKey, $entityKey, $attributes[ATTR_TYPE::INTEGER->value()][_ATTR::ID]));
+        $this->assertFalse($valueModel->find(ATTR_TYPE::DECIMAL->valueTable(), $domainKey, $entityKey, $attributes[ATTR_TYPE::DECIMAL->value()][_ATTR::ID]));
+        $this->assertFalse($valueModel->find(ATTR_TYPE::DATETIME->valueTable(), $domainKey, $entityKey, $attributes[ATTR_TYPE::DATETIME->value()][_ATTR::ID]));
+        $this->assertFalse($valueModel->find(ATTR_TYPE::TEXT->valueTable(), $domainKey, $entityKey, $attributes[ATTR_TYPE::TEXT->value()][_ATTR::ID]));
 
         $this->assertFalse($entity->hasKey());
         $this->assertEquals(0, $entity->getKey());

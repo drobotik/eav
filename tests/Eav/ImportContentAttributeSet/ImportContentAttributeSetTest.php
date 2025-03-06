@@ -52,7 +52,7 @@ class ImportContentAttributeSetTest extends TestCase
     public function attributes()
     {
         $this->assertFalse($this->set->hasAttribute('test'));
-        $attribute = [_ATTR::NAME->column() => 'test'];
+        $attribute = [_ATTR::NAME => 'test'];
         $this->set->appendAttribute($attribute);
         $this->assertTrue($this->set->hasAttribute('test'));
         $this->assertSame($attribute, $this->set->getAttribute('test'));
@@ -69,8 +69,8 @@ class ImportContentAttributeSetTest extends TestCase
         $domainKey = 123;
         $setKey = 456;
         $header = ['test'];
-        $attribute1 = [_ATTR::NAME->column() => 'test'];
-        $attribute2 = [_ATTR::NAME->column() => 'other'];
+        $attribute1 = [_ATTR::NAME => 'test'];
+        $attribute2 = [_ATTR::NAME => 'other'];
         $attributes = [$attribute1, $attribute2];
 
         $driver = $this->getMockBuilder(CsvDriver::class)

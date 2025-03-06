@@ -25,9 +25,9 @@ class ConfigAttributeFunctionalTest extends TestCase
         parent::setUp();
         $this->attribute = new ConfigAttribute();
         $this->fields = [
-            _ATTR::ID->column() => 123,
-            _ATTR::NAME->column() => 'name',
-            _ATTR::TYPE->column() => ATTR_TYPE::TEXT->value()
+            _ATTR::ID => 123,
+            _ATTR::NAME => 'name',
+            _ATTR::TYPE => ATTR_TYPE::TEXT->value()
         ];
     }
     /**
@@ -117,7 +117,7 @@ class ConfigAttributeFunctionalTest extends TestCase
      */
     public function validate_type()
     {
-        $this->attribute->setFields([_ATTR::NAME->column() => 'test']);
+        $this->attribute->setFields([_ATTR::NAME => 'test']);
         $this->expectException(AttributeException::class);
         $this->expectExceptionMessage(AttributeException::UNDEFINED_TYPE);
         $this->attribute->validate();

@@ -14,14 +14,15 @@ use Drobotik\Eav\Strategy;
 
 enum _ATTR implements DefineTableInterface
 {
-    case ID;
-    case DOMAIN_ID;
-    case NAME;
-    case TYPE;
-    case STRATEGY;
-    case SOURCE;
-    case DEFAULT_VALUE;
-    case DESCRIPTION;
+
+    public const ID = 'attribute_id';
+    public const DOMAIN_ID = 'domain_id';
+    public const NAME = 'name';
+    public const TYPE = 'type';
+    public const STRATEGY = 'strategy';
+    public const SOURCE = 'source';
+    public const DEFAULT_VALUE = 'default_value';
+    public const DESCRIPTION = 'description';
 
     public static function table() : string
     {
@@ -30,38 +31,26 @@ enum _ATTR implements DefineTableInterface
 
     public function column() : string
     {
-        return match ($this) {
-            self::ID => 'attribute_id',
-            self::DOMAIN_ID => _DOMAIN::ID->column(),
-            self::NAME => 'name',
-            self::TYPE => 'type',
-            self::STRATEGY => 'strategy',
-            self::SOURCE => 'source',
-            self::DEFAULT_VALUE => 'default_value',
-            self::DESCRIPTION => 'description',
-        };
+        return '';
     }
 
-    public function default() : string|bool|null|ATTR_TYPE
+    public static function bag(string $key = null)
     {
-        return match ($this) {
-            self::ID,
-            self::NAME,
-            self::DOMAIN_ID,
-            self::SOURCE,
-            self::DEFAULT_VALUE,
-            self::DESCRIPTION=> null,
+        $defaults = [
+            self::ID => null,
+            self::NAME => null,
+            self::DOMAIN_ID => null,
+            self::SOURCE => null,
+            self::DEFAULT_VALUE => null,
+            self::DESCRIPTION => null,
             self::TYPE => ATTR_TYPE::STRING->value(),
             self::STRATEGY => Strategy::class
-        };
-    }
+        ];
 
-    public static function bag() : array
-    {
-        $output = [];
-        foreach (self::cases() as $case) {
-            $output[$case->column()] = $case->default();
+        if (key_exists($key, $defaults)) {
+            return $defaults[$key];
         }
-        return $output;
+
+        return $defaults;
     }
 }

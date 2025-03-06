@@ -38,7 +38,7 @@ class EavFactory
     public function createDomain(array $data = []): int
     {
         $defaultData = [
-            _DOMAIN::NAME->column() => $this->faker->word(),
+            _DOMAIN::NAME => $this->faker->word(),
         ];
         $input = array_merge($defaultData, $data);
         $model = new DomainModel();
@@ -57,8 +57,8 @@ class EavFactory
         }
         $model = new EntityModel();
         return $model->create([
-            _ENTITY::DOMAIN_ID->column() => $domainKey,
-            _ENTITY::ATTR_SET_ID->column() => $setKey
+            _ENTITY::DOMAIN_ID => $domainKey,
+            _ENTITY::ATTR_SET_ID => $setKey
         ]);
     }
 
@@ -68,13 +68,13 @@ class EavFactory
             $domainKey = $this->createDomain();
         }
         $defaultData = [
-            _SET::NAME->column() => $this->faker->word(),
+            _SET::NAME => $this->faker->word(),
         ];
         $input = array_merge($defaultData, $data);
         $model = new AttributeSetModel();
         return $model->create([
-            _SET::DOMAIN_ID->column() => $domainKey,
-            _SET::NAME->column() => $input[_SET::NAME->column()]
+            _SET::DOMAIN_ID => $domainKey,
+            _SET::NAME => $input[_SET::NAME]
         ]);
     }
 
@@ -84,15 +84,15 @@ class EavFactory
             $setKey = $this->createAttributeSet();
         }
         $defaultData = [
-            _GROUP::SET_ID->column() => $setKey,
-            _GROUP::NAME->column() => $this->faker->word(),
+            _GROUP::SET_ID => $setKey,
+            _GROUP::NAME => $this->faker->word(),
         ];
         $input = array_merge($defaultData, $data);
         $model = new AttributeGroupModel();
 
         return $model->create([
-            _GROUP::SET_ID->column() => $setKey,
-            _GROUP::NAME->column() => $input[_SET::NAME->column()]
+            _GROUP::SET_ID => $setKey,
+            _GROUP::NAME => $input[_SET::NAME]
         ]);
     }
 
@@ -102,24 +102,24 @@ class EavFactory
             $domainKey = $this->createDomain();
         }
         $defaultData = [
-            _ATTR::DOMAIN_ID->column() => $domainKey,
-            _ATTR::NAME->column() => $this->faker->slug(2),
-            _ATTR::TYPE->column() => _ATTR::TYPE->default(),
-            _ATTR::STRATEGY->column() => _ATTR::STRATEGY->default(),
-            _ATTR::SOURCE->column() => _ATTR::SOURCE->default(),
-            _ATTR::DEFAULT_VALUE->column() => _ATTR::DEFAULT_VALUE->default(),
-            _ATTR::DESCRIPTION->column() => _ATTR::DESCRIPTION->default(),
+            _ATTR::DOMAIN_ID => $domainKey,
+            _ATTR::NAME => $this->faker->slug(2),
+            _ATTR::TYPE => _ATTR::bag(_ATTR::TYPE),
+            _ATTR::STRATEGY => _ATTR::bag(_ATTR::STRATEGY),
+            _ATTR::SOURCE => _ATTR::bag(_ATTR::SOURCE),
+            _ATTR::DEFAULT_VALUE => _ATTR::bag(_ATTR::DEFAULT_VALUE),
+            _ATTR::DESCRIPTION => _ATTR::bag(_ATTR::DESCRIPTION),
         ];
         $input = array_merge($defaultData, $data);
         $model = new AttributeModel();
         return $model->create([
-            _ATTR::DOMAIN_ID->column() => $domainKey,
-            _ATTR::NAME->column() => $input[_ATTR::NAME->column()],
-            _ATTR::TYPE->column() => $input[_ATTR::TYPE->column()],
-            _ATTR::STRATEGY->column() => $input[_ATTR::STRATEGY->column()],
-            _ATTR::SOURCE->column() => $input[_ATTR::SOURCE->column()],
-            _ATTR::DEFAULT_VALUE->column() => $input[_ATTR::DEFAULT_VALUE->column()],
-            _ATTR::DESCRIPTION->column() => $input[_ATTR::DESCRIPTION->column()],
+            _ATTR::DOMAIN_ID => $domainKey,
+            _ATTR::NAME => $input[_ATTR::NAME],
+            _ATTR::TYPE => $input[_ATTR::TYPE],
+            _ATTR::STRATEGY => $input[_ATTR::STRATEGY],
+            _ATTR::SOURCE => $input[_ATTR::SOURCE],
+            _ATTR::DEFAULT_VALUE => $input[_ATTR::DEFAULT_VALUE],
+            _ATTR::DESCRIPTION => $input[_ATTR::DESCRIPTION],
         ]);
     }
 
@@ -127,10 +127,10 @@ class EavFactory
     {
         $model = new PivotModel();
         return $model->create([
-            _PIVOT::DOMAIN_ID->column() => $domainKey,
-            _PIVOT::SET_ID->column() => $setKey,
-            _PIVOT::GROUP_ID->column() => $groupKey,
-            _PIVOT::ATTR_ID->column() => $attributeKey
+            _PIVOT::DOMAIN_ID => $domainKey,
+            _PIVOT::SET_ID => $setKey,
+            _PIVOT::GROUP_ID => $groupKey,
+            _PIVOT::ATTR_ID => $attributeKey
         ]);
     }
 

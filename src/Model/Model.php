@@ -24,6 +24,11 @@ class Model
         return Connection::get();
     }
 
+    public function getNativeConnection() : PDO
+    {
+        return Connection::getNativeConnection();
+    }
+
     public function setPrimaryKey(string $name): void
     {
         $this->primaryKey = $name;

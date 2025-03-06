@@ -13,8 +13,8 @@ use Drobotik\Eav\Interface\DefineTableInterface;
 
 enum _DOMAIN implements DefineTableInterface
 {
-    case ID;
-    case NAME;
+    public const ID = 'domain_id';
+    public const NAME = 'name';
 
     public static function table() : string
     {
@@ -23,9 +23,6 @@ enum _DOMAIN implements DefineTableInterface
 
     public function column() : string
     {
-        return match ($this) {
-            self::ID => 'domain_id',
-            self::NAME => 'name',
-        };
+        return '';
     }
 }

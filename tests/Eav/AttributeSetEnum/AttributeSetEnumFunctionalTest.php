@@ -26,18 +26,14 @@ class AttributeSetEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Enum\_SET::column
+     * @covers \Drobotik\Eav\Enum\_SET::ID
+     * @covers \Drobotik\Eav\Enum\_SET::NAME
+     * @covers \Drobotik\Eav\Enum\_SET::DOMAIN_ID
      */
     public function columns() {
-        $cases = [];
-        foreach (_SET::cases() as $case) {
-            $cases[$case->column()] = $case->column();
-        }
-        $this->assertEquals([
-            _SET::ID->column() => 'set_id',
-            _SET::NAME->column() => 'name',
-            _SET::DOMAIN_ID->column() => _DOMAIN::ID->column()
-        ], $cases);
+        $this->assertEquals('set_id', _SET::ID);
+        $this->assertEquals('name', _SET::NAME);
+        $this->assertEquals(_DOMAIN::ID, _SET::DOMAIN_ID);
     }
 
 }

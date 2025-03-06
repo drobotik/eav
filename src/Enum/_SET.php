@@ -13,9 +13,9 @@ use Drobotik\Eav\Interface\DefineTableInterface;
 
 enum _SET implements DefineTableInterface
 {
-    case ID;
-    case DOMAIN_ID;
-    case NAME;
+    public const ID = 'set_id';
+    public const DOMAIN_ID = 'domain_id';
+    public const NAME = 'name';
 
     public static function table() : string
     {
@@ -24,10 +24,6 @@ enum _SET implements DefineTableInterface
 
     public function column() : string
     {
-        return match ($this) {
-            self::ID => 'set_id',
-            self::DOMAIN_ID => _DOMAIN::ID->column(),
-            self::NAME => "name",
-        };
+        return '';
     }
 }

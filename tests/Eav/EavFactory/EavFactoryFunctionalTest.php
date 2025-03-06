@@ -74,7 +74,7 @@ class EavFactoryFunctionalTest extends TestCase
     {
         $name = 'test';
         $key = $this->eavFactory->createDomain([
-            _DOMAIN::NAME->column() => $name
+            _DOMAIN::NAME => $name
         ]);
 
         $qb = Connection::get()->createQueryBuilder();
@@ -83,8 +83,8 @@ class EavFactoryFunctionalTest extends TestCase
             ->fetchAssociative();
 
         $this->assertEquals([
-            _DOMAIN::ID->column() => $key,
-            _DOMAIN::NAME->column() => $name
+            _DOMAIN::ID => $key,
+            _DOMAIN::NAME => $name
         ], $record);
     }
 
@@ -105,10 +105,10 @@ class EavFactoryFunctionalTest extends TestCase
             ->fetchAssociative();
 
         $this->assertEquals([
-            _ENTITY::ID->column() => 1,
-            _ENTITY::DOMAIN_ID->column() => 1,
-            _ENTITY::ATTR_SET_ID->column() => 1,
-            _ENTITY::SERVICE_KEY->column() => null
+            _ENTITY::ID => 1,
+            _ENTITY::DOMAIN_ID => 1,
+            _ENTITY::ATTR_SET_ID => 1,
+            _ENTITY::SERVICE_KEY => null
         ], $record);
 
         // domain created
@@ -145,7 +145,7 @@ class EavFactoryFunctionalTest extends TestCase
     public function attributeSetInput()
     {
         $input = [
-            _SET::NAME->column() => 'test',
+            _SET::NAME => 'test',
         ];
         $setKey = $this->eavFactory->createAttributeSet(123, $input);
 
@@ -155,9 +155,9 @@ class EavFactoryFunctionalTest extends TestCase
             ->fetchAssociative();
 
         $this->assertEquals([
-            _SET::ID->column() => $setKey,
-            _SET::DOMAIN_ID->column() => 123,
-            _SET::NAME->column() => 'test'
+            _SET::ID => $setKey,
+            _SET::DOMAIN_ID => 123,
+            _SET::NAME => 'test'
         ], $record);
     }
 
@@ -184,7 +184,7 @@ class EavFactoryFunctionalTest extends TestCase
     public function attributeGroupInput()
     {
         $input = [
-            _GROUP::NAME->column() => 'test',
+            _GROUP::NAME => 'test',
         ];
 
         $groupKey = $this->eavFactory->createGroup(123, $input);
@@ -195,9 +195,9 @@ class EavFactoryFunctionalTest extends TestCase
             ->fetchAssociative();
 
         $this->assertEquals([
-            _GROUP::ID->column() => $groupKey,
-            _GROUP::SET_ID->column() => 123,
-            _GROUP::NAME->column() => 'test'
+            _GROUP::ID => $groupKey,
+            _GROUP::SET_ID => 123,
+            _GROUP::NAME => 'test'
         ], $record);
     }
 
@@ -226,12 +226,12 @@ class EavFactoryFunctionalTest extends TestCase
         $domainKey = 123;
 
         $input = [
-            _ATTR::NAME->column() => 'test',
-            _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value(),
-            _ATTR::STRATEGY->column() => 'strategy',
-            _ATTR::SOURCE->column() => 'source',
-            _ATTR::DEFAULT_VALUE->column() => 'default',
-            _ATTR::DESCRIPTION->column() => 'description',
+            _ATTR::NAME => 'test',
+            _ATTR::TYPE => ATTR_TYPE::INTEGER->value(),
+            _ATTR::STRATEGY => 'strategy',
+            _ATTR::SOURCE => 'source',
+            _ATTR::DEFAULT_VALUE => 'default',
+            _ATTR::DESCRIPTION => 'description',
         ];
         $key = $this->eavFactory->createAttribute($domainKey, $input);
 
@@ -241,14 +241,14 @@ class EavFactoryFunctionalTest extends TestCase
             ->fetchAssociative();
 
         $this->assertEquals([
-            _ATTR::ID->column() => $key,
-            _ATTR::DOMAIN_ID->column() => 123,
-            _ATTR::NAME->column() => 'test',
-            _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value(),
-            _ATTR::STRATEGY->column() => 'strategy',
-            _ATTR::SOURCE->column() => 'source',
-            _ATTR::DEFAULT_VALUE->column() => 'default',
-            _ATTR::DESCRIPTION->column() => 'description',
+            _ATTR::ID => $key,
+            _ATTR::DOMAIN_ID => 123,
+            _ATTR::NAME => 'test',
+            _ATTR::TYPE => ATTR_TYPE::INTEGER->value(),
+            _ATTR::STRATEGY => 'strategy',
+            _ATTR::SOURCE => 'source',
+            _ATTR::DEFAULT_VALUE => 'default',
+            _ATTR::DESCRIPTION => 'description',
         ], $record);
     }
 
@@ -277,11 +277,11 @@ class EavFactoryFunctionalTest extends TestCase
             ->fetchAssociative();
 
         $this->assertEquals([
-            _PIVOT::ID->column() => $pivotKey,
-            _PIVOT::DOMAIN_ID->column() => $domainKey,
-            _PIVOT::SET_ID->column() => $setKey,
-            _PIVOT::GROUP_ID->column() => $groupKey,
-            _PIVOT::ATTR_ID->column() => $attributeKey
+            _PIVOT::ID => $pivotKey,
+            _PIVOT::DOMAIN_ID => $domainKey,
+            _PIVOT::SET_ID => $setKey,
+            _PIVOT::GROUP_ID => $groupKey,
+            _PIVOT::ATTR_ID => $attributeKey
         ], $record);
     }
 
@@ -300,9 +300,9 @@ class EavFactoryFunctionalTest extends TestCase
         $config = [
             [
                 ATTR_FACTORY::ATTRIBUTE->field() => [
-                    _ATTR::NAME->column() => ATTR_TYPE::STRING->value(),
-                    _ATTR::TYPE->column() => ATTR_TYPE::STRING->value(),
-                    _ATTR::DEFAULT_VALUE->column() => ATTR_TYPE::STRING->randomValue(),
+                    _ATTR::NAME => ATTR_TYPE::STRING->value(),
+                    _ATTR::TYPE => ATTR_TYPE::STRING->value(),
+                    _ATTR::DEFAULT_VALUE => ATTR_TYPE::STRING->randomValue(),
                 ],
                 ATTR_FACTORY::GROUP->field() => $groupKey
             ]

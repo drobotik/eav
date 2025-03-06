@@ -24,12 +24,12 @@ final class AttributePropMigration extends AbstractMigration
     public function up(Schema $schema): void
     {
         $table = $schema->createTable(_ATTR_PROP::table());
-        $table->addColumn(_ATTR_PROP::KEY->column(), Types::INTEGER , ['Autoincrement' => true, 'unsigned' => true]);
-        $table->addColumn(_ATTR_PROP::ATTRIBUTE_KEY->column(), Types::INTEGER);
-        $table->addColumn(_ATTR_PROP::NAME->column(), Types::STRING);
-        $table->addColumn(_ATTR_PROP::VALUE->column(), Types::STRING);
-        $table->setPrimaryKey([_ATTR_PROP::KEY->column()]);
-        $table->addIndex([_ATTR_PROP::ATTRIBUTE_KEY->column()]);
+        $table->addColumn(_ATTR_PROP::KEY, Types::INTEGER , ['Autoincrement' => true, 'unsigned' => true]);
+        $table->addColumn(_ATTR_PROP::ATTRIBUTE_KEY, Types::INTEGER);
+        $table->addColumn(_ATTR_PROP::NAME, Types::STRING);
+        $table->addColumn(_ATTR_PROP::VALUE, Types::STRING);
+        $table->setPrimaryKey([_ATTR_PROP::KEY]);
+        $table->addIndex([_ATTR_PROP::ATTRIBUTE_KEY]);
     }
 
     public function down(Schema $schema): void

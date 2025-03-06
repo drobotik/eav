@@ -24,9 +24,9 @@ final class DomainMigration extends AbstractMigration
     public function up(Schema $schema): void
     {
         $table = $schema->createTable(_DOMAIN::table());
-        $table->addColumn(_DOMAIN::ID->column(), Types::INTEGER , ['Autoincrement' => true, 'unsigned' => true]);
-        $table->addColumn(_DOMAIN::NAME->column(), Types::STRING);
-        $table->setPrimaryKey([_DOMAIN::ID->column()]);
+        $table->addColumn(_DOMAIN::ID, Types::INTEGER , ['Autoincrement' => true, 'unsigned' => true]);
+        $table->addColumn(_DOMAIN::NAME, Types::STRING);
+        $table->setPrimaryKey([_DOMAIN::ID]);
     }
 
     public function down(Schema $schema): void

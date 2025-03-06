@@ -22,7 +22,7 @@ class EntityModel extends Model
     public function __construct()
     {
         $this->setTable(_ENTITY::table());
-        $this->setPrimaryKey(_ENTITY::ID->column());
+        $this->setPrimaryKey(_ENTITY::ID);
     }
 
     public function getServiceKey(): int
@@ -42,11 +42,11 @@ class EntityModel extends Model
         $conn->createQueryBuilder()
             ->insert($this->getTable())
             ->values([
-                _ENTITY::DOMAIN_ID->column() => '?',
-                _ENTITY::ATTR_SET_ID->column() => '?'
+                _ENTITY::DOMAIN_ID => '?',
+                _ENTITY::ATTR_SET_ID => '?'
             ])
-            ->setParameter(0, $data[_ENTITY::DOMAIN_ID->column()])
-            ->setParameter(1, $data[_ENTITY::ATTR_SET_ID->column()])
+            ->setParameter(0, $data[_ENTITY::DOMAIN_ID])
+            ->setParameter(1, $data[_ENTITY::ATTR_SET_ID])
             ->executeQuery();
         return (int) $conn->lastInsertId();
     }
@@ -54,7 +54,7 @@ class EntityModel extends Model
     public function isServiceKey(int $key) : bool
     {
         $table = $this->getTable();
-        $serviceKeyCol = _ENTITY::SERVICE_KEY->column();
+        $serviceKeyCol = _ENTITY::SERVICE_KEY;
 
         $conn = $this->db()->getNativeConnection();
 
@@ -70,7 +70,7 @@ class EntityModel extends Model
     public function getByServiceKey(int $key): bool|array
     {
         $table = $this->getTable();
-        $serviceKeyCol = _ENTITY::SERVICE_KEY->column();
+        $serviceKeyCol = _ENTITY::SERVICE_KEY;
 
         $conn = $this->db()->getNativeConnection();;
 
@@ -96,7 +96,7 @@ class EntityModel extends Model
             $bulk[] = $format;
         }
         $template = sprintf(
-            "INSERT INTO "._ENTITY::table()." ("._ENTITY::DOMAIN_ID->column().", "._ENTITY::ATTR_SET_ID->column().", "._ENTITY::SERVICE_KEY->column().") VALUES %s;",
+            "INSERT INTO "._ENTITY::table()." ("._ENTITY::DOMAIN_ID.", "._ENTITY::ATTR_SET_ID.", "._ENTITY::SERVICE_KEY.") VALUES %s;",
             implode(',',$bulk)
         );
 
@@ -110,8 +110,8 @@ class EntityModel extends Model
         return $this->db()->createQueryBuilder()
             ->select('*')
             ->from($this->getTable())
-            ->where(sprintf('%s = %s', _ENTITY::DOMAIN_ID->column(), $domainKey))
-            ->andWhere(sprintf('%s = %s', _ENTITY::ATTR_SET_ID->column(), $setKey))
+            ->where(sprintf('%s = %s', _ENTITY::DOMAIN_ID, $domainKey))
+            ->andWhere(sprintf('%s = %s', _ENTITY::ATTR_SET_ID, $setKey))
             ->executeQuery()
             ->fetchAllAssociative();
     }

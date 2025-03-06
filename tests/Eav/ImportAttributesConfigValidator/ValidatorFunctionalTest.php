@@ -82,8 +82,8 @@ class ValidatorFunctionalTest extends TestCase
             ->onlyMethods(['getContainer'])->getMock();
         $worker->expects($this->once())->method('getContainer')->willReturn($container);
 
-        $attr1 = [_ATTR::NAME->column() => 'test1'];
-        $attr2 = [_ATTR::NAME->column() => 'test2'];
+        $attr1 = [_ATTR::NAME => 'test1'];
+        $attr2 = [_ATTR::NAME => 'test2'];
         $collection = [$attr1, $attr2];
 
         $setModel = $this->getMockBuilder(AttributeSetModel::class)
@@ -154,12 +154,12 @@ class ValidatorFunctionalTest extends TestCase
      */
     public function analyse_entity_key()
     {
-        $attributes = [_ENTITY::ID->column() => null];
+        $attributes = [_ENTITY::ID => null];
         $analyzer = $this->getMockBuilder(Validator::class)
             ->onlyMethods(['getExistingAttributes'])
             ->getMock();
         $analyzer->expects($this->once())->method('getExistingAttributes')->willReturn($attributes);
-        $analyzer->analyseAttribute(_ENTITY::ID->column());
+        $analyzer->analyseAttribute(_ENTITY::ID);
         $this->assertEquals([], $analyzer->getRequiredAttributes());
     }
     /**
@@ -192,7 +192,7 @@ class ValidatorFunctionalTest extends TestCase
         $config = new Config();
         $attribute = new ConfigAttribute();
 
-        $attribute->setFields([_ATTR::NAME->column() => 'one', _ATTR::TYPE->column() => ATTR_TYPE::TEXT->value()]);
+        $attribute->setFields([_ATTR::NAME => 'one', _ATTR::TYPE => ATTR_TYPE::TEXT->value()]);
         $config->appendAttribute($attribute);
         $validator = $this->getMockBuilder(Validator::class)
             ->onlyMethods(['getRequiredAttributes', 'getConfig'])->getMock();
@@ -218,7 +218,7 @@ class ValidatorFunctionalTest extends TestCase
     {
         $config = new Config();
         $attribute = new ConfigAttribute();
-        $attribute->setFields([_ATTR::NAME->column() => 'one', _ATTR::TYPE->column() => ATTR_TYPE::TEXT->value()]);
+        $attribute->setFields([_ATTR::NAME => 'one', _ATTR::TYPE => ATTR_TYPE::TEXT->value()]);
         $config->appendAttribute($attribute);
         $validator = $this->getMockBuilder(Validator::class)
             ->onlyMethods(['getRequiredAttributes', 'getConfig'])->getMock();

@@ -18,7 +18,7 @@ class PivotModel extends Model
     public function __construct()
     {
         $this->setTable(_PIVOT::table());
-        $this->setPrimaryKey(_PIVOT::ID->column());
+        $this->setPrimaryKey(_PIVOT::ID);
     }
 
     /**
@@ -30,15 +30,15 @@ class PivotModel extends Model
         $conn->createQueryBuilder()
             ->insert($this->getTable())
             ->values([
-                _PIVOT::DOMAIN_ID->column() => '?',
-                _PIVOT::SET_ID->column() => '?',
-                _PIVOT::GROUP_ID->column() => '?',
-                _PIVOT::ATTR_ID->column() => '?'
+                _PIVOT::DOMAIN_ID => '?',
+                _PIVOT::SET_ID => '?',
+                _PIVOT::GROUP_ID => '?',
+                _PIVOT::ATTR_ID => '?'
             ])
-            ->setParameter(0, $data[_PIVOT::DOMAIN_ID->column()])
-            ->setParameter(1, $data[_PIVOT::SET_ID->column()])
-            ->setParameter(2, $data[_PIVOT::GROUP_ID->column()])
-            ->setParameter(3, $data[_PIVOT::ATTR_ID->column()])
+            ->setParameter(0, $data[_PIVOT::DOMAIN_ID])
+            ->setParameter(1, $data[_PIVOT::SET_ID])
+            ->setParameter(2, $data[_PIVOT::GROUP_ID])
+            ->setParameter(3, $data[_PIVOT::ATTR_ID])
             ->executeQuery();
         return (int) $conn->lastInsertId();
     }
@@ -48,10 +48,10 @@ class PivotModel extends Model
         return $this->db()->createQueryBuilder()
             ->select($this->getPrimaryKey())
             ->from($this->getTable())
-            ->where(sprintf('%s = ?', _PIVOT::DOMAIN_ID->column()))
-            ->andWhere(sprintf('%s = ?', _PIVOT::SET_ID->column()))
-            ->andWhere(sprintf('%s = ?', _PIVOT::GROUP_ID->column()))
-            ->andWhere(sprintf('%s = ?', _PIVOT::ATTR_ID->column()))
+            ->where(sprintf('%s = ?', _PIVOT::DOMAIN_ID))
+            ->andWhere(sprintf('%s = ?', _PIVOT::SET_ID))
+            ->andWhere(sprintf('%s = ?', _PIVOT::GROUP_ID))
+            ->andWhere(sprintf('%s = ?', _PIVOT::ATTR_ID))
             ->setParameter(0, $domainKey, PDO::PARAM_INT)
             ->setParameter(1, $setKey, PDO::PARAM_INT)
             ->setParameter(2, $groupKey, PDO::PARAM_INT)

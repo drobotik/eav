@@ -31,7 +31,7 @@ class DomainModelFunctionalTest extends TestCase
      */
     public function defaults() {
         $this->assertEquals(_DOMAIN::table(), $this->model->getTable());
-        $this->assertEquals(_DOMAIN::ID->column(), $this->model->getPrimaryKey());
+        $this->assertEquals(_DOMAIN::ID, $this->model->getPrimaryKey());
     }
     /**
      * @test
@@ -41,7 +41,7 @@ class DomainModelFunctionalTest extends TestCase
     public function create_record()
     {
         $result = $this->model->create([
-            _DOMAIN::NAME->column() => 'test'
+            _DOMAIN::NAME => 'test'
         ]);
         $this->assertEquals(1, $result);
 
@@ -52,8 +52,8 @@ class DomainModelFunctionalTest extends TestCase
         $stmt->execute();
         $record = $stmt->fetch(PDO::FETCH_ASSOC);
         $this->assertEquals([
-            _DOMAIN::ID->column() => 1,
-            _DOMAIN::NAME->column() => 'test',
+            _DOMAIN::ID => 1,
+            _DOMAIN::NAME => 'test',
         ], $record);
     }
 

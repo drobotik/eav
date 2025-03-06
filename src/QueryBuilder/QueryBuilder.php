@@ -46,7 +46,7 @@ class QueryBuilder
     public function startQuery(): void
     {
         $this->query->from(_ENTITY::table(), 'e');
-        $this->query->addSelect('e.'._ENTITY::ID->column());
+        $this->query->addSelect('e.'._ENTITY::ID);
         $config = $this->getConfig();
         foreach($config->getSelected() as $selected) {
             $this->select($selected);
@@ -60,8 +60,8 @@ class QueryBuilder
     {
         $config = $this->getConfig();
         $query = $this->getQuery();
-        $query->andwhere(sprintf('e.%s = :%s', _ENTITY::DOMAIN_ID->column(), $config->getDomainKeyParam()));
-        $query->andWhere(sprintf('e.%s = :%s', _ENTITY::ATTR_SET_ID->column(), $config->getSetKeyParam()));
+        $query->andwhere(sprintf('e.%s = :%s', _ENTITY::DOMAIN_ID, $config->getDomainKeyParam()));
+        $query->andWhere(sprintf('e.%s = :%s', _ENTITY::ATTR_SET_ID, $config->getSetKeyParam()));
     }
 
 
@@ -125,7 +125,7 @@ class QueryBuilder
         return
             $this->getQuery()->innerJoin('e', $table, $name,
                 sprintf('e.%s = %s.%s AND %s.%s = :%s',
-                    _ENTITY::ID->column(),
+                    _ENTITY::ID,
                     $name,
                     _VALUE::ENTITY_ID->column(),
                     $name,

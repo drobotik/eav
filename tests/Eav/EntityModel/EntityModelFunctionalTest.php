@@ -33,7 +33,7 @@ class EntityModelFunctionalTest extends TestCase
      */
     public function defaults() {
         $this->assertEquals(_ENTITY::table(), $this->model->getTable());
-        $this->assertEquals(_ENTITY::ID->column(), $this->model->getPrimaryKey());
+        $this->assertEquals(_ENTITY::ID, $this->model->getPrimaryKey());
     }
     /**
      * @test
@@ -46,8 +46,8 @@ class EntityModelFunctionalTest extends TestCase
         $setKey = 567;
 
         $entityKey = $this->model->create([
-            _ENTITY::DOMAIN_ID->column() => $domainKey,
-            _ENTITY::ATTR_SET_ID->column() => $setKey
+            _ENTITY::DOMAIN_ID => $domainKey,
+            _ENTITY::ATTR_SET_ID => $setKey
         ]);
 
         $this->assertEquals(1, $entityKey);
@@ -60,10 +60,10 @@ class EntityModelFunctionalTest extends TestCase
         $record = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $this->assertEquals([
             [
-                _ENTITY::ID->column() => $entityKey,
-                _ENTITY::DOMAIN_ID->column() => $domainKey,
-                _ENTITY::ATTR_SET_ID->column() => $setKey,
-                _ENTITY::SERVICE_KEY->column() => null
+                _ENTITY::ID => $entityKey,
+                _ENTITY::DOMAIN_ID => $domainKey,
+                _ENTITY::ATTR_SET_ID => $setKey,
+                _ENTITY::SERVICE_KEY => null
             ]
         ], $record);
     }
@@ -82,9 +82,9 @@ class EntityModelFunctionalTest extends TestCase
         $setKey = 2;
         $serviceKey = 456;
 
-        $domainColumn = _ENTITY::DOMAIN_ID->column();
-        $setColumn = _ENTITY::ATTR_SET_ID->column();
-        $serviceKeyColumn = _ENTITY::SERVICE_KEY->column();
+        $domainColumn = _ENTITY::DOMAIN_ID;
+        $setColumn = _ENTITY::ATTR_SET_ID;
+        $serviceKeyColumn = _ENTITY::SERVICE_KEY;
 
         $stmt = $connection->prepare("INSERT INTO $table ($domainColumn,$setColumn,$serviceKeyColumn) VALUES ($domainKey,$setKey,$serviceKey)");
         $stmt->execute();
@@ -107,9 +107,9 @@ class EntityModelFunctionalTest extends TestCase
         $setKey = 2;
         $serviceKey = 456;
 
-        $domainColumn = _ENTITY::DOMAIN_ID->column();
-        $setColumn = _ENTITY::ATTR_SET_ID->column();
-        $serviceKeyColumn = _ENTITY::SERVICE_KEY->column();
+        $domainColumn = _ENTITY::DOMAIN_ID;
+        $setColumn = _ENTITY::ATTR_SET_ID;
+        $serviceKeyColumn = _ENTITY::SERVICE_KEY;
 
         $stmt = $connection->prepare("INSERT INTO $table ($domainColumn,$setColumn,$serviceKeyColumn) VALUES ($domainKey,$setKey,$serviceKey)");
         $stmt->execute();
@@ -119,7 +119,7 @@ class EntityModelFunctionalTest extends TestCase
 
         $this->assertEquals([
             [
-                _ENTITY::ID->column() => 1,
+                _ENTITY::ID => 1,
                 $domainColumn => $domainKey,
                 $setColumn => $setKey,
                 $serviceKeyColumn => $serviceKey
@@ -166,9 +166,9 @@ class EntityModelFunctionalTest extends TestCase
         $serviceKey = 456;
         $newServiceKey = 9847;
 
-        $domainColumn = _ENTITY::DOMAIN_ID->column();
-        $setColumn = _ENTITY::ATTR_SET_ID->column();
-        $serviceKeyColumn = _ENTITY::SERVICE_KEY->column();
+        $domainColumn = _ENTITY::DOMAIN_ID;
+        $setColumn = _ENTITY::ATTR_SET_ID;
+        $serviceKeyColumn = _ENTITY::SERVICE_KEY;
 
         $stmt = $connection->prepare("INSERT INTO $table ($domainColumn,$setColumn,$serviceKeyColumn) VALUES ($domainKey,$setKey,$serviceKey)");
         $stmt->execute();
@@ -202,8 +202,8 @@ class EntityModelFunctionalTest extends TestCase
         $this->assertEquals(100, count($entities));
         /** @var EntityModel $entity */
         foreach($entities as $index => $entity) {
-            $this->assertEquals(2, $entity[_ENTITY::DOMAIN_ID->column()], "Iteration:".$index);
-            $this->assertEquals(3, $entity[_ENTITY::ATTR_SET_ID->column()], "Iteration:".$index);
+            $this->assertEquals(2, $entity[_ENTITY::DOMAIN_ID], "Iteration:".$index);
+            $this->assertEquals(3, $entity[_ENTITY::ATTR_SET_ID], "Iteration:".$index);
         }
     }
 
@@ -232,10 +232,10 @@ class EntityModelFunctionalTest extends TestCase
         $result = $this->model->getBySetAndDomain(2,3);
         $this->assertEquals(1, count($result));
         $entity = $result[0];
-        $this->assertEquals(1, $entity[_ENTITY::ID->column()]);
-        $this->assertEquals(2, $entity[_ENTITY::DOMAIN_ID->column()]);
-        $this->assertEquals(3, $entity[_ENTITY::ATTR_SET_ID->column()]);
-        $this->assertEquals(null, $entity[_ENTITY::SERVICE_KEY->column()]);
+        $this->assertEquals(1, $entity[_ENTITY::ID]);
+        $this->assertEquals(2, $entity[_ENTITY::DOMAIN_ID]);
+        $this->assertEquals(3, $entity[_ENTITY::ATTR_SET_ID]);
+        $this->assertEquals(null, $entity[_ENTITY::SERVICE_KEY]);
     }
 
 }

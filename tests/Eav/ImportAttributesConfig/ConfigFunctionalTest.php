@@ -34,7 +34,7 @@ class ConfigFunctionalTest extends TestCase
         $this->assertFalse($config->hasAttribute('test'));
 
         $attribute = new ConfigAttribute();
-        $attribute->setFields([_ATTR::NAME->column() => 'test', _ATTR::TYPE->column() => ATTR_TYPE::TEXT->value()]);
+        $attribute->setFields([_ATTR::NAME => 'test', _ATTR::TYPE => ATTR_TYPE::TEXT->value()]);
         $config->appendAttribute($attribute);
 
         $this->assertSame(['test' => $attribute], $config->getAttributes());

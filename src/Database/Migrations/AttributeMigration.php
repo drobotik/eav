@@ -24,16 +24,16 @@ final class AttributeMigration extends AbstractMigration
     public function up(Schema $schema): void
     {
         $table = $schema->createTable(_ATTR::table());
-        $table->addColumn(_ATTR::ID->column(), Types::INTEGER , ['Autoincrement' => true, 'unsigned' => true]);
-        $table->addColumn(_ATTR::DOMAIN_ID->column(), Types::INTEGER, ['unsigned' => true]);
-        $table->addColumn(_ATTR::NAME->column(), Types::STRING);
-        $table->addColumn(_ATTR::TYPE->column(), Types::STRING);
-        $table->addColumn(_ATTR::STRATEGY->column(), Types::STRING, ['notnull'=>false]);
-        $table->addColumn(_ATTR::SOURCE->column(), Types::STRING, ['notnull'=>false]);
-        $table->addColumn(_ATTR::DEFAULT_VALUE->column(), Types::STRING, ['notnull'=>false]);
-        $table->addColumn(_ATTR::DESCRIPTION->column(), Types::STRING, ['notnull'=>false]);
-        $table->setPrimaryKey([_ATTR::ID->column()]);
-        $table->addIndex([_ATTR::DOMAIN_ID->column()]);
+        $table->addColumn(_ATTR::ID, Types::INTEGER , ['Autoincrement' => true, 'unsigned' => true]);
+        $table->addColumn(_ATTR::DOMAIN_ID, Types::INTEGER, ['unsigned' => true]);
+        $table->addColumn(_ATTR::NAME, Types::STRING);
+        $table->addColumn(_ATTR::TYPE, Types::STRING);
+        $table->addColumn(_ATTR::STRATEGY, Types::STRING, ['notnull'=>false]);
+        $table->addColumn(_ATTR::SOURCE, Types::STRING, ['notnull'=>false]);
+        $table->addColumn(_ATTR::DEFAULT_VALUE, Types::STRING, ['notnull'=>false]);
+        $table->addColumn(_ATTR::DESCRIPTION, Types::STRING, ['notnull'=>false]);
+        $table->setPrimaryKey([_ATTR::ID]);
+        $table->addIndex([_ATTR::DOMAIN_ID]);
     }
 
     public function down(Schema $schema): void

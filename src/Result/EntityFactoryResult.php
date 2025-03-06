@@ -56,7 +56,7 @@ class EntityFactoryResult
 
     public function addAttribute(array $attribute): void
     {
-        $this->attributes[$attribute[_ATTR::NAME->column()]] = $attribute;
+        $this->attributes[$attribute[_ATTR::NAME]] = $attribute;
     }
 
     public function getAttributes(): array

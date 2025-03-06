@@ -31,7 +31,7 @@ class PivotModelFunctionalTest extends TestCase
      */
     public function defaults() {
         $this->assertEquals(_PIVOT::table(), $this->model->getTable());
-        $this->assertEquals(_PIVOT::ID->column(), $this->model->getPrimaryKey());
+        $this->assertEquals(_PIVOT::ID, $this->model->getPrimaryKey());
     }
     /**
      * @test
@@ -41,10 +41,10 @@ class PivotModelFunctionalTest extends TestCase
     public function create_record()
     {
         $key = $this->model->create([
-            _PIVOT::DOMAIN_ID->column() => 1,
-            _PIVOT::SET_ID->column() => 2,
-            _PIVOT::GROUP_ID->column() => 3,
-            _PIVOT::ATTR_ID->column() => 4
+            _PIVOT::DOMAIN_ID => 1,
+            _PIVOT::SET_ID => 2,
+            _PIVOT::GROUP_ID => 3,
+            _PIVOT::ATTR_ID => 4
         ]);
         $this->assertEquals(1, $key);
 
@@ -55,11 +55,11 @@ class PivotModelFunctionalTest extends TestCase
         $stmt->execute();
         $record = $stmt->fetch(PDO::FETCH_ASSOC);
         $this->assertEquals([
-            _PIVOT::ID->column() => 1,
-            _PIVOT::DOMAIN_ID->column() => 1,
-            _PIVOT::SET_ID->column() => 2,
-            _PIVOT::GROUP_ID->column() => 3,
-            _PIVOT::ATTR_ID->column() => 4
+            _PIVOT::ID => 1,
+            _PIVOT::DOMAIN_ID => 1,
+            _PIVOT::SET_ID => 2,
+            _PIVOT::GROUP_ID => 3,
+            _PIVOT::ATTR_ID => 4
         ], $record);
     }
 
@@ -71,10 +71,10 @@ class PivotModelFunctionalTest extends TestCase
     public function findOne()
     {
         $this->model->create([
-            _PIVOT::DOMAIN_ID->column() => 1,
-            _PIVOT::SET_ID->column() => 2,
-            _PIVOT::GROUP_ID->column() => 3,
-            _PIVOT::ATTR_ID->column() => 4
+            _PIVOT::DOMAIN_ID => 1,
+            _PIVOT::SET_ID => 2,
+            _PIVOT::GROUP_ID => 3,
+            _PIVOT::ATTR_ID => 4
         ]);
         $this->assertIsArray($this->model->findOne(1,2,3,4));
         $this->assertFalse($this->model->findOne(2,2,3,4));

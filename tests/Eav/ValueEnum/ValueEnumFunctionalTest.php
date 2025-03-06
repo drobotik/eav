@@ -37,9 +37,9 @@ class ValueEnumFunctionalTest extends TestCase
         }
         $this->assertEquals([
             _VALUE::ID->column() => 'value_id',
-            _VALUE::DOMAIN_ID->column() => _DOMAIN::ID->column(),
-            _VALUE::ENTITY_ID->column() => _ENTITY::ID->column(),
-            _VALUE::ATTRIBUTE_ID->column() => _ATTR::ID->column(),
+            _VALUE::DOMAIN_ID->column() => _DOMAIN::ID,
+            _VALUE::ENTITY_ID->column() => _ENTITY::ID,
+            _VALUE::ATTRIBUTE_ID->column() => _ATTR::ID,
             _VALUE::VALUE->column() => 'value',
         ], $cases);
     }

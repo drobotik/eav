@@ -48,8 +48,8 @@ class EntityGnome
             $this->checkAttrSetExist($setKey);
             $model = $this->makeEntityModel();
             $key = $model->create([
-                _ENTITY::DOMAIN_ID->column() => $domainKey,
-                _ENTITY::ATTR_SET_ID->column() => $setKey
+                _ENTITY::DOMAIN_ID => $domainKey,
+                _ENTITY::ATTR_SET_ID => $setKey
             ]);
             $entity->setKey($key);
 
@@ -57,8 +57,8 @@ class EntityGnome
         }
         $key = $entity->getKey();
         $record = $this->checkEntityExists($key);
-        $domainKey = (int) $record[_ENTITY::DOMAIN_ID->column()];
-        $setKey = (int) $record[_ENTITY::ATTR_SET_ID->column()];
+        $domainKey = (int) $record[_ENTITY::DOMAIN_ID];
+        $setKey = (int) $record[_ENTITY::ATTR_SET_ID];
 
         $this->checkDomainExists($domainKey);
         $this->checkAttrSetExist($setKey);
@@ -86,9 +86,9 @@ class EntityGnome
             return $result->notFound();
         }
 
-        $entity->setDomainKey($record[_ENTITY::DOMAIN_ID->column()]);
+        $entity->setDomainKey($record[_ENTITY::DOMAIN_ID]);
         $set = $entity->getAttributeSet();
-        $set->setKey($record[_ENTITY::ATTR_SET_ID->column()]);
+        $set->setKey($record[_ENTITY::ATTR_SET_ID]);
         $set->fetchContainers();
 
         $result->found();

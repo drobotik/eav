@@ -58,7 +58,7 @@ class EavFactoryResultFunctionalTest extends TestCase
      */
     public function attributes() {
         $this->assertEquals([], $this->result->getAttributes());
-        $record = [_ATTR::NAME->column() => 'test'];
+        $record = [_ATTR::NAME => 'test'];
         $this->result->addAttribute($record);
         $this->assertEquals(['test' => $record], $this->result->getAttributes());
     }

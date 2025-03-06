@@ -26,18 +26,14 @@ class GroupEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Enum\_GROUP::column
+     * @covers \Drobotik\Eav\Enum\_GROUP::ID
+     * @covers \Drobotik\Eav\Enum\_GROUP::NAME
+     * @covers \Drobotik\Eav\Enum\_GROUP::SET_ID
      */
     public function columns() {
-        $cases = [];
-        foreach (_GROUP::cases() as $case) {
-            $cases[$case->column()] = $case->column();
-        }
-        $this->assertEquals([
-            _GROUP::ID->column() => 'group_id',
-            _GROUP::NAME->column() => 'name',
-            _GROUP::SET_ID->column() => _SET::ID->column()
-        ], $cases);
+        $this->assertEquals('group_id', _GROUP::ID);
+        $this->assertEquals('name', _GROUP::NAME);
+        $this->assertEquals(_SET::ID, _GROUP::SET_ID);
     }
 
 }

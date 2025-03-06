@@ -13,11 +13,11 @@ use Drobotik\Eav\Interface\DefineTableInterface;
 
 enum _PIVOT implements DefineTableInterface
 {
-    case ID;
-    case DOMAIN_ID;
-    case SET_ID;
-    case GROUP_ID;
-    case ATTR_ID;
+    public const ID = 'pivot_id';
+    public const DOMAIN_ID = 'domain_id';
+    public const SET_ID = 'set_id';
+    public const GROUP_ID = 'group_id';
+    public const ATTR_ID = 'attribute_id';
 
     public static function table() : string
     {
@@ -26,12 +26,6 @@ enum _PIVOT implements DefineTableInterface
 
     public function column() : string
     {
-        return match ($this) {
-            self::ID => 'pivot_id',
-            self::DOMAIN_ID => _DOMAIN::ID->column(),
-            self::SET_ID => _SET::ID->column(),
-            self::GROUP_ID => _GROUP::ID->column(),
-            self::ATTR_ID => _ATTR::ID->column()
-        };
+        return '1';
     }
 }

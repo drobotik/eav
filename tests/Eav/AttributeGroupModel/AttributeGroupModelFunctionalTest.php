@@ -32,7 +32,7 @@ class AttributeGroupModelFunctionalTest extends TestCase
      */
     public function defaults() {
         $this->assertEquals(_GROUP::table(), $this->model->getTable());
-        $this->assertEquals(_GROUP::ID->column(), $this->model->getPrimaryKey());
+        $this->assertEquals(_GROUP::ID, $this->model->getPrimaryKey());
     }
 
     /**
@@ -43,8 +43,8 @@ class AttributeGroupModelFunctionalTest extends TestCase
     public function create_record()
     {
         $result = $this->model->create([
-            _GROUP::SET_ID->column() => 123,
-            _GROUP::NAME->column() => 'test'
+            _GROUP::SET_ID => 123,
+            _GROUP::NAME => 'test'
         ]);
         $this->assertEquals(1, $result);
 
@@ -55,9 +55,9 @@ class AttributeGroupModelFunctionalTest extends TestCase
         $stmt->execute();
         $record = $stmt->fetch(PDO::FETCH_ASSOC);
         $this->assertEquals([
-            _GROUP::ID->column() => 1,
-            _GROUP::SET_ID->column() => 123,
-            _GROUP::NAME->column() => 'test'
+            _GROUP::ID => 1,
+            _GROUP::SET_ID => 123,
+            _GROUP::NAME => 'test'
         ], $record);
     }
 

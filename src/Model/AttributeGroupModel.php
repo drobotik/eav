@@ -18,24 +18,16 @@ class AttributeGroupModel extends Model
     public function __construct()
     {
         $this->setTable(_GROUP::table());
-        $this->setPrimaryKey(_GROUP::ID->column());
+        $this->setPrimaryKey(_GROUP::ID);
     }
 
-    /**
-     * @throws Exception
-     */
+
     public function create(array $data) : int
     {
-        $conn = $this->db();
-        $conn->createQueryBuilder()
-            ->insert(_GROUP::table())
-            ->values([
-                _GROUP::SET_ID->column() => '?',
-                _GROUP::NAME->column() => '?'
-            ])
-            ->setParameter(0, $data[_GROUP::SET_ID->column()])
-            ->setParameter(1, $data[_GROUP::NAME->column()])
-            ->executeQuery();
+        $conn = $this->getNativeConnection();
+        $sql = sprintf("INSERT INTO %s (%s, %s) values(:sid, :name)", _GROUP::table(), _GROUP::SET_ID, _GROUP::NAME);
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(['sid' => $data[_GROUP::SET_ID], 'name' => $data[_GROUP::NAME]]);
         return (int) $conn->lastInsertId();
     }
 
@@ -44,8 +36,8 @@ class AttributeGroupModel extends Model
         $result = $this->db()->createQueryBuilder()
             ->select($this->getPrimaryKey())
             ->from($this->getTable())
-            ->where(sprintf('%s = ?', _GROUP::SET_ID->column()))
-            ->andWhere(sprintf('%s = ?', _GROUP::ID->column()))
+            ->where(sprintf('%s = ?', _GROUP::SET_ID))
+            ->andWhere(sprintf('%s = ?', _GROUP::ID))
             ->setParameter(0, $setKey, PDO::PARAM_INT)
             ->setParameter(1, $groupKey, PDO::PARAM_INT)
             ->executeQuery()

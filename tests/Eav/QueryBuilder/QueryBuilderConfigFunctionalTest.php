@@ -134,14 +134,14 @@ class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
     {
         $this->assertEquals([], $this->config->getAttributes());
         $this->assertFalse($this->config->hasAttribute('test'));
-        $attribute = [_ATTR::NAME->column() => 'test'];
+        $attribute = [_ATTR::NAME => 'test'];
         $this->config->addAttribute($attribute);
         $this->assertTrue($this->config->hasAttribute('test'));
         $this->assertSame($attribute, $this->config->getAttribute('test'));
         $this->assertEquals(['test' => $attribute], $this->config->getAttributes());
 
-        $extraAttr1 = [_ATTR::NAME->column() => 'test2'];
-        $extraAttr2 = [_ATTR::NAME->column() => 'test3'];
+        $extraAttr1 = [_ATTR::NAME => 'test2'];
+        $extraAttr2 = [_ATTR::NAME => 'test3'];
         $this->config->addAttributes([$extraAttr1, $extraAttr2]);
         $this->assertEquals([
             'test' => $attribute,
@@ -243,9 +243,9 @@ class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
     public function handle_columns_attribute__type_exception()
     {
         $attribute = [
-            _ATTR::ID->column() => 1,
-            _ATTR::NAME->column() => 'test',
-            _ATTR::TYPE->column() => 'wrong_type'
+            _ATTR::ID => 1,
+            _ATTR::NAME => 'test',
+            _ATTR::TYPE => 'wrong_type'
         ];
 
         $this->config->addColumns(['test']);
@@ -270,9 +270,9 @@ class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
         $paramName = $attrName.'_join_'.QB_JOIN::ATTR_PARAM;
 
         $attribute = [
-            _ATTR::ID->column() => $attrKey,
-            _ATTR::NAME->column() => $attrName,
-            _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value()
+            _ATTR::ID => $attrKey,
+            _ATTR::NAME => $attrName,
+            _ATTR::TYPE => ATTR_TYPE::INTEGER->value()
         ];
 
         $this->config->addColumns([$attrName, $attrName, $attrName]);
@@ -553,9 +553,9 @@ class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
     public function register_join()
     {
         $attribute = [
-            _ATTR::ID->column() => 2,
-            _ATTR::NAME->column() => 'size',
-            _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value()
+            _ATTR::ID => 2,
+            _ATTR::NAME => 'size',
+            _ATTR::TYPE => ATTR_TYPE::INTEGER->value()
         ];
 
         $config = $this->getMockBuilder(Config::class)
@@ -595,8 +595,8 @@ class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
         $config = $this->getMockBuilder(Config::class)
             ->onlyMethods(['hasJoin'])->getMock();
         $config->addAttribute([
-            _ATTR::NAME->column() => 'size',
-            _ATTR::TYPE->column() => 'test'
+            _ATTR::NAME => 'size',
+            _ATTR::TYPE => 'test'
         ]);
         $config->expects($this->once())->method('hasJoin')
             ->with($field)->willReturn(false);
@@ -683,21 +683,21 @@ class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
         ];
 
         $attr0 = [
-            _ATTR::ID->column() => 3,
-            _ATTR::NAME->column() => ATTR_TYPE::INTEGER->value(),
-            _ATTR::TYPE->column() => ATTR_TYPE::INTEGER->value()
+            _ATTR::ID => 3,
+            _ATTR::NAME => ATTR_TYPE::INTEGER->value(),
+            _ATTR::TYPE => ATTR_TYPE::INTEGER->value()
         ];
 
         $attr1 = [
-            _ATTR::ID->column() => 4,
-            _ATTR::NAME->column() => ATTR_TYPE::DECIMAL->value(),
-            _ATTR::TYPE->column() => ATTR_TYPE::DECIMAL->value()
+            _ATTR::ID => 4,
+            _ATTR::NAME => ATTR_TYPE::DECIMAL->value(),
+            _ATTR::TYPE => ATTR_TYPE::DECIMAL->value()
         ];
 
         $attr2 = [
-            _ATTR::ID->column() => 5,
-            _ATTR::NAME->column() => ATTR_TYPE::STRING->value(),
-            _ATTR::TYPE->column() => ATTR_TYPE::STRING->value()
+            _ATTR::ID => 5,
+            _ATTR::NAME => ATTR_TYPE::STRING->value(),
+            _ATTR::TYPE => ATTR_TYPE::STRING->value()
         ];
 
         $this->config->addAttribute($attr0);
@@ -729,9 +729,9 @@ class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
         ];
 
         $attributes = [
-            $attr0[_ATTR::NAME->column()] => $attr0,
-            $attr1[_ATTR::NAME->column()] => $attr1,
-            $attr2[_ATTR::NAME->column()] => $attr2
+            $attr0[_ATTR::NAME] => $attr0,
+            $attr1[_ATTR::NAME] => $attr1,
+            $attr2[_ATTR::NAME] => $attr2
         ];
 
         $parameters = [

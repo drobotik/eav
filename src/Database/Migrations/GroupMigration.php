@@ -24,11 +24,11 @@ final class GroupMigration extends AbstractMigration
     public function up(Schema $schema): void
     {
         $table = $schema->createTable(_GROUP::table());
-        $table->addColumn(_GROUP::ID->column(), Types::INTEGER , ['Autoincrement' => true, 'unsigned' => true]);
-        $table->addColumn(_GROUP::SET_ID->column(), Types::INTEGER, ['unsigned' => true]);
-        $table->addColumn(_GROUP::NAME->column(), Types::STRING);
-        $table->setPrimaryKey([_GROUP::ID->column()]);
-        $table->addIndex([_GROUP::SET_ID->column()]);
+        $table->addColumn(_GROUP::ID, Types::INTEGER , ['Autoincrement' => true, 'unsigned' => true]);
+        $table->addColumn(_GROUP::SET_ID, Types::INTEGER, ['unsigned' => true]);
+        $table->addColumn(_GROUP::NAME, Types::STRING);
+        $table->setPrimaryKey([_GROUP::ID]);
+        $table->addIndex([_GROUP::SET_ID]);
     }
 
     public function down(Schema $schema): void

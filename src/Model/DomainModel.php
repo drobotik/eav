@@ -17,7 +17,7 @@ class DomainModel extends Model
     public function __construct()
     {
         $this->setTable(_DOMAIN::table());
-        $this->setPrimaryKey(_DOMAIN::ID->column());
+        $this->setPrimaryKey(_DOMAIN::ID);
     }
     /**
      * @throws Exception
@@ -28,9 +28,9 @@ class DomainModel extends Model
         $conn->createQueryBuilder()
             ->insert(_DOMAIN::table())
             ->values([
-                _DOMAIN::NAME->column() => '?'
+                _DOMAIN::NAME => '?'
             ])
-            ->setParameter(0, $data[_DOMAIN::NAME->column()])
+            ->setParameter(0, $data[_DOMAIN::NAME])
             ->executeQuery();
         return (int) $conn->lastInsertId();
     }

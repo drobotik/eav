@@ -20,19 +20,19 @@ class ConfigAttribute
 
     public function getKey(): ?int
     {
-        return isset($this->fields[_ATTR::ID->column()])
-            ? $this->fields[_ATTR::ID->column()]
+        return isset($this->fields[_ATTR::ID])
+            ? $this->fields[_ATTR::ID]
             : null;
     }
 
     public function getName(): string
     {
-        return $this->fields[_ATTR::NAME->column()];
+        return $this->fields[_ATTR::NAME];
     }
 
     public function getType(): ATTR_TYPE
     {
-        return ATTR_TYPE::getCase($this->fields[_ATTR::TYPE->column()]);
+        return ATTR_TYPE::getCase($this->fields[_ATTR::TYPE]);
     }
 
     public function getGroupKey(): int
@@ -61,11 +61,11 @@ class ConfigAttribute
      */
     public function validate(): void
     {
-        if(!key_exists(_ATTR::NAME->column(), $this->fields))
+        if(!key_exists(_ATTR::NAME, $this->fields))
         {
             AttributeException::undefinedAttributeName();
         }
-        if(!key_exists(_ATTR::TYPE->column(), $this->fields))
+        if(!key_exists(_ATTR::TYPE, $this->fields))
         {
             AttributeException::undefinedAttributeType();
         }

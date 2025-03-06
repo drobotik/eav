@@ -66,10 +66,10 @@ class Worker
         $attrSet = $this->getAttributeSet();
         $attribute = $attrSet->getAttribute($attributeName);
         $value = new Value();
-        $value->setType(ATTR_TYPE::getCase($attribute[_ATTR::TYPE->column()]));
+        $value->setType(ATTR_TYPE::getCase($attribute[_ATTR::TYPE]));
         $value->setValue($content);
-        $value->setAttributeKey($attribute[_ATTR::ID->column()]);
-        $value->setAttributeName($attribute[_ATTR::NAME->column()]);
+        $value->setAttributeKey($attribute[_ATTR::ID]);
+        $value->setAttributeName($attribute[_ATTR::NAME]);
         if(!is_null($entityKey))
         {
             $value->setEntityKey($entityKey);
@@ -83,15 +83,15 @@ class Worker
 
     public function parseLine(array $line): void
     {
-        if(!key_exists(_ENTITY::ID->column(), $line))
+        if(!key_exists(_ENTITY::ID, $line))
         {
             EntityException::mustBeEntityKey();
         }
 
-        $entityKey = empty($line[_ENTITY::ID->column()])
+        $entityKey = empty($line[_ENTITY::ID])
             ? null
-            : (int) $line[_ENTITY::ID->column()];
-        unset($line[_ENTITY::ID->column()]);
+            : (int) $line[_ENTITY::ID];
+        unset($line[_ENTITY::ID]);
 
         if ($entityKey < 1)
         {
@@ -141,7 +141,7 @@ class Worker
         foreach($valueSet->forNewEntities() as $value)
         {
             if($value->isEmptyValue()) continue;
-            $value->setEntityKey($entities[$value->getLineIndex() - 1][_ENTITY::ID->column()]);
+            $value->setEntityKey($entities[$value->getLineIndex() - 1][_ENTITY::ID]);
             $bulkCreateSet->appendValue($value);
         }
         $valueModel->bulkCreate($bulkCreateSet, $domainKey);

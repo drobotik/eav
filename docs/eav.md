@@ -233,9 +233,9 @@ use Drobotik\Eav\Enum\ATTR_TYPE;
 $attribute = new Attribute();
 $bag = $attribute->getBag();
 
-$bag->setField(_ATTR::NAME->column(), 'price')
-$bag->setField(_ATTR::TYPE->column(), ATTR_TYPE::DECIMAL->value())
-$bag->setField(_ATTR::STRATEGY->column(), Strategy::class);
+$bag->setField(_ATTR::NAME, 'price')
+$bag->setField(_ATTR::TYPE, ATTR_TYPE::DECIMAL->value())
+$bag->setField(_ATTR::STRATEGY, Strategy::class);
 
 
 $type = $attribute->getType(); // ATTR_TYPE::DECIMAL
@@ -386,10 +386,10 @@ $model = new PivotModel();
 $model->findOne($domainKey, $setKey, $groupKey, $attributeKey);
 
 $model->create([
-    _PIVOT::DOMAIN_ID->column() => $domainKey,
-    _PIVOT::SET_ID->column() => $setKey,
-    _PIVOT::GROUP_ID->column() => $groupKey,
-    _PIVOT::ATTR_ID->column() => $attributeKey
+    _PIVOT::DOMAIN_ID => $domainKey,
+    _PIVOT::SET_ID => $setKey,
+    _PIVOT::GROUP_ID => $groupKey,
+    _PIVOT::ATTR_ID => $attributeKey
 ]);
 
 ```
@@ -462,15 +462,15 @@ $groupKey = 1;
 
 $ageAttribute  = new ConfigAttribute()
 $ageAttribute->setFields([
-    _ATTR::NAME->column() => "age",
-    _ATTR::TYPE->column() => ATTR_TYPE::INT->value()
+    _ATTR::NAME => "age",
+    _ATTR::TYPE => ATTR_TYPE::INT->value()
 ]);
 $ageAttribute->setGroupKey($groupKey);
 
 $noteAttribute  =  new ConfigAttribute()
 $noteAttribute->setFields([
-    _ATTR::NAME->column() => "note",
-    _ATTR::TYPE->column() => ATTR_TYPE::TEXT->value()
+    _ATTR::NAME => "note",
+    _ATTR::TYPE => ATTR_TYPE::TEXT->value()
 ]);
 $noteAttribute->setGroupKey($groupKey);
 

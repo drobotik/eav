@@ -28,44 +28,24 @@ class AttributeEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Enum\_ATTR::column
+     * @covers \Drobotik\Eav\Enum\_ATTR::ID
+     * @covers \Drobotik\Eav\Enum\_ATTR::NAME
+     * @covers \Drobotik\Eav\Enum\_ATTR::DOMAIN_ID
+     * @covers \Drobotik\Eav\Enum\_ATTR::SOURCE
+     * @covers \Drobotik\Eav\Enum\_ATTR::DEFAULT_VALUE
+     * @covers \Drobotik\Eav\Enum\_ATTR::TYPE
+     * @covers \Drobotik\Eav\Enum\_ATTR::STRATEGY
+     * @covers \Drobotik\Eav\Enum\_ATTR::DESCRIPTION
      */
     public function columns() {
-        $cases = [];
-        foreach (_ATTR::cases() as $case) {
-            $cases[$case->column()] = $case->column();
-        }
-        $this->assertEquals([
-            _ATTR::ID->column() => 'attribute_id',
-            _ATTR::NAME->column() => 'name',
-            _ATTR::DOMAIN_ID->column() => _DOMAIN::ID->column(),
-            _ATTR::SOURCE->column() => 'source',
-            _ATTR::DEFAULT_VALUE->column() => 'default_value',
-            _ATTR::TYPE->column() => 'type',
-            _ATTR::STRATEGY->column() => 'strategy',
-            _ATTR::DESCRIPTION->column() => 'description',
-        ], $cases);
-    }
-    /**
-     * @test
-     * @group functional
-     * @covers \Drobotik\Eav\Enum\_ATTR::default
-     */
-    public function default() {
-        $cases = [];
-        foreach (_ATTR::cases() as $case) {
-            $cases[$case->column()] = $case->default();
-        }
-        $this->assertEquals([
-            _ATTR::ID->column() => null,
-            _ATTR::NAME->column() => null,
-            _ATTR::DOMAIN_ID->column() => null,
-            _ATTR::SOURCE->column() => null,
-            _ATTR::DEFAULT_VALUE->column() => null,
-            _ATTR::TYPE->column() => ATTR_TYPE::STRING->value(),
-            _ATTR::STRATEGY->column() => Strategy::class,
-            _ATTR::DESCRIPTION->column() => null,
-        ], $cases);
+        $this->assertEquals('attribute_id', _ATTR::ID);
+        $this->assertEquals('name', _ATTR::NAME);
+        $this->assertEquals(_DOMAIN::ID, _ATTR::DOMAIN_ID);
+        $this->assertEquals('source', _ATTR::SOURCE);
+        $this->assertEquals('default_value', _ATTR::DEFAULT_VALUE);
+        $this->assertEquals('type', _ATTR::TYPE);
+        $this->assertEquals('strategy', _ATTR::STRATEGY);
+        $this->assertEquals('description', _ATTR::DESCRIPTION);
     }
     /**
      * @test
@@ -73,10 +53,13 @@ class AttributeEnumFunctionalTest extends TestCase
      * @covers \Drobotik\Eav\Enum\_ATTR::bag
      */
     public function bag() {
-        $cases = [];
-        foreach (_ATTR::cases() as $case) {
-            $cases[$case->column()] = $case->default();
-        }
-        $this->assertSame($cases, _ATTR::bag());
+        $this->assertEquals(null, _ATTR::bag(_ATTR::ID));
+        $this->assertEquals(null, _ATTR::bag(_ATTR::NAME));
+        $this->assertEquals(null, _ATTR::bag(_ATTR::DOMAIN_ID));
+        $this->assertEquals(null, _ATTR::bag(_ATTR::SOURCE));
+        $this->assertEquals(null, _ATTR::bag(_ATTR::DEFAULT_VALUE));
+        $this->assertEquals(null, _ATTR::bag(_ATTR::DESCRIPTION));
+        $this->assertEquals(ATTR_TYPE::STRING->value(), _ATTR::bag(_ATTR::TYPE));
+        $this->assertEquals( Strategy::class, _ATTR::bag(_ATTR::STRATEGY));
     }
 }

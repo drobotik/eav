@@ -13,10 +13,10 @@ use Drobotik\Eav\Interface\DefineTableInterface;
 
 enum _ENTITY implements DefineTableInterface
 {
-    case ID;
-    case DOMAIN_ID;
-    case ATTR_SET_ID;
-    case SERVICE_KEY;
+    public const ID = 'entity_id';
+    public const DOMAIN_ID = 'domain_id';
+    public const ATTR_SET_ID = 'set_id';
+    public const SERVICE_KEY = 'service_key';
 
     public static function table() : string
     {
@@ -25,11 +25,6 @@ enum _ENTITY implements DefineTableInterface
 
     public function column() : string
     {
-        return match ($this) {
-            self::ID => 'entity_id',
-            self::DOMAIN_ID => _DOMAIN::ID->column(),
-            self::ATTR_SET_ID => _SET::ID->column(),
-            self::SERVICE_KEY => "service_key"
-        };
+        return '';
     }
 }

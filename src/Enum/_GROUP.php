@@ -13,9 +13,10 @@ use Drobotik\Eav\Interface\DefineTableInterface;
 
 enum _GROUP implements DefineTableInterface
 {
-    case ID;
-    case SET_ID;
-    case NAME;
+
+    public const ID = 'group_id';
+    public const SET_ID = 'set_id';
+    public const NAME = 'name';
 
     public static function table() : string
     {
@@ -24,10 +25,6 @@ enum _GROUP implements DefineTableInterface
 
     public function column() : string
     {
-        return match ($this) {
-            self::ID => 'group_id',
-            self::SET_ID => _SET::ID->column(),
-            self::NAME => "name",
-        };
+        return '1';
     }
 }

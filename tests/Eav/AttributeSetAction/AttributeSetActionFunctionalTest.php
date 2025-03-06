@@ -38,10 +38,10 @@ class AttributeSetActionFunctionalTest extends TestCase
      */
     public function initialize_attribute() {
         $attribute = [
-            _ATTR::ID->column() => 1,
-            _ATTR::DOMAIN_ID->column() => 1,
-            _ATTR::NAME->column() => 'test',
-            _ATTR::TYPE->column() => ATTR_TYPE::STRING->value()
+            _ATTR::ID => 1,
+            _ATTR::DOMAIN_ID => 1,
+            _ATTR::NAME => 'test',
+            _ATTR::TYPE => ATTR_TYPE::STRING->value()
         ];
         $result = $this->action->initializeAttribute($attribute);
         $this->assertInstanceOf(Attribute::class, $result);

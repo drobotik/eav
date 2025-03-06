@@ -21,21 +21,21 @@ class AttributeBag
         $this->data = _ATTR::bag();
     }
 
-    public function setField(_ATTR $field, $value): self
+    public function setField($field, $value): self
     {
-        $this->data[$field->column()] = $value;
+        $this->data[$field] = $value;
 
         return $this;
     }
 
-    public function getField(_ATTR $field)
+    public function getField($field)
     {
-        return $this->data[$field->column()];
+        return $this->data[$field];
     }
 
-    public function resetField(_ATTR $field): self
+    public function resetField($field): self
     {
-        $this->data[$field->column()] = $field->default();
+        $this->data[$field] = _ATTR::bag($field);
 
         return $this;
     }

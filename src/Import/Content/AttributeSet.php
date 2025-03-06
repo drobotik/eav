@@ -32,7 +32,7 @@ class AttributeSet
 
     public function appendAttribute(array $attribute): void
     {
-        $this->attributes[$attribute[_ATTR::NAME->column()]] = $attribute;
+        $this->attributes[$attribute[_ATTR::NAME]] = $attribute;
     }
 
     public function getAttribute(string $name) : array
@@ -55,7 +55,7 @@ class AttributeSet
         $attributes = $attributeModel->findAttributes($container->getDomainKey(), $container->getSetKey());
         foreach ($attributes as $attribute)
         {
-            $name = $attribute[_ATTR::NAME->column()];
+            $name = $attribute[_ATTR::NAME];
             if(in_array($name, $columns))
             {
                 $this->appendAttribute($attribute);

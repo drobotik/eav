@@ -110,7 +110,7 @@ class Config
 
     public function addAttribute(array $attribute): void
     {
-        $this->attributes[$attribute[_ATTR::NAME->column()]] = $attribute;
+        $this->attributes[$attribute[_ATTR::NAME]] = $attribute;
     }
 
     public function getAttribute(string $name) : array
@@ -185,8 +185,8 @@ class Config
             }
 
             $attribute = $this->getAttribute($column);
-            $attributeKey = $attribute[_ATTR::ID->column()];
-            $table = ATTR_TYPE::getCase($attribute[_ATTR::TYPE->column()])->valueTable();
+            $attributeKey = $attribute[_ATTR::ID];
+            $table = ATTR_TYPE::getCase($attribute[_ATTR::TYPE])->valueTable();
 
             // if in search it should be joined
             if(!$this->hasJoin($column)) {
@@ -260,8 +260,8 @@ class Config
     {
         if(!$this->hasJoin($field)) {
             $attribute = $this->getAttribute($field);
-            $table = ATTR_TYPE::getCase($attribute[_ATTR::TYPE->column()])->valueTable();
-            $attributeKey = $attribute[_ATTR::ID->column()];
+            $table = ATTR_TYPE::getCase($attribute[_ATTR::TYPE])->valueTable();
+            $attributeKey = $attribute[_ATTR::ID];
             $this->addJoin($table, $field, $attributeKey);
         }
     }

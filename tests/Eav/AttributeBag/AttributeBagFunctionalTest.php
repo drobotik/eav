@@ -56,8 +56,8 @@ class AttributeBagFunctionalTest extends TestCase
      */
     public function set_fields() {
         $input = [
-            _ATTR::ID->column() => 123,
-            _ATTR::STRATEGY->column() => 'test',
+            _ATTR::ID => 123,
+            _ATTR::STRATEGY => 'test',
         ];
         $result = $this->bag->setFields($input);
         $this->assertSame($this->bag, $result);

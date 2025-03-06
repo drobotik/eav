@@ -77,12 +77,12 @@ class ImportContentWorkerBehaviorTest extends TestCase
         $entity2Key = 20;
 
         $entity1 = [
-            _ENTITY::ID->column() => $entity1Key,
-            _ENTITY::DOMAIN_ID->column() => $domainKey
+            _ENTITY::ID => $entity1Key,
+            _ENTITY::DOMAIN_ID => $domainKey
         ];
         $entity2 = [
-            _ENTITY::ID->column() => $entity2Key,
-            _ENTITY::DOMAIN_ID->column() => $domainKey
+            _ENTITY::ID => $entity2Key,
+            _ENTITY::DOMAIN_ID => $domainKey
         ];
         $collection = [$entity1, $entity2];
 

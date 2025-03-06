@@ -25,20 +25,16 @@ class AttributePropEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Enum\_ATTR_PROP::column
+     * @covers \Drobotik\Eav\Enum\_ATTR_PROP::KEY
+     * @covers \Drobotik\Eav\Enum\_ATTR_PROP::ATTRIBUTE_KEY
+     * @covers \Drobotik\Eav\Enum\_ATTR_PROP::NAME
+     * @covers \Drobotik\Eav\Enum\_ATTR_PROP::VALUE
      */
     public function column() {
-        $cases = [];
-        foreach (_ATTR_PROP::cases() as $case) {
-            $cases[$case->column()] = $case->column();
-        }
-        $this->assertEquals([
-            _ATTR_PROP::KEY->column()           => 'property_key',
-            _ATTR_PROP::ATTRIBUTE_KEY->column() => 'attribute_key',
-            _ATTR_PROP::NAME->column()          => "name",
-            _ATTR_PROP::VALUE->column()         => 'value',
-
-        ], $cases);
+        $this->assertEquals('property_key',  _ATTR_PROP::KEY);
+        $this->assertEquals('attribute_key',  _ATTR_PROP::ATTRIBUTE_KEY);
+        $this->assertEquals('name',  _ATTR_PROP::NAME);
+        $this->assertEquals('value',  _ATTR_PROP::VALUE);
     }
 
 }

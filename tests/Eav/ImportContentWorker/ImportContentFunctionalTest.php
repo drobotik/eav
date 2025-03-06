@@ -104,9 +104,9 @@ class ImportContentFunctionalTest extends TestCase
         $lineIndex = 45;
 
         $attribute = [
-            _ATTR::ID->column() => $attributeKey,
-            _ATTR::NAME->column() => $attributeName,
-            _ATTR::TYPE->column() => $attributeType
+            _ATTR::ID => $attributeKey,
+            _ATTR::NAME => $attributeName,
+            _ATTR::TYPE => $attributeType
         ];
 
         $attrSet = new AttributeSet();
@@ -150,9 +150,9 @@ class ImportContentFunctionalTest extends TestCase
         $lineIndex = 45;
 
         $attribute = [
-            _ATTR::ID->column() => $attributeKey,
-            _ATTR::NAME->column() => $attributeName,
-            _ATTR::TYPE->column() => $attributeType
+            _ATTR::ID => $attributeKey,
+            _ATTR::NAME => $attributeName,
+            _ATTR::TYPE => $attributeType
         ];
 
         $attrSet = new AttributeSet();
@@ -180,7 +180,7 @@ class ImportContentFunctionalTest extends TestCase
      */
     public function parse_line_entity_key_as_string()
     {
-        $line = [_ENTITY::ID->column() => '1',"name" => "Tom"];
+        $line = [_ENTITY::ID => '1',"name" => "Tom"];
         $worker = $this->getMockBuilder(Worker::class)
             ->onlyMethods(['parseCell'])->getMock();
         $worker->expects($this->once())->method('parseCell')
@@ -197,7 +197,7 @@ class ImportContentFunctionalTest extends TestCase
      */
     public function parse_line_with_entity_key()
     {
-        $line = [_ENTITY::ID->column() => 1,"name" => "Tom", "type" => "cat"];
+        $line = [_ENTITY::ID => 1,"name" => "Tom", "type" => "cat"];
         $worker = $this->getMockBuilder(Worker::class)
             ->onlyMethods(['parseCell','incrementLineIndex'])->getMock();
         $worker->expects($this->exactly(2))
@@ -216,7 +216,7 @@ class ImportContentFunctionalTest extends TestCase
      */
     public function parse_line_without_nullable_entity_key()
     {
-        $line = [_ENTITY::ID->column() => null, "name" => "Tom", "type" => "cat"];
+        $line = [_ENTITY::ID => null, "name" => "Tom", "type" => "cat"];
         $worker = $this->getMockBuilder(Worker::class)
             ->onlyMethods(['parseCell','incrementLineIndex'])->getMock();
         $worker->expects($this->exactly(2))

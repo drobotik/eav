@@ -85,7 +85,7 @@ class ExportManagerAcceptanceTest extends QueryingDataTestCase
         }
 
         $this->assertEquals([
-            [_ENTITY::ID->column(),ATTR_TYPE::STRING->value(),ATTR_TYPE::DECIMAL->value()],
+            [_ENTITY::ID,ATTR_TYPE::STRING->value(),ATTR_TYPE::DECIMAL->value()],
             ['1822','et dolores','170.359'],
             ['18795','sit quisquam','3685.969'],
             ['19738','sit quisquam','180.63']

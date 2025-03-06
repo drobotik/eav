@@ -32,7 +32,7 @@ class AttributeModelFunctionalTest extends TestCase
      */
     public function defaults() {
         $this->assertEquals(_ATTR::table(), $this->model->getTable());
-        $this->assertEquals(_ATTR::ID->column(), $this->model->getPrimaryKey());
+        $this->assertEquals(_ATTR::ID, $this->model->getPrimaryKey());
     }
 
     /**
@@ -43,13 +43,13 @@ class AttributeModelFunctionalTest extends TestCase
     public function create_record()
     {
         $result = $this->model->create([
-            _ATTR::DOMAIN_ID->column() => 1,
-            _ATTR::NAME->column() => 'test',
-            _ATTR::TYPE->column() => ATTR_TYPE::STRING->value(),
-            _ATTR::STRATEGY->column() => 'strategy',
-            _ATTR::SOURCE->column() => 'source',
-            _ATTR::DEFAULT_VALUE->column() => 'default',
-            _ATTR::DESCRIPTION->column() => 'description'
+            _ATTR::DOMAIN_ID => 1,
+            _ATTR::NAME => 'test',
+            _ATTR::TYPE => ATTR_TYPE::STRING->value(),
+            _ATTR::STRATEGY => 'strategy',
+            _ATTR::SOURCE => 'source',
+            _ATTR::DEFAULT_VALUE => 'default',
+            _ATTR::DESCRIPTION => 'description'
         ]);
         $this->assertEquals(1, $result);
 
@@ -60,14 +60,14 @@ class AttributeModelFunctionalTest extends TestCase
         $stmt->execute();
         $record = $stmt->fetch(PDO::FETCH_ASSOC);
         $this->assertEquals([
-            _ATTR::ID->column() => 1,
-            _ATTR::DOMAIN_ID->column() => 1,
-            _ATTR::NAME->column() => 'test',
-            _ATTR::TYPE->column() => ATTR_TYPE::STRING->value(),
-            _ATTR::STRATEGY->column() => 'strategy',
-            _ATTR::SOURCE->column() => 'source',
-            _ATTR::DEFAULT_VALUE->column() => 'default',
-            _ATTR::DESCRIPTION->column() => 'description'
+            _ATTR::ID => 1,
+            _ATTR::DOMAIN_ID => 1,
+            _ATTR::NAME => 'test',
+            _ATTR::TYPE => ATTR_TYPE::STRING->value(),
+            _ATTR::STRATEGY => 'strategy',
+            _ATTR::SOURCE => 'source',
+            _ATTR::DEFAULT_VALUE => 'default',
+            _ATTR::DESCRIPTION => 'description'
         ], $record);
     }
 
@@ -81,7 +81,7 @@ class AttributeModelFunctionalTest extends TestCase
         $domainKey = 1;
         $name = "test";
         $this->eavFactory->createAttribute($domainKey, [
-            _ATTR::NAME->column() => $name
+            _ATTR::NAME => $name
         ]);
         $this->eavFactory->createAttribute();
         $this->eavFactory->createAttribute();

@@ -17,7 +17,7 @@ class AttributeModel extends Model
     public function __construct()
     {
         $this->setTable(_ATTR::table());
-        $this->setPrimaryKey(_ATTR::ID->column());
+        $this->setPrimaryKey(_ATTR::ID);
     }
 
     public function create(array $data) : int
@@ -26,21 +26,21 @@ class AttributeModel extends Model
         $conn->createQueryBuilder()
             ->insert($this->getTable())
             ->values([
-                _ATTR::DOMAIN_ID->column() => '?',
-                _ATTR::NAME->column() => '?',
-                _ATTR::TYPE->column() => '?',
-                _ATTR::STRATEGY->column() => '?',
-                _ATTR::SOURCE->column() => '?',
-                _ATTR::DEFAULT_VALUE->column() => '?',
-                _ATTR::DESCRIPTION->column() => '?'
+                _ATTR::DOMAIN_ID => '?',
+                _ATTR::NAME => '?',
+                _ATTR::TYPE => '?',
+                _ATTR::STRATEGY => '?',
+                _ATTR::SOURCE => '?',
+                _ATTR::DEFAULT_VALUE => '?',
+                _ATTR::DESCRIPTION => '?'
             ])
-            ->setParameter(0, $data[_ATTR::DOMAIN_ID->column()], PDO::PARAM_INT)
-            ->setParameter(1, $data[_ATTR::NAME->column()])
-            ->setParameter(2, $data[_ATTR::TYPE->column()])
-            ->setParameter(3, $data[_ATTR::STRATEGY->column()])
-            ->setParameter(4, $data[_ATTR::SOURCE->column()])
-            ->setParameter(5, $data[_ATTR::DEFAULT_VALUE->column()])
-            ->setParameter(6, $data[_ATTR::DESCRIPTION->column()])
+            ->setParameter(0, $data[_ATTR::DOMAIN_ID], PDO::PARAM_INT)
+            ->setParameter(1, $data[_ATTR::NAME])
+            ->setParameter(2, $data[_ATTR::TYPE])
+            ->setParameter(3, $data[_ATTR::STRATEGY])
+            ->setParameter(4, $data[_ATTR::SOURCE])
+            ->setParameter(5, $data[_ATTR::DEFAULT_VALUE])
+            ->setParameter(6, $data[_ATTR::DESCRIPTION])
             ->executeQuery();
         return (int) $conn->lastInsertId();
     }
@@ -50,8 +50,8 @@ class AttributeModel extends Model
         return $this->db()->createQueryBuilder()
             ->select($this->getPrimaryKey())
             ->from($this->getTable())
-            ->where(sprintf('%s = ?', _ATTR::DOMAIN_ID->column()))
-            ->andWhere(sprintf('%s = ?', _ATTR::NAME->column()))
+            ->where(sprintf('%s = ?', _ATTR::DOMAIN_ID))
+            ->andWhere(sprintf('%s = ?', _ATTR::NAME))
             ->setParameter(0, $domainKey, PDO::PARAM_INT)
             ->setParameter(1, $name)
             ->executeQuery()

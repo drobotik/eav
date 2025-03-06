@@ -51,9 +51,9 @@ class EntityGnomeBehaviorTest extends TestCase
         $set->expects($this->never())->method('setEntity');
 
         $entityRecord = [
-            _ENTITY::ID->column() => $entityKey,
-            _ENTITY::DOMAIN_ID->column() =>  $domainModelKey,
-            _ENTITY::ATTR_SET_ID->column() => $setModelKey
+            _ENTITY::ID => $entityKey,
+            _ENTITY::DOMAIN_ID =>  $domainModelKey,
+            _ENTITY::ATTR_SET_ID => $setModelKey
         ];
 
         $entityModel = $this->getMockBuilder(EntityModel::class)
