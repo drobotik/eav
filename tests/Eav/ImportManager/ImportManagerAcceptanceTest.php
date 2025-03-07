@@ -232,11 +232,11 @@ class ImportManagerAcceptanceTest extends TestCase
             $this->assertIsArray($datetimeValue);
             $this->assertIsArray($textValue);
 
-            $this->assertEquals($valueParser->parse(ATTR_TYPE::STRING, $record[$string[_ATTR::NAME]]), $stringValue[_VALUE::VALUE->column()], "Iteration:$iteration");
-            $this->assertEquals($valueParser->parse(ATTR_TYPE::INTEGER, $record[$integer[_ATTR::NAME]]), $integerValue[_VALUE::VALUE->column()], "Iteration:$iteration");
-            $this->assertEquals($valueParser->parse(ATTR_TYPE::DECIMAL, $record[$decimal[_ATTR::NAME]]), $decimalValue[_VALUE::VALUE->column()], "Iteration:$iteration");
-            $this->assertEquals($valueParser->parse(ATTR_TYPE::DATETIME, $record[$datetime[_ATTR::NAME]]), $datetimeValue[_VALUE::VALUE->column()], "Iteration:$iteration");
-            $this->assertEquals($valueParser->parse(ATTR_TYPE::TEXT, $record[$text[_ATTR::NAME]]), $textValue[_VALUE::VALUE->column()], "Iteration:$iteration");
+            $this->assertEquals($valueParser->parse(ATTR_TYPE::STRING, $record[$string[_ATTR::NAME]]), $stringValue[_VALUE::VALUE], "Iteration:$iteration");
+            $this->assertEquals($valueParser->parse(ATTR_TYPE::INTEGER, $record[$integer[_ATTR::NAME]]), $integerValue[_VALUE::VALUE], "Iteration:$iteration");
+            $this->assertEquals($valueParser->parse(ATTR_TYPE::DECIMAL, $record[$decimal[_ATTR::NAME]]), $decimalValue[_VALUE::VALUE], "Iteration:$iteration");
+            $this->assertEquals($valueParser->parse(ATTR_TYPE::DATETIME, $record[$datetime[_ATTR::NAME]]), $datetimeValue[_VALUE::VALUE], "Iteration:$iteration");
+            $this->assertEquals($valueParser->parse(ATTR_TYPE::TEXT, $record[$text[_ATTR::NAME]]), $textValue[_VALUE::VALUE], "Iteration:$iteration");
 
             $iteration++;
         }
@@ -457,7 +457,7 @@ class ImportManagerAcceptanceTest extends TestCase
                 else
                 {
                     $this->assertIsArray($valueRecord);
-                    $this->assertEquals($parser->parse($attrType, $value), $valueRecord[_VALUE::VALUE->column()]);
+                    $this->assertEquals($parser->parse($attrType, $value), $valueRecord[_VALUE::VALUE]);
                 }
             }
             $iteration++;

@@ -67,8 +67,8 @@ class ValueActionFunctionalTest extends TestCase
             $attrKey
         );
         $this->assertIsArray($valueRecord);
-        $valueKey = $valueRecord[_VALUE::ID->column()];
-        $this->assertEquals($valueToSave, $valueRecord[_VALUE::VALUE->column()]);
+        $valueKey = $valueRecord[_VALUE::ID];
+        $this->assertEquals($valueToSave, $valueRecord[_VALUE::VALUE]);
 
         $this->assertNull($valueManager->getRuntime());
         $this->assertEquals($valueToSave, $valueManager->getStored());
@@ -240,7 +240,7 @@ class ValueActionFunctionalTest extends TestCase
 
         $record = $valueModel->find(ATTR_TYPE::STRING->valueTable(), $domainKey, $entityKey, $attrKey);
         $this->assertIsArray($record);
-        $this->assertEquals($valueToSave, $record[_VALUE::VALUE->column()]);
+        $this->assertEquals($valueToSave, $record[_VALUE::VALUE]);
 
         $this->assertNull($valueManager->getRuntime());
         $this->assertEquals($valueToSave, $valueManager->getStored());

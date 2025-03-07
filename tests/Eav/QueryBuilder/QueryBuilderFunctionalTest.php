@@ -257,7 +257,7 @@ class QueryBuilderFunctionalTest extends QueryingDataTestCase
         $entityCol = _ENTITY::ID;
         $entitySetCol = _ENTITY::ATTR_SET_ID;
         $entityDomainCol = _ENTITY::DOMAIN_ID;
-        $attributeCol = _VALUE::ATTRIBUTE_ID->column();
+        $attributeCol = _VALUE::ATTRIBUTE_ID;
 
         $query = $this->qb->getQuery();
 
@@ -394,9 +394,9 @@ class QueryBuilderFunctionalTest extends QueryingDataTestCase
         $on = sprintf('e.%s = %s.%s AND %s.%s = :%s',
             _ENTITY::ID,
             $field,
-            _VALUE::ENTITY_ID->column(),
+            _VALUE::ENTITY_ID,
             $field,
-            _VALUE::ATTRIBUTE_ID->column(),
+            _VALUE::ATTRIBUTE_ID,
             $paramName
         );
         $join = "SELECT  FROM entity e INNER JOIN $table $field ON ";

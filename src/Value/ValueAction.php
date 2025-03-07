@@ -83,8 +83,8 @@ class ValueAction
         }
 
         $valueManager
-            ->setKey($record[_VALUE::ID->column()])
-            ->setStored($record[_VALUE::VALUE->column()]);
+            ->setKey($record[_VALUE::ID])
+            ->setStored($record[_VALUE::VALUE]);
 
         return $result->found();
     }

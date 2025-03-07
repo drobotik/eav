@@ -21,7 +21,7 @@ class ValueBase extends Model
     use SingletonsTrait;
     public function __construct()
     {
-        $this->setPrimaryKey(_VALUE::ID->column());
+        $this->setPrimaryKey(_VALUE::ID);
     }
 
     public function find(string $table, int $domainKey, int $entityKey, int $attributeKey) : bool|array
@@ -31,7 +31,7 @@ class ValueBase extends Model
             ->select('*')
             ->from($table)
             ->where(sprintf('%s = :domain AND %s = :entity AND %s = :attr',
-                _VALUE::DOMAIN_ID->column(), _VALUE::ENTITY_ID->column(), _VALUE::ATTRIBUTE_ID->column()
+                _VALUE::DOMAIN_ID, _VALUE::ENTITY_ID, _VALUE::ATTRIBUTE_ID
             ))
             ->setParameters([
                 "domain" => $domainKey,
@@ -49,10 +49,10 @@ class ValueBase extends Model
         $conn->createQueryBuilder()
             ->insert($table)
             ->values([
-                _VALUE::DOMAIN_ID->column() => '?',
-                _VALUE::ENTITY_ID->column() => '?',
-                _VALUE::ATTRIBUTE_ID->column() => '?',
-                _VALUE::VALUE->column() => '?',
+                _VALUE::DOMAIN_ID => '?',
+                _VALUE::ENTITY_ID => '?',
+                _VALUE::ATTRIBUTE_ID => '?',
+                _VALUE::VALUE => '?',
             ])
             ->setParameter(0, $domainKey)
             ->setParameter(1, $entityKey)
@@ -68,9 +68,9 @@ class ValueBase extends Model
         return $conn->createQueryBuilder()
             ->update($table)
             ->where(sprintf('%s = :domain AND %s = :entity AND %s = :attr',
-                _VALUE::DOMAIN_ID->column(), _VALUE::ENTITY_ID->column(), _VALUE::ATTRIBUTE_ID->column()
+                _VALUE::DOMAIN_ID, _VALUE::ENTITY_ID, _VALUE::ATTRIBUTE_ID
             ))
-            ->set(_VALUE::VALUE->column(), ':value')
+            ->set(_VALUE::VALUE, ':value')
             ->setParameters([
                 "domain" => $domainKey,
                 "entity" => $entityKey,
@@ -87,7 +87,7 @@ class ValueBase extends Model
             ->createQueryBuilder()
             ->delete($table)
             ->where(sprintf('%s = ? AND %s = ? AND %s = ?',
-                _VALUE::DOMAIN_ID->column(), _VALUE::ENTITY_ID->column(), _VALUE::ATTRIBUTE_ID->column()
+                _VALUE::DOMAIN_ID, _VALUE::ENTITY_ID, _VALUE::ATTRIBUTE_ID
             ))
             ->setParameters([$domainKey, $entityKey, $attributeKey])
             ->executeQuery()
@@ -98,7 +98,7 @@ class ValueBase extends Model
     {
         $pdo = Connection::get()->getNativeConnection();
 
-        $template = "INSERT INTO %s ("._VALUE::DOMAIN_ID->column().","._VALUE::ENTITY_ID->column().","._VALUE::ATTRIBUTE_ID->column().","._VALUE::VALUE->column().")";
+        $template = "INSERT INTO %s ("._VALUE::DOMAIN_ID.","._VALUE::ENTITY_ID.","._VALUE::ATTRIBUTE_ID.","._VALUE::VALUE.")";
 
         $stringTable = ATTR_TYPE::STRING->valueTable();
         $integerTable = ATTR_TYPE::INTEGER->valueTable();

@@ -111,7 +111,7 @@ class QueryBuilder
 
     public function select(string $name) : Query
     {
-        return $this->getQuery()->addSelect(sprintf('%1$s.%2$s as %1$s', $name, _VALUE::VALUE->column()));
+        return $this->getQuery()->addSelect(sprintf('%1$s.%2$s as %1$s', $name, _VALUE::VALUE));
     }
 
     public function join(string $name): Query
@@ -127,9 +127,9 @@ class QueryBuilder
                 sprintf('e.%s = %s.%s AND %s.%s = :%s',
                     _ENTITY::ID,
                     $name,
-                    _VALUE::ENTITY_ID->column(),
+                    _VALUE::ENTITY_ID,
                     $name,
-                    _VALUE::ATTRIBUTE_ID->column(),
+                    _VALUE::ATTRIBUTE_ID,
                     $paramName
                 )
             );

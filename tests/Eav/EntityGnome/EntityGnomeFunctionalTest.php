@@ -259,7 +259,7 @@ class EntityGnomeFunctionalTest extends TestCase
             $attrEmailKey
         );
         $this->assertIsArray($emailRecord);
-        $this->assertEquals($testData["email"], $emailRecord[_VALUE::VALUE->column()]);
+        $this->assertEquals($testData["email"], $emailRecord[_VALUE::VALUE]);
 
         $phoneRecord = $valueModel->find(
             ATTR_TYPE::STRING->valueTable(),
@@ -268,7 +268,7 @@ class EntityGnomeFunctionalTest extends TestCase
             $attrPhoneKey
         );
         $this->assertIsArray($phoneRecord);
-        $this->assertEquals($testData["phone"], $phoneRecord[_VALUE::VALUE->column()]);
+        $this->assertEquals($testData["phone"], $phoneRecord[_VALUE::VALUE]);
 
         $noteRecord = $valueModel->find(
             ATTR_TYPE::STRING->valueTable(),

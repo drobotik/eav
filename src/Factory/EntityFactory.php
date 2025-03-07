@@ -128,7 +128,7 @@ class EntityFactory
         if($record === false) {
             $key = $valueModel->create($valueTable, $domainKey, $entityKey, $attrKey, $valueParser->parse($type, $value));
         } else {
-            $key = $record[_VALUE::ID->column()];
+            $key = $record[_VALUE::ID];
             $valueModel->update($valueTable, $domainKey, $entityKey, $attrKey, $valueParser->parse($type, $value));
         }
         $result->addValue($attrKey, $key);

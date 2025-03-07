@@ -34,10 +34,10 @@ class ValueValidator
     {
         $rules = $this->getAttributeContainer()->getStrategy()->rules();
         return new Constraints\Collection([
-            _VALUE::ENTITY_ID->column() => [new Constraints\NotBlank(), Assert::integer()],
-            _VALUE::DOMAIN_ID->column() => [new Constraints\NotBlank(), Assert::integer()],
-            _VALUE::ATTRIBUTE_ID->column() => [new Constraints\NotBlank(), Assert::integer()],
-            _VALUE::VALUE->column() => is_null($rules)
+            _VALUE::ENTITY_ID => [new Constraints\NotBlank(), Assert::integer()],
+            _VALUE::DOMAIN_ID => [new Constraints\NotBlank(), Assert::integer()],
+            _VALUE::ATTRIBUTE_ID => [new Constraints\NotBlank(), Assert::integer()],
+            _VALUE::VALUE => is_null($rules)
                 ? $this->getDefaultValueRule()
                 : $rules,
         ]);
@@ -51,10 +51,10 @@ class ValueValidator
         $valueManager = $container->getValueManager();
 
         return [
-            _VALUE::ENTITY_ID->column() => $entity->getKey(),
-            _VALUE::DOMAIN_ID->column() => $entity->getDomainKey(),
-            _VALUE::ATTRIBUTE_ID->column() => $attribute->getKey(),
-            _VALUE::VALUE->column() => $valueManager->getRuntime(),
+            _VALUE::ENTITY_ID => $entity->getKey(),
+            _VALUE::DOMAIN_ID => $entity->getDomainKey(),
+            _VALUE::ATTRIBUTE_ID => $attribute->getKey(),
+            _VALUE::VALUE => $valueManager->getRuntime(),
         ];
     }
 

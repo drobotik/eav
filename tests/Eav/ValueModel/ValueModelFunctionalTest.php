@@ -34,7 +34,7 @@ class ValueModelFunctionalTest extends TestCase
      * @covers \Drobotik\Eav\Model\ValueBase::__construct
      */
     public function defaults() {
-        $this->assertEquals(_VALUE::ID->column(), $this->model->getPrimaryKey());
+        $this->assertEquals(_VALUE::ID, $this->model->getPrimaryKey());
     }
 
     /**
@@ -63,13 +63,13 @@ class ValueModelFunctionalTest extends TestCase
                 ->select('*')
                 ->from($case->valueTable())
                 ->where(sprintf('%s = ? AND %s = ? AND %s = ?',
-                    _VALUE::DOMAIN_ID->column(), _VALUE::ENTITY_ID->column(), _VALUE::ATTRIBUTE_ID->column()
+                    _VALUE::DOMAIN_ID, _VALUE::ENTITY_ID, _VALUE::ATTRIBUTE_ID
                 ))
                 ->setParameters([$domainKey,$entityKey,$attributeKey])
                 ->executeQuery()
                 ->fetchAssociative();
-            $this->assertEquals($valueKey, $valueRecord[_VALUE::ID->column()], "Iteration:".$case->value());
-            $this->assertEquals($parser->parse($case, $value), $valueRecord[_VALUE::VALUE->column()], "Iteration:".$case->value());
+            $this->assertEquals($valueKey, $valueRecord[_VALUE::ID], "Iteration:".$case->value());
+            $this->assertEquals($parser->parse($case, $value), $valueRecord[_VALUE::VALUE], "Iteration:".$case->value());
         }
     }
 
@@ -88,7 +88,7 @@ class ValueModelFunctionalTest extends TestCase
         {
             $valueKey = $this->model->create($case->valueTable(), $domainKey, $entityKey, $attributeKey, $case->randomValue());
             $record = $this->model->find($case->valueTable(), $domainKey, $entityKey, $attributeKey);
-            $this->assertEquals($valueKey, $record[_VALUE::ID->column()]);
+            $this->assertEquals($valueKey, $record[_VALUE::ID]);
         }
     }
 
@@ -111,7 +111,7 @@ class ValueModelFunctionalTest extends TestCase
             $this->assertEquals(1, $result);
             $record = $this->model->find($case->valueTable(), $domainKey, $entityKey, $attributeKey);
             $this->assertIsArray($record);
-            $this->assertEquals($newValue, $record[_VALUE::VALUE->column()]);
+            $this->assertEquals($newValue, $record[_VALUE::VALUE]);
         }
     }
 
@@ -237,62 +237,62 @@ class ValueModelFunctionalTest extends TestCase
         $stringRecords = Connection::get()->createQueryBuilder()->select('*')->from(ATTR_TYPE::STRING->valueTable())
             ->executeQuery()->fetchAllAssociative();
         $this->assertEquals(2, count($stringRecords));
-        $this->assertEquals($domainKey, $stringRecords[0][_VALUE::DOMAIN_ID->column()]);
-        $this->assertEquals($valueString1->getAttributeKey(), $stringRecords[0][_VALUE::ATTRIBUTE_ID->column()]);
-        $this->assertEquals($valueString1->getEntityKey(), $stringRecords[0][_VALUE::ENTITY_ID->column()]);
-        $this->assertEquals($valueString1->getValue(), $stringRecords[0][_VALUE::VALUE->column()]);
-        $this->assertEquals($domainKey, $stringRecords[1][_VALUE::DOMAIN_ID->column()]);
-        $this->assertEquals($valueString2->getAttributeKey(), $stringRecords[1][_VALUE::ATTRIBUTE_ID->column()]);
-        $this->assertEquals($valueString2->getEntityKey(), $stringRecords[1][_VALUE::ENTITY_ID->column()]);
-        $this->assertEquals($valueString2->getValue(), $stringRecords[1][_VALUE::VALUE->column()]);
+        $this->assertEquals($domainKey, $stringRecords[0][_VALUE::DOMAIN_ID]);
+        $this->assertEquals($valueString1->getAttributeKey(), $stringRecords[0][_VALUE::ATTRIBUTE_ID]);
+        $this->assertEquals($valueString1->getEntityKey(), $stringRecords[0][_VALUE::ENTITY_ID]);
+        $this->assertEquals($valueString1->getValue(), $stringRecords[0][_VALUE::VALUE]);
+        $this->assertEquals($domainKey, $stringRecords[1][_VALUE::DOMAIN_ID]);
+        $this->assertEquals($valueString2->getAttributeKey(), $stringRecords[1][_VALUE::ATTRIBUTE_ID]);
+        $this->assertEquals($valueString2->getEntityKey(), $stringRecords[1][_VALUE::ENTITY_ID]);
+        $this->assertEquals($valueString2->getValue(), $stringRecords[1][_VALUE::VALUE]);
 
         $integerRecords = Connection::get()->createQueryBuilder()->select('*')->from(ATTR_TYPE::INTEGER->valueTable())
             ->executeQuery()->fetchAllAssociative();
 
         $this->assertEquals(2, count($integerRecords));
-        $this->assertEquals($domainKey, $integerRecords[0][_VALUE::DOMAIN_ID->column()]);
-        $this->assertEquals($valueInteger1->getAttributeKey(), $integerRecords[0][_VALUE::ATTRIBUTE_ID->column()]);
-        $this->assertEquals($valueInteger1->getEntityKey(), $integerRecords[0][_VALUE::ENTITY_ID->column()]);
-        $this->assertEquals($valueInteger1->getValue(), $integerRecords[0][_VALUE::VALUE->column()]);
-        $this->assertEquals($domainKey, $integerRecords[1][_VALUE::DOMAIN_ID->column()]);
-        $this->assertEquals($valueInteger2->getAttributeKey(), $integerRecords[1][_VALUE::ATTRIBUTE_ID->column()]);
-        $this->assertEquals($valueInteger2->getEntityKey(), $integerRecords[1][_VALUE::ENTITY_ID->column()]);
-        $this->assertEquals($valueInteger2->getValue(), $integerRecords[1][_VALUE::VALUE->column()]);
+        $this->assertEquals($domainKey, $integerRecords[0][_VALUE::DOMAIN_ID]);
+        $this->assertEquals($valueInteger1->getAttributeKey(), $integerRecords[0][_VALUE::ATTRIBUTE_ID]);
+        $this->assertEquals($valueInteger1->getEntityKey(), $integerRecords[0][_VALUE::ENTITY_ID]);
+        $this->assertEquals($valueInteger1->getValue(), $integerRecords[0][_VALUE::VALUE]);
+        $this->assertEquals($domainKey, $integerRecords[1][_VALUE::DOMAIN_ID]);
+        $this->assertEquals($valueInteger2->getAttributeKey(), $integerRecords[1][_VALUE::ATTRIBUTE_ID]);
+        $this->assertEquals($valueInteger2->getEntityKey(), $integerRecords[1][_VALUE::ENTITY_ID]);
+        $this->assertEquals($valueInteger2->getValue(), $integerRecords[1][_VALUE::VALUE]);
 
         $decimalRecords = Connection::get()->createQueryBuilder()->select('*')->from(ATTR_TYPE::DECIMAL->valueTable())
             ->executeQuery()->fetchAllAssociative();
         $this->assertEquals(2, count($decimalRecords));
-        $this->assertEquals($domainKey, $decimalRecords[0][_VALUE::DOMAIN_ID->column()]);
-        $this->assertEquals($valueDecimal1->getAttributeKey(), $decimalRecords[0][_VALUE::ATTRIBUTE_ID->column()]);
-        $this->assertEquals($valueDecimal1->getEntityKey(), $decimalRecords[0][_VALUE::ENTITY_ID->column()]);
-        $this->assertEquals($valueDecimal1->getValue(), $decimalRecords[0][_VALUE::VALUE->column()]);
-        $this->assertEquals($domainKey, $decimalRecords[1][_VALUE::DOMAIN_ID->column()]);
-        $this->assertEquals($valueDecimal2->getAttributeKey(), $decimalRecords[1][_VALUE::ATTRIBUTE_ID->column()]);
-        $this->assertEquals($valueDecimal2->getEntityKey(), $decimalRecords[1][_VALUE::ENTITY_ID->column()]);
-        $this->assertEquals($valueDecimal2->getValue(), $decimalRecords[1][_VALUE::VALUE->column()]);
+        $this->assertEquals($domainKey, $decimalRecords[0][_VALUE::DOMAIN_ID]);
+        $this->assertEquals($valueDecimal1->getAttributeKey(), $decimalRecords[0][_VALUE::ATTRIBUTE_ID]);
+        $this->assertEquals($valueDecimal1->getEntityKey(), $decimalRecords[0][_VALUE::ENTITY_ID]);
+        $this->assertEquals($valueDecimal1->getValue(), $decimalRecords[0][_VALUE::VALUE]);
+        $this->assertEquals($domainKey, $decimalRecords[1][_VALUE::DOMAIN_ID]);
+        $this->assertEquals($valueDecimal2->getAttributeKey(), $decimalRecords[1][_VALUE::ATTRIBUTE_ID]);
+        $this->assertEquals($valueDecimal2->getEntityKey(), $decimalRecords[1][_VALUE::ENTITY_ID]);
+        $this->assertEquals($valueDecimal2->getValue(), $decimalRecords[1][_VALUE::VALUE]);
 
         $datetimeRecords =  Connection::get()->createQueryBuilder()->select('*')->from(ATTR_TYPE::DATETIME->valueTable())
             ->executeQuery()->fetchAllAssociative();
         $this->assertEquals(2, count($datetimeRecords));
-        $this->assertEquals($domainKey, $datetimeRecords[0][_VALUE::DOMAIN_ID->column()]);
-        $this->assertEquals($valueDatetime1->getAttributeKey(), $datetimeRecords[0][_VALUE::ATTRIBUTE_ID->column()]);
-        $this->assertEquals($valueDatetime1->getEntityKey(), $datetimeRecords[0][_VALUE::ENTITY_ID->column()]);
-        $this->assertEquals($valueDatetime1->getValue(), $datetimeRecords[0][_VALUE::VALUE->column()]);
-        $this->assertEquals($domainKey, $datetimeRecords[1][_VALUE::DOMAIN_ID->column()]);
-        $this->assertEquals($valueDatetime2->getAttributeKey(), $datetimeRecords[1][_VALUE::ATTRIBUTE_ID->column()]);
-        $this->assertEquals($valueDatetime2->getEntityKey(), $datetimeRecords[1][_VALUE::ENTITY_ID->column()]);
-        $this->assertEquals($valueDatetime2->getValue(), $datetimeRecords[1][_VALUE::VALUE->column()]);
+        $this->assertEquals($domainKey, $datetimeRecords[0][_VALUE::DOMAIN_ID]);
+        $this->assertEquals($valueDatetime1->getAttributeKey(), $datetimeRecords[0][_VALUE::ATTRIBUTE_ID]);
+        $this->assertEquals($valueDatetime1->getEntityKey(), $datetimeRecords[0][_VALUE::ENTITY_ID]);
+        $this->assertEquals($valueDatetime1->getValue(), $datetimeRecords[0][_VALUE::VALUE]);
+        $this->assertEquals($domainKey, $datetimeRecords[1][_VALUE::DOMAIN_ID]);
+        $this->assertEquals($valueDatetime2->getAttributeKey(), $datetimeRecords[1][_VALUE::ATTRIBUTE_ID]);
+        $this->assertEquals($valueDatetime2->getEntityKey(), $datetimeRecords[1][_VALUE::ENTITY_ID]);
+        $this->assertEquals($valueDatetime2->getValue(), $datetimeRecords[1][_VALUE::VALUE]);
 
         $textRecords =  Connection::get()->createQueryBuilder()->select('*')->from(ATTR_TYPE::TEXT->valueTable())
             ->executeQuery()->fetchAllAssociative();
         $this->assertEquals(2, count($textRecords));
-        $this->assertEquals($domainKey, $textRecords[0][_VALUE::DOMAIN_ID->column()]);
-        $this->assertEquals($valueText1->getAttributeKey(), $textRecords[0][_VALUE::ATTRIBUTE_ID->column()]);
-        $this->assertEquals($valueText1->getEntityKey(), $textRecords[0][_VALUE::ENTITY_ID->column()]);
-        $this->assertEquals($valueText1->getValue(), $textRecords[0][_VALUE::VALUE->column()]);
-        $this->assertEquals($domainKey, $textRecords[1][_VALUE::DOMAIN_ID->column()]);
-        $this->assertEquals($valueText2->getAttributeKey(), $textRecords[1][_VALUE::ATTRIBUTE_ID->column()]);
-        $this->assertEquals($valueText2->getEntityKey(), $textRecords[1][_VALUE::ENTITY_ID->column()]);
-        $this->assertEquals($valueText2->getValue(), $textRecords[1][_VALUE::VALUE->column()]);
+        $this->assertEquals($domainKey, $textRecords[0][_VALUE::DOMAIN_ID]);
+        $this->assertEquals($valueText1->getAttributeKey(), $textRecords[0][_VALUE::ATTRIBUTE_ID]);
+        $this->assertEquals($valueText1->getEntityKey(), $textRecords[0][_VALUE::ENTITY_ID]);
+        $this->assertEquals($valueText1->getValue(), $textRecords[0][_VALUE::VALUE]);
+        $this->assertEquals($domainKey, $textRecords[1][_VALUE::DOMAIN_ID]);
+        $this->assertEquals($valueText2->getAttributeKey(), $textRecords[1][_VALUE::ATTRIBUTE_ID]);
+        $this->assertEquals($valueText2->getEntityKey(), $textRecords[1][_VALUE::ENTITY_ID]);
+        $this->assertEquals($valueText2->getValue(), $textRecords[1][_VALUE::VALUE]);
     }
 }

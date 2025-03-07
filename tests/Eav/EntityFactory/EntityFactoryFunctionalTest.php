@@ -618,19 +618,19 @@ class EntityFactoryFunctionalTest extends TestCase
 
         $parser = $this->makeValueParser();
 
-        $this->assertEquals($parser->parse(ATTR_TYPE::STRING, $stringValue), $string[_VALUE::VALUE->column()]);
-        $this->assertEquals($parser->parse(ATTR_TYPE::INTEGER, $integerValue), $integer[_VALUE::VALUE->column()]);
-        $this->assertEquals($parser->parse(ATTR_TYPE::DECIMAL, $decimalValue), $decimal[_VALUE::VALUE->column()]);
-        $this->assertEquals($parser->parse(ATTR_TYPE::DATETIME, $datetimeValue), $datetime[_VALUE::VALUE->column()]);
-        $this->assertEquals($parser->parse(ATTR_TYPE::TEXT, $textValue), $text[_VALUE::VALUE->column()]);
+        $this->assertEquals($parser->parse(ATTR_TYPE::STRING, $stringValue), $string[_VALUE::VALUE]);
+        $this->assertEquals($parser->parse(ATTR_TYPE::INTEGER, $integerValue), $integer[_VALUE::VALUE]);
+        $this->assertEquals($parser->parse(ATTR_TYPE::DECIMAL, $decimalValue), $decimal[_VALUE::VALUE]);
+        $this->assertEquals($parser->parse(ATTR_TYPE::DATETIME, $datetimeValue), $datetime[_VALUE::VALUE]);
+        $this->assertEquals($parser->parse(ATTR_TYPE::TEXT, $textValue), $text[_VALUE::VALUE]);
 
         $values = $result->getValues();
         $this->assertCount(5, $values);
-        $this->assertEquals($string[_VALUE::ID->column()], $values[$stringKey]);
-        $this->assertEquals($integer[_VALUE::ID->column()], $values[$integerKey]);
-        $this->assertEquals($decimal[_VALUE::ID->column()], $values[$decimalKey]);
-        $this->assertEquals($datetime[_VALUE::ID->column()], $values[$datetimeKey]);
-        $this->assertEquals($text[_VALUE::ID->column()], $values[$textKey]);
+        $this->assertEquals($string[_VALUE::ID], $values[$stringKey]);
+        $this->assertEquals($integer[_VALUE::ID], $values[$integerKey]);
+        $this->assertEquals($decimal[_VALUE::ID], $values[$decimalKey]);
+        $this->assertEquals($datetime[_VALUE::ID], $values[$datetimeKey]);
+        $this->assertEquals($text[_VALUE::ID], $values[$textKey]);
     }
 
     /**
@@ -792,7 +792,7 @@ class EntityFactoryFunctionalTest extends TestCase
         $attrType = ATTR_TYPE::INTEGER;
         $valueKey = 5;
         $record = [
-            _VALUE::ID->column() => $valueKey
+            _VALUE::ID => $valueKey
         ];
         $value = 432;
         $parsedValue = 433;

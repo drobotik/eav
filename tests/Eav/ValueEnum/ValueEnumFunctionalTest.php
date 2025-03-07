@@ -28,19 +28,17 @@ class ValueEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Enum\_VALUE::column
+     * @covers \Drobotik\Eav\Enum\_VALUE::ID
+     * @covers \Drobotik\Eav\Enum\_VALUE::DOMAIN_ID
+     * @covers \Drobotik\Eav\Enum\_VALUE::ENTITY_ID
+     * @covers \Drobotik\Eav\Enum\_VALUE::ATTRIBUTE_ID
+     * @covers \Drobotik\Eav\Enum\_VALUE::VALUE
      */
     public function columns() {
-        $cases = [];
-        foreach (_VALUE::cases() as $case) {
-            $cases[$case->column()] = $case->column();
-        }
-        $this->assertEquals([
-            _VALUE::ID->column() => 'value_id',
-            _VALUE::DOMAIN_ID->column() => _DOMAIN::ID,
-            _VALUE::ENTITY_ID->column() => _ENTITY::ID,
-            _VALUE::ATTRIBUTE_ID->column() => _ATTR::ID,
-            _VALUE::VALUE->column() => 'value',
-        ], $cases);
+        $this->assertEquals('value_id', _VALUE::ID);
+        $this->assertEquals( _DOMAIN::ID, _VALUE::DOMAIN_ID);
+        $this->assertEquals( _ENTITY::ID, _VALUE::ENTITY_ID);
+        $this->assertEquals(_ATTR::ID, _VALUE::ATTRIBUTE_ID);
+        $this->assertEquals('value', _VALUE::VALUE);
     }
 }

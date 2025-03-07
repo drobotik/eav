@@ -61,10 +61,10 @@ class ValueValidatorFunctionalTest extends TestCase
         $this->validator->setAttributeContainer($container);
         $this->assertEquals(
             new Constraints\Collection([
-                _VALUE::ENTITY_ID->column() => [new Constraints\NotBlank(), Assert::integer()],
-                _VALUE::DOMAIN_ID->column() => [new Constraints\NotBlank(), Assert::integer()],
-                _VALUE::ATTRIBUTE_ID->column() => [new Constraints\NotBlank(), Assert::integer()],
-                _VALUE::VALUE->column() => $this->validator->getDefaultValueRule(),
+                _VALUE::ENTITY_ID => [new Constraints\NotBlank(), Assert::integer()],
+                _VALUE::DOMAIN_ID => [new Constraints\NotBlank(), Assert::integer()],
+                _VALUE::ATTRIBUTE_ID => [new Constraints\NotBlank(), Assert::integer()],
+                _VALUE::VALUE => $this->validator->getDefaultValueRule(),
             ]),
             $this->validator->getRules()
         );
@@ -89,7 +89,7 @@ class ValueValidatorFunctionalTest extends TestCase
         $this->validator->setAttributeContainer($container);
         $result = $this->validator->getRules();
         /** @var \Symfony\Component\Validator\Constraints\Required $valueRule */
-        $valueRule = $result->fields[_VALUE::VALUE->column()];
+        $valueRule = $result->fields[_VALUE::VALUE];
         $constraints = $valueRule->getNestedConstraints();
         $this->assertCount(1, $constraints);
         $this->assertInstanceOf(Constraints\NotBlank::class,  $constraints[0]);
@@ -118,10 +118,10 @@ class ValueValidatorFunctionalTest extends TestCase
         $this->validator->setAttributeContainer($container);
         $this->assertEquals(
             [
-                _VALUE::ENTITY_ID->column() => $entity->getKey(),
-                _VALUE::DOMAIN_ID->column() => $entity->getDomainKey(),
-                _VALUE::ATTRIBUTE_ID->column() => $attribute->getKey(),
-                _VALUE::VALUE->column() => $valueManager->getRuntime()
+                _VALUE::ENTITY_ID => $entity->getKey(),
+                _VALUE::DOMAIN_ID => $entity->getDomainKey(),
+                _VALUE::ATTRIBUTE_ID => $attribute->getKey(),
+                _VALUE::VALUE => $valueManager->getRuntime()
             ],
             $this->validator->getValidatedData()
         );

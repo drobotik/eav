@@ -51,7 +51,7 @@ class ValueValidatorBehaviorTest extends TestCase
         $this->validator->setAttributeContainer($container);
         $result = $this->validator->getRules();
         /** @var \Symfony\Component\Validator\Constraints\Required  $t */
-        $t = $result->fields[_VALUE::VALUE->column()];
+        $t = $result->fields[_VALUE::VALUE];
         $this->assertEquals($collection, $t->getNestedConstraints());
     }
     /**
