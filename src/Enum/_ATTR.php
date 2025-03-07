@@ -12,7 +12,7 @@ namespace Drobotik\Eav\Enum;
 use Drobotik\Eav\Interface\DefineTableInterface;
 use Drobotik\Eav\Strategy;
 
-enum _ATTR implements DefineTableInterface
+class _ATTR implements DefineTableInterface
 {
 
     public const ID = 'attribute_id';
@@ -27,11 +27,6 @@ enum _ATTR implements DefineTableInterface
     public static function table() : string
     {
         return 'eav_attributes';
-    }
-
-    public function column() : string
-    {
-        return '';
     }
 
     public static function bag(string $key = null)

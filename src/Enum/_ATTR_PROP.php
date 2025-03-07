@@ -11,7 +11,7 @@ namespace Drobotik\Eav\Enum;
 
 use Drobotik\Eav\Interface\DefineTableInterface;
 
-enum _ATTR_PROP implements DefineTableInterface
+class _ATTR_PROP implements DefineTableInterface
 {
     public const KEY = 'property_key';
     public const ATTRIBUTE_KEY = 'attribute_key';
@@ -23,8 +23,4 @@ enum _ATTR_PROP implements DefineTableInterface
         return "eav_attribute_properties";
     }
 
-    public function column(): string
-    {
-        return '';
-    }
 }

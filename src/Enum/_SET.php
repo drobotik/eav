@@ -11,7 +11,7 @@ namespace Drobotik\Eav\Enum;
 
 use Drobotik\Eav\Interface\DefineTableInterface;
 
-enum _SET implements DefineTableInterface
+class _SET implements DefineTableInterface
 {
     public const ID = 'set_id';
     public const DOMAIN_ID = 'domain_id';
@@ -20,10 +20,5 @@ enum _SET implements DefineTableInterface
     public static function table() : string
     {
         return 'eav_attribute_sets';
-    }
-
-    public function column() : string
-    {
-        return '';
     }
 }

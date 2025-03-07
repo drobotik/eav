@@ -11,7 +11,7 @@ namespace Drobotik\Eav\Enum;
 
 use Drobotik\Eav\Interface\DefineTableInterface;
 
-enum _GROUP implements DefineTableInterface
+class _GROUP implements DefineTableInterface
 {
 
     public const ID = 'group_id';
@@ -21,10 +21,5 @@ enum _GROUP implements DefineTableInterface
     public static function table() : string
     {
         return 'eav_attribute_groups';
-    }
-
-    public function column() : string
-    {
-        return '1';
     }
 }

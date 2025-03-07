@@ -10,60 +10,39 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\Enum;
 
-enum _RESULT
+class _RESULT
 {
-    case CREATED;
+    const CREATED = 1;
+    const UPDATED = 2;
+    const FOUND = 3;
+    const NOT_FOUND = 4;
+    const NOT_ENOUGH_ARGS = 5;
+    const NOT_ALLOWED = 6;
+    const EMPTY = 7;
+    const DELETED = 8;
+    const NOT_DELETED = 9;
+    const VALIDATION_FAILS = 10;
+    const VALIDATION_PASSED = 11;
+    const EXPORT_SUCCESS = 12;
+    const EXPORT_FAILED = 13;
+    const IMPORT_SUCCESS = 14;
+    const IMPORT_FAILED = 15;
 
-    case UPDATED;
-
-    case DELETED;
-
-    case NOT_DELETED;
-
-    case FOUND;
-
-    case NOT_FOUND;
-
-    case NOT_ENOUGH_ARGS;
-
-    case NOT_ALLOWED;
-
-    case EMPTY;
-
-    case VALIDATION_FAILS;
-
-    case VALIDATION_PASSED;
-
-    case EXPORT_SUCCESS;
-    case EXPORT_FAILED;
-    case IMPORT_SUCCESS;
-
-    case IMPORT_FAILED;
-
-    public function code(): int
+    public static function code($result)
     {
-        return match ($this) {
-            self::CREATED => 1,
-            self::UPDATED => 2,
-            self::FOUND => 3,
-            self::NOT_FOUND => 4,
-            self::NOT_ENOUGH_ARGS => 5,
-            self::NOT_ALLOWED => 6,
-            self::EMPTY => 7,
-            self::DELETED => 8,
-            self::NOT_DELETED => 9,
-            self::VALIDATION_FAILS => 10,
-            self::VALIDATION_PASSED => 11,
-            self::EXPORT_SUCCESS => 12,
-            self::EXPORT_FAILED => 13,
-            self::IMPORT_SUCCESS => 14,
-            self::IMPORT_FAILED => 15,
-        };
+        $validResults = [
+            self::CREATED, self::UPDATED, self::FOUND, self::NOT_FOUND,
+            self::NOT_ENOUGH_ARGS, self::NOT_ALLOWED, self::EMPTY, self::DELETED,
+            self::NOT_DELETED, self::VALIDATION_FAILS, self::VALIDATION_PASSED,
+            self::EXPORT_SUCCESS, self::EXPORT_FAILED, self::IMPORT_SUCCESS, self::IMPORT_FAILED
+        ];
+
+        return in_array($result, $validResults, true) ? $result : null;
     }
 
-    public function message(): string
+    public static function message($result)
     {
-        return match ($this) {
+        $messages = [
             self::CREATED => 'Created',
             self::UPDATED => 'Updated',
             self::FOUND => 'Found',
@@ -79,6 +58,8 @@ enum _RESULT
             self::EXPORT_FAILED => 'Export failed',
             self::IMPORT_SUCCESS => 'Successfully imported',
             self::IMPORT_FAILED => 'Import failed',
-        };
+        ];
+
+        return $messages[$result] ?? 'Unknown result';
     }
 }

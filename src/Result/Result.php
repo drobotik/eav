@@ -57,91 +57,91 @@ class Result
 
     public function created(): self
     {
-        return $this->setCode(_RESULT::CREATED->code())
-            ->setMessage(_RESULT::CREATED->message());
+        return $this->setCode(_RESULT::CREATED)
+            ->setMessage(_RESULT::message(_RESULT::CREATED));
     }
 
     public function updated(): self
     {
-        return $this->setCode(_RESULT::UPDATED->code())
-            ->setMessage(_RESULT::UPDATED->message());
+        return $this->setCode(_RESULT::UPDATED)
+            ->setMessage(_RESULT::message(_RESULT::UPDATED));
     }
 
     public function deleted(): self
     {
-        return $this->setCode(_RESULT::DELETED->code())
-            ->setMessage(_RESULT::DELETED->message());
+        return $this->setCode(_RESULT::DELETED)
+            ->setMessage(_RESULT::message(_RESULT::DELETED));
     }
 
     public function notDeleted(): self
     {
-        return $this->setCode(_RESULT::NOT_DELETED->code())
-            ->setMessage(_RESULT::NOT_DELETED->message());
+        return $this->setCode(_RESULT::NOT_DELETED)
+            ->setMessage(_RESULT::message(_RESULT::NOT_DELETED));
     }
 
     public function found(): self
     {
-        return $this->setCode(_RESULT::FOUND->code())
-            ->setMessage(_RESULT::FOUND->message());
+        return $this->setCode(_RESULT::FOUND)
+            ->setMessage(_RESULT::message(_RESULT::FOUND));
     }
 
     public function notFound(): self
     {
-        return $this->setCode(_RESULT::NOT_FOUND->code())
-            ->setMessage(_RESULT::NOT_FOUND->message());
+        return $this->setCode(_RESULT::NOT_FOUND)
+            ->setMessage(_RESULT::message(_RESULT::NOT_FOUND));
     }
 
     public function notEnoughArgs(): self
     {
-        return $this->setCode(_RESULT::NOT_ENOUGH_ARGS->code())
-            ->setMessage(_RESULT::NOT_ENOUGH_ARGS->message());
+        return $this->setCode(_RESULT::NOT_ENOUGH_ARGS)
+            ->setMessage(_RESULT::message(_RESULT::NOT_ENOUGH_ARGS));
     }
 
     public function notAllowed(): self
     {
-        return $this->setCode(_RESULT::NOT_ALLOWED->code())
-            ->setMessage(_RESULT::NOT_ALLOWED->message());
+        return $this->setCode(_RESULT::NOT_ALLOWED)
+            ->setMessage(_RESULT::message(_RESULT::NOT_ALLOWED));
     }
 
     public function empty(): self
     {
-        return $this->setCode(_RESULT::EMPTY->code())
-            ->setMessage(_RESULT::EMPTY->message());
+        return $this->setCode(_RESULT::EMPTY)
+            ->setMessage(_RESULT::message(_RESULT::EMPTY));
     }
 
     public function validationFails(): self
     {
-        return $this->setCode(_RESULT::VALIDATION_FAILS->code())
-            ->setMessage(_RESULT::VALIDATION_FAILS->message());
+        return $this->setCode(_RESULT::VALIDATION_FAILS)
+            ->setMessage(_RESULT::message(_RESULT::VALIDATION_FAILS));
     }
 
     public function validationPassed(): self
     {
-        return $this->setCode(_RESULT::VALIDATION_PASSED->code())
-            ->setMessage(_RESULT::VALIDATION_PASSED->message());
+        return $this->setCode(_RESULT::VALIDATION_PASSED)
+            ->setMessage(_RESULT::message(_RESULT::VALIDATION_PASSED));
     }
 
     public function exportSuccess(): self
     {
-        return $this->setCode(_RESULT::EXPORT_SUCCESS->code())
-            ->setMessage(_RESULT::EXPORT_SUCCESS->message());
+        return $this->setCode(_RESULT::EXPORT_SUCCESS)
+            ->setMessage(_RESULT::message(_RESULT::EXPORT_SUCCESS));
     }
 
     public function exportFailed(): self
     {
-        return $this->setCode(_RESULT::EXPORT_FAILED->code())
-            ->setMessage(_RESULT::EXPORT_FAILED->message());
+        return $this->setCode(_RESULT::EXPORT_FAILED)
+            ->setMessage(_RESULT::message(_RESULT::EXPORT_FAILED));
     }
 
     public function importSuccess(): self
     {
-        return $this->setCode(_RESULT::IMPORT_SUCCESS->code())
-            ->setMessage(_RESULT::IMPORT_SUCCESS->message());
+        return $this->setCode(_RESULT::IMPORT_SUCCESS)
+            ->setMessage(_RESULT::message(_RESULT::IMPORT_SUCCESS));
     }
 
     public function importFailed(): self
     {
-        return $this->setCode(_RESULT::IMPORT_FAILED->code())
-            ->setMessage(_RESULT::IMPORT_FAILED->message());
+        return $this->setCode(_RESULT::IMPORT_FAILED)
+            ->setMessage(_RESULT::message(_RESULT::IMPORT_FAILED));
     }
 }

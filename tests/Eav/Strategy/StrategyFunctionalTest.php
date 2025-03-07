@@ -105,8 +105,8 @@ class StrategyFunctionalTest extends TestCase
 
         $this->assertFalse($valueManager->isRuntime());
         $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::NOT_ALLOWED->code(), $result->getCode());
-        $this->assertEquals(_RESULT::NOT_ALLOWED->message(), $result->getMessage());
+        $this->assertEquals(_RESULT::NOT_ALLOWED, $result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::NOT_ALLOWED), $result->getMessage());
     }
     /**
      * @test
@@ -170,8 +170,8 @@ class StrategyFunctionalTest extends TestCase
 
         $this->assertFalse($valueManager->isRuntime());
         $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::NOT_ALLOWED->code(), $result->getCode());
-        $this->assertEquals(_RESULT::NOT_ALLOWED->message(), $result->getMessage());
+        $this->assertEquals(_RESULT::NOT_ALLOWED, $result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::NOT_ALLOWED), $result->getMessage());
     }
     /**
      * @test
@@ -192,8 +192,8 @@ class StrategyFunctionalTest extends TestCase
         $result = $this->strategy->delete();
 
         $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::DELETED->code(), $result->getCode());
-        $this->assertEquals(_RESULT::DELETED->message(), $result->getMessage());
+        $this->assertEquals(_RESULT::DELETED, $result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::DELETED), $result->getMessage());
     }
     /**
      * @test

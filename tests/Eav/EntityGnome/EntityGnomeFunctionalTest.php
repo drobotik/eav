@@ -49,8 +49,8 @@ class EntityGnomeFunctionalTest extends TestCase
     public function find_no_key() {
         $result = $this->gnome->find();
         $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::EMPTY->code(), $result->getCode());
-        $this->assertEquals(_RESULT::EMPTY->message(), $result->getMessage());
+        $this->assertEquals(_RESULT::EMPTY, $result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::EMPTY), $result->getMessage());
     }
     /**
      * @test
@@ -61,8 +61,8 @@ class EntityGnomeFunctionalTest extends TestCase
         $this->gnome->getEntity()->setKey(123);
         $result = $this->gnome->find();
         $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::NOT_FOUND->code(), $result->getCode());
-        $this->assertEquals(_RESULT::NOT_FOUND->message(), $result->getMessage());
+        $this->assertEquals(_RESULT::NOT_FOUND, $result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::NOT_FOUND), $result->getMessage());
     }
     /**
      * @test
@@ -281,8 +281,8 @@ class EntityGnomeFunctionalTest extends TestCase
         $this->assertEquals([], $entity->getBag()->getData());
 
         $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::CREATED->code(), $result->getCode());
-        $this->assertEquals(_RESULT::CREATED->message(), $result->getMessage());
+        $this->assertEquals(_RESULT::CREATED, $result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::CREATED), $result->getMessage());
 
         $resultData = $result->getData();
         $this->assertCount(3, $resultData);
@@ -290,20 +290,20 @@ class EntityGnomeFunctionalTest extends TestCase
         $this->assertArrayHasKey('email', $resultData);
         $data = $resultData['email'];
         $this->assertInstanceOf(Result::class, $data);
-        $this->assertEquals(_RESULT::CREATED->code(), $data->getCode());
-        $this->assertEquals(_RESULT::CREATED->message(), $data->getMessage());
+        $this->assertEquals(_RESULT::CREATED, $data->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::CREATED), $data->getMessage());
 
         $this->assertArrayHasKey('phone', $resultData);
         $data = $resultData['phone'];
         $this->assertInstanceOf(Result::class, $data);
-        $this->assertEquals(_RESULT::CREATED->code(), $data->getCode());
-        $this->assertEquals(_RESULT::CREATED->message(), $data->getMessage());
+        $this->assertEquals(_RESULT::CREATED, $data->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::CREATED), $data->getMessage());
 
         $this->assertArrayHasKey('note', $resultData);
         $data = $resultData['note'];
         $this->assertInstanceOf(Result::class, $data);
-        $this->assertEquals(_RESULT::EMPTY->code(), $data->getCode());
-        $this->assertEquals(_RESULT::EMPTY->message(), $data->getMessage());
+        $this->assertEquals(_RESULT::EMPTY, $data->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::EMPTY), $data->getMessage());
     }
     /**
      * @test

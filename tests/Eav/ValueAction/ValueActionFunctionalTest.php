@@ -75,8 +75,8 @@ class ValueActionFunctionalTest extends TestCase
         $this->assertEquals($valueKey, $valueManager->getKey());
 
         $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::CREATED->code(), $result->getCode());
-        $this->assertEquals(_RESULT::CREATED->message(), $result->getMessage());
+        $this->assertEquals(_RESULT::CREATED, $result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::CREATED), $result->getMessage());
     }
     /**
      * @test
@@ -102,8 +102,8 @@ class ValueActionFunctionalTest extends TestCase
         $this->assertFalse($test);
 
         $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::EMPTY->code(), $result->getCode());
-        $this->assertEquals(_RESULT::EMPTY->message(), $result->getMessage());
+        $this->assertEquals(_RESULT::EMPTY, $result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::EMPTY), $result->getMessage());
     }
     /**
      * @test
@@ -146,8 +146,8 @@ class ValueActionFunctionalTest extends TestCase
         $this->assertEquals($valueKey, $valueManager->getKey());
 
         $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::FOUND->code(), $result->getCode());
-        $this->assertEquals(_RESULT::FOUND->message(), $result->getMessage());
+        $this->assertEquals(_RESULT::FOUND, $result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::FOUND), $result->getMessage());
     }
     /**
      * @test
@@ -166,8 +166,8 @@ class ValueActionFunctionalTest extends TestCase
         $this->action->setAttributeContainer($container);
         $result = $this->action->find();
         $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::EMPTY->code(), $result->getCode());
-        $this->assertEquals(_RESULT::EMPTY->message(), $result->getMessage());
+        $this->assertEquals(_RESULT::EMPTY, $result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::EMPTY), $result->getMessage());
     }
     /**
      * @test
@@ -196,8 +196,8 @@ class ValueActionFunctionalTest extends TestCase
         $this->assertNull($valueManager->getRuntime());
         $this->assertNull($valueManager->getStored());
         $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::NOT_FOUND->code(), $result->getCode());
-        $this->assertEquals(_RESULT::NOT_FOUND->message(), $result->getMessage());
+        $this->assertEquals(_RESULT::NOT_FOUND, $result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::NOT_FOUND), $result->getMessage());
     }
     /**
      * @test
@@ -247,8 +247,8 @@ class ValueActionFunctionalTest extends TestCase
         $this->assertEquals($valueKey, $valueManager->getKey());
 
         $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::UPDATED->code(), $result->getCode());
-        $this->assertEquals(_RESULT::UPDATED->message(), $result->getMessage());
+        $this->assertEquals(_RESULT::UPDATED, $result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::UPDATED), $result->getMessage());
     }
     /**
      * @test
@@ -274,8 +274,8 @@ class ValueActionFunctionalTest extends TestCase
         $this->action->setAttributeContainer($container);
         $result = $this->action->update();
         $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::EMPTY->code(), $result->getCode());
-        $this->assertEquals(_RESULT::EMPTY->message(), $result->getMessage());
+        $this->assertEquals(_RESULT::EMPTY, $result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::EMPTY), $result->getMessage());
     }
     /**
      * @test
@@ -321,8 +321,8 @@ class ValueActionFunctionalTest extends TestCase
         $this->assertFalse($value->hasKey());
 
         $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::DELETED->code(), $result->getCode());
-        $this->assertEquals(_RESULT::DELETED->message(), $result->getMessage());
+        $this->assertEquals(_RESULT::DELETED, $result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::DELETED), $result->getMessage());
     }
     /**
      * @test
@@ -354,8 +354,8 @@ class ValueActionFunctionalTest extends TestCase
         $this->action->setAttributeContainer($container);
         $result = $this->action->delete();
         $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::EMPTY->code(), $result->getCode());
-        $this->assertEquals(_RESULT::EMPTY->message(), $result->getMessage());
+        $this->assertEquals(_RESULT::EMPTY, $result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::EMPTY), $result->getMessage());
     }
 
     /**
@@ -395,7 +395,7 @@ class ValueActionFunctionalTest extends TestCase
 
         $result = $valueAction->delete();
         $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::NOT_DELETED->code(), $result->getCode());
-        $this->assertEquals(_RESULT::NOT_DELETED->message(), $result->getMessage());
+        $this->assertEquals(_RESULT::NOT_DELETED, $result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::NOT_DELETED), $result->getMessage());
     }
 }

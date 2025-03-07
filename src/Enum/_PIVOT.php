@@ -11,7 +11,7 @@ namespace Drobotik\Eav\Enum;
 
 use Drobotik\Eav\Interface\DefineTableInterface;
 
-enum _PIVOT implements DefineTableInterface
+class _PIVOT implements DefineTableInterface
 {
     public const ID = 'pivot_id';
     public const DOMAIN_ID = 'domain_id';
@@ -22,10 +22,5 @@ enum _PIVOT implements DefineTableInterface
     public static function table() : string
     {
         return 'eav_pivot';
-    }
-
-    public function column() : string
-    {
-        return '1';
     }
 }

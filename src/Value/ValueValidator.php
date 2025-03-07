@@ -69,7 +69,7 @@ class ValueValidator
         $container = $this->getAttributeContainer();
         $strategy = $container->getStrategy();
         $result = $strategy->validate();
-        if ($result->getCode() == _RESULT::VALIDATION_FAILS->code()) {
+        if ($result->getCode() == _RESULT::VALIDATION_FAILS) {
             $output = $result->getData();
         }
 

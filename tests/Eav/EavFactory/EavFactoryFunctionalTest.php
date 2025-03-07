@@ -309,8 +309,8 @@ class EavFactoryFunctionalTest extends TestCase
         ];
         $result = $this->eavFactory->createEavEntity($config, $domainKey, $setKey);
         $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::CREATED->code(), $result->getCode());
-        $this->assertEquals(_RESULT::CREATED->message(), $result->getMessage());
+        $this->assertEquals(_RESULT::CREATED, $result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::CREATED), $result->getMessage());
         $this->assertInstanceOf(EntityFactoryResult::class, $result->getData());
     }
 }

@@ -66,8 +66,8 @@ class ResultFunctionalTest extends TestCase
     public function created()
     {
         $this->result->created();
-        $this->assertEquals(_RESULT::CREATED->code(), $this->result->getCode());
-        $this->assertEquals(_RESULT::CREATED->message(), $this->result->getMessage());
+        $this->assertEquals(_RESULT::CREATED, $this->result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::CREATED), $this->result->getMessage());
     }
     /**
      * @test
@@ -77,8 +77,8 @@ class ResultFunctionalTest extends TestCase
     public function updated()
     {
         $this->result->updated();
-        $this->assertEquals(_RESULT::UPDATED->code(), $this->result->getCode());
-        $this->assertEquals(_RESULT::UPDATED->message(), $this->result->getMessage());
+        $this->assertEquals(_RESULT::UPDATED, $this->result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::UPDATED), $this->result->getMessage());
     }
     /**
      * @test
@@ -88,8 +88,8 @@ class ResultFunctionalTest extends TestCase
     public function deleted()
     {
         $this->result->deleted();
-        $this->assertEquals(_RESULT::DELETED->code(), $this->result->getCode());
-        $this->assertEquals(_RESULT::DELETED->message(), $this->result->getMessage());
+        $this->assertEquals(_RESULT::DELETED, $this->result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::DELETED), $this->result->getMessage());
     }
     /**
      * @test
@@ -99,8 +99,8 @@ class ResultFunctionalTest extends TestCase
     public function not_deleted()
     {
         $this->result->notDeleted();
-        $this->assertEquals(_RESULT::NOT_DELETED->code(), $this->result->getCode());
-        $this->assertEquals(_RESULT::NOT_DELETED->message(), $this->result->getMessage());
+        $this->assertEquals(_RESULT::NOT_DELETED, $this->result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::NOT_DELETED), $this->result->getMessage());
     }
     /**
      * @test
@@ -110,8 +110,8 @@ class ResultFunctionalTest extends TestCase
     public function found()
     {
         $this->result->found();
-        $this->assertEquals(_RESULT::FOUND->code(), $this->result->getCode());
-        $this->assertEquals(_RESULT::FOUND->message(), $this->result->getMessage());
+        $this->assertEquals(_RESULT::FOUND, $this->result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::FOUND), $this->result->getMessage());
     }
     /**
      * @test
@@ -121,8 +121,8 @@ class ResultFunctionalTest extends TestCase
     public function not_found()
     {
         $this->result->notFound();
-        $this->assertEquals(_RESULT::NOT_FOUND->code(), $this->result->getCode());
-        $this->assertEquals(_RESULT::NOT_FOUND->message(), $this->result->getMessage());
+        $this->assertEquals(_RESULT::NOT_FOUND, $this->result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::NOT_FOUND), $this->result->getMessage());
     }
     /**
      * @test
@@ -132,8 +132,8 @@ class ResultFunctionalTest extends TestCase
     public function not_enough_args()
     {
         $this->result->notEnoughArgs();
-        $this->assertEquals(_RESULT::NOT_ENOUGH_ARGS->code(), $this->result->getCode());
-        $this->assertEquals(_RESULT::NOT_ENOUGH_ARGS->message(), $this->result->getMessage());
+        $this->assertEquals(_RESULT::NOT_ENOUGH_ARGS, $this->result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::NOT_ENOUGH_ARGS), $this->result->getMessage());
     }
     /**
      * @test
@@ -143,8 +143,8 @@ class ResultFunctionalTest extends TestCase
     public function not_allowed()
     {
         $this->result->notAllowed();
-        $this->assertEquals(_RESULT::NOT_ALLOWED->code(), $this->result->getCode());
-        $this->assertEquals(_RESULT::NOT_ALLOWED->message(), $this->result->getMessage());
+        $this->assertEquals(_RESULT::NOT_ALLOWED, $this->result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::NOT_ALLOWED), $this->result->getMessage());
     }
     /**
      * @test
@@ -154,8 +154,8 @@ class ResultFunctionalTest extends TestCase
     public function empty()
     {
         $this->result->empty();
-        $this->assertEquals(_RESULT::EMPTY->code(), $this->result->getCode());
-        $this->assertEquals(_RESULT::EMPTY->message(), $this->result->getMessage());
+        $this->assertEquals(_RESULT::EMPTY, $this->result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::EMPTY), $this->result->getMessage());
     }
     /**
      * @test
@@ -165,8 +165,8 @@ class ResultFunctionalTest extends TestCase
     public function validation_fails()
     {
         $this->result->validationFails();
-        $this->assertEquals(_RESULT::VALIDATION_FAILS->code(), $this->result->getCode());
-        $this->assertEquals(_RESULT::VALIDATION_FAILS->message(), $this->result->getMessage());
+        $this->assertEquals(_RESULT::VALIDATION_FAILS, $this->result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::VALIDATION_FAILS), $this->result->getMessage());
     }
     /**
      * @test
@@ -176,8 +176,8 @@ class ResultFunctionalTest extends TestCase
     public function validation_passed()
     {
         $this->result->validationPassed();
-        $this->assertEquals(_RESULT::VALIDATION_PASSED->code(), $this->result->getCode());
-        $this->assertEquals(_RESULT::VALIDATION_PASSED->message(), $this->result->getMessage());
+        $this->assertEquals(_RESULT::VALIDATION_PASSED, $this->result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::VALIDATION_PASSED), $this->result->getMessage());
     }
     /**
      * @test
@@ -187,8 +187,8 @@ class ResultFunctionalTest extends TestCase
     public function export_success()
     {
         $this->result->exportSuccess();
-        $this->assertEquals(_RESULT::EXPORT_SUCCESS->code(), $this->result->getCode());
-        $this->assertEquals(_RESULT::EXPORT_SUCCESS->message(), $this->result->getMessage());
+        $this->assertEquals(_RESULT::EXPORT_SUCCESS, $this->result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::EXPORT_SUCCESS), $this->result->getMessage());
     }
 
     /**
@@ -199,8 +199,8 @@ class ResultFunctionalTest extends TestCase
     public function export_failed()
     {
         $this->result->exportFailed();
-        $this->assertEquals(_RESULT::EXPORT_FAILED->code(), $this->result->getCode());
-        $this->assertEquals(_RESULT::EXPORT_FAILED->message(), $this->result->getMessage());
+        $this->assertEquals(_RESULT::EXPORT_FAILED, $this->result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::EXPORT_FAILED), $this->result->getMessage());
     }
 
     /**
@@ -211,8 +211,8 @@ class ResultFunctionalTest extends TestCase
     public function import_success()
     {
         $this->result->importSuccess();
-        $this->assertEquals(_RESULT::IMPORT_SUCCESS->code(), $this->result->getCode());
-        $this->assertEquals(_RESULT::IMPORT_SUCCESS->message(), $this->result->getMessage());
+        $this->assertEquals(_RESULT::IMPORT_SUCCESS, $this->result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::IMPORT_SUCCESS), $this->result->getMessage());
     }
 
     /**
@@ -223,7 +223,7 @@ class ResultFunctionalTest extends TestCase
     public function import_failed()
     {
         $this->result->importFailed();
-        $this->assertEquals(_RESULT::IMPORT_FAILED->code(), $this->result->getCode());
-        $this->assertEquals(_RESULT::IMPORT_FAILED->message(), $this->result->getMessage());
+        $this->assertEquals(_RESULT::IMPORT_FAILED, $this->result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::IMPORT_FAILED), $this->result->getMessage());
     }
 }

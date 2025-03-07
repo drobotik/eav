@@ -101,8 +101,8 @@ class EntityGnomeBehaviorTest extends TestCase
         $result = $gnome->find();
 
         $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::FOUND->code(), $result->getCode());
-        $this->assertEquals(_RESULT::FOUND->message(), $result->getMessage());
+        $this->assertEquals(_RESULT::FOUND, $result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::FOUND), $result->getMessage());
     }
     /**
      * @test
@@ -208,8 +208,8 @@ class EntityGnomeBehaviorTest extends TestCase
             ->willReturn(1);
         $result = $gnome->save();
         $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::CREATED->code(), $result->getCode());
-        $this->assertEquals(_RESULT::CREATED->message(), $result->getMessage());
+        $this->assertEquals(_RESULT::CREATED, $result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::CREATED), $result->getMessage());
     }
     /**
      * @test
@@ -237,8 +237,8 @@ class EntityGnomeBehaviorTest extends TestCase
             ->willReturn(2);
         $result = $gnome->save();
         $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::UPDATED->code(), $result->getCode());
-        $this->assertEquals(_RESULT::UPDATED->message(), $result->getMessage());
+        $this->assertEquals(_RESULT::UPDATED, $result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::UPDATED), $result->getMessage());
     }
     /**
      * @test
@@ -286,8 +286,8 @@ class EntityGnomeBehaviorTest extends TestCase
         $gnome = new EntityGnome($entity);
         $result = $gnome->validate();
         $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::VALIDATION_FAILS->code(), $result->getCode());
-        $this->assertEquals(_RESULT::VALIDATION_FAILS->message(), $result->getMessage());
+        $this->assertEquals(_RESULT::VALIDATION_FAILS, $result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::VALIDATION_FAILS), $result->getMessage());
         $this->assertEquals(['email' => $emailErrors, 'phone' => $phoneErrors], $result->getData());
     }
     /**
@@ -329,8 +329,8 @@ class EntityGnomeBehaviorTest extends TestCase
         $gnome = new EntityGnome($entity);
         $result = $gnome->validate();
         $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::VALIDATION_PASSED->code(), $result->getCode());
-        $this->assertEquals(_RESULT::VALIDATION_PASSED->message(), $result->getMessage());
+        $this->assertEquals(_RESULT::VALIDATION_PASSED, $result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::VALIDATION_PASSED), $result->getMessage());
         $this->assertNull($result->getData());
     }
     /**
@@ -398,8 +398,8 @@ class EntityGnomeBehaviorTest extends TestCase
             ->willReturn($record);
         $result = $gnome->delete();
         $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::DELETED->code(), $result->getCode());
-        $this->assertEquals(_RESULT::DELETED->message(), $result->getMessage());
+        $this->assertEquals(_RESULT::DELETED, $result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::DELETED), $result->getMessage());
         $this->assertSame([
             "email" => $strategyResult,
             "phone" => $strategyResult
@@ -441,8 +441,8 @@ class EntityGnomeBehaviorTest extends TestCase
             ->willReturn($record);
         $result = $gnome->delete();
         $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals(_RESULT::NOT_DELETED->code(), $result->getCode());
-        $this->assertEquals(_RESULT::NOT_DELETED->message(), $result->getMessage());
+        $this->assertEquals(_RESULT::NOT_DELETED, $result->getCode());
+        $this->assertEquals(_RESULT::message(_RESULT::NOT_DELETED), $result->getMessage());
     }
     /**
      * @test

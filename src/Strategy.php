@@ -93,8 +93,8 @@ class Strategy implements StrategyInterface, EavStrategyInterface
                 ->setData($violationData);
         }
 
-        return $result->setCode(_RESULT::VALIDATION_PASSED->code())
-            ->setMessage(_RESULT::VALIDATION_PASSED->message());
+        return $result->setCode(_RESULT::VALIDATION_PASSED)
+            ->setMessage(_RESULT::message(_RESULT::VALIDATION_PASSED));
     }
 
     public function save(): Result
