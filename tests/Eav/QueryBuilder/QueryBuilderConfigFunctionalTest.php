@@ -310,11 +310,11 @@ class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
     public function handle_group()
     {
         $filter = [
-            QB_CONFIG::CONDITION => QB_CONDITION::AND->name(),
+            QB_CONFIG::CONDITION => QB_CONDITION::AND,
             QB_CONFIG::RULES => [
                 ["test1"],
                 [
-                    QB_CONFIG::CONDITION => QB_CONDITION::OR->name(),
+                    QB_CONFIG::CONDITION => QB_CONDITION::OR,
                     QB_CONFIG::RULES => [
                         ["test2"],
                         ["test3"],
@@ -662,7 +662,7 @@ class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
         $attr2Value = 'sit quisquam';
 
         $config = [
-            QB_CONFIG::CONDITION => QB_CONDITION::AND->name(),
+            QB_CONFIG::CONDITION => QB_CONDITION::AND,
             QB_CONFIG::RULES => [
                 [
                     QB_CONFIG::NAME => ATTR_TYPE::DECIMAL->value(),
@@ -670,7 +670,7 @@ class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
                     QB_CONFIG::VALUE => 10000
                 ],
                 [
-                    QB_CONFIG::CONDITION => QB_CONDITION::OR->name(),
+                    QB_CONFIG::CONDITION => QB_CONDITION::OR,
                     QB_CONFIG::RULES => [
                         [
                             QB_CONFIG::NAME => ATTR_TYPE::STRING->value(),

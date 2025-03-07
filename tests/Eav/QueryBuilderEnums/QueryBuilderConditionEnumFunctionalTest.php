@@ -22,8 +22,8 @@ class QueryBuilderConditionEnumFunctionalTest extends TestCase
      */
     public function name()
     {
-        $this->assertEquals('and', QB_CONDITION::AND->name());
-        $this->assertEquals('or', QB_CONDITION::OR->name());
+        $this->assertEquals('and', QB_CONDITION::AND);
+        $this->assertEquals('or', QB_CONDITION::OR);
     }
     /**
      * @test
@@ -32,7 +32,7 @@ class QueryBuilderConditionEnumFunctionalTest extends TestCase
      */
     public function getCase()
     {
-        $this->assertEquals(QB_CONDITION::AND, QB_CONDITION::getCase(QB_CONDITION::AND->name()));
-        $this->assertEquals(QB_CONDITION::OR, QB_CONDITION::getCase(QB_CONDITION::OR->name()));
+        $this->assertEquals(QB_CONDITION::AND, QB_CONDITION::getCase(QB_CONDITION::AND));
+        $this->assertEquals(QB_CONDITION::OR, QB_CONDITION::getCase(QB_CONDITION::OR));
     }
 }

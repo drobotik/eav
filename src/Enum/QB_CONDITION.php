@@ -13,23 +13,21 @@ use Drobotik\Eav\Exception\QueryBuilderException;
 
 enum QB_CONDITION
 {
-    case AND;
-    case OR;
+    public const AND = 'and';
+    public const OR = 'or';
 
-    public function name() : string
-    {
-        return match ($this) {
-            self::AND => "and",
-            self::OR => "or"
-        };
-    }
-
+    /**
+     * @throws QueryBuilderException
+     */
     public static function getCase(string $slug)
     {
-        return match($slug) {
-            self::AND->name() => self::AND,
-            self::OR->name() => self::OR,
-            default => QueryBuilderException::unsupportedCondition($slug)
-        };
+        switch ($slug) {
+            case self::AND:
+                return self::AND;
+            case self::OR:
+                return self::OR;
+            default:
+                return QueryBuilderException::unsupportedCondition($slug);
+        }
     }
 }

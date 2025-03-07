@@ -525,7 +525,7 @@ $filters = [
             QB_CONFIG::VALUE => 10000
         ], 
         [
-            QB_CONFIG::CONDITION => QB_CONDITION::OR->name(),
+            QB_CONFIG::CONDITION => QB_CONDITION::OR,
             QB_CONFIG::RULES => [
                 [
                     QB_CONFIG::NAME => "name",

@@ -39,7 +39,7 @@ class ExportManagerAcceptanceTest extends QueryingDataTestCase
         $driver->setWriter($writer);
 
         $filters = [
-            QB_CONFIG::CONDITION => QB_CONDITION::AND->name(),
+            QB_CONFIG::CONDITION => QB_CONDITION::AND,
             QB_CONFIG::RULES => [
                 [
                     QB_CONFIG::NAME => ATTR_TYPE::DECIMAL->value(),
@@ -47,7 +47,7 @@ class ExportManagerAcceptanceTest extends QueryingDataTestCase
                     QB_CONFIG::VALUE => 10000
                 ],
                 [
-                    QB_CONFIG::CONDITION => QB_CONDITION::OR->name(),
+                    QB_CONFIG::CONDITION => QB_CONDITION::OR,
                     QB_CONFIG::RULES => [
                         [
                             QB_CONFIG::NAME => ATTR_TYPE::STRING->value(),

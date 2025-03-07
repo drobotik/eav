@@ -303,7 +303,7 @@ class QueryBuilderFunctionalTest extends QueryingDataTestCase
     public function run_with_parsed_config()
     {
         $filters = [
-            QB_CONFIG::CONDITION => QB_CONDITION::AND->name(),
+            QB_CONFIG::CONDITION => QB_CONDITION::AND,
             QB_CONFIG::RULES => [
                 [
                     QB_CONFIG::NAME => ATTR_TYPE::DECIMAL->value(),
@@ -311,7 +311,7 @@ class QueryBuilderFunctionalTest extends QueryingDataTestCase
                     QB_CONFIG::VALUE => 10000
                 ],
                 [
-                    QB_CONFIG::CONDITION => QB_CONDITION::OR->name(),
+                    QB_CONFIG::CONDITION => QB_CONDITION::OR,
                     QB_CONFIG::RULES => [
                         [
                             QB_CONFIG::NAME => ATTR_TYPE::STRING->value(),

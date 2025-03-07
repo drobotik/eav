@@ -57,11 +57,11 @@ class EntityFactory
         $groupModel = $this->makeGroupModel();
         $setKey = $result->getSetKey();
         foreach($fields as $field) {
-            if (!key_exists(ATTR_FACTORY::GROUP->field(), $field)) {
+            if (!key_exists(ATTR_FACTORY::GROUP, $field)) {
                 throw new EntityFactoryException("Group key must be provided!");
             }
         }
-        $groups = array_unique(array_column($fields, ATTR_FACTORY::GROUP->field()));
+        $groups = array_unique(array_column($fields, ATTR_FACTORY::GROUP));
         foreach($groups as $groupKey)
         {
             if(!$groupModel->checkGroupInAttributeSet($setKey, $groupKey))
@@ -140,10 +140,10 @@ class EntityFactory
         $result = $this->getResult();
         $entityKey = $result->getEntityKey();
 
-        if (!key_exists(ATTR_FACTORY::ATTRIBUTE->field(), $field)) {
+        if (!key_exists(ATTR_FACTORY::ATTRIBUTE, $field)) {
             EntityFactoryException::undefinedAttributeArray();
         }
-        $attrConfig = $field[ATTR_FACTORY::ATTRIBUTE->field()];
+        $attrConfig = $field[ATTR_FACTORY::ATTRIBUTE];
         if (!key_exists(_ATTR::NAME, $attrConfig)) {
             AttributeException::undefinedAttributeName();
         }
@@ -153,9 +153,9 @@ class EntityFactory
 
         $attrType = ATTR_TYPE::getCase($attrConfig[_ATTR::TYPE]);
         $attrKey = $this->handleAttribute($attrConfig);
-        $this->handlePivot($attrKey, $field[ATTR_FACTORY::GROUP->field()]);
+        $this->handlePivot($attrKey, $field[ATTR_FACTORY::GROUP]);
 
-        if(isset($field[ATTR_FACTORY::VALUE->field()]))
-            $this->handleValue($attrType, $entityKey, $attrKey, $field[ATTR_FACTORY::VALUE->field()]);
+        if(isset($field[ATTR_FACTORY::VALUE]))
+            $this->handleValue($attrType, $entityKey, $attrKey, $field[ATTR_FACTORY::VALUE]);
     }
 }

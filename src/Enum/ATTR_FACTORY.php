@@ -11,16 +11,8 @@ namespace Drobotik\Eav\Enum;
 
 enum ATTR_FACTORY
 {
-    case ATTRIBUTE;
-    case GROUP;
-    case VALUE;
+    public const ATTRIBUTE = 'attribute';
+    public const GROUP = 'group';
+    public const VALUE = 'value';
 
-    public function field(): string
-    {
-        return match ($this) {
-            self::ATTRIBUTE => "attribute",
-            self::GROUP => "group",
-            self::VALUE => "value"
-        };
-    }
 }

@@ -77,13 +77,13 @@ class QueryBuilder
     /**
      * @throws QueryBuilderException
      */
-    public function applyExpressions(array $expressions, ?QB_CONDITION $condition = null) : void
+    public function applyExpressions(array $expressions, $condition = null) : void
     {
         $query = $this->getQuery();
         $expr = $query->expr();
         $executed = [];
         foreach ($expressions as $expression) {
-            if ($expression instanceof QB_CONDITION) {
+            if (is_string($expression)) {
                 $condition = $expression;
             } else if ($expression instanceof Expression) {
                 $executed[] = $expression->execute();

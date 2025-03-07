@@ -42,35 +42,35 @@ class EntityFactoryFunctionalTest extends TestCase
     {
         return [
             ATTR_TYPE::STRING->value() => [
-                ATTR_FACTORY::ATTRIBUTE->field() => [
+                ATTR_FACTORY::ATTRIBUTE => [
                     _ATTR::NAME => ATTR_TYPE::STRING->value(),
                     _ATTR::TYPE => ATTR_TYPE::STRING->value(),
                     _ATTR::DEFAULT_VALUE => ATTR_TYPE::STRING->randomValue(),
                 ]
             ],
             ATTR_TYPE::INTEGER->value() => [
-                ATTR_FACTORY::ATTRIBUTE->field() => [
+                ATTR_FACTORY::ATTRIBUTE => [
                     _ATTR::NAME => ATTR_TYPE::INTEGER->value(),
                     _ATTR::TYPE => ATTR_TYPE::INTEGER->value(),
                     _ATTR::DEFAULT_VALUE => ATTR_TYPE::INTEGER->randomValue(),
                 ]
             ],
             ATTR_TYPE::DECIMAL->value() => [
-                ATTR_FACTORY::ATTRIBUTE->field() => [
+                ATTR_FACTORY::ATTRIBUTE => [
                     _ATTR::NAME => ATTR_TYPE::DECIMAL->value(),
                     _ATTR::TYPE => ATTR_TYPE::DECIMAL->value(),
                     _ATTR::DEFAULT_VALUE => ATTR_TYPE::DECIMAL->randomValue(),
                 ]
             ],
             ATTR_TYPE::DATETIME->value() => [
-                ATTR_FACTORY::ATTRIBUTE->field() => [
+                ATTR_FACTORY::ATTRIBUTE => [
                     _ATTR::NAME => ATTR_TYPE::DATETIME->value(),
                     _ATTR::TYPE => ATTR_TYPE::DATETIME->value(),
                     _ATTR::DEFAULT_VALUE => ATTR_TYPE::DATETIME->randomValue(),
                 ]
             ],
             ATTR_TYPE::TEXT->value() => [
-                ATTR_FACTORY::ATTRIBUTE->field() => [
+                ATTR_FACTORY::ATTRIBUTE => [
                     _ATTR::NAME => ATTR_TYPE::TEXT->value(),
                     _ATTR::TYPE => ATTR_TYPE::TEXT->value(),
                     _ATTR::DEFAULT_VALUE => ATTR_TYPE::TEXT->randomValue(),
@@ -162,11 +162,11 @@ class EntityFactoryFunctionalTest extends TestCase
         $domainKey = $this->eavFactory->createDomain();
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
         $config = $this->getFactoryDefaultConfig();
-        $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::GROUP->field()] = 1;
-        $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::GROUP->field()] = 2;
-        $config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::GROUP->field()] = 3;
-        $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::GROUP->field()] = 4;
-        $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::GROUP->field()] = 5;
+        $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::GROUP] = 1;
+        $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::GROUP] = 2;
+        $config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::GROUP] = 3;
+        $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::GROUP] = 4;
+        $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::GROUP] = 5;
 
         $this->factory->create($config, $domainKey, $setKey);
     }
@@ -190,17 +190,17 @@ class EntityFactoryFunctionalTest extends TestCase
 
         $config = $this->getFactoryDefaultConfig();
 
-        $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::GROUP->field()] = $groupKey;
-        $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::GROUP->field()] = $groupKey;
-        $config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::GROUP->field()] = $groupKey;
-        $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::GROUP->field()] = $groupKey;
-        $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::GROUP->field()] = $groupKey;
+        $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::GROUP] = $groupKey;
+        $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::GROUP] = $groupKey;
+        $config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::GROUP] = $groupKey;
+        $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::GROUP] = $groupKey;
+        $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::GROUP] = $groupKey;
 
-        $stringConfig = $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::ATTRIBUTE->field()];
-        $integerConfig = $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::ATTRIBUTE->field()];
-        $decimalConfig = $config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::ATTRIBUTE->field()];
-        $datetimeConfig = $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::ATTRIBUTE->field()];
-        $textConfig = $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::ATTRIBUTE->field()];
+        $stringConfig = $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::ATTRIBUTE];
+        $integerConfig = $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::ATTRIBUTE];
+        $decimalConfig = $config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::ATTRIBUTE];
+        $datetimeConfig = $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::ATTRIBUTE];
+        $textConfig = $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::ATTRIBUTE];
 
         $result = $this->factory->create($config, $domainKey, $setKey);
 
@@ -333,8 +333,8 @@ class EntityFactoryFunctionalTest extends TestCase
 
         $config = $this->getFactoryDefaultConfig();
         $field = $config[ATTR_TYPE::STRING->value()];
-        $field[ATTR_FACTORY::GROUP->field()] = $groupKey;
-        unset($field[ATTR_FACTORY::ATTRIBUTE->field()]);
+        $field[ATTR_FACTORY::GROUP] = $groupKey;
+        unset($field[ATTR_FACTORY::ATTRIBUTE]);
 
         $this->factory->create([$field], $domainKey, $setKey);
     }
@@ -361,8 +361,8 @@ class EntityFactoryFunctionalTest extends TestCase
 
         $config = $this->getFactoryDefaultConfig();
         $field = $config[ATTR_TYPE::STRING->value()];
-        $field[ATTR_FACTORY::GROUP->field()] = $groupKey;
-        unset($field[ATTR_FACTORY::ATTRIBUTE->field()][_ATTR::NAME]);
+        $field[ATTR_FACTORY::GROUP] = $groupKey;
+        unset($field[ATTR_FACTORY::ATTRIBUTE][_ATTR::NAME]);
 
         $this->factory->create([$field], $domainKey, $setKey);
     }
@@ -390,8 +390,8 @@ class EntityFactoryFunctionalTest extends TestCase
 
         $config = $this->getFactoryDefaultConfig();
         $field = $config[ATTR_TYPE::STRING->value()];
-        $field[ATTR_FACTORY::GROUP->field()] = $groupKey;
-        unset($field[ATTR_FACTORY::ATTRIBUTE->field()][_ATTR::TYPE]);
+        $field[ATTR_FACTORY::GROUP] = $groupKey;
+        unset($field[ATTR_FACTORY::ATTRIBUTE][_ATTR::TYPE]);
 
         $this->factory->create([$field], $domainKey, $setKey);
     }
@@ -419,8 +419,8 @@ class EntityFactoryFunctionalTest extends TestCase
 
         $config = $this->getFactoryDefaultConfig();
         $field = $config[ATTR_TYPE::STRING->value()];
-        $field[ATTR_FACTORY::GROUP->field()] = $groupKey;
-        $field[ATTR_FACTORY::ATTRIBUTE->field()][_ATTR::TYPE] = "test";
+        $field[ATTR_FACTORY::GROUP] = $groupKey;
+        $field[ATTR_FACTORY::ATTRIBUTE][_ATTR::TYPE] = "test";
 
         $this->factory->create([$field], $domainKey, $setKey);
     }
@@ -446,11 +446,11 @@ class EntityFactoryFunctionalTest extends TestCase
         $groupTwoKey = $this->eavFactory->createGroup($setKey);
 
         $config = $this->getFactoryDefaultConfig();
-        $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::GROUP->field()] = $groupOneKey;
-        $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::GROUP->field()] = $groupOneKey;
-        $config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::GROUP->field()] = $groupOneKey;
-        $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::GROUP->field()] = $groupTwoKey;
-        $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::GROUP->field()] = $groupTwoKey;
+        $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::GROUP] = $groupOneKey;
+        $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::GROUP] = $groupOneKey;
+        $config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::GROUP] = $groupOneKey;
+        $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::GROUP] = $groupTwoKey;
+        $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::GROUP] = $groupTwoKey;
 
         $result = $this->factory->create($config, $domainKey, $setKey);
 
@@ -545,11 +545,11 @@ class EntityFactoryFunctionalTest extends TestCase
         $groupTwoKey = $this->eavFactory->createGroup($setKey);
 
         $config = $this->getFactoryDefaultConfig();
-        $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::GROUP->field()] = $groupOneKey;
-        $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::GROUP->field()] = $groupOneKey;
-        $config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::GROUP->field()] = $groupOneKey;
-        $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::GROUP->field()] = $groupTwoKey;
-        $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::GROUP->field()] = $groupTwoKey;
+        $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::GROUP] = $groupOneKey;
+        $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::GROUP] = $groupOneKey;
+        $config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::GROUP] = $groupOneKey;
+        $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::GROUP] = $groupTwoKey;
+        $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::GROUP] = $groupTwoKey;
 
         $stringValue = ATTR_TYPE::STRING->randomValue();
         $integerValue = ATTR_TYPE::INTEGER->randomValue();
@@ -557,11 +557,11 @@ class EntityFactoryFunctionalTest extends TestCase
         $datetimeValue = ATTR_TYPE::DATETIME->randomValue();
         $textValue = ATTR_TYPE::TEXT->randomValue();
 
-        $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::VALUE->field()] = $stringValue;
-        $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::VALUE->field()] = $integerValue;
-        $config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::VALUE->field()] = $decimalValue;
-        $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::VALUE->field()] = $datetimeValue;
-        $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::VALUE->field()] = $textValue;
+        $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::VALUE] = $stringValue;
+        $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::VALUE] = $integerValue;
+        $config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::VALUE] = $decimalValue;
+        $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::VALUE] = $datetimeValue;
+        $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::VALUE] = $textValue;
 
         $result = $this->factory->create($config, $domainKey, $setKey);
         $entityKey = $result->getEntityKey();
@@ -646,11 +646,11 @@ class EntityFactoryFunctionalTest extends TestCase
         $groupKey = $this->eavFactory->createGroup($setKey);
 
         $config = $this->getFactoryDefaultConfig();
-        $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::GROUP->field()] = $groupKey;
-        $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::GROUP->field()] = $groupKey;
-        $config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::GROUP->field()] = $groupKey;
-        $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::GROUP->field()] = $groupKey;
-        $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::GROUP->field()] = $groupKey;
+        $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::GROUP] = $groupKey;
+        $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::GROUP] = $groupKey;
+        $config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::GROUP] = $groupKey;
+        $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::GROUP] = $groupKey;
+        $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::GROUP] = $groupKey;
 
         $result = $this->factory->create($config, $domainKey, $setKey);
         $entityKey = $result->getEntityKey();

@@ -116,44 +116,44 @@ class EntityAcceptanceTest extends TestCase
         $valueModel = $this->makeValueModel();
         $fields = [
             [
-                ATTR_FACTORY::ATTRIBUTE->field() => [
+                ATTR_FACTORY::ATTRIBUTE => [
                     _ATTR::NAME => ATTR_TYPE::STRING->value(),
                     _ATTR::TYPE => ATTR_TYPE::STRING->value()
                 ],
-                ATTR_FACTORY::GROUP->field() => $groupKey,
-                ATTR_FACTORY::VALUE->field() => "string value"
+                ATTR_FACTORY::GROUP => $groupKey,
+                ATTR_FACTORY::VALUE => "string value"
             ],
             [
-                ATTR_FACTORY::ATTRIBUTE->field() => [
+                ATTR_FACTORY::ATTRIBUTE => [
                     _ATTR::NAME => ATTR_TYPE::INTEGER->value(),
                     _ATTR::TYPE => ATTR_TYPE::INTEGER->value()
                 ],
-                ATTR_FACTORY::GROUP->field() => $groupKey,
-                ATTR_FACTORY::VALUE->field() => 123
+                ATTR_FACTORY::GROUP => $groupKey,
+                ATTR_FACTORY::VALUE => 123
             ],
             [
-                ATTR_FACTORY::ATTRIBUTE->field() => [
+                ATTR_FACTORY::ATTRIBUTE => [
                     _ATTR::NAME => ATTR_TYPE::DECIMAL->value(),
                     _ATTR::TYPE => ATTR_TYPE::DECIMAL->value()
                 ],
-                ATTR_FACTORY::GROUP->field() => $groupKey,
-                ATTR_FACTORY::VALUE->field() => 3.14
+                ATTR_FACTORY::GROUP => $groupKey,
+                ATTR_FACTORY::VALUE => 3.14
             ],
             [
-                ATTR_FACTORY::ATTRIBUTE->field() => [
+                ATTR_FACTORY::ATTRIBUTE => [
                     _ATTR::NAME => ATTR_TYPE::DATETIME->value(),
                     _ATTR::TYPE => ATTR_TYPE::DATETIME->value()
                 ],
-                ATTR_FACTORY::GROUP->field() => $groupKey,
-                ATTR_FACTORY::VALUE->field() => Carbon::now()->format('Y-m-d H:i:s')
+                ATTR_FACTORY::GROUP => $groupKey,
+                ATTR_FACTORY::VALUE => Carbon::now()->format('Y-m-d H:i:s')
             ],
             [
-                ATTR_FACTORY::ATTRIBUTE->field() => [
+                ATTR_FACTORY::ATTRIBUTE => [
                     _ATTR::NAME => ATTR_TYPE::TEXT->value(),
                     _ATTR::TYPE => ATTR_TYPE::TEXT->value()
                 ],
-                ATTR_FACTORY::GROUP->field() => $groupKey,
-                ATTR_FACTORY::VALUE->field() => "text value"
+                ATTR_FACTORY::GROUP => $groupKey,
+                ATTR_FACTORY::VALUE => "text value"
             ]
         ];
         /** @var EntityFactoryResult $result */
@@ -223,44 +223,44 @@ class EntityAcceptanceTest extends TestCase
         $groupKey = $this->eavFactory->createGroup($setKey);
         $fields = [
             [
-                ATTR_FACTORY::ATTRIBUTE->field() => [
+                ATTR_FACTORY::ATTRIBUTE => [
                     _ATTR::NAME => ATTR_TYPE::STRING->value(),
                     _ATTR::TYPE => ATTR_TYPE::STRING->value()
                 ],
-                ATTR_FACTORY::GROUP->field() => $groupKey,
-                ATTR_FACTORY::VALUE->field() => "string value"
+                ATTR_FACTORY::GROUP => $groupKey,
+                ATTR_FACTORY::VALUE => "string value"
             ],
             [
-                ATTR_FACTORY::ATTRIBUTE->field() => [
+                ATTR_FACTORY::ATTRIBUTE => [
                     _ATTR::NAME => ATTR_TYPE::INTEGER->value(),
                     _ATTR::TYPE => ATTR_TYPE::INTEGER->value()
                 ],
-                ATTR_FACTORY::GROUP->field() => $groupKey,
-                ATTR_FACTORY::VALUE->field() => 123
+                ATTR_FACTORY::GROUP => $groupKey,
+                ATTR_FACTORY::VALUE => 123
             ],
             [
-                ATTR_FACTORY::ATTRIBUTE->field() => [
+                ATTR_FACTORY::ATTRIBUTE => [
                     _ATTR::NAME => ATTR_TYPE::DECIMAL->value(),
                     _ATTR::TYPE => ATTR_TYPE::DECIMAL->value()
                 ],
-                ATTR_FACTORY::GROUP->field() => $groupKey,
-                ATTR_FACTORY::VALUE->field() => 3.14
+                ATTR_FACTORY::GROUP => $groupKey,
+                ATTR_FACTORY::VALUE => 3.14
             ],
             [
-                ATTR_FACTORY::ATTRIBUTE->field() => [
+                ATTR_FACTORY::ATTRIBUTE => [
                     _ATTR::NAME => ATTR_TYPE::DATETIME->value(),
                     _ATTR::TYPE => ATTR_TYPE::DATETIME->value()
                 ],
-                ATTR_FACTORY::GROUP->field() => $groupKey,
-                ATTR_FACTORY::VALUE->field() => Carbon::now()->format('Y-m-d H:i:s')
+                ATTR_FACTORY::GROUP => $groupKey,
+                ATTR_FACTORY::VALUE => Carbon::now()->format('Y-m-d H:i:s')
             ],
             [
-                ATTR_FACTORY::ATTRIBUTE->field() => [
+                ATTR_FACTORY::ATTRIBUTE => [
                     _ATTR::NAME => ATTR_TYPE::TEXT->value(),
                     _ATTR::TYPE => ATTR_TYPE::TEXT->value()
                 ],
-                ATTR_FACTORY::GROUP->field() =>$groupKey,
-                ATTR_FACTORY::VALUE->field() => "text value"
+                ATTR_FACTORY::GROUP =>$groupKey,
+                ATTR_FACTORY::VALUE => "text value"
             ]
         ];
         /** @var EntityFactoryResult $result */
@@ -311,44 +311,44 @@ class EntityAcceptanceTest extends TestCase
         $groupKey = $this->eavFactory->createGroup($setKey);
         $fields = [
             [
-                ATTR_FACTORY::ATTRIBUTE->field() => [
+                ATTR_FACTORY::ATTRIBUTE => [
                     _ATTR::NAME => ATTR_TYPE::STRING->value(),
                     _ATTR::TYPE => ATTR_TYPE::STRING->value()
                 ],
-                ATTR_FACTORY::GROUP->field() => $groupKey,
-                ATTR_FACTORY::VALUE->field() => "string value"
+                ATTR_FACTORY::GROUP => $groupKey,
+                ATTR_FACTORY::VALUE => "string value"
             ],
             [
-                ATTR_FACTORY::ATTRIBUTE->field() => [
+                ATTR_FACTORY::ATTRIBUTE => [
                     _ATTR::NAME => ATTR_TYPE::INTEGER->value(),
                     _ATTR::TYPE => ATTR_TYPE::INTEGER->value()
                 ],
-                ATTR_FACTORY::GROUP->field() => $groupKey,
-                ATTR_FACTORY::VALUE->field() => 123
+                ATTR_FACTORY::GROUP => $groupKey,
+                ATTR_FACTORY::VALUE => 123
             ],
             [
-                ATTR_FACTORY::ATTRIBUTE->field() => [
+                ATTR_FACTORY::ATTRIBUTE => [
                     _ATTR::NAME => ATTR_TYPE::DECIMAL->value(),
                     _ATTR::TYPE => ATTR_TYPE::DECIMAL->value()
                 ],
-                ATTR_FACTORY::GROUP->field() => $groupKey,
-                ATTR_FACTORY::VALUE->field() => 3.14
+                ATTR_FACTORY::GROUP => $groupKey,
+                ATTR_FACTORY::VALUE => 3.14
             ],
             [
-                ATTR_FACTORY::ATTRIBUTE->field() => [
+                ATTR_FACTORY::ATTRIBUTE => [
                     _ATTR::NAME => ATTR_TYPE::DATETIME->value(),
                     _ATTR::TYPE => ATTR_TYPE::DATETIME->value()
                 ],
-                ATTR_FACTORY::GROUP->field() => $groupKey,
-                ATTR_FACTORY::VALUE->field() => Carbon::now()->format('Y-m-d H:i:s')
+                ATTR_FACTORY::GROUP => $groupKey,
+                ATTR_FACTORY::VALUE => Carbon::now()->format('Y-m-d H:i:s')
             ],
             [
-                ATTR_FACTORY::ATTRIBUTE->field() => [
+                ATTR_FACTORY::ATTRIBUTE => [
                     _ATTR::NAME => ATTR_TYPE::TEXT->value(),
                     _ATTR::TYPE => ATTR_TYPE::TEXT->value()
                 ],
-                ATTR_FACTORY::GROUP->field() => $groupKey,
-                ATTR_FACTORY::VALUE->field() => "text value"
+                ATTR_FACTORY::GROUP => $groupKey,
+                ATTR_FACTORY::VALUE => "text value"
             ]
         ];
         /** @var EntityFactoryResult $result */

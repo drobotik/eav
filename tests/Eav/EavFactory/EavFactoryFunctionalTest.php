@@ -299,12 +299,12 @@ class EavFactoryFunctionalTest extends TestCase
         $groupKey = $this->eavFactory->createGroup($setKey);
         $config = [
             [
-                ATTR_FACTORY::ATTRIBUTE->field() => [
+                ATTR_FACTORY::ATTRIBUTE => [
                     _ATTR::NAME => ATTR_TYPE::STRING->value(),
                     _ATTR::TYPE => ATTR_TYPE::STRING->value(),
                     _ATTR::DEFAULT_VALUE => ATTR_TYPE::STRING->randomValue(),
                 ],
-                ATTR_FACTORY::GROUP->field() => $groupKey
+                ATTR_FACTORY::GROUP => $groupKey
             ]
         ];
         $result = $this->eavFactory->createEavEntity($config, $domainKey, $setKey);

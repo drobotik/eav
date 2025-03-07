@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav;
 
+use Doctrine\DBAL\Exception;
 use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Exception\EntityException;
 use Drobotik\Eav\Result\Result;
@@ -31,6 +32,10 @@ class EntityGnome
         return $this->entity;
     }
 
+    /**
+     * @throws EntityException
+     * @throws Exception
+     */
     public function beforeSave(): int
     {
         $entity = $this->getEntity();
@@ -96,6 +101,10 @@ class EntityGnome
         return $result;
     }
 
+    /**
+     * @throws EntityException
+     * @throws Exception
+     */
     public function save(): Result
     {
         $entity = $this->getEntity();
@@ -118,6 +127,9 @@ class EntityGnome
         return $result;
     }
 
+    /**
+     * @throws EntityException
+     */
     public function delete()
     {
         $entity = $this->getEntity();
@@ -212,6 +224,9 @@ class EntityGnome
             EntityException::domainNotFound();
     }
 
+    /**
+     * @throws EntityException
+     */
     private function checkAttrSetExist(int $key): void
     {
         $model = $this->makeAttributeSetModel();

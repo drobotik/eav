@@ -19,18 +19,14 @@ class AttributeFactoryEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Enum\ATTR_FACTORY::field
+     * @covers \Drobotik\Eav\Enum\ATTR_FACTORY::ATTRIBUTE
+     * @covers \Drobotik\Eav\Enum\ATTR_FACTORY::GROUP
+     * @covers \Drobotik\Eav\Enum\ATTR_FACTORY::VALUE
      */
     public function columns() {
-        $cases = [];
-        foreach (ATTR_FACTORY::cases() as $case) {
-            $cases[$case->name] = $case->field();
-        }
-        $this->assertEquals([
-            ATTR_FACTORY::ATTRIBUTE->name => 'attribute',
-            ATTR_FACTORY::GROUP->name => 'group',
-            ATTR_FACTORY::VALUE->name => 'value',
-        ], $cases);
+        $this->assertEquals('attribute', ATTR_FACTORY::ATTRIBUTE);
+        $this->assertEquals('group', ATTR_FACTORY::GROUP);
+        $this->assertEquals('value', ATTR_FACTORY::VALUE);
     }
 
 }
