@@ -14,6 +14,7 @@ use Drobotik\Eav\Enum\_VALUE;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Import\Content\ValueSet;
 use Drobotik\Eav\Trait\SingletonsTrait;
+use InvalidArgumentException;
 
 class ValueBase extends Model
 {
@@ -124,13 +125,30 @@ class ValueBase extends Model
             $table = ATTR_TYPE::valueTable($data->getType());
             $entityKey = $data->getEntityKey();
             $bulkTemplate = "($domainKey, $entityKey, $attributeKey, '$value')";
-            match($table) {
-                $stringTable => $stringBulk[] = $bulkTemplate,
-                $integerTable => $integerBulk[] = $bulkTemplate,
-                $decimalTable => $decimalBulk[] = $bulkTemplate,
-                $datetimeTable=> $datetimeBulk[] = $bulkTemplate,
-                $textTable    => $textBulk[] = $bulkTemplate
-            };
+            switch ($table) {
+                case $stringTable:
+                    $stringBulk[] = $bulkTemplate;
+                    break;
+
+                case $integerTable:
+                    $integerBulk[] = $bulkTemplate;
+                    break;
+
+                case $decimalTable:
+                    $decimalBulk[] = $bulkTemplate;
+                    break;
+
+                case $datetimeTable:
+                    $datetimeBulk[] = $bulkTemplate;
+                    break;
+
+                case $textTable:
+                    $textBulk[] = $bulkTemplate;
+                    break;
+
+                default:
+                    throw new InvalidArgumentException("Unhandled table: " . $table);
+            }
         }
 
         if(count($stringBulk) > 0) {

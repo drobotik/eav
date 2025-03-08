@@ -17,6 +17,7 @@ use Drobotik\Eav\Enum\QB_JOIN;
 use Drobotik\Eav\Enum\QB_OPERATOR;
 use Drobotik\Eav\Exception\QueryBuilderException;
 use Drobotik\Eav\Value\ValueEmpty;
+use InvalidArgumentException;
 
 class Config
 {
@@ -236,12 +237,24 @@ class Config
 
         } else if(!QB_OPERATOR::isNull($operator)) {
             if(QB_OPERATOR::isLike($operator)) {
-                $value = match($operator) {
-                    QB_OPERATOR::BEGINS_WITH, QB_OPERATOR::NOT_BEGINS_WITH => $value.'%',
-                    QB_OPERATOR::CONTAINS, QB_OPERATOR::NOT_CONTAINS => '%'.$value.'%',
-                    QB_OPERATOR::ENDS_WITH ,QB_OPERATOR::NOT_ENDS_WITH => '%'.$value
-                };
+                switch ($operator) {
+                    case QB_OPERATOR::BEGINS_WITH:
+                    case QB_OPERATOR::NOT_BEGINS_WITH:
+                        $value = $value . '%';
+                        break;
 
+                    case QB_OPERATOR::CONTAINS:
+                    case QB_OPERATOR::NOT_CONTAINS:
+                        $value = '%' . $value . '%';
+                        break;
+
+                    case QB_OPERATOR::ENDS_WITH:
+                    case QB_OPERATOR::NOT_ENDS_WITH:
+                        $value = '%' . $value;
+                        break;
+                    default:
+                        throw new InvalidArgumentException("Unhandled operator: " . $operator);
+                }
             }
             $param = $this->createParameter($field .'_cond', $value);
             $expression->setParam1($param);

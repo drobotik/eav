@@ -20,6 +20,7 @@ use Drobotik\Eav\Exception\QueryBuilderException;
 use Drobotik\Eav\QueryBuilder\Config;
 use Drobotik\Eav\QueryBuilder\Expression;
 use Drobotik\Eav\Value\ValueEmpty;
+use InvalidArgumentException;
 use Tests\QueryingDataTestCase;
 
 class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
@@ -533,14 +534,25 @@ class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
             $this->assertEquals($field, $result->getField());
             $this->assertEquals($operator, $result->getOperator());
             $this->assertEquals(':'.$fieldParam, $result->getParam1());
-            $value = match($operator) {
-                QB_OPERATOR::BEGINS_WITH => 'test%',
-                QB_OPERATOR::NOT_BEGINS_WITH => 'test%',
-                QB_OPERATOR::CONTAINS => '%test%',
-                QB_OPERATOR::NOT_CONTAINS => '%test%',
-                QB_OPERATOR::ENDS_WITH => '%test',
-                QB_OPERATOR::NOT_ENDS_WITH => '%test'
-            };
+            switch ($operator) {
+                case QB_OPERATOR::BEGINS_WITH:
+                case QB_OPERATOR::NOT_BEGINS_WITH:
+                    $value = 'test%';
+                    break;
+
+                case QB_OPERATOR::CONTAINS:
+                case QB_OPERATOR::NOT_CONTAINS:
+                    $value = '%test%';
+                    break;
+
+                case QB_OPERATOR::ENDS_WITH:
+                case QB_OPERATOR::NOT_ENDS_WITH:
+                    $value = '%test';
+                    break;
+
+                default:
+                    throw new InvalidArgumentException("Unhandled operator: " . $operator);
+            }
             $this->assertEquals($value, $config->getParameterValue($fieldParam), $operator);
             $this->assertFalse($result->isParam2());
         }

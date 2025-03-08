@@ -24,6 +24,7 @@ use Drobotik\Eav\Model\EntityModel;
 use Drobotik\Eav\Model\PivotModel;
 use Drobotik\Eav\Model\ValueBase;
 use Drobotik\Eav\Value\ValueParser;
+use InvalidArgumentException;
 use League\Csv\Reader;
 use League\Csv\Statement;
 use League\Csv\Writer;
@@ -439,12 +440,27 @@ class ImportManagerAcceptanceTest extends TestCase
             foreach($record as $attributeName => $value)
             {
                 if($attributeName == _ENTITY::ID) continue;
-                $attribute = match ($attributeName) {
-                    ATTR_TYPE::STRING => $string,
-                    ATTR_TYPE::INTEGER => $integer,
-                    ATTR_TYPE::DECIMAL => $decimal,
-                    ATTR_TYPE::DATETIME => $datetime,
-                };
+                switch ($attributeName) {
+                    case ATTR_TYPE::STRING:
+                        $attribute = $string;
+                        break;
+
+                    case ATTR_TYPE::INTEGER:
+                        $attribute = $integer;
+                        break;
+
+                    case ATTR_TYPE::DECIMAL:
+                        $attribute = $decimal;
+                        break;
+
+                    case ATTR_TYPE::DATETIME:
+                        $attribute = $datetime;
+                        break;
+
+                    default:
+                        throw new InvalidArgumentException("Unhandled attribute type: " . $attributeName);
+                }
+
 
                 $attrType = ATTR_TYPE::getCase($attribute[_ATTR::TYPE]);
                 $valueTable = ATTR_TYPE::valueTable($attrType);
