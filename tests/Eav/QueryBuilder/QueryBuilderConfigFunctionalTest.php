@@ -374,7 +374,7 @@ class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
     {
         $rule = [
             QB_CONFIG::NAME => 'size',
-            QB_CONFIG::OPERATOR => QB_OPERATOR::IS_NULL->name(),
+            QB_CONFIG::OPERATOR => QB_OPERATOR::IS_NULL,
         ];
         $config = $this->getMockBuilder(Config::class)
             ->onlyMethods(['createExpression', 'registerSelect', 'registerJoin'])
@@ -398,7 +398,7 @@ class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
     {
         $rule = [
             QB_CONFIG::NAME => 'size',
-            QB_CONFIG::OPERATOR => QB_OPERATOR::EQUAL->name(),
+            QB_CONFIG::OPERATOR => QB_OPERATOR::EQUAL,
             QB_CONFIG::VALUE => 12
         ];
 
@@ -541,7 +541,7 @@ class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
                 QB_OPERATOR::ENDS_WITH => '%test',
                 QB_OPERATOR::NOT_ENDS_WITH => '%test'
             };
-            $this->assertEquals($value, $config->getParameterValue($fieldParam), $operator->name());
+            $this->assertEquals($value, $config->getParameterValue($fieldParam), $operator);
             $this->assertFalse($result->isParam2());
         }
     }
@@ -666,7 +666,7 @@ class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
             QB_CONFIG::RULES => [
                 [
                     QB_CONFIG::NAME => ATTR_TYPE::DECIMAL,
-                    QB_CONFIG::OPERATOR => QB_OPERATOR::LESS->name(),
+                    QB_CONFIG::OPERATOR => QB_OPERATOR::LESS,
                     QB_CONFIG::VALUE => 10000
                 ],
                 [
@@ -674,7 +674,7 @@ class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
                     QB_CONFIG::RULES => [
                         [
                             QB_CONFIG::NAME => ATTR_TYPE::STRING,
-                            QB_CONFIG::OPERATOR => QB_OPERATOR::CONTAINS->name(),
+                            QB_CONFIG::OPERATOR => QB_OPERATOR::CONTAINS,
                             QB_CONFIG::VALUE => 'sit quisquam'
                         ]
                     ],

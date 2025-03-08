@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\Enum;
 
-enum ATTR_FACTORY
+class ATTR_FACTORY
 {
     public const ATTRIBUTE = 'attribute';
     public const GROUP = 'group';

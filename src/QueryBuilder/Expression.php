@@ -16,7 +16,7 @@ use Drobotik\Eav\Enum\QB_OPERATOR;
 
 class Expression
 {
-    private QB_OPERATOR $operator;
+    private string      $operator;
     private string      $field;
     private string      $param1;
     private string $param2;
@@ -28,12 +28,12 @@ class Expression
         $this->exprBuilder = new ExpressionBuilder(Connection::get());
     }
 
-    public function setOperator(QB_OPERATOR $operator): void
+    public function setOperator($operator): void
     {
         $this->operator = $operator;
     }
 
-    public function getOperator() : QB_OPERATOR
+    public function getOperator() : string
     {
         return $this->operator;
     }
@@ -99,14 +99,14 @@ class Expression
     public function execute() : string|CompositeExpression
     {
         $operator = $this->getOperator();
-        $method = $operator->expr();
+        $method = QB_OPERATOR::expr($operator);
         // when need to call custom methods
-        if($operator->isBetween()) {
+        if(QB_OPERATOR::isBetween($operator)) {
             return call_user_func([$this, $method]);
         }
         // when need to call basic ExpressionBuilder methods
         $args = [$this->getField()];
-        if(!$operator->isNull())
+        if(!QB_OPERATOR::isNull($operator))
             $args[] = $this->getParam1();
         return call_user_func_array([$this->exprBuilder, $method], $args);
     }

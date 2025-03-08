@@ -215,13 +215,14 @@ class Config
         return $result;
     }
 
-    public function createExpression(string $field, QB_OPERATOR $operator, mixed $value) : Expression
+    public function createExpression(string $field, $operator, mixed $value) : Expression
     {
+        $operator = QB_OPERATOR::getCase($operator);
         $expression = new Expression();
         $expression->setField($field);
         $expression->setOperator($operator);
 
-        if($operator->isBetween()) {
+        if(QB_OPERATOR::isBetween($operator)) {
             $value1 = $value[0];
             $value2 = $value[1];
             $param1 = $this->createParameter($field .'_cond_1', $value1);
@@ -229,12 +230,12 @@ class Config
             $expression->setParam1($param1);
             $expression->setParam2($param2);
 
-        } else if($operator->isEmpty()) {
+        } else if(QB_OPERATOR::isEmpty($operator)) {
             $param = $this->createParameter($field .'_cond', '');
             $expression->setParam1($param);
 
-        } else if(!$operator->isNull()) {
-            if($operator->isLike()) {
+        } else if(!QB_OPERATOR::isNull($operator)) {
+            if(QB_OPERATOR::isLike($operator)) {
                 $value = match($operator) {
                     QB_OPERATOR::BEGINS_WITH, QB_OPERATOR::NOT_BEGINS_WITH => $value.'%',
                     QB_OPERATOR::CONTAINS, QB_OPERATOR::NOT_CONTAINS => '%'.$value.'%',

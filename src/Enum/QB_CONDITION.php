@@ -11,7 +11,7 @@ namespace Drobotik\Eav\Enum;
 
 use Drobotik\Eav\Exception\QueryBuilderException;
 
-enum QB_CONDITION
+class QB_CONDITION
 {
     public const AND = 'and';
     public const OR = 'or';

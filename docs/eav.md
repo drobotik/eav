@@ -521,7 +521,7 @@ $filters = [
     QB_CONFIG::RULES => [
         [
             QB_CONFIG::NAME => "size",
-            QB_CONFIG::OPERATOR => QB_OPERATOR::LESS->name(),
+            QB_CONFIG::OPERATOR => QB_OPERATOR::LESS,
             QB_CONFIG::VALUE => 10000
         ], 
         [
@@ -529,12 +529,12 @@ $filters = [
             QB_CONFIG::RULES => [
                 [
                     QB_CONFIG::NAME => "name",
-                    QB_CONFIG::OPERATOR => QB_OPERATOR::CONTAINS->name(),
+                    QB_CONFIG::OPERATOR => QB_OPERATOR::CONTAINS,
                     QB_CONFIG::VALUE => 'sit quisquam'
                 ],
                 [
                     QB_CONFIG::NAME => "name",
-                    QB_CONFIG::OPERATOR => QB_OPERATOR::EQUAL->name(),
+                    QB_CONFIG::OPERATOR => QB_OPERATOR::EQUAL,
                     QB_CONFIG::VALUE => 'et dolores'
                 ]
             ],
