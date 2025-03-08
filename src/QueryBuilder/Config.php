@@ -186,7 +186,7 @@ class Config
 
             $attribute = $this->getAttribute($column);
             $attributeKey = $attribute[_ATTR::ID];
-            $table = ATTR_TYPE::getCase($attribute[_ATTR::TYPE])->valueTable();
+            $table = ATTR_TYPE::valueTable(ATTR_TYPE::getCase($attribute[_ATTR::TYPE]));
 
             // if in search it should be joined
             if(!$this->hasJoin($column)) {
@@ -260,7 +260,7 @@ class Config
     {
         if(!$this->hasJoin($field)) {
             $attribute = $this->getAttribute($field);
-            $table = ATTR_TYPE::getCase($attribute[_ATTR::TYPE])->valueTable();
+            $table = ATTR_TYPE::valueTable(ATTR_TYPE::getCase($attribute[_ATTR::TYPE]));
             $attributeKey = $attribute[_ATTR::ID];
             $this->addJoin($table, $field, $attributeKey);
         }

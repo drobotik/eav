@@ -12,6 +12,7 @@ namespace Drobotik\Eav\Value;
 
 use Drobotik\Eav\Enum\_RESULT;
 use Drobotik\Eav\Enum\_VALUE;
+use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Trait\ContainerTrait;
 use Drobotik\Eav\Validation\Assert;
 use Symfony\Component\Validator\Validation;
@@ -24,10 +25,7 @@ class ValueValidator
 
     public function getDefaultValueRule(): array
     {
-        return $this->getAttributeContainer()
-            ->getAttribute()
-            ->getType()
-            ->validationRule();
+        return ATTR_TYPE::validationRule($this->getAttributeContainer()->getAttribute()->getType());
     }
 
     public function getRules(): Constraints\Collection

@@ -70,7 +70,7 @@ class ImportAttributesWorkerBehaviorTest extends TestCase
 
         $fields = [
             _ATTR::NAME => 'test',
-            _ATTR::TYPE => ATTR_TYPE::DATETIME->value()
+            _ATTR::TYPE => ATTR_TYPE::DATETIME
         ];
 
         $attribute = $this->getMockBuilder(ConfigAttribute::class)

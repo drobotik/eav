@@ -100,11 +100,11 @@ class ValueBase extends Model
 
         $template = "INSERT INTO %s ("._VALUE::DOMAIN_ID.","._VALUE::ENTITY_ID.","._VALUE::ATTRIBUTE_ID.","._VALUE::VALUE.")";
 
-        $stringTable = ATTR_TYPE::STRING->valueTable();
-        $integerTable = ATTR_TYPE::INTEGER->valueTable();
-        $decimalTable = ATTR_TYPE::DECIMAL->valueTable();
-        $datetimeTable = ATTR_TYPE::DATETIME->valueTable();
-        $textTable = ATTR_TYPE::TEXT->valueTable();
+        $stringTable = ATTR_TYPE::valueTable(ATTR_TYPE::STRING);
+        $integerTable = ATTR_TYPE::valueTable(ATTR_TYPE::INTEGER);
+        $decimalTable = ATTR_TYPE::valueTable(ATTR_TYPE::DECIMAL);
+        $datetimeTable = ATTR_TYPE::valueTable(ATTR_TYPE::DATETIME);
+        $textTable = ATTR_TYPE::valueTable(ATTR_TYPE::TEXT);
 
         $stringTemplate = sprintf($template, $stringTable) . " VALUES %s;";
         $integerTemplate = sprintf($template, $integerTable) . " VALUES %s;";
@@ -121,7 +121,7 @@ class ValueBase extends Model
         foreach ($valueSet->forExistingEntities() as $data) {
             $attributeKey = $data->getAttributeKey();
             $value = $data->getValue();
-            $table = $data->getType()->valueTable();
+            $table = ATTR_TYPE::valueTable($data->getType());
             $entityKey = $data->getEntityKey();
             $bulkTemplate = "($domainKey, $entityKey, $attributeKey, '$value')";
             match($table) {

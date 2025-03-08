@@ -99,7 +99,7 @@ class ImportContentFunctionalTest extends TestCase
     {
         $attributeKey = 123;
         $attributeName = 'test';
-        $attributeType = ATTR_TYPE::TEXT->value();
+        $attributeType = ATTR_TYPE::TEXT;
         $content = 'text';
         $lineIndex = 45;
 
@@ -126,7 +126,7 @@ class ImportContentFunctionalTest extends TestCase
         $value = $values[0];
 
         $this->assertEquals($content, $value->getValue());
-        $this->assertEquals($attributeType, $value->getType()->value());
+        $this->assertEquals($attributeType, $value->getType());
         $this->assertEquals($attributeName, $value->getAttributeName());
         $this->assertEquals($attributeKey, $value->getAttributeKey());
         $this->assertEquals($lineIndex, $value->getLineIndex());
@@ -145,7 +145,7 @@ class ImportContentFunctionalTest extends TestCase
         $entityKey = 451;
         $attributeKey = 123;
         $attributeName = 'test';
-        $attributeType = ATTR_TYPE::TEXT->value();
+        $attributeType = ATTR_TYPE::TEXT;
         $content = 'text';
         $lineIndex = 45;
 

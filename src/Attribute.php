@@ -77,7 +77,7 @@ class Attribute
     /**
      * @throws AttributeException
      */
-    public function getType(): ATTR_TYPE
+    public function getType(): string
     {
         $type = $this->getBag()->getField(_ATTR::TYPE);
         return ATTR_TYPE::getCase($type);

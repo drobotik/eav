@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace Drobotik\Eav\Value;
 
 use Drobotik\Eav\Enum\_VALUE;
+use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Result\Result;
 use Drobotik\Eav\Trait\ContainerTrait;
 use Drobotik\Eav\Trait\SingletonsTrait;
@@ -38,7 +39,7 @@ class ValueAction
         $value = $parser->parse($type, $valueManager->getRuntime());
 
         $valueKey = $valueModel->create(
-            $type->valueTable(),
+            ATTR_TYPE::valueTable($type),
             $entity->getDomainKey(),
             $entity->getKey(),
             $attribute->getKey(),
@@ -72,7 +73,7 @@ class ValueAction
         $domainKey = $entity->getDomainKey();
 
         $record = $valueModel->find(
-            $type->valueTable(),
+            ATTR_TYPE::valueTable($type),
             $domainKey,
             $entityKey,
             $attributeKey
@@ -111,7 +112,7 @@ class ValueAction
         $value = $valueParser->parse($type, $valueManager->getRuntime());
 
         $valueModel->update(
-            $type->valueTable(),
+            ATTR_TYPE::valueTable($type),
             $domainKey,
             $entityKey,
             $attributeKey,
@@ -142,7 +143,7 @@ class ValueAction
         $entityKey = $entity->getKey();
         $attributeKey = $attribute->getKey();
 
-        $deleted = $valueModel->destroy($type->valueTable(), $domainKey, $entityKey, $attributeKey);
+        $deleted = $valueModel->destroy(ATTR_TYPE::valueTable($type), $domainKey, $entityKey, $attributeKey);
 
         if ($deleted === 0) {
             return $result->notDeleted();

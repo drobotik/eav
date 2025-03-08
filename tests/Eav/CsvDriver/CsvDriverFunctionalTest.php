@@ -125,25 +125,25 @@ class CsvDriverFunctionalTest extends TestCase
 
         $chunk = $this->driver->getChunk();
         $this->assertCount(10, $chunk);
-        $this->assertEquals('sunt', $chunk[0][ATTR_TYPE::STRING->value()]);
-        $this->assertEquals('repudiandae', $chunk[9][ATTR_TYPE::STRING->value()]);
+        $this->assertEquals('sunt', $chunk[0][ATTR_TYPE::STRING]);
+        $this->assertEquals('repudiandae', $chunk[9][ATTR_TYPE::STRING]);
         $this->assertEquals(10, $this->driver->getCursor());
         $chunk = $this->driver->getChunk();
         $this->assertCount(10, $chunk);
-        $this->assertEquals('rerum', $chunk[0][ATTR_TYPE::STRING->value()]);
-        $this->assertEquals('voluptatem', $chunk[9][ATTR_TYPE::STRING->value()]);
+        $this->assertEquals('rerum', $chunk[0][ATTR_TYPE::STRING]);
+        $this->assertEquals('voluptatem', $chunk[9][ATTR_TYPE::STRING]);
         $this->assertEquals(20, $this->driver->getCursor());
         $this->driver->setChunkSize(75);
         $chunk = $this->driver->getChunk();
         $this->assertCount(75, $chunk);
-        $this->assertEquals('reprehenderit', $chunk[0][ATTR_TYPE::STRING->value()]);
-        $this->assertEquals('quos', $chunk[74][ATTR_TYPE::STRING->value()]);
+        $this->assertEquals('reprehenderit', $chunk[0][ATTR_TYPE::STRING]);
+        $this->assertEquals('quos', $chunk[74][ATTR_TYPE::STRING]);
         $this->assertEquals(95, $this->driver->getCursor());
         $this->driver->setChunkSize(10);
         $chunk = $this->driver->getChunk();
         $this->assertCount(5, $chunk);
-        $this->assertEquals('est', $chunk[0][ATTR_TYPE::STRING->value()]);
-        $this->assertEquals('vel', $chunk[4][ATTR_TYPE::STRING->value()]);
+        $this->assertEquals('est', $chunk[0][ATTR_TYPE::STRING]);
+        $this->assertEquals('vel', $chunk[4][ATTR_TYPE::STRING]);
         $this->assertEquals(100, $this->driver->getCursor());
 
         $chunk = $this->driver->getChunk();
@@ -161,11 +161,11 @@ class CsvDriverFunctionalTest extends TestCase
     {
         $driver = new CsvDriver();
         $columns = [
-            ATTR_TYPE::STRING->value(),
-            ATTR_TYPE::INTEGER->value(),
-            ATTR_TYPE::DECIMAL->value(),
-            ATTR_TYPE::DATETIME->value(),
-            ATTR_TYPE::TEXT->value()
+            ATTR_TYPE::STRING,
+            ATTR_TYPE::INTEGER,
+            ATTR_TYPE::DECIMAL,
+            ATTR_TYPE::DATETIME,
+            ATTR_TYPE::TEXT
         ];
         $input = [
             ['test1', '1', '1.2', Carbon::now()->toISOString(), 'text text1'],
@@ -208,11 +208,11 @@ class CsvDriverFunctionalTest extends TestCase
         $fp = fopen($path, 'w');
         $data = [
             [
-                ATTR_TYPE::STRING->value(),
-                ATTR_TYPE::INTEGER->value(),
-                ATTR_TYPE::DECIMAL->value(),
-                ATTR_TYPE::DATETIME->value(),
-                ATTR_TYPE::TEXT->value()
+                ATTR_TYPE::STRING,
+                ATTR_TYPE::INTEGER,
+                ATTR_TYPE::DECIMAL,
+                ATTR_TYPE::DATETIME,
+                ATTR_TYPE::TEXT
             ],
             ['test1', 1, 1.2, Carbon::now()->toISOString(), 'text text1'],
             ['test2', 1, 1.2, Carbon::now()->subDays()->toISOString(), 'text text2'],
@@ -224,11 +224,11 @@ class CsvDriverFunctionalTest extends TestCase
             fputcsv($fp, $row);
             if($index > 0) {
                 $expected[] = [
-                    ATTR_TYPE::STRING->value() => $row[0],
-                    ATTR_TYPE::INTEGER->value() => $row[1],
-                    ATTR_TYPE::DECIMAL->value() => $row[2],
-                    ATTR_TYPE::DATETIME->value() => $row[3],
-                    ATTR_TYPE::TEXT->value() => $row[4],
+                    ATTR_TYPE::STRING => $row[0],
+                    ATTR_TYPE::INTEGER => $row[1],
+                    ATTR_TYPE::DECIMAL => $row[2],
+                    ATTR_TYPE::DATETIME => $row[3],
+                    ATTR_TYPE::TEXT => $row[4],
                 ];
             }
         }

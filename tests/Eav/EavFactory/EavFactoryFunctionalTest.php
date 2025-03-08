@@ -227,7 +227,7 @@ class EavFactoryFunctionalTest extends TestCase
 
         $input = [
             _ATTR::NAME => 'test',
-            _ATTR::TYPE => ATTR_TYPE::INTEGER->value(),
+            _ATTR::TYPE => ATTR_TYPE::INTEGER,
             _ATTR::STRATEGY => 'strategy',
             _ATTR::SOURCE => 'source',
             _ATTR::DEFAULT_VALUE => 'default',
@@ -244,7 +244,7 @@ class EavFactoryFunctionalTest extends TestCase
             _ATTR::ID => $key,
             _ATTR::DOMAIN_ID => 123,
             _ATTR::NAME => 'test',
-            _ATTR::TYPE => ATTR_TYPE::INTEGER->value(),
+            _ATTR::TYPE => ATTR_TYPE::INTEGER,
             _ATTR::STRATEGY => 'strategy',
             _ATTR::SOURCE => 'source',
             _ATTR::DEFAULT_VALUE => 'default',
@@ -300,9 +300,9 @@ class EavFactoryFunctionalTest extends TestCase
         $config = [
             [
                 ATTR_FACTORY::ATTRIBUTE => [
-                    _ATTR::NAME => ATTR_TYPE::STRING->value(),
-                    _ATTR::TYPE => ATTR_TYPE::STRING->value(),
-                    _ATTR::DEFAULT_VALUE => ATTR_TYPE::STRING->randomValue(),
+                    _ATTR::NAME => ATTR_TYPE::STRING,
+                    _ATTR::TYPE => ATTR_TYPE::STRING,
+                    _ATTR::DEFAULT_VALUE => ATTR_TYPE::randomValue(ATTR_TYPE::STRING),
                 ],
                 ATTR_FACTORY::GROUP => $groupKey
             ]

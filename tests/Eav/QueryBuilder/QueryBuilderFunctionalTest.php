@@ -195,10 +195,10 @@ class QueryBuilderFunctionalTest extends QueryingDataTestCase
         $setKey = 1;
         $attrDecimalKey = 3;
         $attrStringKey = 1;
-        $attrDecimalName = ATTR_TYPE::DECIMAL->value();
-        $attrStringName = ATTR_TYPE::STRING->value();
-        $valueDecimalTable = ATTR_TYPE::DECIMAL->valueTable();
-        $valueStringTable = ATTR_TYPE::STRING->valueTable();
+        $attrDecimalName = ATTR_TYPE::DECIMAL;
+        $attrStringName = ATTR_TYPE::STRING;
+        $valueDecimalTable = ATTR_TYPE::valueTable(ATTR_TYPE::DECIMAL);
+        $valueStringTable = ATTR_TYPE::valueTable(ATTR_TYPE::STRING);
 
         $decimalParamValue = 10000;
         $stringParamValue1 = '%et dolores%';
@@ -306,7 +306,7 @@ class QueryBuilderFunctionalTest extends QueryingDataTestCase
             QB_CONFIG::CONDITION => QB_CONDITION::AND,
             QB_CONFIG::RULES => [
                 [
-                    QB_CONFIG::NAME => ATTR_TYPE::DECIMAL->value(),
+                    QB_CONFIG::NAME => ATTR_TYPE::DECIMAL,
                     QB_CONFIG::OPERATOR => QB_OPERATOR::LESS->name(),
                     QB_CONFIG::VALUE => 10000
                 ],
@@ -314,12 +314,12 @@ class QueryBuilderFunctionalTest extends QueryingDataTestCase
                     QB_CONFIG::CONDITION => QB_CONDITION::OR,
                     QB_CONFIG::RULES => [
                         [
-                            QB_CONFIG::NAME => ATTR_TYPE::STRING->value(),
+                            QB_CONFIG::NAME => ATTR_TYPE::STRING,
                             QB_CONFIG::OPERATOR => QB_OPERATOR::CONTAINS->name(),
                             QB_CONFIG::VALUE => 'sit quisquam'
                         ],
                         [
-                            QB_CONFIG::NAME => ATTR_TYPE::STRING->value(),
+                            QB_CONFIG::NAME => ATTR_TYPE::STRING,
                             QB_CONFIG::OPERATOR => QB_OPERATOR::EQUAL->name(),
                             QB_CONFIG::VALUE => 'et dolores'
                         ]
@@ -329,7 +329,7 @@ class QueryBuilderFunctionalTest extends QueryingDataTestCase
         ];
         $domainKey = 1;
         $setKey = 1;
-        $columns = [ATTR_TYPE::STRING->value(), ATTR_TYPE::DECIMAL->value()];
+        $columns = [ATTR_TYPE::STRING, ATTR_TYPE::DECIMAL];
         $qb = new QueryBuilder();
         $config = new Config();
         $config->setDomainKey($domainKey);
@@ -341,18 +341,18 @@ class QueryBuilderFunctionalTest extends QueryingDataTestCase
         $this->assertSame([
             [
                 _ENTITY::ID => 1822,
-                ATTR_TYPE::STRING->value() => 'et dolores',
-                ATTR_TYPE::DECIMAL->value() => 170.359
+                ATTR_TYPE::STRING => 'et dolores',
+                ATTR_TYPE::DECIMAL => 170.359
             ],
             [
                 _ENTITY::ID => 18795,
-                ATTR_TYPE::STRING->value() => 'sit quisquam',
-                ATTR_TYPE::DECIMAL->value() => 3685.969
+                ATTR_TYPE::STRING => 'sit quisquam',
+                ATTR_TYPE::DECIMAL => 3685.969
             ],
             [
                 _ENTITY::ID => 19738,
-                ATTR_TYPE::STRING->value() => 'sit quisquam',
-                ATTR_TYPE::DECIMAL->value() => 180.63
+                ATTR_TYPE::STRING => 'sit quisquam',
+                ATTR_TYPE::DECIMAL => 180.63
             ]
         ], $qb->run()->executeQuery()->fetchAllAssociative());
     }

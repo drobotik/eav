@@ -30,7 +30,7 @@ class ConfigAttribute
         return $this->fields[_ATTR::NAME];
     }
 
-    public function getType(): ATTR_TYPE
+    public function getType(): string
     {
         return ATTR_TYPE::getCase($this->fields[_ATTR::TYPE]);
     }

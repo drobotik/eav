@@ -59,7 +59,7 @@ class AttributeEnumFunctionalTest extends TestCase
         $this->assertEquals(null, _ATTR::bag(_ATTR::SOURCE));
         $this->assertEquals(null, _ATTR::bag(_ATTR::DEFAULT_VALUE));
         $this->assertEquals(null, _ATTR::bag(_ATTR::DESCRIPTION));
-        $this->assertEquals(ATTR_TYPE::STRING->value(), _ATTR::bag(_ATTR::TYPE));
+        $this->assertEquals(ATTR_TYPE::STRING, _ATTR::bag(_ATTR::TYPE));
         $this->assertEquals( Strategy::class, _ATTR::bag(_ATTR::STRATEGY));
     }
 }

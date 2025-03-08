@@ -116,13 +116,13 @@ class EntityFactory
         return $pivotKey;
     }
 
-    public function handleValue(ATTR_TYPE $type, int $entityKey, int $attrKey, mixed $value)
+    public function handleValue($type, int $entityKey, int $attrKey, mixed $value)
     {
         $result = $this->getResult();
         $valueModel = $this->makeValueModel();
         $valueParser = $this->makeValueParser();
         $domainKey = $result->getDomainKey();
-        $valueTable = $type->valueTable();
+        $valueTable = ATTR_TYPE::valueTable($type);
 
         $record = $valueModel->find($valueTable, $domainKey, $entityKey, $attrKey);
         if($record === false) {

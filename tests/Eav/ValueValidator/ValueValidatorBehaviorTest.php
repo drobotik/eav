@@ -35,7 +35,7 @@ class ValueValidatorBehaviorTest extends TestCase
      */
     public function validation_rules_with_custom_rule() {
         $attribute = new Attribute();
-        $attribute->setType(ATTR_TYPE::INTEGER->value());
+        $attribute->setType(ATTR_TYPE::INTEGER);
         $strategy = $this->getMockBuilder(Strategy::class)
             ->onlyMethods(['rules'])
             ->getMock();

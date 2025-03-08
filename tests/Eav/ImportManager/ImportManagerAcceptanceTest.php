@@ -46,36 +46,36 @@ class ImportManagerAcceptanceTest extends TestCase
 
         $stringConfig  = new ConfigAttribute();
         $stringConfig->setFields([
-            _ATTR::NAME =>  ATTR_TYPE::STRING->value(),
-            _ATTR::TYPE => ATTR_TYPE::STRING->value()
+            _ATTR::NAME =>  ATTR_TYPE::STRING,
+            _ATTR::TYPE => ATTR_TYPE::STRING
         ]);
         $stringConfig->setGroupKey($groupKey);
 
         $integerConfig  = new ConfigAttribute();
         $integerConfig->setFields([
-            _ATTR::NAME => ATTR_TYPE::INTEGER->value(),
-            _ATTR::TYPE => ATTR_TYPE::INTEGER->value()
+            _ATTR::NAME => ATTR_TYPE::INTEGER,
+            _ATTR::TYPE => ATTR_TYPE::INTEGER
         ]);
         $integerConfig->setGroupKey($groupKey);
 
         $decimalConfig  = new ConfigAttribute();
         $decimalConfig->setFields([
-            _ATTR::NAME => ATTR_TYPE::DECIMAL->value(),
-            _ATTR::TYPE => ATTR_TYPE::DECIMAL->value()
+            _ATTR::NAME => ATTR_TYPE::DECIMAL,
+            _ATTR::TYPE => ATTR_TYPE::DECIMAL
         ]);
         $decimalConfig->setGroupKey($groupKey);
 
         $datetimeConfig  = new ConfigAttribute();
         $datetimeConfig->setFields([
-            _ATTR::NAME => ATTR_TYPE::DATETIME->value(),
-            _ATTR::TYPE => ATTR_TYPE::DATETIME->value()
+            _ATTR::NAME => ATTR_TYPE::DATETIME,
+            _ATTR::TYPE => ATTR_TYPE::DATETIME
         ]);
         $datetimeConfig->setGroupKey($groupKey);
 
         $textConfig  = new ConfigAttribute();
         $textConfig->setFields([
-            _ATTR::NAME => ATTR_TYPE::TEXT->value(),
-            _ATTR::TYPE => ATTR_TYPE::TEXT->value()
+            _ATTR::NAME => ATTR_TYPE::TEXT,
+            _ATTR::TYPE => ATTR_TYPE::TEXT
         ]);
         $textConfig->setGroupKey($groupKey);
 
@@ -121,32 +121,32 @@ class ImportManagerAcceptanceTest extends TestCase
 
         $string = $q->setParameters([
             'domain' => $domainKey,
-            'type' => ATTR_TYPE::STRING->value(),
-            'name' => ATTR_TYPE::STRING->value()
+            'type' => ATTR_TYPE::STRING,
+            'name' => ATTR_TYPE::STRING
         ])->executeQuery()->fetchAssociative();
 
         $integer = $q->setParameters([
             'domain' => $domainKey,
-            'type' => ATTR_TYPE::INTEGER->value(),
-            'name' => ATTR_TYPE::INTEGER->value()
+            'type' => ATTR_TYPE::INTEGER,
+            'name' => ATTR_TYPE::INTEGER
         ])->executeQuery()->fetchAssociative();
 
         $decimal =  $q->setParameters([
             'domain' => $domainKey,
-            'type' => ATTR_TYPE::DECIMAL->value(),
-            'name' => ATTR_TYPE::DECIMAL->value()
+            'type' => ATTR_TYPE::DECIMAL,
+            'name' => ATTR_TYPE::DECIMAL
         ])->executeQuery()->fetchAssociative();
 
         $datetime = $q->setParameters([
             'domain' => $domainKey,
-            'type' => ATTR_TYPE::DATETIME->value(),
-            'name' => ATTR_TYPE::DATETIME->value()
+            'type' => ATTR_TYPE::DATETIME,
+            'name' => ATTR_TYPE::DATETIME
         ])->executeQuery()->fetchAssociative();
 
         $text = $q->setParameters([
             'domain' => $domainKey,
-            'type' => ATTR_TYPE::TEXT->value(),
-            'name' => ATTR_TYPE::TEXT->value()
+            'type' => ATTR_TYPE::TEXT,
+            'name' => ATTR_TYPE::TEXT
         ])->executeQuery()->fetchAssociative();
 
         $this->assertIsArray($string);
@@ -196,31 +196,31 @@ class ImportManagerAcceptanceTest extends TestCase
 
             // check values created
             $stringValue = $valueModel->find(
-                ATTR_TYPE::STRING->valueTable(),
+                ATTR_TYPE::valueTable(ATTR_TYPE::STRING),
                 $domainKey,
                 $entityKey,
                 $string[_ATTR::ID]
             );
             $integerValue = $valueModel->find(
-                ATTR_TYPE::INTEGER->valueTable(),
+                ATTR_TYPE::valueTable(ATTR_TYPE::INTEGER),
                 $domainKey,
                 $entityKey,
                 $integer[_ATTR::ID]
             );
             $decimalValue = $valueModel->find(
-                ATTR_TYPE::DECIMAL->valueTable(),
+                ATTR_TYPE::valueTable(ATTR_TYPE::DECIMAL),
                 $domainKey,
                 $entityKey,
                 $decimal[_ATTR::ID]
             );
             $datetimeValue = $valueModel->find(
-                ATTR_TYPE::DATETIME->valueTable(),
+                ATTR_TYPE::valueTable(ATTR_TYPE::DATETIME),
                 $domainKey,
                 $entityKey,
                 $datetime[_ATTR::ID]
             );
             $textValue = $valueModel->find(
-                ATTR_TYPE::TEXT->valueTable(),
+                ATTR_TYPE::valueTable(ATTR_TYPE::TEXT),
                 $domainKey,
                 $entityKey,
                 $text[_ATTR::ID]
@@ -257,14 +257,14 @@ class ImportManagerAcceptanceTest extends TestCase
 
         $stringAttributeKey = $this->eavFactory->createAttribute($domainKey, [
             _ATTR::DOMAIN_ID => $domainKey,
-            _ATTR::NAME => ATTR_TYPE::STRING->value(),
-            _ATTR::TYPE => ATTR_TYPE::STRING->value(),
+            _ATTR::NAME => ATTR_TYPE::STRING,
+            _ATTR::TYPE => ATTR_TYPE::STRING,
         ]);
         $this->eavFactory->createPivot($domainKey, $setKey, $groupKey,$stringAttributeKey);
         $integerAttributeKey = $this->eavFactory->createAttribute($domainKey, [
             _ATTR::DOMAIN_ID => $domainKey,
-            _ATTR::NAME => ATTR_TYPE::INTEGER->value(),
-            _ATTR::TYPE => ATTR_TYPE::INTEGER->value(),
+            _ATTR::NAME => ATTR_TYPE::INTEGER,
+            _ATTR::TYPE => ATTR_TYPE::INTEGER,
         ]);
         $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $integerAttributeKey);
 
@@ -274,8 +274,8 @@ class ImportManagerAcceptanceTest extends TestCase
         for($i=0; $i<6; $i++)
         {
             $entityKey = $this->eavFactory->createEntity($domainKey, $setKey);
-            $stringValueKey = $valueModel->create(ATTR_TYPE::STRING->valueTable(), $domainKey, $entityKey, $stringAttributeKey, ATTR_TYPE::STRING->randomValue());
-            $integerValueKey = $valueModel->create(ATTR_TYPE::STRING->valueTable(), $domainKey, $entityKey, $integerAttributeKey, ATTR_TYPE::INTEGER->randomValue());
+            $stringValueKey = $valueModel->create(ATTR_TYPE::valueTable(ATTR_TYPE::STRING), $domainKey, $entityKey, $stringAttributeKey, ATTR_TYPE::randomValue(ATTR_TYPE::STRING));
+            $integerValueKey = $valueModel->create(ATTR_TYPE::valueTable(ATTR_TYPE::STRING), $domainKey, $entityKey, $integerAttributeKey, ATTR_TYPE::randomValue(ATTR_TYPE::INTEGER));
             $oldValues[] = [$entityKey, $stringValueKey, $integerValueKey];
         }
 
@@ -299,31 +299,31 @@ class ImportManagerAcceptanceTest extends TestCase
         $writer = Writer::createFromFileObject($file);
         $writer->insertOne([
             _ENTITY::ID,
-            ATTR_TYPE::STRING->value(),
-            ATTR_TYPE::INTEGER->value(),
-            ATTR_TYPE::DECIMAL->value(),
-            ATTR_TYPE::DATETIME->value()
+            ATTR_TYPE::STRING,
+            ATTR_TYPE::INTEGER,
+            ATTR_TYPE::DECIMAL,
+            ATTR_TYPE::DATETIME
         ]);
         $writer->insertAll($newValues);
 
         $decimalConfig  = new ConfigAttribute();
         $decimalConfig->setFields([
-            _ATTR::NAME => ATTR_TYPE::DECIMAL->value(),
-            _ATTR::TYPE => ATTR_TYPE::DECIMAL->value()
+            _ATTR::NAME => ATTR_TYPE::DECIMAL,
+            _ATTR::TYPE => ATTR_TYPE::DECIMAL
         ]);
         $decimalConfig->setGroupKey($groupKey);
 
         $datetimeConfig  = new ConfigAttribute();
         $datetimeConfig->setFields([
-            _ATTR::NAME => ATTR_TYPE::DATETIME->value(),
-            _ATTR::TYPE => ATTR_TYPE::DATETIME->value()
+            _ATTR::NAME => ATTR_TYPE::DATETIME,
+            _ATTR::TYPE => ATTR_TYPE::DATETIME
         ]);
         $datetimeConfig->setGroupKey($groupKey);
 
         $textConfig  = new ConfigAttribute();
         $textConfig->setFields([
-            _ATTR::NAME => ATTR_TYPE::TEXT->value(),
-            _ATTR::TYPE => ATTR_TYPE::TEXT->value()
+            _ATTR::NAME => ATTR_TYPE::TEXT,
+            _ATTR::TYPE => ATTR_TYPE::TEXT
         ]);
         $textConfig->setGroupKey($groupKey);
 
@@ -367,32 +367,32 @@ class ImportManagerAcceptanceTest extends TestCase
 
         $string = $q->setParameters([
             'domain' => $domainKey,
-            'type' => ATTR_TYPE::STRING->value(),
-            'name' => ATTR_TYPE::STRING->value()
+            'type' => ATTR_TYPE::STRING,
+            'name' => ATTR_TYPE::STRING
         ])->executeQuery()->fetchAssociative();
 
         $integer = $q->setParameters([
             'domain' => $domainKey,
-            'type' => ATTR_TYPE::INTEGER->value(),
-            'name' => ATTR_TYPE::INTEGER->value()
+            'type' => ATTR_TYPE::INTEGER,
+            'name' => ATTR_TYPE::INTEGER
         ])->executeQuery()->fetchAssociative();
 
         $decimal =  $q->setParameters([
             'domain' => $domainKey,
-            'type' => ATTR_TYPE::DECIMAL->value(),
-            'name' => ATTR_TYPE::DECIMAL->value()
+            'type' => ATTR_TYPE::DECIMAL,
+            'name' => ATTR_TYPE::DECIMAL
         ])->executeQuery()->fetchAssociative();
 
         $datetime = $q->setParameters([
             'domain' => $domainKey,
-            'type' => ATTR_TYPE::DATETIME->value(),
-            'name' => ATTR_TYPE::DATETIME->value()
+            'type' => ATTR_TYPE::DATETIME,
+            'name' => ATTR_TYPE::DATETIME
         ])->executeQuery()->fetchAssociative();
 
         $text = $q->setParameters([
             'domain' => $domainKey,
-            'type' => ATTR_TYPE::TEXT->value(),
-            'name' => ATTR_TYPE::TEXT->value()
+            'type' => ATTR_TYPE::TEXT,
+            'name' => ATTR_TYPE::TEXT
         ])->executeQuery()->fetchAssociative();
 
         $this->assertIsArray($string);
@@ -440,14 +440,14 @@ class ImportManagerAcceptanceTest extends TestCase
             {
                 if($attributeName == _ENTITY::ID) continue;
                 $attribute = match ($attributeName) {
-                    ATTR_TYPE::STRING->value() => $string,
-                    ATTR_TYPE::INTEGER->value() => $integer,
-                    ATTR_TYPE::DECIMAL->value() => $decimal,
-                    ATTR_TYPE::DATETIME->value() => $datetime,
+                    ATTR_TYPE::STRING => $string,
+                    ATTR_TYPE::INTEGER => $integer,
+                    ATTR_TYPE::DECIMAL => $decimal,
+                    ATTR_TYPE::DATETIME => $datetime,
                 };
 
                 $attrType = ATTR_TYPE::getCase($attribute[_ATTR::TYPE]);
-                $valueTable = $attrType->valueTable();
+                $valueTable = ATTR_TYPE::valueTable($attrType);
                 $valueRecord = $valueModel->find($valueTable, $domainKey, $entityKey, $attribute[_ATTR::ID]);
 
                 if($value == '')

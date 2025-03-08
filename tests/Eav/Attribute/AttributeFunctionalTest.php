@@ -80,7 +80,7 @@ class AttributeFunctionalTest extends TestCase
      * @covers \Drobotik\Eav\Attribute::setType
      */
     public function get_type() {
-        $this->attribute->setType(ATTR_TYPE::STRING->value());
+        $this->attribute->setType(ATTR_TYPE::STRING);
         $this->assertEquals(ATTR_TYPE::STRING, $this->attribute->getType());
     }
     /**

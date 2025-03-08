@@ -41,7 +41,7 @@ class AttributeSetActionFunctionalTest extends TestCase
             _ATTR::ID => 1,
             _ATTR::DOMAIN_ID => 1,
             _ATTR::NAME => 'test',
-            _ATTR::TYPE => ATTR_TYPE::STRING->value()
+            _ATTR::TYPE => ATTR_TYPE::STRING
         ];
         $result = $this->action->initializeAttribute($attribute);
         $this->assertInstanceOf(Attribute::class, $result);
@@ -94,7 +94,7 @@ class AttributeSetActionFunctionalTest extends TestCase
 
         $value = "test";
         $valueModel = new ValueBase();
-        $valueKey = $valueModel->create(ATTR_TYPE::STRING->valueTable(), $domainKey, $entityKey, $attKey, $value);
+        $valueKey = $valueModel->create(ATTR_TYPE::valueTable(ATTR_TYPE::STRING), $domainKey, $entityKey, $attKey, $value);
 
         $entity = new Entity();
         $entity->setKey($entityKey);

@@ -22,14 +22,14 @@ class Value
     private ?int $entityKey = null;
     private int  $lineIndex;
 
-    private ATTR_TYPE $type;
+    private string $type;
 
-    public function setType(ATTR_TYPE $type): void
+    public function setType($type): void
     {
-        $this->type = $type;
+        $this->type = ATTR_TYPE::getCase($type);
     }
 
-    public function getType() : ATTR_TYPE
+    public function getType() : string
     {
         return $this->type;
     }

@@ -41,39 +41,39 @@ class EntityFactoryFunctionalTest extends TestCase
     protected function getFactoryDefaultConfig(): array
     {
         return [
-            ATTR_TYPE::STRING->value() => [
+            ATTR_TYPE::STRING => [
                 ATTR_FACTORY::ATTRIBUTE => [
-                    _ATTR::NAME => ATTR_TYPE::STRING->value(),
-                    _ATTR::TYPE => ATTR_TYPE::STRING->value(),
-                    _ATTR::DEFAULT_VALUE => ATTR_TYPE::STRING->randomValue(),
+                    _ATTR::NAME => ATTR_TYPE::STRING,
+                    _ATTR::TYPE => ATTR_TYPE::STRING,
+                    _ATTR::DEFAULT_VALUE => ATTR_TYPE::randomValue(ATTR_TYPE::STRING),
                 ]
             ],
-            ATTR_TYPE::INTEGER->value() => [
+            ATTR_TYPE::INTEGER => [
                 ATTR_FACTORY::ATTRIBUTE => [
-                    _ATTR::NAME => ATTR_TYPE::INTEGER->value(),
-                    _ATTR::TYPE => ATTR_TYPE::INTEGER->value(),
-                    _ATTR::DEFAULT_VALUE => ATTR_TYPE::INTEGER->randomValue(),
+                    _ATTR::NAME => ATTR_TYPE::INTEGER,
+                    _ATTR::TYPE => ATTR_TYPE::INTEGER,
+                    _ATTR::DEFAULT_VALUE => ATTR_TYPE::randomValue(ATTR_TYPE::INTEGER),
                 ]
             ],
-            ATTR_TYPE::DECIMAL->value() => [
+            ATTR_TYPE::DECIMAL => [
                 ATTR_FACTORY::ATTRIBUTE => [
-                    _ATTR::NAME => ATTR_TYPE::DECIMAL->value(),
-                    _ATTR::TYPE => ATTR_TYPE::DECIMAL->value(),
-                    _ATTR::DEFAULT_VALUE => ATTR_TYPE::DECIMAL->randomValue(),
+                    _ATTR::NAME => ATTR_TYPE::DECIMAL,
+                    _ATTR::TYPE => ATTR_TYPE::DECIMAL,
+                    _ATTR::DEFAULT_VALUE => ATTR_TYPE::randomValue(ATTR_TYPE::DECIMAL),
                 ]
             ],
-            ATTR_TYPE::DATETIME->value() => [
+            ATTR_TYPE::DATETIME => [
                 ATTR_FACTORY::ATTRIBUTE => [
-                    _ATTR::NAME => ATTR_TYPE::DATETIME->value(),
-                    _ATTR::TYPE => ATTR_TYPE::DATETIME->value(),
-                    _ATTR::DEFAULT_VALUE => ATTR_TYPE::DATETIME->randomValue(),
+                    _ATTR::NAME => ATTR_TYPE::DATETIME,
+                    _ATTR::TYPE => ATTR_TYPE::DATETIME,
+                    _ATTR::DEFAULT_VALUE => ATTR_TYPE::randomValue(ATTR_TYPE::DATETIME),
                 ]
             ],
-            ATTR_TYPE::TEXT->value() => [
+            ATTR_TYPE::TEXT => [
                 ATTR_FACTORY::ATTRIBUTE => [
-                    _ATTR::NAME => ATTR_TYPE::TEXT->value(),
-                    _ATTR::TYPE => ATTR_TYPE::TEXT->value(),
-                    _ATTR::DEFAULT_VALUE => ATTR_TYPE::TEXT->randomValue(),
+                    _ATTR::NAME => ATTR_TYPE::TEXT,
+                    _ATTR::TYPE => ATTR_TYPE::TEXT,
+                    _ATTR::DEFAULT_VALUE => ATTR_TYPE::randomValue(ATTR_TYPE::TEXT),
                 ]
             ]
         ];
@@ -162,11 +162,11 @@ class EntityFactoryFunctionalTest extends TestCase
         $domainKey = $this->eavFactory->createDomain();
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
         $config = $this->getFactoryDefaultConfig();
-        $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::GROUP] = 1;
-        $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::GROUP] = 2;
-        $config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::GROUP] = 3;
-        $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::GROUP] = 4;
-        $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::GROUP] = 5;
+        $config[ATTR_TYPE::STRING][ATTR_FACTORY::GROUP] = 1;
+        $config[ATTR_TYPE::INTEGER][ATTR_FACTORY::GROUP] = 2;
+        $config[ATTR_TYPE::DECIMAL][ATTR_FACTORY::GROUP] = 3;
+        $config[ATTR_TYPE::DATETIME][ATTR_FACTORY::GROUP] = 4;
+        $config[ATTR_TYPE::TEXT][ATTR_FACTORY::GROUP] = 5;
 
         $this->factory->create($config, $domainKey, $setKey);
     }
@@ -190,17 +190,17 @@ class EntityFactoryFunctionalTest extends TestCase
 
         $config = $this->getFactoryDefaultConfig();
 
-        $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::GROUP] = $groupKey;
-        $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::GROUP] = $groupKey;
-        $config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::GROUP] = $groupKey;
-        $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::GROUP] = $groupKey;
-        $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::GROUP] = $groupKey;
+        $config[ATTR_TYPE::STRING][ATTR_FACTORY::GROUP] = $groupKey;
+        $config[ATTR_TYPE::INTEGER][ATTR_FACTORY::GROUP] = $groupKey;
+        $config[ATTR_TYPE::DECIMAL][ATTR_FACTORY::GROUP] = $groupKey;
+        $config[ATTR_TYPE::DATETIME][ATTR_FACTORY::GROUP] = $groupKey;
+        $config[ATTR_TYPE::TEXT][ATTR_FACTORY::GROUP] = $groupKey;
 
-        $stringConfig = $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::ATTRIBUTE];
-        $integerConfig = $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::ATTRIBUTE];
-        $decimalConfig = $config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::ATTRIBUTE];
-        $datetimeConfig = $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::ATTRIBUTE];
-        $textConfig = $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::ATTRIBUTE];
+        $stringConfig = $config[ATTR_TYPE::STRING][ATTR_FACTORY::ATTRIBUTE];
+        $integerConfig = $config[ATTR_TYPE::INTEGER][ATTR_FACTORY::ATTRIBUTE];
+        $decimalConfig = $config[ATTR_TYPE::DECIMAL][ATTR_FACTORY::ATTRIBUTE];
+        $datetimeConfig = $config[ATTR_TYPE::DATETIME][ATTR_FACTORY::ATTRIBUTE];
+        $textConfig = $config[ATTR_TYPE::TEXT][ATTR_FACTORY::ATTRIBUTE];
 
         $result = $this->factory->create($config, $domainKey, $setKey);
 
@@ -212,32 +212,32 @@ class EntityFactoryFunctionalTest extends TestCase
 
         $string = $q->setParameters([
                 'domain' => $domainKey,
-                'type' => ATTR_TYPE::STRING->value(),
-                'name' => ATTR_TYPE::STRING->value()
+                'type' => ATTR_TYPE::STRING,
+                'name' => ATTR_TYPE::STRING
             ])->executeQuery()->fetchAssociative();
 
         $integer = $q->setParameters([
             'domain' => $domainKey,
-            'type' => ATTR_TYPE::INTEGER->value(),
-            'name' => ATTR_TYPE::INTEGER->value()
+            'type' => ATTR_TYPE::INTEGER,
+            'name' => ATTR_TYPE::INTEGER
         ])->executeQuery()->fetchAssociative();
 
         $decimal =  $q->setParameters([
             'domain' => $domainKey,
-            'type' => ATTR_TYPE::DECIMAL->value(),
-            'name' => ATTR_TYPE::DECIMAL->value()
+            'type' => ATTR_TYPE::DECIMAL,
+            'name' => ATTR_TYPE::DECIMAL
         ])->executeQuery()->fetchAssociative();
 
         $datetime = $q->setParameters([
             'domain' => $domainKey,
-            'type' => ATTR_TYPE::DATETIME->value(),
-            'name' => ATTR_TYPE::DATETIME->value()
+            'type' => ATTR_TYPE::DATETIME,
+            'name' => ATTR_TYPE::DATETIME
         ])->executeQuery()->fetchAssociative();
 
         $text = $q->setParameters([
             'domain' => $domainKey,
-            'type' => ATTR_TYPE::TEXT->value(),
-            'name' => ATTR_TYPE::TEXT->value()
+            'type' => ATTR_TYPE::TEXT,
+            'name' => ATTR_TYPE::TEXT
         ])->executeQuery()->fetchAssociative();
 
         $this->assertIsArray($string);
@@ -332,7 +332,7 @@ class EntityFactoryFunctionalTest extends TestCase
         $groupKey = $this->eavFactory->createGroup($setKey);
 
         $config = $this->getFactoryDefaultConfig();
-        $field = $config[ATTR_TYPE::STRING->value()];
+        $field = $config[ATTR_TYPE::STRING];
         $field[ATTR_FACTORY::GROUP] = $groupKey;
         unset($field[ATTR_FACTORY::ATTRIBUTE]);
 
@@ -360,7 +360,7 @@ class EntityFactoryFunctionalTest extends TestCase
         $groupKey = $this->eavFactory->createGroup($setKey);
 
         $config = $this->getFactoryDefaultConfig();
-        $field = $config[ATTR_TYPE::STRING->value()];
+        $field = $config[ATTR_TYPE::STRING];
         $field[ATTR_FACTORY::GROUP] = $groupKey;
         unset($field[ATTR_FACTORY::ATTRIBUTE][_ATTR::NAME]);
 
@@ -389,7 +389,7 @@ class EntityFactoryFunctionalTest extends TestCase
         $groupKey = $this->eavFactory->createGroup($setKey);
 
         $config = $this->getFactoryDefaultConfig();
-        $field = $config[ATTR_TYPE::STRING->value()];
+        $field = $config[ATTR_TYPE::STRING];
         $field[ATTR_FACTORY::GROUP] = $groupKey;
         unset($field[ATTR_FACTORY::ATTRIBUTE][_ATTR::TYPE]);
 
@@ -418,7 +418,7 @@ class EntityFactoryFunctionalTest extends TestCase
         $groupKey = $this->eavFactory->createGroup($setKey);
 
         $config = $this->getFactoryDefaultConfig();
-        $field = $config[ATTR_TYPE::STRING->value()];
+        $field = $config[ATTR_TYPE::STRING];
         $field[ATTR_FACTORY::GROUP] = $groupKey;
         $field[ATTR_FACTORY::ATTRIBUTE][_ATTR::TYPE] = "test";
 
@@ -446,11 +446,11 @@ class EntityFactoryFunctionalTest extends TestCase
         $groupTwoKey = $this->eavFactory->createGroup($setKey);
 
         $config = $this->getFactoryDefaultConfig();
-        $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::GROUP] = $groupOneKey;
-        $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::GROUP] = $groupOneKey;
-        $config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::GROUP] = $groupOneKey;
-        $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::GROUP] = $groupTwoKey;
-        $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::GROUP] = $groupTwoKey;
+        $config[ATTR_TYPE::STRING][ATTR_FACTORY::GROUP] = $groupOneKey;
+        $config[ATTR_TYPE::INTEGER][ATTR_FACTORY::GROUP] = $groupOneKey;
+        $config[ATTR_TYPE::DECIMAL][ATTR_FACTORY::GROUP] = $groupOneKey;
+        $config[ATTR_TYPE::DATETIME][ATTR_FACTORY::GROUP] = $groupTwoKey;
+        $config[ATTR_TYPE::TEXT][ATTR_FACTORY::GROUP] = $groupTwoKey;
 
         $result = $this->factory->create($config, $domainKey, $setKey);
 
@@ -462,36 +462,36 @@ class EntityFactoryFunctionalTest extends TestCase
 
         $string = $q->setParameters([
             'domain' => $domainKey,
-            'type' => ATTR_TYPE::STRING->value(),
-            'name' => ATTR_TYPE::STRING->value()
+            'type' => ATTR_TYPE::STRING,
+            'name' => ATTR_TYPE::STRING
         ])->executeQuery()->fetchAssociative();
         $stringKey = $string[_ATTR::ID];
 
         $integer = $q->setParameters([
             'domain' => $domainKey,
-            'type' => ATTR_TYPE::INTEGER->value(),
-            'name' => ATTR_TYPE::INTEGER->value()
+            'type' => ATTR_TYPE::INTEGER,
+            'name' => ATTR_TYPE::INTEGER
         ])->executeQuery()->fetchAssociative();
         $integerKey = $integer[_ATTR::ID];
 
         $decimal =  $q->setParameters([
             'domain' => $domainKey,
-            'type' => ATTR_TYPE::DECIMAL->value(),
-            'name' => ATTR_TYPE::DECIMAL->value()
+            'type' => ATTR_TYPE::DECIMAL,
+            'name' => ATTR_TYPE::DECIMAL
         ])->executeQuery()->fetchAssociative();
         $decimalKey = $decimal[_ATTR::ID];
 
         $datetime = $q->setParameters([
             'domain' => $domainKey,
-            'type' => ATTR_TYPE::DATETIME->value(),
-            'name' => ATTR_TYPE::DATETIME->value()
+            'type' => ATTR_TYPE::DATETIME,
+            'name' => ATTR_TYPE::DATETIME
         ])->executeQuery()->fetchAssociative();
         $datetimeKey = $datetime[_ATTR::ID];
 
         $text = $q->setParameters([
             'domain' => $domainKey,
-            'type' => ATTR_TYPE::TEXT->value(),
-            'name' => ATTR_TYPE::TEXT->value()
+            'type' => ATTR_TYPE::TEXT,
+            'name' => ATTR_TYPE::TEXT
         ])->executeQuery()->fetchAssociative();
         $textKey = $text[_ATTR::ID];
 
@@ -545,23 +545,23 @@ class EntityFactoryFunctionalTest extends TestCase
         $groupTwoKey = $this->eavFactory->createGroup($setKey);
 
         $config = $this->getFactoryDefaultConfig();
-        $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::GROUP] = $groupOneKey;
-        $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::GROUP] = $groupOneKey;
-        $config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::GROUP] = $groupOneKey;
-        $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::GROUP] = $groupTwoKey;
-        $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::GROUP] = $groupTwoKey;
+        $config[ATTR_TYPE::STRING][ATTR_FACTORY::GROUP] = $groupOneKey;
+        $config[ATTR_TYPE::INTEGER][ATTR_FACTORY::GROUP] = $groupOneKey;
+        $config[ATTR_TYPE::DECIMAL][ATTR_FACTORY::GROUP] = $groupOneKey;
+        $config[ATTR_TYPE::DATETIME][ATTR_FACTORY::GROUP] = $groupTwoKey;
+        $config[ATTR_TYPE::TEXT][ATTR_FACTORY::GROUP] = $groupTwoKey;
 
-        $stringValue = ATTR_TYPE::STRING->randomValue();
-        $integerValue = ATTR_TYPE::INTEGER->randomValue();
-        $decimalValue = ATTR_TYPE::DECIMAL->randomValue();
-        $datetimeValue = ATTR_TYPE::DATETIME->randomValue();
-        $textValue = ATTR_TYPE::TEXT->randomValue();
+        $stringValue = ATTR_TYPE::randomValue(ATTR_TYPE::STRING);
+        $integerValue = ATTR_TYPE::randomValue(ATTR_TYPE::INTEGER);
+        $decimalValue = ATTR_TYPE::randomValue(ATTR_TYPE::DECIMAL);
+        $datetimeValue = ATTR_TYPE::randomValue(ATTR_TYPE::DATETIME);
+        $textValue = ATTR_TYPE::randomValue(ATTR_TYPE::TEXT);
 
-        $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::VALUE] = $stringValue;
-        $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::VALUE] = $integerValue;
-        $config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::VALUE] = $decimalValue;
-        $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::VALUE] = $datetimeValue;
-        $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::VALUE] = $textValue;
+        $config[ATTR_TYPE::STRING][ATTR_FACTORY::VALUE] = $stringValue;
+        $config[ATTR_TYPE::INTEGER][ATTR_FACTORY::VALUE] = $integerValue;
+        $config[ATTR_TYPE::DECIMAL][ATTR_FACTORY::VALUE] = $decimalValue;
+        $config[ATTR_TYPE::DATETIME][ATTR_FACTORY::VALUE] = $datetimeValue;
+        $config[ATTR_TYPE::TEXT][ATTR_FACTORY::VALUE] = $textValue;
 
         $result = $this->factory->create($config, $domainKey, $setKey);
         $entityKey = $result->getEntityKey();
@@ -569,42 +569,42 @@ class EntityFactoryFunctionalTest extends TestCase
         $valueModel = $this->makeValueModel();
 
         // check values created
-        $stringKey = $attributes[ATTR_TYPE::STRING->value()][_ATTR::ID];
+        $stringKey = $attributes[ATTR_TYPE::STRING][_ATTR::ID];
         $string = $valueModel->find(
-            ATTR_TYPE::STRING->valueTable(),
+            ATTR_TYPE::valueTable(ATTR_TYPE::STRING),
             $domainKey,
             $entityKey,
             $stringKey
         );
 
 
-        $integerKey = $attributes[ATTR_TYPE::INTEGER->value()][_ATTR::ID];
+        $integerKey = $attributes[ATTR_TYPE::INTEGER][_ATTR::ID];
         $integer = $valueModel->find(
-            ATTR_TYPE::INTEGER->valueTable(),
+            ATTR_TYPE::valueTable(ATTR_TYPE::INTEGER),
             $domainKey,
             $entityKey,
             $integerKey
         );
 
-        $decimalKey = $attributes[ATTR_TYPE::DECIMAL->value()][_ATTR::ID];
+        $decimalKey = $attributes[ATTR_TYPE::DECIMAL][_ATTR::ID];
         $decimal = $valueModel->find(
-            ATTR_TYPE::DECIMAL->valueTable(),
+            ATTR_TYPE::valueTable(ATTR_TYPE::DECIMAL),
             $domainKey,
             $entityKey,
             $decimalKey
         );
 
-        $datetimeKey = $attributes[ATTR_TYPE::DATETIME->value()][_ATTR::ID];
+        $datetimeKey = $attributes[ATTR_TYPE::DATETIME][_ATTR::ID];
         $datetime = $valueModel->find(
-            ATTR_TYPE::DATETIME->valueTable(),
+            ATTR_TYPE::valueTable(ATTR_TYPE::DATETIME),
             $domainKey,
             $entityKey,
             $datetimeKey
         );
 
-        $textKey = $attributes[ATTR_TYPE::TEXT->value()][_ATTR::ID];
+        $textKey = $attributes[ATTR_TYPE::TEXT][_ATTR::ID];
         $text = $valueModel->find(
-            ATTR_TYPE::TEXT->valueTable(),
+            ATTR_TYPE::valueTable(ATTR_TYPE::TEXT),
             $domainKey,
             $entityKey,
             $textKey
@@ -646,11 +646,11 @@ class EntityFactoryFunctionalTest extends TestCase
         $groupKey = $this->eavFactory->createGroup($setKey);
 
         $config = $this->getFactoryDefaultConfig();
-        $config[ATTR_TYPE::STRING->value()][ATTR_FACTORY::GROUP] = $groupKey;
-        $config[ATTR_TYPE::INTEGER->value()][ATTR_FACTORY::GROUP] = $groupKey;
-        $config[ATTR_TYPE::DECIMAL->value()][ATTR_FACTORY::GROUP] = $groupKey;
-        $config[ATTR_TYPE::DATETIME->value()][ATTR_FACTORY::GROUP] = $groupKey;
-        $config[ATTR_TYPE::TEXT->value()][ATTR_FACTORY::GROUP] = $groupKey;
+        $config[ATTR_TYPE::STRING][ATTR_FACTORY::GROUP] = $groupKey;
+        $config[ATTR_TYPE::INTEGER][ATTR_FACTORY::GROUP] = $groupKey;
+        $config[ATTR_TYPE::DECIMAL][ATTR_FACTORY::GROUP] = $groupKey;
+        $config[ATTR_TYPE::DATETIME][ATTR_FACTORY::GROUP] = $groupKey;
+        $config[ATTR_TYPE::TEXT][ATTR_FACTORY::GROUP] = $groupKey;
 
         $result = $this->factory->create($config, $domainKey, $setKey);
         $entityKey = $result->getEntityKey();
@@ -658,34 +658,34 @@ class EntityFactoryFunctionalTest extends TestCase
         $valueModel = $this->makeValueModel();
         // check values created
         $string = $valueModel->find(
-            ATTR_TYPE::STRING->valueTable(),
+            ATTR_TYPE::valueTable(ATTR_TYPE::STRING),
             $domainKey,
             $entityKey,
-            $attributes[ATTR_TYPE::STRING->value()][_ATTR::ID]
+            $attributes[ATTR_TYPE::STRING][_ATTR::ID]
         );
         $integer = $valueModel->find(
-            ATTR_TYPE::INTEGER->valueTable(),
+            ATTR_TYPE::valueTable(ATTR_TYPE::INTEGER),
             $domainKey,
             $entityKey,
-            $attributes[ATTR_TYPE::INTEGER->value()][_ATTR::ID]
+            $attributes[ATTR_TYPE::INTEGER][_ATTR::ID]
         );
         $decimal = $valueModel->find(
-            ATTR_TYPE::DECIMAL->valueTable(),
+            ATTR_TYPE::valueTable(ATTR_TYPE::DECIMAL),
             $domainKey,
             $entityKey,
-            $attributes[ATTR_TYPE::DECIMAL->value()][_ATTR::ID]
+            $attributes[ATTR_TYPE::DECIMAL][_ATTR::ID]
         );
         $datetime = $valueModel->find(
-            ATTR_TYPE::DATETIME->valueTable(),
+            ATTR_TYPE::valueTable(ATTR_TYPE::DATETIME),
             $domainKey,
             $entityKey,
-            $attributes[ATTR_TYPE::DATETIME->value()][_ATTR::ID]
+            $attributes[ATTR_TYPE::DATETIME][_ATTR::ID]
         );
         $text = $valueModel->find(
-            ATTR_TYPE::TEXT->valueTable(),
+            ATTR_TYPE::valueTable(ATTR_TYPE::TEXT),
             $domainKey,
             $entityKey,
-            $attributes[ATTR_TYPE::TEXT->value()][_ATTR::ID]
+            $attributes[ATTR_TYPE::TEXT][_ATTR::ID]
         );
 
         $this->assertFalse($string);
@@ -710,7 +710,7 @@ class EntityFactoryFunctionalTest extends TestCase
         $config = [
             _ATTR::NAME => $attrName,
             'not_exist' => 'field',
-            _ATTR::TYPE => ATTR_TYPE::INTEGER->value(),
+            _ATTR::TYPE => ATTR_TYPE::INTEGER,
             _ATTR::STRATEGY => 'test_STRATEGY',
             _ATTR::SOURCE => 'test_SOURCE',
             _ATTR::DEFAULT_VALUE => 'test_DEFAULT_VALUE',
@@ -726,7 +726,7 @@ class EntityFactoryFunctionalTest extends TestCase
         $attrModel->expects($this->once())->method('updateByArray')
             ->with($attrKey, [
                 _ATTR::NAME => $attrName,
-                _ATTR::TYPE => ATTR_TYPE::INTEGER->value(),
+                _ATTR::TYPE => ATTR_TYPE::INTEGER,
                 _ATTR::STRATEGY => 'test_STRATEGY',
                 _ATTR::SOURCE => 'test_SOURCE',
                 _ATTR::DEFAULT_VALUE => 'test_DEFAULT_VALUE',
@@ -811,7 +811,7 @@ class EntityFactoryFunctionalTest extends TestCase
             ->onlyMethods(['find', 'update'])->getMock();
         $valueModel->method('find')->willReturn($record);
         $valueModel->expects($this->once())->method('update')
-            ->with($attrType->valueTable(), $domainKey, $entityKey, $attrKey, $parsedValue);
+            ->with(ATTR_TYPE::valueTable($attrType), $domainKey, $entityKey, $attrKey, $parsedValue);
 
         $entityFactory = $this->getMockBuilder(EntityFactory::class)
             ->onlyMethods(['makeValueModel', 'makeValueParser', 'getResult'])->getMock();

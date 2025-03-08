@@ -38,7 +38,7 @@ class _ATTR implements DefineTableInterface
             self::SOURCE => null,
             self::DEFAULT_VALUE => null,
             self::DESCRIPTION => null,
-            self::TYPE => ATTR_TYPE::STRING->value(),
+            self::TYPE => ATTR_TYPE::STRING,
             self::STRATEGY => Strategy::class
         ];
 

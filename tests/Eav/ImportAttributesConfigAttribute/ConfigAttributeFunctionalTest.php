@@ -27,7 +27,7 @@ class ConfigAttributeFunctionalTest extends TestCase
         $this->fields = [
             _ATTR::ID => 123,
             _ATTR::NAME => 'name',
-            _ATTR::TYPE => ATTR_TYPE::TEXT->value()
+            _ATTR::TYPE => ATTR_TYPE::TEXT
         ];
     }
     /**

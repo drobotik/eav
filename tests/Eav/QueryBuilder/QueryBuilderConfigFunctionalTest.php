@@ -272,7 +272,7 @@ class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
         $attribute = [
             _ATTR::ID => $attrKey,
             _ATTR::NAME => $attrName,
-            _ATTR::TYPE => ATTR_TYPE::INTEGER->value()
+            _ATTR::TYPE => ATTR_TYPE::INTEGER
         ];
 
         $this->config->addColumns([$attrName, $attrName, $attrName]);
@@ -555,7 +555,7 @@ class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
         $attribute = [
             _ATTR::ID => 2,
             _ATTR::NAME => 'size',
-            _ATTR::TYPE => ATTR_TYPE::INTEGER->value()
+            _ATTR::TYPE => ATTR_TYPE::INTEGER
         ];
 
         $config = $this->getMockBuilder(Config::class)
@@ -565,7 +565,7 @@ class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
 
         $config->expects($this->once())
             ->method('addJoin')
-            ->with(ATTR_TYPE::INTEGER->valueTable(), 'size', 2);
+            ->with(ATTR_TYPE::valueTable(ATTR_TYPE::INTEGER), 'size', 2);
 
         $config->registerJoin('size');
     }
@@ -665,7 +665,7 @@ class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
             QB_CONFIG::CONDITION => QB_CONDITION::AND,
             QB_CONFIG::RULES => [
                 [
-                    QB_CONFIG::NAME => ATTR_TYPE::DECIMAL->value(),
+                    QB_CONFIG::NAME => ATTR_TYPE::DECIMAL,
                     QB_CONFIG::OPERATOR => QB_OPERATOR::LESS->name(),
                     QB_CONFIG::VALUE => 10000
                 ],
@@ -673,7 +673,7 @@ class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
                     QB_CONFIG::CONDITION => QB_CONDITION::OR,
                     QB_CONFIG::RULES => [
                         [
-                            QB_CONFIG::NAME => ATTR_TYPE::STRING->value(),
+                            QB_CONFIG::NAME => ATTR_TYPE::STRING,
                             QB_CONFIG::OPERATOR => QB_OPERATOR::CONTAINS->name(),
                             QB_CONFIG::VALUE => 'sit quisquam'
                         ]
@@ -684,38 +684,38 @@ class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
 
         $attr0 = [
             _ATTR::ID => 3,
-            _ATTR::NAME => ATTR_TYPE::INTEGER->value(),
-            _ATTR::TYPE => ATTR_TYPE::INTEGER->value()
+            _ATTR::NAME => ATTR_TYPE::INTEGER,
+            _ATTR::TYPE => ATTR_TYPE::INTEGER
         ];
 
         $attr1 = [
             _ATTR::ID => 4,
-            _ATTR::NAME => ATTR_TYPE::DECIMAL->value(),
-            _ATTR::TYPE => ATTR_TYPE::DECIMAL->value()
+            _ATTR::NAME => ATTR_TYPE::DECIMAL,
+            _ATTR::TYPE => ATTR_TYPE::DECIMAL
         ];
 
         $attr2 = [
             _ATTR::ID => 5,
-            _ATTR::NAME => ATTR_TYPE::STRING->value(),
-            _ATTR::TYPE => ATTR_TYPE::STRING->value()
+            _ATTR::NAME => ATTR_TYPE::STRING,
+            _ATTR::TYPE => ATTR_TYPE::STRING
         ];
 
         $this->config->addAttribute($attr0);
         $this->config->addAttribute($attr1);
         $this->config->addAttribute($attr2);
-        $this->config->addColumns([ATTR_TYPE::INTEGER->value()]);
+        $this->config->addColumns([ATTR_TYPE::INTEGER]);
         $this->config->handleColumns();
         $this->config->parse($config);
 
-        $attr1Param = ATTR_TYPE::DECIMAL->value().'_cond';
-        $attr2Param = ATTR_TYPE::STRING->value().'_cond';
+        $attr1Param = ATTR_TYPE::DECIMAL.'_cond';
+        $attr2Param = ATTR_TYPE::STRING.'_cond';
 
         $expression1 = new Expression();
-        $expression1->setField(ATTR_TYPE::DECIMAL->value());
+        $expression1->setField(ATTR_TYPE::DECIMAL);
         $expression1->setOperator(QB_OPERATOR::LESS);
         $expression1->setParam1($attr1Param);
         $expression2 = new Expression();
-        $expression2->setField(ATTR_TYPE::STRING->value());
+        $expression2->setField(ATTR_TYPE::STRING);
         $expression2->setOperator(QB_OPERATOR::CONTAINS);
         $expression2->setParam1($attr2Param);
 
@@ -737,19 +737,19 @@ class QueryBuilderConfigFunctionalTest extends QueryingDataTestCase
         $parameters = [
             $attr1Param => $attr1Value,
             $attr2Param => '%'.$attr2Value.'%',
-            ATTR_TYPE::INTEGER->value().'_join_'.QB_JOIN::ATTR_PARAM => 3,
-            ATTR_TYPE::DECIMAL->value().'_join_'.QB_JOIN::ATTR_PARAM => 4,
-            ATTR_TYPE::STRING->value().'_join_'.QB_JOIN::ATTR_PARAM => 5
+            ATTR_TYPE::INTEGER.'_join_'.QB_JOIN::ATTR_PARAM => 3,
+            ATTR_TYPE::DECIMAL.'_join_'.QB_JOIN::ATTR_PARAM => 4,
+            ATTR_TYPE::STRING.'_join_'.QB_JOIN::ATTR_PARAM => 5
         ];
 
         $columns = [
-            ATTR_TYPE::INTEGER->value()
+            ATTR_TYPE::INTEGER
         ];
 
         $selected = [
-            ATTR_TYPE::INTEGER->value(),
-            ATTR_TYPE::DECIMAL->value(),
-            ATTR_TYPE::STRING->value()
+            ATTR_TYPE::INTEGER,
+            ATTR_TYPE::DECIMAL,
+            ATTR_TYPE::STRING
         ];
 
         $this->assertEquals($expressions, $this->config->getExpressions());

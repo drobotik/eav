@@ -9,21 +9,29 @@
 namespace Drobotik\Eav\Value;
 
 use Drobotik\Eav\Enum\ATTR_TYPE;
+use InvalidArgumentException;
 
 class ValueParser
 {
     public function parseDecimal($value) : string|float|int
     {
-        $scale = ATTR_TYPE::DECIMAL->migrateOptions()['scale'];
+        $scale = ATTR_TYPE::migrateOptions(ATTR_TYPE::DECIMAL)['scale'];
         return number_format($value, $scale, '.', '');
     }
 
-    public function parse(ATTR_TYPE $type, $value) : mixed
+    public function parse($type, $value) : mixed
     {
-        return match($type)
-        {
-            ATTR_TYPE::INTEGER, ATTR_TYPE::DATETIME, ATTR_TYPE::STRING, ATTR_TYPE::TEXT, ATTR_TYPE::MANUAL => $value,
-            ATTR_TYPE::DECIMAL => $this->parseDecimal($value),
-        };
+        switch ($type) {
+            case ATTR_TYPE::INTEGER:
+            case ATTR_TYPE::DATETIME:
+            case ATTR_TYPE::STRING:
+            case ATTR_TYPE::TEXT:
+            case ATTR_TYPE::MANUAL:
+                return $value;
+            case ATTR_TYPE::DECIMAL:
+                return $this->parseDecimal($value);
+            default:
+                throw new InvalidArgumentException("Unknown attribute type: " . $type);
+        }
     }
 }

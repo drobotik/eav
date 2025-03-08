@@ -163,7 +163,7 @@ class Worker
             $entityKey = $attributeValue->getEntityKey();
             $attributeKey = $attributeValue->getAttributeKey();
             $attributeType = $attributeValue->getType();
-            $valueTable = $attributeType->valueTable();
+            $valueTable = ATTR_TYPE::valueTable($attributeType);
             if($value == '')
                 $valueModel->destroy($valueTable, $domainKey, $entityKey, $attributeKey);
             else

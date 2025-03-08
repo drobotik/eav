@@ -234,13 +234,13 @@ $attribute = new Attribute();
 $bag = $attribute->getBag();
 
 $bag->setField(_ATTR::NAME, 'price')
-$bag->setField(_ATTR::TYPE, ATTR_TYPE::DECIMAL->value())
+$bag->setField(_ATTR::TYPE, ATTR_TYPE::DECIMAL)
 $bag->setField(_ATTR::STRATEGY, Strategy::class);
 
 
 $type = $attribute->getType(); // ATTR_TYPE::DECIMAL
-$valueModelTable = $type->valueTable(); // ATTR_TYPE::DECIMAL->valueTable()
-$typeName = $type->value(); // ATTR_TYPE::DECIMAL->value()
+$valueModelTable = $type->valueTable(); // ATTR_TYPE::valueTable(ATTR_TYPE::DECIMAL)
+$typeName = $type->value(); // ATTR_TYPE::DECIMAL
 // ...
 
 $attribute->getName();
@@ -470,7 +470,7 @@ $ageAttribute->setGroupKey($groupKey);
 $noteAttribute  =  new ConfigAttribute()
 $noteAttribute->setFields([
     _ATTR::NAME => "note",
-    _ATTR::TYPE => ATTR_TYPE::TEXT->value()
+    _ATTR::TYPE => ATTR_TYPE::TEXT
 ]);
 $noteAttribute->setGroupKey($groupKey);
 

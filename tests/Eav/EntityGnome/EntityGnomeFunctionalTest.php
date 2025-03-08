@@ -253,7 +253,7 @@ class EntityGnomeFunctionalTest extends TestCase
         $result = $this->gnome->save();
 
         $emailRecord = $valueModel->find(
-            ATTR_TYPE::STRING->valueTable(),
+            ATTR_TYPE::valueTable(ATTR_TYPE::STRING),
             $domainKey,
             $entity->getKey(),
             $attrEmailKey
@@ -262,7 +262,7 @@ class EntityGnomeFunctionalTest extends TestCase
         $this->assertEquals($testData["email"], $emailRecord[_VALUE::VALUE]);
 
         $phoneRecord = $valueModel->find(
-            ATTR_TYPE::STRING->valueTable(),
+            ATTR_TYPE::valueTable(ATTR_TYPE::STRING),
             $domainKey,
             $entity->getKey(),
             $attrPhoneKey
@@ -271,7 +271,7 @@ class EntityGnomeFunctionalTest extends TestCase
         $this->assertEquals($testData["phone"], $phoneRecord[_VALUE::VALUE]);
 
         $noteRecord = $valueModel->find(
-            ATTR_TYPE::STRING->valueTable(),
+            ATTR_TYPE::valueTable(ATTR_TYPE::STRING),
             $domainKey,
             $entity->getKey(),
             $attrNoteKey

@@ -105,7 +105,7 @@ class ValueParserFunctionalTest extends TestCase
      */
     public function parse_decimal_spontaneous_value()
     {
-        $value = $this->faker->randomFloat(ATTR_TYPE::DECIMAL->migrateOptions()['scale']);
+        $value = $this->faker->randomFloat(ATTR_TYPE::migrateOptions(ATTR_TYPE::DECIMAL)['scale']);
         $result = $this->parser->parseDecimal($value);
         $this->assertEquals($value, $result);
     }

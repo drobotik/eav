@@ -192,7 +192,7 @@ class ValidatorFunctionalTest extends TestCase
         $config = new Config();
         $attribute = new ConfigAttribute();
 
-        $attribute->setFields([_ATTR::NAME => 'one', _ATTR::TYPE => ATTR_TYPE::TEXT->value()]);
+        $attribute->setFields([_ATTR::NAME => 'one', _ATTR::TYPE => ATTR_TYPE::TEXT]);
         $config->appendAttribute($attribute);
         $validator = $this->getMockBuilder(Validator::class)
             ->onlyMethods(['getRequiredAttributes', 'getConfig'])->getMock();
@@ -218,7 +218,7 @@ class ValidatorFunctionalTest extends TestCase
     {
         $config = new Config();
         $attribute = new ConfigAttribute();
-        $attribute->setFields([_ATTR::NAME => 'one', _ATTR::TYPE => ATTR_TYPE::TEXT->value()]);
+        $attribute->setFields([_ATTR::NAME => 'one', _ATTR::TYPE => ATTR_TYPE::TEXT]);
         $config->appendAttribute($attribute);
         $validator = $this->getMockBuilder(Validator::class)
             ->onlyMethods(['getRequiredAttributes', 'getConfig'])->getMock();

@@ -23,15 +23,20 @@ class AttributeTypeEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::value
+     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::INTEGER
+     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::DATETIME
+     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::DECIMAL
+     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::STRING
+     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::TEXT
+     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::MANUAL
      */
     public function value() {
-        $this->assertEquals("int", ATTR_TYPE::INTEGER->value());
-        $this->assertEquals("datetime", ATTR_TYPE::DATETIME->value());
-        $this->assertEquals("decimal", ATTR_TYPE::DECIMAL->value());
-        $this->assertEquals("varchar", ATTR_TYPE::STRING->value());
-        $this->assertEquals("text", ATTR_TYPE::TEXT->value());
-        $this->assertEquals("manual", ATTR_TYPE::MANUAL->value());
+        $this->assertEquals("int", ATTR_TYPE::INTEGER);
+        $this->assertEquals("datetime", ATTR_TYPE::DATETIME);
+        $this->assertEquals("decimal", ATTR_TYPE::DECIMAL);
+        $this->assertEquals("varchar", ATTR_TYPE::STRING);
+        $this->assertEquals("text", ATTR_TYPE::TEXT);
+        $this->assertEquals("manual", ATTR_TYPE::MANUAL);
     }
     /**
      * @test
@@ -39,12 +44,12 @@ class AttributeTypeEnumFunctionalTest extends TestCase
      * @covers \Drobotik\Eav\Enum\ATTR_TYPE::isValid
      */
     public function is_valid() {
-        $this->assertTrue(ATTR_TYPE::isValid("int"));
-        $this->assertTrue(ATTR_TYPE::isValid("datetime"));
-        $this->assertTrue(ATTR_TYPE::isValid("decimal"));
-        $this->assertTrue(ATTR_TYPE::isValid("varchar"));
-        $this->assertTrue(ATTR_TYPE::isValid("text"));
-        $this->assertFalse(ATTR_TYPE::isValid("manual"));
+        $this->assertTrue(ATTR_TYPE::isValid(ATTR_TYPE::INTEGER));
+        $this->assertTrue(ATTR_TYPE::isValid(ATTR_TYPE::DATETIME));
+        $this->assertTrue(ATTR_TYPE::isValid(ATTR_TYPE::DECIMAL));
+        $this->assertTrue(ATTR_TYPE::isValid(ATTR_TYPE::STRING));
+        $this->assertTrue(ATTR_TYPE::isValid(ATTR_TYPE::TEXT));
+        $this->assertFalse(ATTR_TYPE::isValid(ATTR_TYPE::MANUAL));
         $this->assertFalse(ATTR_TYPE::isValid("test"));
     }
     /**
@@ -53,11 +58,11 @@ class AttributeTypeEnumFunctionalTest extends TestCase
      * @covers \Drobotik\Eav\Enum\ATTR_TYPE::valueTable
      */
     public function value_table() {
-        $this->assertEquals(sprintf(_VALUE::table(), ATTR_TYPE::INTEGER->value()), ATTR_TYPE::INTEGER->valueTable());
-        $this->assertEquals(sprintf(_VALUE::table(), ATTR_TYPE::DATETIME->value()), ATTR_TYPE::DATETIME->valueTable());
-        $this->assertEquals(sprintf(_VALUE::table(), ATTR_TYPE::DECIMAL->value()), ATTR_TYPE::DECIMAL->valueTable());
-        $this->assertEquals(sprintf(_VALUE::table(), ATTR_TYPE::STRING->value()), ATTR_TYPE::STRING->valueTable());
-        $this->assertEquals(sprintf(_VALUE::table(), ATTR_TYPE::TEXT->value()), ATTR_TYPE::TEXT->valueTable());
+        $this->assertEquals(sprintf(_VALUE::table(), ATTR_TYPE::INTEGER), ATTR_TYPE::valueTable(ATTR_TYPE::INTEGER));
+        $this->assertEquals(sprintf(_VALUE::table(), ATTR_TYPE::DATETIME), ATTR_TYPE::valueTable(ATTR_TYPE::DATETIME));
+        $this->assertEquals(sprintf(_VALUE::table(), ATTR_TYPE::DECIMAL), ATTR_TYPE::valueTable(ATTR_TYPE::DECIMAL));
+        $this->assertEquals(sprintf(_VALUE::table(), ATTR_TYPE::STRING), ATTR_TYPE::valueTable(ATTR_TYPE::STRING));
+        $this->assertEquals(sprintf(_VALUE::table(), ATTR_TYPE::TEXT), ATTR_TYPE::valueTable(ATTR_TYPE::TEXT));
     }
     /**
      * @test
@@ -65,11 +70,11 @@ class AttributeTypeEnumFunctionalTest extends TestCase
      * @covers \Drobotik\Eav\Enum\ATTR_TYPE::doctrineType
      */
     public function doctrine_type() {
-        $this->assertEquals(Types::INTEGER, ATTR_TYPE::INTEGER->doctrineType());
-        $this->assertEquals(Types::DATETIME_MUTABLE, ATTR_TYPE::DATETIME->doctrineType());
-        $this->assertEquals(Types::DECIMAL, ATTR_TYPE::DECIMAL->doctrineType());
-        $this->assertEquals(Types::STRING, ATTR_TYPE::STRING->doctrineType());
-        $this->assertEquals(Types::TEXT, ATTR_TYPE::TEXT->doctrineType());
+        $this->assertEquals(Types::INTEGER, ATTR_TYPE::doctrineType(ATTR_TYPE::INTEGER));
+        $this->assertEquals(Types::DATETIME_MUTABLE, ATTR_TYPE::doctrineType(ATTR_TYPE::DATETIME));
+        $this->assertEquals(Types::DECIMAL, ATTR_TYPE::doctrineType(ATTR_TYPE::DECIMAL));
+        $this->assertEquals(Types::STRING, ATTR_TYPE::doctrineType(ATTR_TYPE::STRING));
+        $this->assertEquals(Types::TEXT, ATTR_TYPE::doctrineType(ATTR_TYPE::TEXT));
     }
 
     /**
@@ -78,14 +83,14 @@ class AttributeTypeEnumFunctionalTest extends TestCase
      * @covers \Drobotik\Eav\Enum\ATTR_TYPE::migrateOptions
      */
     public function migrate_options() {
-        $this->assertEquals([], ATTR_TYPE::INTEGER->migrateOptions());
-        $this->assertEquals([], ATTR_TYPE::DATETIME->migrateOptions());
+        $this->assertEquals([], ATTR_TYPE::migrateOptions(ATTR_TYPE::INTEGER));
+        $this->assertEquals([], ATTR_TYPE::migrateOptions(ATTR_TYPE::DATETIME));
         $this->assertEquals([
             'precision' => 21,
             'scale' => 6
-        ], ATTR_TYPE::DECIMAL->migrateOptions());
-        $this->assertEquals([], ATTR_TYPE::STRING->migrateOptions());
-        $this->assertEquals([], ATTR_TYPE::TEXT->migrateOptions());
+        ], ATTR_TYPE::migrateOptions(ATTR_TYPE::DECIMAL));
+        $this->assertEquals([], ATTR_TYPE::migrateOptions(ATTR_TYPE::STRING));
+        $this->assertEquals([], ATTR_TYPE::migrateOptions(ATTR_TYPE::TEXT));
     }
     /**
      * @test
@@ -93,11 +98,11 @@ class AttributeTypeEnumFunctionalTest extends TestCase
      * @covers \Drobotik\Eav\Enum\ATTR_TYPE::validationRule
      */
     public function validation_rule() {
-        $this->assertEquals([Assert::integer()], ATTR_TYPE::INTEGER->validationRule());
-        $this->assertEquals([new Constraints\Date], ATTR_TYPE::DATETIME->validationRule());
-        $this->assertEquals([new Constraints\Regex('/^[0-9]{1,11}(?:\.[0-9]{1,3})?$/')], ATTR_TYPE::DECIMAL->validationRule());
-        $this->assertEquals([new Constraints\Length(['min' => 1,'max' => 191])], ATTR_TYPE::STRING->validationRule());
-        $this->assertEquals([new Constraints\Length(['min' => 1,'max' => 10000])], ATTR_TYPE::TEXT->validationRule());
+        $this->assertEquals([Assert::integer()], ATTR_TYPE::validationRule(ATTR_TYPE::INTEGER));
+        $this->assertEquals([new Constraints\Date], ATTR_TYPE::validationRule(ATTR_TYPE::DATETIME));
+        $this->assertEquals([new Constraints\Regex('/^[0-9]{1,11}(?:\.[0-9]{1,3})?$/')], ATTR_TYPE::validationRule(ATTR_TYPE::DECIMAL));
+        $this->assertEquals([new Constraints\Length(['min' => 1,'max' => 191])], ATTR_TYPE::validationRule(ATTR_TYPE::STRING));
+        $this->assertEquals([new Constraints\Length(['min' => 1,'max' => 10000])], ATTR_TYPE::validationRule(ATTR_TYPE::TEXT));
     }
     /**
      * @test
@@ -105,11 +110,11 @@ class AttributeTypeEnumFunctionalTest extends TestCase
      * @covers \Drobotik\Eav\Enum\ATTR_TYPE::getCase
      */
     public function get_case() {
-        $this->assertEquals(ATTR_TYPE::INTEGER, ATTR_TYPE::getCase(ATTR_TYPE::INTEGER->value()));
-        $this->assertEquals(ATTR_TYPE::DATETIME, ATTR_TYPE::getCase(ATTR_TYPE::DATETIME->value()));
-        $this->assertEquals(ATTR_TYPE::DECIMAL, ATTR_TYPE::getCase(ATTR_TYPE::DECIMAL->value()));
-        $this->assertEquals(ATTR_TYPE::STRING, ATTR_TYPE::getCase(ATTR_TYPE::STRING->value()));
-        $this->assertEquals(ATTR_TYPE::TEXT, ATTR_TYPE::getCase(ATTR_TYPE::TEXT->value()));
+        $this->assertEquals(ATTR_TYPE::INTEGER, ATTR_TYPE::getCase(ATTR_TYPE::INTEGER));
+        $this->assertEquals(ATTR_TYPE::DATETIME, ATTR_TYPE::getCase(ATTR_TYPE::DATETIME));
+        $this->assertEquals(ATTR_TYPE::DECIMAL, ATTR_TYPE::getCase(ATTR_TYPE::DECIMAL));
+        $this->assertEquals(ATTR_TYPE::STRING, ATTR_TYPE::getCase(ATTR_TYPE::STRING));
+        $this->assertEquals(ATTR_TYPE::TEXT, ATTR_TYPE::getCase(ATTR_TYPE::TEXT));
     }
     /**
      * @test
@@ -128,10 +133,10 @@ class AttributeTypeEnumFunctionalTest extends TestCase
      * @covers \Drobotik\Eav\Enum\ATTR_TYPE::randomValue
      */
     public function random_value() {
-        $this->assertTrue(is_string(ATTR_TYPE::STRING->randomValue()));
-        $this->assertTrue(is_int(ATTR_TYPE::INTEGER->randomValue()));
-        $this->assertTrue(is_float(ATTR_TYPE::DECIMAL->randomValue()));
-        $this->assertTrue(Carbon::createFromFormat('Y-m-d H:i:s', ATTR_TYPE::DATETIME->randomValue()) !== false);
-        $this->assertTrue(is_string(ATTR_TYPE::TEXT->randomValue()));
+        $this->assertTrue(is_string(ATTR_TYPE::randomValue(ATTR_TYPE::STRING)));
+        $this->assertTrue(is_int(ATTR_TYPE::randomValue(ATTR_TYPE::INTEGER)));
+        $this->assertTrue(is_float(ATTR_TYPE::randomValue(ATTR_TYPE::DECIMAL)));
+        $this->assertTrue(Carbon::createFromFormat('Y-m-d H:i:s', ATTR_TYPE::randomValue(ATTR_TYPE::DATETIME)) !== false);
+        $this->assertTrue(is_string(ATTR_TYPE::randomValue(ATTR_TYPE::TEXT)));
     }
 }

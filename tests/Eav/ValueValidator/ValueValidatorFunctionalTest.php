@@ -39,13 +39,13 @@ class ValueValidatorFunctionalTest extends TestCase
      */
     public function default_value_rule() {
         $attribute = new Attribute();
-        $attribute->setType(ATTR_TYPE::INTEGER->value());
+        $attribute->setType(ATTR_TYPE::INTEGER);
         $container = new AttributeContainer();
         $container->setAttribute($attribute);
         $this->validator->setAttributeContainer($container);
-        $this->assertEquals(ATTR_TYPE::INTEGER->validationRule(),$this->validator->getDefaultValueRule());
-        $attribute->setType(ATTR_TYPE::TEXT->value());
-        $this->assertEquals(ATTR_TYPE::TEXT->validationRule(),$this->validator->getDefaultValueRule());
+        $this->assertEquals(ATTR_TYPE::validationRule(ATTR_TYPE::INTEGER),$this->validator->getDefaultValueRule());
+        $attribute->setType(ATTR_TYPE::TEXT);
+        $this->assertEquals(ATTR_TYPE::validationRule(ATTR_TYPE::TEXT),$this->validator->getDefaultValueRule());
     }
     /**
      * @test
@@ -54,7 +54,7 @@ class ValueValidatorFunctionalTest extends TestCase
      */
     public function validation_rules() {
         $attribute = new Attribute();
-        $attribute->setType(ATTR_TYPE::INTEGER->value());
+        $attribute->setType(ATTR_TYPE::INTEGER);
         $container = new AttributeContainer();
         $container->setAttribute($attribute)
             ->makeStrategy();
@@ -76,7 +76,7 @@ class ValueValidatorFunctionalTest extends TestCase
      */
     public function validation_rules_with_custom_rule() {
         $attribute = new Attribute();
-        $attribute->setType(ATTR_TYPE::INTEGER->value());
+        $attribute->setType(ATTR_TYPE::INTEGER);
         $strategy = $this->getMockBuilder(Strategy::class)
             ->onlyMethods(['rules'])
             ->getMock();
@@ -140,7 +140,7 @@ class ValueValidatorFunctionalTest extends TestCase
         $attrSet->setEntity($entity);
         $attribute = new Attribute();
         $attribute->setKey(1);
-        $attribute->setType(ATTR_TYPE::STRING->value());
+        $attribute->setType(ATTR_TYPE::STRING);
         $valueManager = new ValueManager();
         $valueManager->setRuntime('test');
         $container = new AttributeContainer();

@@ -42,7 +42,7 @@ class ExportManagerAcceptanceTest extends QueryingDataTestCase
             QB_CONFIG::CONDITION => QB_CONDITION::AND,
             QB_CONFIG::RULES => [
                 [
-                    QB_CONFIG::NAME => ATTR_TYPE::DECIMAL->value(),
+                    QB_CONFIG::NAME => ATTR_TYPE::DECIMAL,
                     QB_CONFIG::OPERATOR => QB_OPERATOR::LESS->name(),
                     QB_CONFIG::VALUE => 10000
                 ],
@@ -50,12 +50,12 @@ class ExportManagerAcceptanceTest extends QueryingDataTestCase
                     QB_CONFIG::CONDITION => QB_CONDITION::OR,
                     QB_CONFIG::RULES => [
                         [
-                            QB_CONFIG::NAME => ATTR_TYPE::STRING->value(),
+                            QB_CONFIG::NAME => ATTR_TYPE::STRING,
                             QB_CONFIG::OPERATOR => QB_OPERATOR::CONTAINS->name(),
                             QB_CONFIG::VALUE => 'sit quisquam'
                         ],
                         [
-                            QB_CONFIG::NAME => ATTR_TYPE::STRING->value(),
+                            QB_CONFIG::NAME => ATTR_TYPE::STRING,
                             QB_CONFIG::OPERATOR => QB_OPERATOR::EQUAL->name(),
                             QB_CONFIG::VALUE => 'et dolores'
                         ]
@@ -66,7 +66,7 @@ class ExportManagerAcceptanceTest extends QueryingDataTestCase
 
         $domainKey = 1;
         $setKey = 1;
-        $columns = [ATTR_TYPE::STRING->value(), ATTR_TYPE::DECIMAL->value()];
+        $columns = [ATTR_TYPE::STRING, ATTR_TYPE::DECIMAL];
         $manager = new ExportManager();
         $manager->setDriver($driver);
         $manager->run($domainKey, $setKey, $filters, $columns);
@@ -85,7 +85,7 @@ class ExportManagerAcceptanceTest extends QueryingDataTestCase
         }
 
         $this->assertEquals([
-            [_ENTITY::ID,ATTR_TYPE::STRING->value(),ATTR_TYPE::DECIMAL->value()],
+            [_ENTITY::ID,ATTR_TYPE::STRING,ATTR_TYPE::DECIMAL],
             ['1822','et dolores','170.359'],
             ['18795','sit quisquam','3685.969'],
             ['19738','sit quisquam','180.63']
