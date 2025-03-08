@@ -12,6 +12,7 @@ namespace Tests\Eav\AttributeSetAction;
 use Drobotik\Eav\Attribute;
 use Drobotik\Eav\AttributeContainer;
 use Drobotik\Eav\AttributeSet;
+use Drobotik\Eav\AttributeSetAction;
 use Drobotik\Eav\Database\Connection;
 use Drobotik\Eav\Entity;
 use Drobotik\Eav\Enum\_ATTR;
@@ -23,6 +24,7 @@ use Tests\TestCase;
 class AttributeSetActionFunctionalTest extends TestCase
 {
     private AttributeContainer $container;
+    private AttributeSetAction $action;
 
     public function setUp(): void
     {

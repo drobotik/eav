@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 
 class EntityFunctionalTest extends TestCase
 {
+    private Entity $entity;
     public function setUp(): void
     {
         parent::setUp();

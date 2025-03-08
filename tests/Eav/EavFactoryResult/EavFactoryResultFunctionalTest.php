@@ -15,6 +15,7 @@ use Drobotik\Eav\Result\EntityFactoryResult;
 
 class EavFactoryResultFunctionalTest extends TestCase
 {
+    private EntityFactoryResult $result;
     public function setUp(): void
     {
         parent::setUp();

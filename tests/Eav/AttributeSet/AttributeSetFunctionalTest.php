@@ -17,6 +17,8 @@ use PHPUnit\Framework\TestCase;
 
 class AttributeSetFunctionalTest extends TestCase
 {
+    protected AttributeSet $instance;
+
     public function setUp(): void
     {
         parent::setUp();

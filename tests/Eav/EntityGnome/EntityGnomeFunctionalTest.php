@@ -23,6 +23,7 @@ use Tests\TestCase;
 
 class EntityGnomeFunctionalTest extends TestCase
 {
+    private EntityGnome $gnome;
     public function setUp(): void
     {
         parent::setUp();

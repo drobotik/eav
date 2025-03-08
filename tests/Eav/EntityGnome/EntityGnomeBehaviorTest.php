@@ -26,6 +26,7 @@ use Tests\TestCase;
 
 class EntityGnomeBehaviorTest extends TestCase
 {
+    private EntityGnome $gnome;
     public function setUp(): void
     {
         parent::setUp();
