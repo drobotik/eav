@@ -110,12 +110,17 @@ class EntityFactory
         $pivotRecord = $pivotModel->findOne($domainKey, $setKey, $groupKey, $attrKey);
         if($pivotRecord === false)
             $pivotKey = $factory->createPivot($domainKey, $setKey, $groupKey, $attrKey);
-        else
+        else {
             $pivotKey = $pivotRecord[_PIVOT::ID];
+        }
+
         $result->addPivot($attrKey, $pivotKey);
         return $pivotKey;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function handleValue($type, int $entityKey, int $attrKey, mixed $value)
     {
         $result = $this->getResult();

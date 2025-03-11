@@ -27,36 +27,42 @@ class PivotModel extends Model
     public function create(array $data) : int
     {
         $conn = $this->db();
-        $conn->createQueryBuilder()
-            ->insert($this->getTable())
-            ->values([
-                _PIVOT::DOMAIN_ID => '?',
-                _PIVOT::SET_ID => '?',
-                _PIVOT::GROUP_ID => '?',
-                _PIVOT::ATTR_ID => '?'
-            ])
-            ->setParameter(0, $data[_PIVOT::DOMAIN_ID])
-            ->setParameter(1, $data[_PIVOT::SET_ID])
-            ->setParameter(2, $data[_PIVOT::GROUP_ID])
-            ->setParameter(3, $data[_PIVOT::ATTR_ID])
-            ->executeQuery();
+        $sql = sprintf(
+            "INSERT INTO %s (%s, %s, %s, %s) VALUES (:domain_id, :set_id, :group_id, :attr_id)",
+            $this->getTable(),
+            _PIVOT::DOMAIN_ID,
+            _PIVOT::SET_ID,
+            _PIVOT::GROUP_ID,
+            _PIVOT::ATTR_ID
+        );
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':domain_id', $data[_PIVOT::DOMAIN_ID]);
+        $stmt->bindParam(':set_id', $data[_PIVOT::SET_ID]);
+        $stmt->bindParam(':group_id', $data[_PIVOT::GROUP_ID]);
+        $stmt->bindParam(':attr_id', $data[_PIVOT::ATTR_ID]);
+        $stmt->execute();
         return (int) $conn->lastInsertId();
     }
 
     public function findOne(int $domainKey, int $setKey, int $groupKey, int $attributeKey) : bool|array
     {
-        return $this->db()->createQueryBuilder()
-            ->select($this->getPrimaryKey())
-            ->from($this->getTable())
-            ->where(sprintf('%s = ?', _PIVOT::DOMAIN_ID))
-            ->andWhere(sprintf('%s = ?', _PIVOT::SET_ID))
-            ->andWhere(sprintf('%s = ?', _PIVOT::GROUP_ID))
-            ->andWhere(sprintf('%s = ?', _PIVOT::ATTR_ID))
-            ->setParameter(0, $domainKey, PDO::PARAM_INT)
-            ->setParameter(1, $setKey, PDO::PARAM_INT)
-            ->setParameter(2, $groupKey, PDO::PARAM_INT)
-            ->setParameter(3, $attributeKey, PDO::PARAM_INT)
-            ->executeQuery()
-            ->fetchAssociative();
+        $conn = $this->db();
+        $sql = sprintf(
+            "SELECT %s FROM %s WHERE %s = :domain_id AND %s = :set_id AND %s = :group_id AND %s = :attr_id",
+            $this->getPrimaryKey(),
+            $this->getTable(),
+            _PIVOT::DOMAIN_ID,
+            _PIVOT::SET_ID,
+            _PIVOT::GROUP_ID,
+            _PIVOT::ATTR_ID
+        );
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':domain_id', $domainKey, PDO::PARAM_INT);
+        $stmt->bindParam(':set_id', $setKey, PDO::PARAM_INT);
+        $stmt->bindParam(':group_id', $groupKey, PDO::PARAM_INT);
+        $stmt->bindParam(':attr_id', $attributeKey, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }

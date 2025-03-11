@@ -49,7 +49,7 @@ class AttributeGroupModelFunctionalTest extends TestCase
         $this->assertEquals(1, $result);
 
         $table = _GROUP::table();
-        $connection = Connection::get()->getNativeConnection();
+        $connection = Connection::get();
 
         $stmt = $connection->prepare("SELECT * FROM $table");
         $stmt->execute();

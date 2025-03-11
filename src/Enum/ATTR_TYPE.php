@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\Enum;
 
-use Carbon\Carbon;
 use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Drobotik\Eav\Exception\AttributeException;

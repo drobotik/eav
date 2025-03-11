@@ -51,9 +51,7 @@ class AttributeSetModelFunctionalTest extends TestCase
         $this->assertEquals(1, $result);
 
         $table = _SET::table();
-        $connection = Connection::get()->getNativeConnection();
-
-        $stmt = $connection->prepare("SELECT * FROM $table");
+        $stmt = Connection::get()->prepare("SELECT * FROM $table");
         $stmt->execute();
         $record = $stmt->fetch(PDO::FETCH_ASSOC);
         $this->assertEquals([
@@ -80,12 +78,10 @@ class AttributeSetModelFunctionalTest extends TestCase
         $result = $this->model->findAttributes(123);
         $this->assertEquals([], $result);
 
-        $qb = Connection::get()->createQueryBuilder();
-        $expected = $qb
-            ->select('*')
-            ->from(_ATTR::table())
-            ->executeQuery()
-            ->fetchAllAssociative();
+        $sql = sprintf("SELECT * FROM %s", _ATTR::table()); // Using the table name from _ATTR
+        $stmt =  Connection::get()->prepare($sql);
+        $stmt->execute();
+        $expected = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         $this->assertEquals(2, count($expected));
         $result = $this->model->findAttributes($domainKey, $setKey);

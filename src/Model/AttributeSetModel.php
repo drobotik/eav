@@ -13,6 +13,7 @@ use Doctrine\DBAL\Exception;
 use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\_PIVOT;
 use Drobotik\Eav\Enum\_SET;
+use PDO;
 
 class AttributeSetModel extends Model
 {
@@ -25,40 +26,47 @@ class AttributeSetModel extends Model
     public function create(array $data) : int
     {
         $conn = $this->db();
-        $conn->createQueryBuilder()
-            ->insert($this->getTable())
-            ->values([
-                _SET::DOMAIN_ID => '?',
-                _SET::NAME => '?'
-            ])
-            ->setParameter(0, $data[_SET::DOMAIN_ID])
-            ->setParameter(1, $data[_SET::NAME])
-            ->executeQuery();
+        $sql = sprintf(
+            "INSERT INTO %s (%s, %s) VALUES (:domain_id, :name)",
+            $this->getTable(),
+            _SET::DOMAIN_ID,
+            _SET::NAME
+        );
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':domain_id', $data[_SET::DOMAIN_ID]);
+        $stmt->bindParam(':name', $data[_SET::NAME]);
+        $stmt->execute();
         return (int) $conn->lastInsertId();
     }
-
     /**
      * @throws Exception
      */
     public function findAttributes(int $domainKey, int $setKey = null) : array
     {
-        $query = $this->db()
-            ->createQueryBuilder()
-            ->select('a.*')
-            ->from(_ATTR::table(), 'a')
-            ->innerJoin('a', _PIVOT::table(), 'p',
-                sprintf('a.%s = p.%s', _ATTR::ID, _PIVOT::ATTR_ID)
-            )
-            ->where(sprintf('p.%s = ?', _PIVOT::DOMAIN_ID))
-            ->setParameter(0, $domainKey);
+        $sql = sprintf(
+            "SELECT a.* FROM %s a
+        INNER JOIN %s p ON a.%s = p.%s
+        WHERE p.%s = :domain_id",
+            _ATTR::table(), _PIVOT::table(),
+            _ATTR::ID, _PIVOT::ATTR_ID,
+            _PIVOT::DOMAIN_ID
+        );
 
-        if(!is_null($setKey))
-            $query = $query
-                ->andWhere(sprintf('p.%s = ?', _PIVOT::SET_ID))
-                ->setParameter(1, $setKey);
+        if (!is_null($setKey)) {
+            $sql .= sprintf(" AND p.%s = :set_id", _PIVOT::SET_ID);
+        }
 
-        return $query
-            ->executeQuery()
-            ->fetchAllAssociative();
+        $conn = $this->db();
+        $stmt = $conn->prepare($sql);
+
+        $stmt->bindParam(':domain_id', $domainKey, PDO::PARAM_INT);
+
+        if (!is_null($setKey)) {
+            $stmt->bindParam(':set_id', $setKey, PDO::PARAM_INT);
+        }
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

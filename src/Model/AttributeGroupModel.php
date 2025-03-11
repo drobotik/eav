@@ -33,15 +33,20 @@ class AttributeGroupModel extends Model
 
     public function checkGroupInAttributeSet(int $setKey, int $groupKey) : bool
     {
-        $result = $this->db()->createQueryBuilder()
-            ->select($this->getPrimaryKey())
-            ->from($this->getTable())
-            ->where(sprintf('%s = ?', _GROUP::SET_ID))
-            ->andWhere(sprintf('%s = ?', _GROUP::ID))
-            ->setParameter(0, $setKey, PDO::PARAM_INT)
-            ->setParameter(1, $groupKey, PDO::PARAM_INT)
-            ->executeQuery()
-            ->fetchAssociative();
+        $conn = $this->db();
+        $sql = sprintf(
+            "SELECT %s FROM %s WHERE %s = :set_id AND %s = :group_id",
+            $this->getPrimaryKey(),
+            $this->getTable(),
+            _GROUP::SET_ID,
+            _GROUP::ID
+        );
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':set_id', $setKey, PDO::PARAM_INT);
+        $stmt->bindParam(':group_id', $groupKey, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result !== false;
     }
 }

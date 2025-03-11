@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Drobotik\Eav\Model;
 
 use Doctrine\DBAL\Exception;
+use Drobotik\Eav\Database\Connection;
 use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Exception\EntityException;
 use Drobotik\Eav\Trait\SingletonsTrait;
@@ -39,15 +40,16 @@ class EntityModel extends Model
     public function create(array $data) : int
     {
         $conn = $this->db();
-        $conn->createQueryBuilder()
-            ->insert($this->getTable())
-            ->values([
-                _ENTITY::DOMAIN_ID => '?',
-                _ENTITY::ATTR_SET_ID => '?'
-            ])
-            ->setParameter(0, $data[_ENTITY::DOMAIN_ID])
-            ->setParameter(1, $data[_ENTITY::ATTR_SET_ID])
-            ->executeQuery();
+        $sql = sprintf(
+            "INSERT INTO %s (%s, %s) VALUES (:domain_id, :attr_set_id)",
+            $this->getTable(),
+            _ENTITY::DOMAIN_ID,
+            _ENTITY::ATTR_SET_ID
+        );
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':domain_id', $data[_ENTITY::DOMAIN_ID]);
+        $stmt->bindParam(':attr_set_id', $data[_ENTITY::ATTR_SET_ID]);
+        $stmt->execute();
         return (int) $conn->lastInsertId();
     }
 
@@ -56,7 +58,7 @@ class EntityModel extends Model
         $table = $this->getTable();
         $serviceKeyCol = _ENTITY::SERVICE_KEY;
 
-        $conn = $this->db()->getNativeConnection();
+        $conn = $this->db();
 
         $stmt = $conn->prepare("SELECT count(*) as c FROM $table WHERE $serviceKeyCol = :key");
         $stmt->bindParam(':key', $key);
@@ -72,7 +74,7 @@ class EntityModel extends Model
         $table = $this->getTable();
         $serviceKeyCol = _ENTITY::SERVICE_KEY;
 
-        $conn = $this->db()->getNativeConnection();;
+        $conn = $this->db();
 
         $stmt = $conn->prepare("SELECT * FROM $table WHERE $serviceKeyCol = :key");
         $stmt->bindParam(':key', $key);
@@ -100,19 +102,25 @@ class EntityModel extends Model
             implode(',',$bulk)
         );
 
-        $conn = $this->db()->getNativeConnection();
+        $conn = $this->db();
 
         $conn->exec($template);
     }
 
     public function getBySetAndDomain(int $domainKey, int $setKey) : array
     {
-        return $this->db()->createQueryBuilder()
-            ->select('*')
-            ->from($this->getTable())
-            ->where(sprintf('%s = %s', _ENTITY::DOMAIN_ID, $domainKey))
-            ->andWhere(sprintf('%s = %s', _ENTITY::ATTR_SET_ID, $setKey))
-            ->executeQuery()
-            ->fetchAllAssociative();
+        $conn = Connection::get();
+        $table = $this->getTable();
+
+        $stmt = $conn->prepare(
+            "SELECT * FROM $table WHERE " . _ENTITY::DOMAIN_ID . " = :domainKey AND " . _ENTITY::ATTR_SET_ID . " = :setKey"
+        );
+
+        $stmt->bindParam(':domainKey', $domainKey, PDO::PARAM_INT);
+        $stmt->bindParam(':setKey', $setKey, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

@@ -19,7 +19,7 @@ class Model
 
     protected string $table;
 
-    public function db() : DBALConnection
+    public function db() : PDO
     {
         return Connection::get();
     }
@@ -51,7 +51,7 @@ class Model
 
     public function insert(array $data): int
     {
-        $conn = $this->db()->getNativeConnection();
+        $conn = $this->db();
         $table = $this->getTable();
 
         // Extract the column names and values from the data array
@@ -73,7 +73,7 @@ class Model
     {
         $keyName = $this->getPrimaryKey();
 
-        $conn = $this->db()->getNativeConnection();
+        $conn = $this->db();
         $table = $this->getTable();
 
         $setValues = [];
@@ -96,7 +96,7 @@ class Model
     {
         $keyName = $this->getPrimaryKey();
 
-        $conn = $this->db()->getNativeConnection();
+        $conn = $this->db();
         $table = $this->getTable();
 
         $stmt = $conn->prepare("DELETE FROM $table WHERE $keyName = :key");
@@ -107,9 +107,8 @@ class Model
 
     public function count() : int
     {
-        $conn = $this->db()->getNativeConnection();
         $table = $this->getTable();
-        $stmt = $conn->prepare("SELECT COUNT(*) as count FROM $table");
+        $stmt = $this->db()->prepare("SELECT COUNT(*) as count FROM $table");
         $stmt->execute();
         $record = $stmt->fetch(PDO::FETCH_ASSOC);
         return (int) $record["count"];
@@ -117,13 +116,10 @@ class Model
 
     public function findByKey(int $key) : array|false
     {
-        return $this->db()
-            ->createQueryBuilder()
-            ->select('*')
-            ->from($this->getTable())
-            ->where(sprintf('%s = ?', $this->getPrimaryKey()))
-            ->setParameter(0, $key, PDO::PARAM_INT)
-            ->executeQuery()
-            ->fetchAssociative();
+        $conn = $this->db();
+        $sql = sprintf("SELECT * FROM %s WHERE %s = ?", $this->getTable(), $this->getPrimaryKey());
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([$key]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }

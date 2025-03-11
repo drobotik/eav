@@ -24,6 +24,7 @@ use Drobotik\Eav\Model\AttributeSetModel;
 use Drobotik\Eav\Result\EntityFactoryResult;
 use Drobotik\Eav\Result\Result;
 use Faker\Generator;
+use PDO;
 use ReflectionClass;
 use Tests\TestCase;
 
@@ -77,10 +78,10 @@ class EavFactoryFunctionalTest extends TestCase
             _DOMAIN::NAME => $name
         ]);
 
-        $qb = Connection::get()->createQueryBuilder();
-        $record = $qb->select('*')->from(_DOMAIN::table())
-            ->executeQuery()
-            ->fetchAssociative();
+        $sql = sprintf("SELECT * FROM %s", _DOMAIN::table());
+        $stmt =  Connection::get()->prepare($sql);
+        $stmt->execute();
+        $record = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $this->assertEquals([
             _DOMAIN::ID => $key,
@@ -99,10 +100,10 @@ class EavFactoryFunctionalTest extends TestCase
     {
         $this->assertEquals(1, $this->eavFactory->createEntity());
 
-        $qb = Connection::get()->createQueryBuilder();
-        $record = $qb->select('*')->from(_ENTITY::table())
-            ->executeQuery()
-            ->fetchAssociative();
+        $sql = sprintf("SELECT * FROM %s", _ENTITY::table());
+        $stmt =  Connection::get()->prepare($sql);
+        $stmt->execute();
+        $record = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $this->assertEquals([
             _ENTITY::ID => 1,
@@ -111,10 +112,10 @@ class EavFactoryFunctionalTest extends TestCase
             _ENTITY::SERVICE_KEY => null
         ], $record);
 
-        // domain created
-        $record = $qb->select('count(*) as c')->from(_DOMAIN::table())
-            ->executeQuery()
-            ->fetchAssociative();
+        $sql = sprintf("SELECT count(*) as c FROM %s", _DOMAIN::table());
+        $stmt =  Connection::get()->prepare($sql);
+        $stmt->execute();
+        $record = $stmt->fetch(PDO::FETCH_ASSOC);
         $this->assertEquals(1, $record['c']);
 
         // attribute set created
@@ -149,10 +150,10 @@ class EavFactoryFunctionalTest extends TestCase
         ];
         $setKey = $this->eavFactory->createAttributeSet(123, $input);
 
-        $qb = Connection::get()->createQueryBuilder();
-        $record = $qb->select('*')->from(_SET::table())
-            ->executeQuery()
-            ->fetchAssociative();
+        $sql = sprintf("SELECT * FROM %s", _SET::table());
+        $stmt =  Connection::get()->prepare($sql);
+        $stmt->execute();
+        $record = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $this->assertEquals([
             _SET::ID => $setKey,
@@ -189,10 +190,10 @@ class EavFactoryFunctionalTest extends TestCase
 
         $groupKey = $this->eavFactory->createGroup(123, $input);
 
-        $qb = Connection::get()->createQueryBuilder();
-        $record = $qb->select('*')->from(_GROUP::table())
-            ->executeQuery()
-            ->fetchAssociative();
+        $sql = sprintf("SELECT * FROM %s", _GROUP::table());
+        $stmt =  Connection::get()->prepare($sql);
+        $stmt->execute();
+        $record = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $this->assertEquals([
             _GROUP::ID => $groupKey,
@@ -235,10 +236,10 @@ class EavFactoryFunctionalTest extends TestCase
         ];
         $key = $this->eavFactory->createAttribute($domainKey, $input);
 
-        $qb = Connection::get()->createQueryBuilder();
-        $record = $qb->select('*')->from(_ATTR::table())
-            ->executeQuery()
-            ->fetchAssociative();
+        $sql = sprintf("SELECT * FROM %s", _ATTR::table());
+        $stmt =  Connection::get()->prepare($sql);
+        $stmt->execute();
+        $record = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $this->assertEquals([
             _ATTR::ID => $key,
@@ -271,10 +272,10 @@ class EavFactoryFunctionalTest extends TestCase
         $attributeKey = $this->eavFactory->createAttribute($domainKey);
         $pivotKey = $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $attributeKey);
 
-        $qb = Connection::get()->createQueryBuilder();
-        $record = $qb->select('*')->from(_PIVOT::table())
-            ->executeQuery()
-            ->fetchAssociative();
+        $sql = sprintf("SELECT * FROM %s", _PIVOT::table());
+        $stmt =  Connection::get()->prepare($sql);
+        $stmt->execute();
+        $record = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $this->assertEquals([
             _PIVOT::ID => $pivotKey,

@@ -30,15 +30,6 @@ $ composer require drobotik/eav
 :heavy_check_mark: Switch to Symfony components<br>
 :pushpin: Attribute props and strategy improvements
 
-### Contributing
-
-Please note the following guidelines before submitting pull request.
-
-- [PSR-2](http://www.php-fig.org/psr/psr-2/) coding standards
-- one pull request per feature
-- implement your change and add tests for it
-- ensure the test suite passes
-
 ### License
 
 Eav package is licensed under the [MIT License](http://opensource.org/licenses/MIT).

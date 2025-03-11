@@ -19,6 +19,7 @@ use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Model\ValueBase;
 use Drobotik\Eav\Strategy;
+use PDO;
 use Tests\TestCase;
 
 class AttributeSetActionFunctionalTest extends TestCase
@@ -62,9 +63,11 @@ class AttributeSetActionFunctionalTest extends TestCase
         $attributeKey = $this->eavFactory->createAttribute($domainKey);
         $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $attributeKey);
 
-        $qb = Connection::get()->createQueryBuilder();
-        $attributeRecord = $qb->select('*')->from(_ATTR::table())
-            ->executeQuery()->fetchAssociative();
+
+        $sql = sprintf("SELECT * FROM %s", _ATTR::table());
+        $stmt = Connection::get()->prepare($sql);
+        $stmt->execute();
+        $attributeRecord = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $result = $this->action->initializeAttribute($attributeRecord);
         $this->assertEquals($attributeRecord, $result->getBag()->getFields());
@@ -106,9 +109,11 @@ class AttributeSetActionFunctionalTest extends TestCase
 
         $this->container->setAttributeSet($attrSet);
 
-        $qb = Connection::get()->createQueryBuilder();
-        $attributeRecord = $qb->select('*')->from(_ATTR::table())
-            ->executeQuery()->fetchAssociative();
+        $sql = sprintf("SELECT * FROM %s", _ATTR::table());
+        $stmt = Connection::get()->prepare($sql);
+        $stmt->execute();
+        $attributeRecord = $stmt->fetch(PDO::FETCH_ASSOC);
+
         $this->action->initialize($attributeRecord);
 
         // attribute

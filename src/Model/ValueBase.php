@@ -14,7 +14,9 @@ use Drobotik\Eav\Enum\_VALUE;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Import\Content\ValueSet;
 use Drobotik\Eav\Trait\SingletonsTrait;
+use Exception;
 use InvalidArgumentException;
+use PDO;
 
 class ValueBase extends Model
 {
@@ -29,82 +31,97 @@ class ValueBase extends Model
     {
         $table = ATTR_TYPE::valueTable($type);
 
-        return $this->db()
-            ->createQueryBuilder()
-            ->select('*')
-            ->from($table)
-            ->where(sprintf('%s = :domain AND %s = :entity AND %s = :attr',
-                _VALUE::DOMAIN_ID, _VALUE::ENTITY_ID, _VALUE::ATTRIBUTE_ID
-            ))
-            ->setParameters([
-                "domain" => $domainKey,
-                "entity" => $entityKey,
-                "attr" => $attributeKey
-            ])
-            ->executeQuery()
-            ->fetchAssociative();
+        $conn = $this->db();
+        $sql = sprintf(
+            "SELECT * FROM %s WHERE %s = :domain AND %s = :entity AND %s = :attr",
+            $table,
+            _VALUE::DOMAIN_ID,
+            _VALUE::ENTITY_ID,
+            _VALUE::ATTRIBUTE_ID
+        );
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':domain', $domainKey, PDO::PARAM_INT);
+        $stmt->bindParam(':entity', $entityKey, PDO::PARAM_INT);
+        $stmt->bindParam(':attr', $attributeKey, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * @throws Exception
+     */
     public function create(string $type, int $domainKey, int $entityKey, int $attributeKey, $value) : int
     {
         $table = ATTR_TYPE::valueTable($type);
 
         $conn = $this->db();
+        $sql = sprintf(
+            "INSERT INTO %s (%s, %s, %s, %s) VALUES (:domain_id, :entity_id, :attribute_id, :value)",
+            $table,
+            _VALUE::DOMAIN_ID,
+            _VALUE::ENTITY_ID,
+            _VALUE::ATTRIBUTE_ID,
+            _VALUE::VALUE
+        );
 
-        $conn->createQueryBuilder()
-            ->insert($table)
-            ->values([
-                _VALUE::DOMAIN_ID => '?',
-                _VALUE::ENTITY_ID => '?',
-                _VALUE::ATTRIBUTE_ID => '?',
-                _VALUE::VALUE => '?',
-            ])
-            ->setParameter(0, $domainKey)
-            ->setParameter(1, $entityKey)
-            ->setParameter(2, $attributeKey)
-            ->setParameter(3, $this->makeValueParser()->parse($type, $value))
-            ->executeQuery();
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':domain_id', $domainKey, PDO::PARAM_INT);
+        $stmt->bindParam(':entity_id', $entityKey, PDO::PARAM_INT);
+        $stmt->bindParam(':attribute_id', $attributeKey, PDO::PARAM_INT);
+        $v = $this->makeValueParser()->parse($type, $value);
+        $stmt->bindParam(':value',$v);
+
+        $stmt->execute();
+
         return (int) $conn->lastInsertId();
     }
 
     public function update(string $type, int $domainKey, int $entityKey, int $attributeKey, $value) : int
     {
+        $pdo = Connection::get();
         $table = ATTR_TYPE::valueTable($type);
-        $conn = $this->db();
-        return $conn->createQueryBuilder()
-            ->update($table)
-            ->set(_VALUE::VALUE, ':val') // Set the value for the `VALUE` column
-            ->where(sprintf('%s = :domain AND %s = :entity AND %s = :attr',
-                _VALUE::DOMAIN_ID, _VALUE::ENTITY_ID, _VALUE::ATTRIBUTE_ID
-            ))
-            ->setParameters([
-                "domain" => $domainKey,
-                "entity" => $entityKey,
-                "attr" => $attributeKey,
-                "val" => $this->makeValueParser()->parse($type, $value)
-            ])
-            ->executeQuery()
-            ->rowCount();
+        $parsedValue = $this->makeValueParser()->parse($type, $value);
+
+        $sql = "UPDATE $table 
+            SET " . _VALUE::VALUE . " = :val 
+            WHERE " . _VALUE::DOMAIN_ID . " = :domain 
+            AND " . _VALUE::ENTITY_ID . " = :entity 
+            AND " . _VALUE::ATTRIBUTE_ID . " = :attr";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':val', $parsedValue);
+        $stmt->bindParam(':domain', $domainKey, PDO::PARAM_INT);
+        $stmt->bindParam(':entity', $entityKey, PDO::PARAM_INT);
+        $stmt->bindParam(':attr', $attributeKey, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->rowCount();
     }
 
     public function destroy(string $type, int $domainKey, int $entityKey, int $attributeKey) : int
     {
+        $pdo = Connection::get();
         $table = ATTR_TYPE::valueTable($type);
 
-        return $this->db()
-            ->createQueryBuilder()
-            ->delete($table)
-            ->where(sprintf('%s = ? AND %s = ? AND %s = ?',
-                _VALUE::DOMAIN_ID, _VALUE::ENTITY_ID, _VALUE::ATTRIBUTE_ID
-            ))
-            ->setParameters([$domainKey, $entityKey, $attributeKey])
-            ->executeQuery()
-            ->rowCount();
+        $sql = "DELETE FROM $table 
+            WHERE " . _VALUE::DOMAIN_ID . " = :domain 
+            AND " . _VALUE::ENTITY_ID . " = :entity 
+            AND " . _VALUE::ATTRIBUTE_ID . " = :attr";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':domain', $domainKey, PDO::PARAM_INT);
+        $stmt->bindParam(':entity', $entityKey, PDO::PARAM_INT);
+        $stmt->bindParam(':attr', $attributeKey, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->rowCount();
     }
 
     public function bulkCreate(ValueSet $valueSet, int $domainKey): void
     {
-        $pdo = Connection::get()->getNativeConnection();
+        $pdo = Connection::get();
 
         $template = "INSERT INTO %s ("._VALUE::DOMAIN_ID.","._VALUE::ENTITY_ID.","._VALUE::ATTRIBUTE_ID.","._VALUE::VALUE.")";
 

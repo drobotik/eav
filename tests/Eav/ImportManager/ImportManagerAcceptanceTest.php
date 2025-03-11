@@ -28,6 +28,7 @@ use InvalidArgumentException;
 use League\Csv\Reader;
 use League\Csv\Statement;
 use League\Csv\Writer;
+use PDO;
 use Tests\TestCase;
 
 class ImportManagerAcceptanceTest extends TestCase
@@ -115,40 +116,49 @@ class ImportManagerAcceptanceTest extends TestCase
         $importManager->run();
 
         // check attributes created
-        $qb = Connection::get()->createQueryBuilder();
-        $q = $qb->select('*')->from(_ATTR::table())
-            ->where(sprintf('%s = :domain AND %s = :type AND %s = :name',
-                _ATTR::DOMAIN_ID, _ATTR::TYPE, _ATTR::NAME));
+        $pdo = $this->db();
+        $table = _ATTR::table();
+        $sql = "SELECT * FROM $table WHERE " . _ATTR::DOMAIN_ID . " = :domain AND " . _ATTR::TYPE . " = :type AND " . _ATTR::NAME . " = :name";
 
-        $string = $q->setParameters([
-            'domain' => $domainKey,
-            'type' => ATTR_TYPE::STRING,
-            'name' => ATTR_TYPE::STRING
-        ])->executeQuery()->fetchAssociative();
+        $stmt = $pdo->prepare($sql);
 
-        $integer = $q->setParameters([
-            'domain' => $domainKey,
-            'type' => ATTR_TYPE::INTEGER,
-            'name' => ATTR_TYPE::INTEGER
-        ])->executeQuery()->fetchAssociative();
+        $domain = $domainKey;
 
-        $decimal =  $q->setParameters([
-            'domain' => $domainKey,
-            'type' => ATTR_TYPE::DECIMAL,
-            'name' => ATTR_TYPE::DECIMAL
-        ])->executeQuery()->fetchAssociative();
+        $typeString = ATTR_TYPE::STRING;
+        $nameString = ATTR_TYPE::STRING;
+        $stmt->bindParam(':domain', $domain, PDO::PARAM_INT);
+        $stmt->bindParam(':type', $typeString, PDO::PARAM_STR);
+        $stmt->bindParam(':name', $nameString, PDO::PARAM_STR);
+        $stmt->execute();
+        $string = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $datetime = $q->setParameters([
-            'domain' => $domainKey,
-            'type' => ATTR_TYPE::DATETIME,
-            'name' => ATTR_TYPE::DATETIME
-        ])->executeQuery()->fetchAssociative();
+        $typeInteger = ATTR_TYPE::INTEGER;
+        $nameInteger = ATTR_TYPE::INTEGER;
+        $stmt->bindParam(':type', $typeInteger, PDO::PARAM_STR);
+        $stmt->bindParam(':name', $nameInteger, PDO::PARAM_STR);
+        $stmt->execute();
+        $integer = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $text = $q->setParameters([
-            'domain' => $domainKey,
-            'type' => ATTR_TYPE::TEXT,
-            'name' => ATTR_TYPE::TEXT
-        ])->executeQuery()->fetchAssociative();
+        $typeDecimal = ATTR_TYPE::DECIMAL;
+        $nameDecimal = ATTR_TYPE::DECIMAL;
+        $stmt->bindParam(':type', $typeDecimal, PDO::PARAM_STR);
+        $stmt->bindParam(':name', $nameDecimal, PDO::PARAM_STR);
+        $stmt->execute();
+        $decimal = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $typeDatetime = ATTR_TYPE::DATETIME;
+        $nameDatetime = ATTR_TYPE::DATETIME;
+        $stmt->bindParam(':type', $typeDatetime, PDO::PARAM_STR);
+        $stmt->bindParam(':name', $nameDatetime, PDO::PARAM_STR);
+        $stmt->execute();
+        $datetime = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $typeText = ATTR_TYPE::TEXT;
+        $nameText = ATTR_TYPE::TEXT;
+        $stmt->bindParam(':type', $typeText, PDO::PARAM_STR);
+        $stmt->bindParam(':name', $nameText, PDO::PARAM_STR);
+        $stmt->execute();
+        $text = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $this->assertIsArray($string);
         $this->assertIsArray($integer);
@@ -172,10 +182,13 @@ class ImportManagerAcceptanceTest extends TestCase
 
         // check entities created
 
-        $qb = Connection::get()->createQueryBuilder();
+        $pdo =  Connection::get();
+        $table = _ENTITY::table();
 
-        $entities = $qb->select('*')->from(_ENTITY::table())
-            ->executeQuery()->fetchAllAssociative();
+        $sql = "SELECT * FROM $table";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $entities = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $this->assertEquals(100, count($entities));
 
         // check values created

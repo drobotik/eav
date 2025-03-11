@@ -99,7 +99,7 @@ class EntityFactoryFunctionalTest extends TestCase
         $result = $this->factory->create([], $domainKey, $setKey);
         $this->assertInstanceOf(EntityFactoryResult::class, $result);
 
-        $conn = Connection::get()->getNativeConnection();
+        $conn = Connection::get();
         $sql = sprintf(
             "SELECT * FROM %s WHERE %s = :setKey AND %s = :domainKey",
             _ENTITY::table(),
@@ -205,40 +205,52 @@ class EntityFactoryFunctionalTest extends TestCase
         $result = $this->factory->create($config, $domainKey, $setKey);
 
         // check attributes created
-        $qb = Connection::get()->createQueryBuilder();
-        $q = $qb->select('*')->from(_ATTR::table())
-            ->where(sprintf('%s = :domain AND %s = :type AND %s = :name',
-                _ATTR::DOMAIN_ID, _ATTR::TYPE, _ATTR::NAME));
+        $sql = sprintf(
+            "SELECT * FROM %s WHERE %s = :domain AND %s = :type AND %s = :name",
+            _ATTR::table(),
+            _ATTR::DOMAIN_ID,
+            _ATTR::TYPE,
+            _ATTR::NAME
+        );
 
-        $string = $q->setParameters([
-                'domain' => $domainKey,
-                'type' => ATTR_TYPE::STRING,
-                'name' => ATTR_TYPE::STRING
-            ])->executeQuery()->fetchAssociative();
+        $stmt = Connection::get()->prepare($sql);
 
-        $integer = $q->setParameters([
-            'domain' => $domainKey,
-            'type' => ATTR_TYPE::INTEGER,
-            'name' => ATTR_TYPE::INTEGER
-        ])->executeQuery()->fetchAssociative();
+        $stmt->bindParam(':domain', $domainKey, PDO::PARAM_INT);
 
-        $decimal =  $q->setParameters([
-            'domain' => $domainKey,
-            'type' => ATTR_TYPE::DECIMAL,
-            'name' => ATTR_TYPE::DECIMAL
-        ])->executeQuery()->fetchAssociative();
+        // Fetch for string
+        $typeString = ATTR_TYPE::STRING;
+        $stmt->bindParam(':type', $typeString, PDO::PARAM_STR);
+        $stmt->bindParam(':name', $typeString, PDO::PARAM_STR);
+        $stmt->execute();
+        $string = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $datetime = $q->setParameters([
-            'domain' => $domainKey,
-            'type' => ATTR_TYPE::DATETIME,
-            'name' => ATTR_TYPE::DATETIME
-        ])->executeQuery()->fetchAssociative();
+        // Fetch for integer
+        $typeInteger = ATTR_TYPE::INTEGER;
+        $stmt->bindParam(':type', $typeInteger, PDO::PARAM_STR);
+        $stmt->bindParam(':name', $typeInteger, PDO::PARAM_STR);
+        $stmt->execute();
+        $integer = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $text = $q->setParameters([
-            'domain' => $domainKey,
-            'type' => ATTR_TYPE::TEXT,
-            'name' => ATTR_TYPE::TEXT
-        ])->executeQuery()->fetchAssociative();
+        // Fetch for decimal
+        $typeDecimal = ATTR_TYPE::DECIMAL;
+        $stmt->bindParam(':type', $typeDecimal, PDO::PARAM_STR);
+        $stmt->bindParam(':name', $typeDecimal, PDO::PARAM_STR);
+        $stmt->execute();
+        $decimal = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Fetch for datetime
+        $typeDatetime = ATTR_TYPE::DATETIME;
+        $stmt->bindParam(':type', $typeDatetime, PDO::PARAM_STR);
+        $stmt->bindParam(':name', $typeDatetime, PDO::PARAM_STR);
+        $stmt->execute();
+        $datetime = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Fetch for text
+        $typeText = ATTR_TYPE::TEXT;
+        $stmt->bindParam(':type', $typeText, PDO::PARAM_STR);
+        $stmt->bindParam(':name', $typeText, PDO::PARAM_STR);
+        $stmt->execute();
+        $text = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $this->assertIsArray($string);
         $this->assertIsArray($integer);
@@ -454,45 +466,57 @@ class EntityFactoryFunctionalTest extends TestCase
 
         $result = $this->factory->create($config, $domainKey, $setKey);
 
-        $qb = Connection::get()->createQueryBuilder();
-        $q = $qb->select('*')->from(_ATTR::table())
-            ->where(sprintf('%s = :domain AND %s = :type AND %s = :name',
-                _ATTR::DOMAIN_ID, _ATTR::TYPE, _ATTR::NAME));
+        $sql = sprintf(
+            "SELECT * FROM %s WHERE %s = :domain AND %s = :type AND %s = :name",
+            _ATTR::table(),
+            _ATTR::DOMAIN_ID,
+            _ATTR::TYPE,
+            _ATTR::NAME
+        );
 
+        $stmt = Connection::get()->prepare($sql);
+        $stmt->bindParam(':domain', $domainKey, PDO::PARAM_INT);
 
-        $string = $q->setParameters([
-            'domain' => $domainKey,
-            'type' => ATTR_TYPE::STRING,
-            'name' => ATTR_TYPE::STRING
-        ])->executeQuery()->fetchAssociative();
+        // Define the attribute types as variables
+        $stringType = ATTR_TYPE::STRING;
+        $integerType = ATTR_TYPE::INTEGER;
+        $decimalType = ATTR_TYPE::DECIMAL;
+        $datetimeType = ATTR_TYPE::DATETIME;
+        $textType = ATTR_TYPE::TEXT;
+
+        // Fetch for string
+        $stmt->bindParam(':type', $stringType, PDO::PARAM_STR);
+        $stmt->bindParam(':name', $stringType, PDO::PARAM_STR);
+        $stmt->execute();
+        $string = $stmt->fetch(PDO::FETCH_ASSOC);
         $stringKey = $string[_ATTR::ID];
 
-        $integer = $q->setParameters([
-            'domain' => $domainKey,
-            'type' => ATTR_TYPE::INTEGER,
-            'name' => ATTR_TYPE::INTEGER
-        ])->executeQuery()->fetchAssociative();
+        // Fetch for integer
+        $stmt->bindParam(':type', $integerType, PDO::PARAM_STR);
+        $stmt->bindParam(':name', $integerType, PDO::PARAM_STR);
+        $stmt->execute();
+        $integer = $stmt->fetch(PDO::FETCH_ASSOC);
         $integerKey = $integer[_ATTR::ID];
 
-        $decimal =  $q->setParameters([
-            'domain' => $domainKey,
-            'type' => ATTR_TYPE::DECIMAL,
-            'name' => ATTR_TYPE::DECIMAL
-        ])->executeQuery()->fetchAssociative();
+        // Fetch for decimal
+        $stmt->bindParam(':type', $decimalType, PDO::PARAM_STR);
+        $stmt->bindParam(':name', $decimalType, PDO::PARAM_STR);
+        $stmt->execute();
+        $decimal = $stmt->fetch(PDO::FETCH_ASSOC);
         $decimalKey = $decimal[_ATTR::ID];
 
-        $datetime = $q->setParameters([
-            'domain' => $domainKey,
-            'type' => ATTR_TYPE::DATETIME,
-            'name' => ATTR_TYPE::DATETIME
-        ])->executeQuery()->fetchAssociative();
+        // Fetch for datetime
+        $stmt->bindParam(':type', $datetimeType, PDO::PARAM_STR);
+        $stmt->bindParam(':name', $datetimeType, PDO::PARAM_STR);
+        $stmt->execute();
+        $datetime = $stmt->fetch(PDO::FETCH_ASSOC);
         $datetimeKey = $datetime[_ATTR::ID];
 
-        $text = $q->setParameters([
-            'domain' => $domainKey,
-            'type' => ATTR_TYPE::TEXT,
-            'name' => ATTR_TYPE::TEXT
-        ])->executeQuery()->fetchAssociative();
+        // Fetch for text
+        $stmt->bindParam(':type', $textType, PDO::PARAM_STR);
+        $stmt->bindParam(':name', $textType, PDO::PARAM_STR);
+        $stmt->execute();
+        $text = $stmt->fetch(PDO::FETCH_ASSOC);
         $textKey = $text[_ATTR::ID];
 
         $this->assertIsArray($string);

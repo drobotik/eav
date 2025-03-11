@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace Tests\Eav\Model;
 
 use Drobotik\Eav\Database\Connection;
-use Doctrine\DBAL\Connection as DBALConnection;
 use Drobotik\Eav\Enum\_DOMAIN;
 use Drobotik\Eav\Model\Model;
 use PDO;
@@ -36,7 +35,7 @@ class ModelFunctionalTest extends TestCase
      */
     public function db()
     {
-        $this->assertInstanceOf(DBALConnection::class, $this->model->db());
+        $this->assertInstanceOf(PDO::class, $this->model->db());
     }
 
     /**
@@ -86,7 +85,7 @@ class ModelFunctionalTest extends TestCase
 
         $this->assertEquals(1, $result);
 
-        $connection = Connection::get()->getNativeConnection();
+        $connection = Connection::get();
 
         $stmt = $connection->prepare("SELECT * FROM $table");
 
@@ -109,7 +108,7 @@ class ModelFunctionalTest extends TestCase
     public function update_record()
     {
         $table = _DOMAIN::table();
-        $connection = Connection::get()->getNativeConnection();
+        $connection = Connection::get();
 
         $nameColumn = _DOMAIN::NAME;
         $stmt = $connection->prepare("INSERT INTO $table ($nameColumn) VALUES ('Tom')");
@@ -151,7 +150,7 @@ class ModelFunctionalTest extends TestCase
     public function delete_record()
     {
         $table = _DOMAIN::table();
-        $connection = Connection::get()->getNativeConnection();
+        $connection = Connection::get();
 
         $nameColumn = _DOMAIN::NAME;
         $stmt = $connection->prepare("INSERT INTO $table ($nameColumn) VALUES ('Tom')");
@@ -186,7 +185,7 @@ class ModelFunctionalTest extends TestCase
     public function records_count()
     {
         $table = _DOMAIN::table();
-        $connection = Connection::get()->getNativeConnection();
+        $connection = Connection::get();
 
         $nameColumn = _DOMAIN::NAME;
         $stmt = $connection->prepare("INSERT INTO $table ($nameColumn) VALUES ('Tom')");
@@ -207,7 +206,7 @@ class ModelFunctionalTest extends TestCase
     public function find_by_key()
     {
         $table = _DOMAIN::table();
-        $connection = Connection::get()->getNativeConnection();
+        $connection = Connection::get();
 
         $idColumn = _DOMAIN::ID;
         $nameColumn = _DOMAIN::NAME;

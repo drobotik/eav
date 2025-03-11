@@ -17,6 +17,7 @@ use Drobotik\Eav\Import\Content\Value;
 use Drobotik\Eav\Import\Content\ValueSet;
 use Drobotik\Eav\Model\ValueBase;
 use Drobotik\Eav\Value\ValueParser;
+use PDO;
 use Tests\TestCase;
 
 class ValueModelFunctionalTest extends TestCase
@@ -59,15 +60,17 @@ class ValueModelFunctionalTest extends TestCase
         {
             $value = ATTR_TYPE::randomValue($case);
             $valueKey = $this->model->create($case, $domainKey, $entityKey, $attributeKey, $value);
-            $valueRecord = Connection::get()->createQueryBuilder()
-                ->select('*')
-                ->from(ATTR_TYPE::valueTable($case))
-                ->where(sprintf('%s = ? AND %s = ? AND %s = ?',
-                    _VALUE::DOMAIN_ID, _VALUE::ENTITY_ID, _VALUE::ATTRIBUTE_ID
-                ))
-                ->setParameters([$domainKey,$entityKey,$attributeKey])
-                ->executeQuery()
-                ->fetchAssociative();
+            $pdo = Connection::get();
+            $table = ATTR_TYPE::valueTable($case);
+
+            $sql = "SELECT * FROM `$table` WHERE " . _VALUE::DOMAIN_ID . " = ? 
+        AND " . _VALUE::ENTITY_ID . " = ? 
+        AND " . _VALUE::ATTRIBUTE_ID . " = ? LIMIT 1";
+
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$domainKey, $entityKey, $attributeKey]);
+
+            $valueRecord = $stmt->fetch(PDO::FETCH_ASSOC);
             $this->assertEquals($valueKey, $valueRecord[_VALUE::ID], "Iteration:".$case);
             $this->assertEquals($parser->parse($case, $value), $valueRecord[_VALUE::VALUE], "Iteration:".$case);
         }
@@ -234,8 +237,12 @@ class ValueModelFunctionalTest extends TestCase
         $repository = new ValueBase();
         $repository->bulkCreate($set, $domainKey);
 
-        $stringRecords = Connection::get()->createQueryBuilder()->select('*')->from(ATTR_TYPE::valueTable(ATTR_TYPE::STRING))
-            ->executeQuery()->fetchAllAssociative();
+        $pdo = Connection::get();
+        $table = ATTR_TYPE::valueTable(ATTR_TYPE::STRING);
+        $sql = "SELECT * FROM `$table`";
+        $stmt = $pdo->query($sql);
+        $stringRecords = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
         $this->assertEquals(2, count($stringRecords));
         $this->assertEquals($domainKey, $stringRecords[0][_VALUE::DOMAIN_ID]);
         $this->assertEquals($valueString1->getAttributeKey(), $stringRecords[0][_VALUE::ATTRIBUTE_ID]);
@@ -246,8 +253,10 @@ class ValueModelFunctionalTest extends TestCase
         $this->assertEquals($valueString2->getEntityKey(), $stringRecords[1][_VALUE::ENTITY_ID]);
         $this->assertEquals($valueString2->getValue(), $stringRecords[1][_VALUE::VALUE]);
 
-        $integerRecords = Connection::get()->createQueryBuilder()->select('*')->from(ATTR_TYPE::valueTable(ATTR_TYPE::INTEGER))
-            ->executeQuery()->fetchAllAssociative();
+        $table = ATTR_TYPE::valueTable(ATTR_TYPE::INTEGER);
+        $sql = "SELECT * FROM `$table`";
+        $stmt = $pdo->query($sql);
+        $integerRecords = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         $this->assertEquals(2, count($integerRecords));
         $this->assertEquals($domainKey, $integerRecords[0][_VALUE::DOMAIN_ID]);
@@ -259,8 +268,11 @@ class ValueModelFunctionalTest extends TestCase
         $this->assertEquals($valueInteger2->getEntityKey(), $integerRecords[1][_VALUE::ENTITY_ID]);
         $this->assertEquals($valueInteger2->getValue(), $integerRecords[1][_VALUE::VALUE]);
 
-        $decimalRecords = Connection::get()->createQueryBuilder()->select('*')->from(ATTR_TYPE::valueTable(ATTR_TYPE::DECIMAL))
-            ->executeQuery()->fetchAllAssociative();
+        $table = ATTR_TYPE::valueTable(ATTR_TYPE::DECIMAL);
+        $sql = "SELECT * FROM `$table`";
+        $stmt = $pdo->query($sql);
+        $decimalRecords = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
         $this->assertEquals(2, count($decimalRecords));
         $this->assertEquals($domainKey, $decimalRecords[0][_VALUE::DOMAIN_ID]);
         $this->assertEquals($valueDecimal1->getAttributeKey(), $decimalRecords[0][_VALUE::ATTRIBUTE_ID]);
@@ -271,8 +283,11 @@ class ValueModelFunctionalTest extends TestCase
         $this->assertEquals($valueDecimal2->getEntityKey(), $decimalRecords[1][_VALUE::ENTITY_ID]);
         $this->assertEquals($valueDecimal2->getValue(), $decimalRecords[1][_VALUE::VALUE]);
 
-        $datetimeRecords =  Connection::get()->createQueryBuilder()->select('*')->from(ATTR_TYPE::valueTable(ATTR_TYPE::DATETIME))
-            ->executeQuery()->fetchAllAssociative();
+        $table = ATTR_TYPE::valueTable(ATTR_TYPE::DATETIME);
+        $sql = "SELECT * FROM `$table`";
+        $stmt = $pdo->query($sql);
+        $datetimeRecords = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
         $this->assertEquals(2, count($datetimeRecords));
         $this->assertEquals($domainKey, $datetimeRecords[0][_VALUE::DOMAIN_ID]);
         $this->assertEquals($valueDatetime1->getAttributeKey(), $datetimeRecords[0][_VALUE::ATTRIBUTE_ID]);
@@ -283,8 +298,11 @@ class ValueModelFunctionalTest extends TestCase
         $this->assertEquals($valueDatetime2->getEntityKey(), $datetimeRecords[1][_VALUE::ENTITY_ID]);
         $this->assertEquals($valueDatetime2->getValue(), $datetimeRecords[1][_VALUE::VALUE]);
 
-        $textRecords =  Connection::get()->createQueryBuilder()->select('*')->from(ATTR_TYPE::valueTable(ATTR_TYPE::TEXT))
-            ->executeQuery()->fetchAllAssociative();
+        $table = ATTR_TYPE::valueTable(ATTR_TYPE::TEXT);
+        $sql = "SELECT * FROM `$table`";
+        $stmt = $pdo->query($sql);
+        $textRecords = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
         $this->assertEquals(2, count($textRecords));
         $this->assertEquals($domainKey, $textRecords[0][_VALUE::DOMAIN_ID]);
         $this->assertEquals($valueText1->getAttributeKey(), $textRecords[0][_VALUE::ATTRIBUTE_ID]);

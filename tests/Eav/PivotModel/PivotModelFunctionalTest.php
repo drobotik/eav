@@ -49,7 +49,7 @@ class PivotModelFunctionalTest extends TestCase
         $this->assertEquals(1, $key);
 
         $table = _PIVOT::table();
-        $connection = Connection::get()->getNativeConnection();
+        $connection = Connection::get();
 
         $stmt = $connection->prepare("SELECT * FROM $table");
         $stmt->execute();

@@ -16,20 +16,23 @@ use PDO;
 
 class Connection
 {
-    protected static DBALConnection|null $conn = null;
+    protected static ?PDO $conn = null;
 
     public static function reset() : void
     {
         self::$conn = null;
     }
 
-    public static function get(array $params = null) : DBALConnection
+    /**
+     * @throws ConnectionException
+     */
+    public static function get(?PDO $pdo = null) : PDO
     {
-        if(!is_null($params)) {
-            self::$conn = DriverManager::getConnection($params);
+        if(self::$conn instanceof PDO) {
             return self::$conn;
         }
-        if(!is_null(self::$conn)) {
+        if($pdo instanceof PDO) {
+            self::$conn = $pdo;
             return self::$conn;
         }
         ConnectionException::undefined();
@@ -37,7 +40,7 @@ class Connection
 
     public static function getNativeConnection() : PDO
     {
-        return Connection::$conn->getNativeConnection();
+        return self::$conn;
     }
 
 }

@@ -22,6 +22,7 @@ use Drobotik\Eav\Model\ValueBase;
 use Drobotik\Eav\Result\Result;
 use Drobotik\Eav\Value\ValueAction;
 use Drobotik\Eav\Value\ValueManager;
+use PDO;
 use Tests\TestCase;
 
 
@@ -96,9 +97,13 @@ class ValueActionFunctionalTest extends TestCase
 
         $result = $this->action->create();
 
-        $test = Connection::get()->createQueryBuilder()
-            ->select('*')->from(ATTR_TYPE::valueTable(ATTR_TYPE::STRING))
-            ->executeQuery()->fetchAssociative();
+        $table = ATTR_TYPE::valueTable(ATTR_TYPE::STRING);
+
+        $sql = "SELECT * FROM `$table` LIMIT 1";
+        $stmt = Connection::get()->prepare($sql);
+        $stmt->execute();
+        $test = $stmt->fetch(PDO::FETCH_ASSOC);
+
         $this->assertFalse($test);
 
         $this->assertInstanceOf(Result::class, $result);
@@ -116,8 +121,14 @@ class ValueActionFunctionalTest extends TestCase
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
         $groupKey = $this->eavFactory->createGroup($setKey);
         $attrKey = $this->eavFactory->createAttribute($domainKey);
-        $attrRecord = Connection::get()->createQueryBuilder()->select('*')
-            ->from(_ATTR::table())->executeQuery()->fetchAssociative();
+
+        $pdo = Connection::get();
+        $table = _ATTR::table();
+        $sql = "SELECT * FROM `$table` LIMIT 1";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $attrRecord = $stmt->fetch(PDO::FETCH_ASSOC);
+
         $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $attrKey);
 
         $valueModel = new ValueBase();

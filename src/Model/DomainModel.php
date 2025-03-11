@@ -25,13 +25,14 @@ class DomainModel extends Model
     public function create(array $data) : int
     {
         $conn = $this->db();
-        $conn->createQueryBuilder()
-            ->insert(_DOMAIN::table())
-            ->values([
-                _DOMAIN::NAME => '?'
-            ])
-            ->setParameter(0, $data[_DOMAIN::NAME])
-            ->executeQuery();
+        $sql = sprintf(
+            "INSERT INTO %s (%s) VALUES (:name)",
+            _DOMAIN::table(),
+            _DOMAIN::NAME
+        );
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':name', $data[_DOMAIN::NAME]);
+        $stmt->execute();
         return (int) $conn->lastInsertId();
     }
 

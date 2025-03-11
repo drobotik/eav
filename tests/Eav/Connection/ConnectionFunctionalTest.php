@@ -42,13 +42,17 @@ class ConnectionFunctionalTest extends TestCase
      */
     public function manual_connection()
     {
-        $config = [
-            'driver' => 'pdo_sqlite',
-            'path' => dirname(__DIR__) . '/tests/test.sqlite'
+        $dbParams = [
+            'dsn'      => 'mysql:host=eav_db;port=3306;dbname=eav;charset=utf8mb4',
+            'user'     => 'root',
+            'password' => 'root',
         ];
-        $connection = Connection::get($config);
-        $this->assertEquals($config, $connection->getParams());
-        $this->assertSame(Connection::get(), $connection);
+        $pdo = new \PDO($dbParams['dsn'], $dbParams['user'], $dbParams['password']);
+        Connection::get($pdo);
+        // Retrieve the PDO instance from the Connection
+        $connectionPdo = Connection::get();
+        // Assert that the provided PDO instance is the same as the one returned by Connection::get()
+        $this->assertSame($pdo, $connectionPdo, 'The PDO instances are not the same.');
     }
     /**
      * @test
@@ -60,11 +64,13 @@ class ConnectionFunctionalTest extends TestCase
      */
     public function reset()
     {
-        $config = [
-            'driver' => 'pdo_sqlite',
-            'path' => dirname(__DIR__, 2) . '/test.sqlite'
+        $dbParams = [
+            'dsn'      => 'mysql:host=eav_db;port=3306;dbname=eav;charset=utf8mb4',
+            'user'     => 'root',
+            'password' => 'root',
         ];
-        Connection::get($config);
+        $pdo = new \PDO($dbParams['dsn'], $dbParams['user'], $dbParams['password']);
+        Connection::get($pdo);
         Connection::reset();
         $this->expectException(ConnectionException::class);
         $this->expectExceptionMessage(ConnectionException::UNDEFINED);
