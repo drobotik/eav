@@ -204,17 +204,17 @@ class ImportContentWorkerBehaviorTest extends TestCase
             ->onlyMethods(['find', 'update', 'destroy'])->getMock();
         $valueModel->expects($this->exactly(2))->method('find')
             ->withConsecutive(
-                [ATTR_TYPE::valueTable(ATTR_TYPE::getCase($attribute1type)), $domainKey, $entity1Key, $attribute1key],
-                [ATTR_TYPE::valueTable(ATTR_TYPE::getCase($attribute2type)), $domainKey, $entity2Key, $attribute2key],
+                [$attribute1type, $domainKey, $entity1Key, $attribute1key],
+                [$attribute2type, $domainKey, $entity2Key, $attribute2key],
             )
             ->willReturn([], []);
         $valueModel->expects($this->exactly(2))->method('update')
             ->withConsecutive(
-                [ATTR_TYPE::valueTable(ATTR_TYPE::getCase($attribute1type)), $domainKey, $entity1Key, $attribute1key, $updatedContent1],
-                [ATTR_TYPE::valueTable(ATTR_TYPE::getCase($attribute2type)), $domainKey, $entity2Key, $attribute2key, $updatedContent2]
+                [$attribute1type, $domainKey, $entity1Key, $attribute1key, $updatedContent1],
+                [$attribute2type, $domainKey, $entity2Key, $attribute2key, $updatedContent2]
             );
         $valueModel->expects($this->once())->method('destroy')
-            ->with(ATTR_TYPE::valueTable(ATTR_TYPE::getCase($attribute3type)), $domainKey, $entity1Key, $attribute3key);
+            ->with($attribute3type, $domainKey, $entity1Key, $attribute3key);
 
         $valueParser = $this->getMockBuilder(ValueParser::class)
             ->onlyMethods(['parse'])->getMock();
@@ -222,8 +222,8 @@ class ImportContentWorkerBehaviorTest extends TestCase
         $valueParser->expects($this->exactly(2))
             ->method('parse')
             ->withConsecutive(
-                [ATTR_TYPE::getCase($attribute1type), $content1],
-                [ATTR_TYPE::getCase($attribute2type), $content2],
+                [$attribute1type, $content1],
+                [$attribute2type, $content2],
             )->willReturn($updatedContent1, $updatedContent2);
 
         $worker = $this->getMockBuilder(Worker::class)
@@ -268,7 +268,7 @@ class ImportContentWorkerBehaviorTest extends TestCase
 
         $valueModel->expects($this->once())
             ->method('create')
-            ->with(ATTR_TYPE::valueTable(ATTR_TYPE::INTEGER), 1, 4, 3, 123);
+            ->with(ATTR_TYPE::INTEGER, 1, 4, 3, 123);
 
         $worker = $this->getMockBuilder(Worker::class)
             ->onlyMethods(['getContainer','getValueSet','makeValueModel'])->getMock();

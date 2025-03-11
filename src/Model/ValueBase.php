@@ -25,8 +25,10 @@ class ValueBase extends Model
         $this->setPrimaryKey(_VALUE::ID);
     }
 
-    public function find(string $table, int $domainKey, int $entityKey, int $attributeKey) : bool|array
+    public function find(string $type, int $domainKey, int $entityKey, int $attributeKey) : bool|array
     {
+        $table = ATTR_TYPE::valueTable($type);
+
         return $this->db()
             ->createQueryBuilder()
             ->select('*')
@@ -43,8 +45,10 @@ class ValueBase extends Model
             ->fetchAssociative();
     }
 
-    public function create(string $table, int $domainKey, int $entityKey, int $attributeKey, $value) : int
+    public function create(string $type, int $domainKey, int $entityKey, int $attributeKey, $value) : int
     {
+        $table = ATTR_TYPE::valueTable($type);
+
         $conn = $this->db();
 
         $conn->createQueryBuilder()
@@ -58,32 +62,35 @@ class ValueBase extends Model
             ->setParameter(0, $domainKey)
             ->setParameter(1, $entityKey)
             ->setParameter(2, $attributeKey)
-            ->setParameter(3, $value)
+            ->setParameter(3, $this->makeValueParser()->parse($type, $value))
             ->executeQuery();
         return (int) $conn->lastInsertId();
     }
 
-    public function update(string $table, int $domainKey, int $entityKey, int $attributeKey, $value) : int
+    public function update(string $type, int $domainKey, int $entityKey, int $attributeKey, $value) : int
     {
+        $table = ATTR_TYPE::valueTable($type);
         $conn = $this->db();
         return $conn->createQueryBuilder()
             ->update($table)
+            ->set(_VALUE::VALUE, ':val') // Set the value for the `VALUE` column
             ->where(sprintf('%s = :domain AND %s = :entity AND %s = :attr',
                 _VALUE::DOMAIN_ID, _VALUE::ENTITY_ID, _VALUE::ATTRIBUTE_ID
             ))
-            ->set(_VALUE::VALUE, ':value')
             ->setParameters([
                 "domain" => $domainKey,
                 "entity" => $entityKey,
                 "attr" => $attributeKey,
-                "value" => $value
+                "val" => $this->makeValueParser()->parse($type, $value)
             ])
             ->executeQuery()
             ->rowCount();
     }
 
-    public function destroy(string $table, int $domainKey, int $entityKey, int $attributeKey) : int
+    public function destroy(string $type, int $domainKey, int $entityKey, int $attributeKey) : int
     {
+        $table = ATTR_TYPE::valueTable($type);
+
         return $this->db()
             ->createQueryBuilder()
             ->delete($table)

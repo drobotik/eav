@@ -39,7 +39,7 @@ class ValueAction
         $value = $parser->parse($type, $valueManager->getRuntime());
 
         $valueKey = $valueModel->create(
-            ATTR_TYPE::valueTable($type),
+            $type,
             $entity->getDomainKey(),
             $entity->getKey(),
             $attribute->getKey(),
@@ -73,7 +73,7 @@ class ValueAction
         $domainKey = $entity->getDomainKey();
 
         $record = $valueModel->find(
-            ATTR_TYPE::valueTable($type),
+            $type,
             $domainKey,
             $entityKey,
             $attributeKey
@@ -112,7 +112,7 @@ class ValueAction
         $value = $valueParser->parse($type, $valueManager->getRuntime());
 
         $valueModel->update(
-            ATTR_TYPE::valueTable($type),
+            $type,
             $domainKey,
             $entityKey,
             $attributeKey,
@@ -143,7 +143,7 @@ class ValueAction
         $entityKey = $entity->getKey();
         $attributeKey = $attribute->getKey();
 
-        $deleted = $valueModel->destroy(ATTR_TYPE::valueTable($type), $domainKey, $entityKey, $attributeKey);
+        $deleted = $valueModel->destroy($type, $domainKey, $entityKey, $attributeKey);
 
         if ($deleted === 0) {
             return $result->notDeleted();

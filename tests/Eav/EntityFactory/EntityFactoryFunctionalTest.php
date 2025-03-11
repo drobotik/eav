@@ -571,7 +571,7 @@ class EntityFactoryFunctionalTest extends TestCase
         // check values created
         $stringKey = $attributes[ATTR_TYPE::STRING][_ATTR::ID];
         $string = $valueModel->find(
-            ATTR_TYPE::valueTable(ATTR_TYPE::STRING),
+            ATTR_TYPE::STRING,
             $domainKey,
             $entityKey,
             $stringKey
@@ -580,7 +580,7 @@ class EntityFactoryFunctionalTest extends TestCase
 
         $integerKey = $attributes[ATTR_TYPE::INTEGER][_ATTR::ID];
         $integer = $valueModel->find(
-            ATTR_TYPE::valueTable(ATTR_TYPE::INTEGER),
+            ATTR_TYPE::INTEGER,
             $domainKey,
             $entityKey,
             $integerKey
@@ -588,7 +588,7 @@ class EntityFactoryFunctionalTest extends TestCase
 
         $decimalKey = $attributes[ATTR_TYPE::DECIMAL][_ATTR::ID];
         $decimal = $valueModel->find(
-            ATTR_TYPE::valueTable(ATTR_TYPE::DECIMAL),
+            ATTR_TYPE::DECIMAL,
             $domainKey,
             $entityKey,
             $decimalKey
@@ -596,7 +596,7 @@ class EntityFactoryFunctionalTest extends TestCase
 
         $datetimeKey = $attributes[ATTR_TYPE::DATETIME][_ATTR::ID];
         $datetime = $valueModel->find(
-            ATTR_TYPE::valueTable(ATTR_TYPE::DATETIME),
+            ATTR_TYPE::DATETIME,
             $domainKey,
             $entityKey,
             $datetimeKey
@@ -604,7 +604,7 @@ class EntityFactoryFunctionalTest extends TestCase
 
         $textKey = $attributes[ATTR_TYPE::TEXT][_ATTR::ID];
         $text = $valueModel->find(
-            ATTR_TYPE::valueTable(ATTR_TYPE::TEXT),
+            ATTR_TYPE::TEXT,
             $domainKey,
             $entityKey,
             $textKey
@@ -658,31 +658,31 @@ class EntityFactoryFunctionalTest extends TestCase
         $valueModel = $this->makeValueModel();
         // check values created
         $string = $valueModel->find(
-            ATTR_TYPE::valueTable(ATTR_TYPE::STRING),
+            ATTR_TYPE::STRING,
             $domainKey,
             $entityKey,
             $attributes[ATTR_TYPE::STRING][_ATTR::ID]
         );
         $integer = $valueModel->find(
-            ATTR_TYPE::valueTable(ATTR_TYPE::INTEGER),
+            ATTR_TYPE::INTEGER,
             $domainKey,
             $entityKey,
             $attributes[ATTR_TYPE::INTEGER][_ATTR::ID]
         );
         $decimal = $valueModel->find(
-            ATTR_TYPE::valueTable(ATTR_TYPE::DECIMAL),
+            ATTR_TYPE::DECIMAL,
             $domainKey,
             $entityKey,
             $attributes[ATTR_TYPE::DECIMAL][_ATTR::ID]
         );
         $datetime = $valueModel->find(
-            ATTR_TYPE::valueTable(ATTR_TYPE::DATETIME),
+            ATTR_TYPE::DATETIME,
             $domainKey,
             $entityKey,
             $attributes[ATTR_TYPE::DATETIME][_ATTR::ID]
         );
         $text = $valueModel->find(
-            ATTR_TYPE::valueTable(ATTR_TYPE::TEXT),
+            ATTR_TYPE::TEXT,
             $domainKey,
             $entityKey,
             $attributes[ATTR_TYPE::TEXT][_ATTR::ID]
@@ -811,7 +811,7 @@ class EntityFactoryFunctionalTest extends TestCase
             ->onlyMethods(['find', 'update'])->getMock();
         $valueModel->method('find')->willReturn($record);
         $valueModel->expects($this->once())->method('update')
-            ->with(ATTR_TYPE::valueTable($attrType), $domainKey, $entityKey, $attrKey, $parsedValue);
+            ->with($attrType, $domainKey, $entityKey, $attrKey, $parsedValue);
 
         $entityFactory = $this->getMockBuilder(EntityFactory::class)
             ->onlyMethods(['makeValueModel', 'makeValueParser', 'getResult'])->getMock();

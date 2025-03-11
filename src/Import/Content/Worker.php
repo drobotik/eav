@@ -163,19 +163,18 @@ class Worker
             $entityKey = $attributeValue->getEntityKey();
             $attributeKey = $attributeValue->getAttributeKey();
             $attributeType = $attributeValue->getType();
-            $valueTable = ATTR_TYPE::valueTable($attributeType);
             if($value == '')
-                $valueModel->destroy($valueTable, $domainKey, $entityKey, $attributeKey);
+                $valueModel->destroy($attributeType, $domainKey, $entityKey, $attributeKey);
             else
             {
                 $value = $valueParser->parse($attributeType, $value);
-                $record = $valueModel->find($valueTable, $domainKey, $entityKey, $attributeKey);
+                $record = $valueModel->find($attributeType, $domainKey, $entityKey, $attributeKey);
                 if($record === false)
                 {
-                    $valueModel->create($valueTable, $domainKey, $entityKey, $attributeKey, $value);
+                    $valueModel->create($attributeType, $domainKey, $entityKey, $attributeKey, $value);
                 } else
                 {
-                    $valueModel->update($valueTable, $domainKey, $entityKey, $attributeKey, $value);
+                    $valueModel->update($attributeType, $domainKey, $entityKey, $attributeKey, $value);
                 }
             }
         }

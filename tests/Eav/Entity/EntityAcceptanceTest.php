@@ -65,7 +65,7 @@ class EntityAcceptanceTest extends TestCase
                 "string" => $this->faker->word,
                 "integer" => $this->faker->randomNumber(),
                 "decimal" => $this->faker->randomFloat(ATTR_TYPE::migrateOptions(ATTR_TYPE::DECIMAL)['scale']),
-                "datetime" => Carbon::now()->format('Y-m-d H:i:s'),
+                "datetime" => ATTR_TYPE::randomValue(ATTR_TYPE::DATETIME),
                 "text" => $this->faker->text
             ];
             $entity = new Entity();
@@ -76,17 +76,19 @@ class EntityAcceptanceTest extends TestCase
 
             $entityKey = $entity->getKey();
 
-            $stringValue = $valueModel->find(ATTR_TYPE::valueTable(ATTR_TYPE::STRING), $domainKey, $entityKey, $stringAttributeKey);
-            $integerValue = $valueModel->find(ATTR_TYPE::valueTable(ATTR_TYPE::INTEGER), $domainKey, $entityKey, $integerAttributeKey);
-            $decimalValue = $valueModel->find(ATTR_TYPE::valueTable(ATTR_TYPE::DECIMAL), $domainKey, $entityKey, $decimalAttributeKey);
-            $datetimeValue = $valueModel->find(ATTR_TYPE::valueTable(ATTR_TYPE::DATETIME), $domainKey, $entityKey, $datetimeAttributeKey);
-            $textValue = $valueModel->find(ATTR_TYPE::valueTable(ATTR_TYPE::TEXT), $domainKey, $entityKey, $textAttributeKey);
+            $stringValue = $valueModel->find(ATTR_TYPE::STRING, $domainKey, $entityKey, $stringAttributeKey);
+            $integerValue = $valueModel->find(ATTR_TYPE::INTEGER, $domainKey, $entityKey, $integerAttributeKey);
+            $decimalValue = $valueModel->find(ATTR_TYPE::DECIMAL, $domainKey, $entityKey, $decimalAttributeKey);
+            $datetimeValue = $valueModel->find(ATTR_TYPE::DATETIME, $domainKey, $entityKey, $datetimeAttributeKey);
+            $textValue = $valueModel->find(ATTR_TYPE::TEXT, $domainKey, $entityKey, $textAttributeKey);
 
             $this->assertIsArray($stringValue, $message);
             $this->assertIsArray($integerValue, $message);
             $this->assertIsArray($decimalValue, $message);
             $this->assertIsArray($datetimeValue, $message);
             $this->assertIsArray($textValue, $message);
+
+            $data["datetime"] = $this->makeValueParser()->parse(ATTR_TYPE::DATETIME, $data["datetime"]);
 
             $this->assertEquals($data["string"], $stringValue[_VALUE::VALUE], $message);
             $this->assertEquals($data["integer"], $integerValue[_VALUE::VALUE], $message);
@@ -191,23 +193,23 @@ class EntityAcceptanceTest extends TestCase
         $datetimeAttrKey = $attributes[ATTR_TYPE::DATETIME][_ATTR::ID];
         $textAttrKey = $attributes[ATTR_TYPE::TEXT][_ATTR::ID];
         // check string
-        $stringRecord = $valueModel->find(ATTR_TYPE::valueTable(ATTR_TYPE::STRING), $domainKey, $entityKey, $stringAttrKey);
+        $stringRecord = $valueModel->find(ATTR_TYPE::STRING, $domainKey, $entityKey, $stringAttrKey);
         $this->assertEquals($stringValue, $stringRecord[_VALUE::VALUE]);
         $this->assertEquals($stringValue, $attrSet->getContainer(ATTR_TYPE::STRING)->getValueManager()->getStored());
         // check integer
-        $integerRecord = $valueModel->find(ATTR_TYPE::valueTable(ATTR_TYPE::INTEGER), $domainKey, $entityKey, $integerAttrKey);
+        $integerRecord = $valueModel->find(ATTR_TYPE::INTEGER, $domainKey, $entityKey, $integerAttrKey);
         $this->assertEquals($integerValue, $integerRecord[_VALUE::VALUE]);
         $this->assertEquals($integerValue, $attrSet->getContainer(ATTR_TYPE::INTEGER)->getValueManager()->getStored());
         // check decimal
-        $decimalRecord = $valueModel->find(ATTR_TYPE::valueTable(ATTR_TYPE::DECIMAL), $domainKey, $entityKey, $decimalAttrKey);
+        $decimalRecord = $valueModel->find(ATTR_TYPE::DECIMAL, $domainKey, $entityKey, $decimalAttrKey);
         $this->assertEquals($decimalValue, $decimalRecord[_VALUE::VALUE]);
         $this->assertEquals($decimalValue, $attrSet->getContainer(ATTR_TYPE::DECIMAL)->getValueManager()->getStored());
         // check datetime
-        $datetimeRecord = $valueModel->find(ATTR_TYPE::valueTable(ATTR_TYPE::DATETIME), $domainKey, $entityKey, $datetimeAttrKey);
+        $datetimeRecord = $valueModel->find(ATTR_TYPE::DATETIME, $domainKey, $entityKey, $datetimeAttrKey);
         $this->assertEquals($datetimeValue, $datetimeRecord[_VALUE::VALUE]);
         $this->assertEquals($datetimeValue, $attrSet->getContainer(ATTR_TYPE::DATETIME)->getValueManager()->getStored());
         // check text
-        $textRecord = $valueModel->find(ATTR_TYPE::valueTable(ATTR_TYPE::TEXT), $domainKey, $entityKey, $textAttrKey);
+        $textRecord = $valueModel->find(ATTR_TYPE::TEXT, $domainKey, $entityKey, $textAttrKey);
         $this->assertEquals($textValue, $textRecord[_VALUE::VALUE]);
         $this->assertEquals($textValue, $attrSet->getContainer(ATTR_TYPE::TEXT)->getValueManager()->getStored());
     }
@@ -283,11 +285,11 @@ class EntityAcceptanceTest extends TestCase
 
         $entityModel = new EntityModel();
         $this->assertEquals(false, $entityModel->findByKey($entityKey));
-        $this->assertFalse($valueModel->find(ATTR_TYPE::valueTable(ATTR_TYPE::STRING), $domainKey, $entityKey, $attributes[ATTR_TYPE::STRING][_ATTR::ID]));
-        $this->assertFalse($valueModel->find(ATTR_TYPE::valueTable(ATTR_TYPE::INTEGER), $domainKey, $entityKey, $attributes[ATTR_TYPE::INTEGER][_ATTR::ID]));
-        $this->assertFalse($valueModel->find(ATTR_TYPE::valueTable(ATTR_TYPE::DECIMAL), $domainKey, $entityKey, $attributes[ATTR_TYPE::DECIMAL][_ATTR::ID]));
-        $this->assertFalse($valueModel->find(ATTR_TYPE::valueTable(ATTR_TYPE::DATETIME), $domainKey, $entityKey, $attributes[ATTR_TYPE::DATETIME][_ATTR::ID]));
-        $this->assertFalse($valueModel->find(ATTR_TYPE::valueTable(ATTR_TYPE::TEXT), $domainKey, $entityKey, $attributes[ATTR_TYPE::TEXT][_ATTR::ID]));
+        $this->assertFalse($valueModel->find(ATTR_TYPE::STRING, $domainKey, $entityKey, $attributes[ATTR_TYPE::STRING][_ATTR::ID]));
+        $this->assertFalse($valueModel->find(ATTR_TYPE::INTEGER, $domainKey, $entityKey, $attributes[ATTR_TYPE::INTEGER][_ATTR::ID]));
+        $this->assertFalse($valueModel->find(ATTR_TYPE::DECIMAL, $domainKey, $entityKey, $attributes[ATTR_TYPE::DECIMAL][_ATTR::ID]));
+        $this->assertFalse($valueModel->find(ATTR_TYPE::DATETIME, $domainKey, $entityKey, $attributes[ATTR_TYPE::DATETIME][_ATTR::ID]));
+        $this->assertFalse($valueModel->find(ATTR_TYPE::TEXT, $domainKey, $entityKey, $attributes[ATTR_TYPE::TEXT][_ATTR::ID]));
 
         $this->assertFalse($entity->hasKey());
         $this->assertEquals(0, $entity->getKey());
@@ -371,11 +373,11 @@ class EntityAcceptanceTest extends TestCase
         $valueModel = $this->makeValueModel();
         $model = new EntityModel();
         $this->assertEquals(false, $model->findByKey($entityKey));
-        $this->assertFalse($valueModel->find(ATTR_TYPE::valueTable(ATTR_TYPE::STRING), $domainKey, $entityKey, $attributes[ATTR_TYPE::STRING][_ATTR::ID]));
-        $this->assertFalse($valueModel->find(ATTR_TYPE::valueTable(ATTR_TYPE::INTEGER), $domainKey, $entityKey, $attributes[ATTR_TYPE::INTEGER][_ATTR::ID]));
-        $this->assertFalse($valueModel->find(ATTR_TYPE::valueTable(ATTR_TYPE::DECIMAL), $domainKey, $entityKey, $attributes[ATTR_TYPE::DECIMAL][_ATTR::ID]));
-        $this->assertFalse($valueModel->find(ATTR_TYPE::valueTable(ATTR_TYPE::DATETIME), $domainKey, $entityKey, $attributes[ATTR_TYPE::DATETIME][_ATTR::ID]));
-        $this->assertFalse($valueModel->find(ATTR_TYPE::valueTable(ATTR_TYPE::TEXT), $domainKey, $entityKey, $attributes[ATTR_TYPE::TEXT][_ATTR::ID]));
+        $this->assertFalse($valueModel->find(ATTR_TYPE::STRING, $domainKey, $entityKey, $attributes[ATTR_TYPE::STRING][_ATTR::ID]));
+        $this->assertFalse($valueModel->find(ATTR_TYPE::INTEGER, $domainKey, $entityKey, $attributes[ATTR_TYPE::INTEGER][_ATTR::ID]));
+        $this->assertFalse($valueModel->find(ATTR_TYPE::DECIMAL, $domainKey, $entityKey, $attributes[ATTR_TYPE::DECIMAL][_ATTR::ID]));
+        $this->assertFalse($valueModel->find(ATTR_TYPE::DATETIME, $domainKey, $entityKey, $attributes[ATTR_TYPE::DATETIME][_ATTR::ID]));
+        $this->assertFalse($valueModel->find(ATTR_TYPE::TEXT, $domainKey, $entityKey, $attributes[ATTR_TYPE::TEXT][_ATTR::ID]));
 
         $this->assertFalse($entity->hasKey());
         $this->assertEquals(0, $entity->getKey());

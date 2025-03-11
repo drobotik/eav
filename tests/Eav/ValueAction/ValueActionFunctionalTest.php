@@ -61,7 +61,7 @@ class ValueActionFunctionalTest extends TestCase
         $result = $this->action->create();
         $valueModel = $this->makeValueModel();
         $valueRecord = $valueModel->find(
-            ATTR_TYPE::valueTable(ATTR_TYPE::STRING),
+            ATTR_TYPE::STRING,
             $domainKey,
             $entityKey,
             $attrKey
@@ -121,7 +121,7 @@ class ValueActionFunctionalTest extends TestCase
         $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $attrKey);
 
         $valueModel = new ValueBase();
-        $valueKey = $valueModel->create(ATTR_TYPE::valueTable(ATTR_TYPE::STRING), $domainKey, $entityKey, $attrKey,"test");
+        $valueKey = $valueModel->create(ATTR_TYPE::STRING, $domainKey, $entityKey, $attrKey,"test");
 
         $entity = new Entity();
         $entity->setKey($entityKey);
@@ -212,7 +212,7 @@ class ValueActionFunctionalTest extends TestCase
         $attrSetKey = 4;
 
         $valueModel = $this->makeValueModel();
-        $valueKey = $valueModel->create(ATTR_TYPE::valueTable(ATTR_TYPE::STRING), $domainKey, $entityKey, $attrKey, 'old');
+        $valueKey = $valueModel->create(ATTR_TYPE::STRING, $domainKey, $entityKey, $attrKey, 'old');
 
         $valueManager = new ValueManager();
         $valueManager->setKey($valueKey);
@@ -238,7 +238,7 @@ class ValueActionFunctionalTest extends TestCase
         $this->action->setAttributeContainer($container);
         $result = $this->action->update();
 
-        $record = $valueModel->find(ATTR_TYPE::valueTable(ATTR_TYPE::STRING), $domainKey, $entityKey, $attrKey);
+        $record = $valueModel->find(ATTR_TYPE::STRING, $domainKey, $entityKey, $attrKey);
         $this->assertIsArray($record);
         $this->assertEquals($valueToSave, $record[_VALUE::VALUE]);
 
@@ -287,7 +287,7 @@ class ValueActionFunctionalTest extends TestCase
         $entityKey = 2;
         $attrKey = 2;
         $valueModel = $this->makeValueModel();
-        $valueKey = $valueModel->create(ATTR_TYPE::valueTable(ATTR_TYPE::STRING), $domainKey, $entityKey, $attrKey, 'test');
+        $valueKey = $valueModel->create(ATTR_TYPE::STRING, $domainKey, $entityKey, $attrKey, 'test');
 
         $value = new ValueManager();
         $value->setKey($valueKey);
@@ -313,7 +313,7 @@ class ValueActionFunctionalTest extends TestCase
 
         $result = $this->action->delete();
 
-        $record = $valueModel->find(ATTR_TYPE::valueTable(ATTR_TYPE::STRING), $domainKey, $entityKey, $attrKey);
+        $record = $valueModel->find(ATTR_TYPE::STRING, $domainKey, $entityKey, $attrKey);
         $this->assertFalse($record);
 
         $this->assertNull($value->getRuntime());

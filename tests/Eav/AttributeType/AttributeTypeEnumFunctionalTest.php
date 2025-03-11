@@ -136,7 +136,7 @@ class AttributeTypeEnumFunctionalTest extends TestCase
         $this->assertTrue(is_string(ATTR_TYPE::randomValue(ATTR_TYPE::STRING)));
         $this->assertTrue(is_int(ATTR_TYPE::randomValue(ATTR_TYPE::INTEGER)));
         $this->assertTrue(is_float(ATTR_TYPE::randomValue(ATTR_TYPE::DECIMAL)));
-        $this->assertTrue(Carbon::createFromFormat('Y-m-d H:i:s', ATTR_TYPE::randomValue(ATTR_TYPE::DATETIME)) !== false);
+        $this->assertTrue(preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{6}$/', ATTR_TYPE::randomValue(ATTR_TYPE::DATETIME)) === 1);
         $this->assertTrue(is_string(ATTR_TYPE::randomValue(ATTR_TYPE::TEXT)));
     }
 }

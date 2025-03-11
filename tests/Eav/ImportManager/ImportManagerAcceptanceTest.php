@@ -47,7 +47,7 @@ class ImportManagerAcceptanceTest extends TestCase
 
         $stringConfig  = new ConfigAttribute();
         $stringConfig->setFields([
-            _ATTR::NAME =>  ATTR_TYPE::STRING,
+            _ATTR::NAME => ATTR_TYPE::STRING,
             _ATTR::TYPE => ATTR_TYPE::STRING
         ]);
         $stringConfig->setGroupKey($groupKey);
@@ -197,31 +197,31 @@ class ImportManagerAcceptanceTest extends TestCase
 
             // check values created
             $stringValue = $valueModel->find(
-                ATTR_TYPE::valueTable(ATTR_TYPE::STRING),
+                ATTR_TYPE::STRING,
                 $domainKey,
                 $entityKey,
                 $string[_ATTR::ID]
             );
             $integerValue = $valueModel->find(
-                ATTR_TYPE::valueTable(ATTR_TYPE::INTEGER),
+                ATTR_TYPE::INTEGER,
                 $domainKey,
                 $entityKey,
                 $integer[_ATTR::ID]
             );
             $decimalValue = $valueModel->find(
-                ATTR_TYPE::valueTable(ATTR_TYPE::DECIMAL),
+                ATTR_TYPE::DECIMAL,
                 $domainKey,
                 $entityKey,
                 $decimal[_ATTR::ID]
             );
             $datetimeValue = $valueModel->find(
-                ATTR_TYPE::valueTable(ATTR_TYPE::DATETIME),
+                ATTR_TYPE::DATETIME,
                 $domainKey,
                 $entityKey,
                 $datetime[_ATTR::ID]
             );
             $textValue = $valueModel->find(
-                ATTR_TYPE::valueTable(ATTR_TYPE::TEXT),
+                ATTR_TYPE::TEXT,
                 $domainKey,
                 $entityKey,
                 $text[_ATTR::ID]
@@ -275,8 +275,8 @@ class ImportManagerAcceptanceTest extends TestCase
         for($i=0; $i<6; $i++)
         {
             $entityKey = $this->eavFactory->createEntity($domainKey, $setKey);
-            $stringValueKey = $valueModel->create(ATTR_TYPE::valueTable(ATTR_TYPE::STRING), $domainKey, $entityKey, $stringAttributeKey, ATTR_TYPE::randomValue(ATTR_TYPE::STRING));
-            $integerValueKey = $valueModel->create(ATTR_TYPE::valueTable(ATTR_TYPE::STRING), $domainKey, $entityKey, $integerAttributeKey, ATTR_TYPE::randomValue(ATTR_TYPE::INTEGER));
+            $stringValueKey = $valueModel->create(ATTR_TYPE::STRING, $domainKey, $entityKey, $stringAttributeKey, ATTR_TYPE::randomValue(ATTR_TYPE::STRING));
+            $integerValueKey = $valueModel->create(ATTR_TYPE::STRING, $domainKey, $entityKey, $integerAttributeKey, ATTR_TYPE::randomValue(ATTR_TYPE::INTEGER));
             $oldValues[] = [$entityKey, $stringValueKey, $integerValueKey];
         }
 
@@ -463,8 +463,7 @@ class ImportManagerAcceptanceTest extends TestCase
 
 
                 $attrType = ATTR_TYPE::getCase($attribute[_ATTR::TYPE]);
-                $valueTable = ATTR_TYPE::valueTable($attrType);
-                $valueRecord = $valueModel->find($valueTable, $domainKey, $entityKey, $attribute[_ATTR::ID]);
+                $valueRecord = $valueModel->find($attrType, $domainKey, $entityKey, $attribute[_ATTR::ID]);
 
                 if($value == '')
                 {

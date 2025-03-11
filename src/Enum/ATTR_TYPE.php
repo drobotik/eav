@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Drobotik\Eav\Enum;
 
 use Carbon\Carbon;
+use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Drobotik\Eav\Exception\AttributeException;
 use Drobotik\Eav\Validation\Assert;
@@ -143,7 +144,7 @@ class ATTR_TYPE
             case self::INTEGER:
                 return $faker->randomNumber();
             case self::DATETIME:
-                return Carbon::now()->subDays($iterator)->format('Y-m-d H:i:s');
+                return (new DateTime())->setTimestamp(rand(strtotime('1980-01-01 00:00:00'), strtotime('2025-12-31 23:59:59')))->format('Y-m-d H:i:s.u');
             case self::DECIMAL:
                 return $faker->randomFloat(3);
             case self::STRING:

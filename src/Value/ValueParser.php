@@ -8,6 +8,7 @@
 
 namespace Drobotik\Eav\Value;
 
+use DateTime;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use InvalidArgumentException;
 
@@ -19,15 +20,19 @@ class ValueParser
         return number_format($value, $scale, '.', '');
     }
 
+    /**
+     * @throws \Exception
+     */
     public function parse($type, $value) : mixed
     {
         switch ($type) {
             case ATTR_TYPE::INTEGER:
-            case ATTR_TYPE::DATETIME:
             case ATTR_TYPE::STRING:
             case ATTR_TYPE::TEXT:
             case ATTR_TYPE::MANUAL:
                 return $value;
+            case ATTR_TYPE::DATETIME:
+                return (new DateTime($value))->format('Y-m-d H:i:s');
             case ATTR_TYPE::DECIMAL:
                 return $this->parseDecimal($value);
             default:

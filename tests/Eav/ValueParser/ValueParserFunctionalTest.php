@@ -40,7 +40,7 @@ class ValueParserFunctionalTest extends TestCase
 
         $this->assertEquals(456, $parser->parse(ATTR_TYPE::DECIMAL, 123));
         $this->assertEquals('test', $parser->parse(ATTR_TYPE::STRING, 'test'));
-        $this->assertEquals('test', $parser->parse(ATTR_TYPE::DATETIME, 'test'));
+        $this->assertEquals('2023-05-20 14:38:12', $parser->parse(ATTR_TYPE::DATETIME, '2023-05-20T14:38:12.795974Z'));
         $this->assertEquals('test', $parser->parse(ATTR_TYPE::INTEGER, 'test'));
         $this->assertEquals('test', $parser->parse(ATTR_TYPE::TEXT, 'test'));
     }

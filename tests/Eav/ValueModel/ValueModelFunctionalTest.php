@@ -58,7 +58,7 @@ class ValueModelFunctionalTest extends TestCase
         foreach($this->cases() as $case)
         {
             $value = ATTR_TYPE::randomValue($case);
-            $valueKey = $this->model->create(ATTR_TYPE::valueTable($case), $domainKey, $entityKey, $attributeKey, $value);
+            $valueKey = $this->model->create($case, $domainKey, $entityKey, $attributeKey, $value);
             $valueRecord = Connection::get()->createQueryBuilder()
                 ->select('*')
                 ->from(ATTR_TYPE::valueTable($case))
@@ -86,8 +86,8 @@ class ValueModelFunctionalTest extends TestCase
 
         foreach($this->cases() as $case)
         {
-            $valueKey = $this->model->create(ATTR_TYPE::valueTable($case), $domainKey, $entityKey, $attributeKey, ATTR_TYPE::randomValue($case));
-            $record = $this->model->find(ATTR_TYPE::valueTable($case), $domainKey, $entityKey, $attributeKey);
+            $valueKey = $this->model->create($case, $domainKey, $entityKey, $attributeKey, ATTR_TYPE::randomValue($case));
+            $record = $this->model->find($case, $domainKey, $entityKey, $attributeKey);
             $this->assertEquals($valueKey, $record[_VALUE::ID]);
         }
     }
@@ -106,12 +106,12 @@ class ValueModelFunctionalTest extends TestCase
         {
             $oldValue = ATTR_TYPE::randomValue($case);
             $newValue = ATTR_TYPE::randomValue($case);
-            $this->model->create(ATTR_TYPE::valueTable($case), $domainKey, $entityKey, $attributeKey, $oldValue);
-            $result = $this->model->update(ATTR_TYPE::valueTable($case), $domainKey, $entityKey, $attributeKey, $newValue);
-            $this->assertEquals(1, $result);
-            $record = $this->model->find(ATTR_TYPE::valueTable($case), $domainKey, $entityKey, $attributeKey);
+            $this->model->create(ATTR_TYPE::getCase($case), $domainKey, $entityKey, $attributeKey, $oldValue);
+            $result = $this->model->update(ATTR_TYPE::getCase($case), $domainKey, $entityKey, $attributeKey, $newValue);
+            $this->assertEquals(1, $result, ATTR_TYPE::valueTable($case));
+            $record = $this->model->find(ATTR_TYPE::getCase($case), $domainKey, $entityKey, $attributeKey);
             $this->assertIsArray($record);
-            $this->assertEquals($newValue, $record[_VALUE::VALUE]);
+            $this->assertEquals($this->makeValueParser()->parse($case, $newValue), $record[_VALUE::VALUE]);
         }
     }
 
@@ -128,10 +128,10 @@ class ValueModelFunctionalTest extends TestCase
 
         foreach($this->cases() as $case)
         {
-            $this->model->create(ATTR_TYPE::valueTable($case), $domainKey, $entityKey, $attributeKey, ATTR_TYPE::randomValue($case));
-            $result = $this->model->destroy(ATTR_TYPE::valueTable($case), $domainKey, $entityKey, $attributeKey);
+            $this->model->create($case, $domainKey, $entityKey, $attributeKey, ATTR_TYPE::randomValue($case));
+            $result = $this->model->destroy($case, $domainKey, $entityKey, $attributeKey);
             $this->assertEquals(1, $result);
-            $test = $this->model->find(ATTR_TYPE::valueTable($case), $domainKey, $entityKey, $attributeKey);
+            $test = $this->model->find($case, $domainKey, $entityKey, $attributeKey);
             $this->assertFalse($test);
         }
     }

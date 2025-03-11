@@ -96,7 +96,7 @@ class AttributeSetActionFunctionalTest extends TestCase
 
         $value = "test";
         $valueModel = new ValueBase();
-        $valueKey = $valueModel->create(ATTR_TYPE::valueTable(ATTR_TYPE::STRING), $domainKey, $entityKey, $attKey, $value);
+        $valueKey = $valueModel->create(ATTR_TYPE::STRING, $domainKey, $entityKey, $attKey, $value);
 
         $entity = new Entity();
         $entity->setKey($entityKey);

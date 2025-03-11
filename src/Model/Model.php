@@ -76,22 +76,20 @@ class Model
         $conn = $this->db()->getNativeConnection();
         $table = $this->getTable();
 
-        // Prepare the update statement
-        $columns = array_keys($data);
-        $setValues = implode(' = ?, ', $columns) . ' = ?';
+        $setValues = [];
+        foreach (array_keys($data) as $column) {
+            $setValues[] = "$column = :$column";
+        }
+        $setValues = implode(", ", $setValues);
 
         $stmt = $conn->prepare("UPDATE $table SET $setValues WHERE $keyName = :key");
 
-        // Bind the data parameters
-        $index = 1;
-        foreach ($data as $value) {
-            $stmt->bindValue($index, $value);
-            $index++;
+        foreach ($data as $k => $value) {
+            $stmt->bindValue($k, $value);
         }
 
-        // Bind the ID parameter
-        $stmt->bindValue(':key',  $key, PDO::PARAM_INT);
-        return $stmt->execute();
+        $binds = array_merge($data, ['key' => $key]);
+        return $stmt->execute($binds);
     }
 
     public function deleteByKey(int $key): bool
