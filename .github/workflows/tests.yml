@@ -18,7 +18,6 @@ jobs:
 
     name: PHP ${{ matrix.php }} - ${{ matrix.stability }}
 
-
     services:
       mysql:
         image: mysql:8
@@ -45,12 +44,23 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: dom, curl, libxml, mbstring, zip
+          extensions: dom, curl, libxml, mbstring, zip, pdo, pdo_mysql
           coverage: pcov
 
       - name: Install dependencies
         run:
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress
+
+      - name: Wait for MySQL
+        run: |
+          until mysqladmin ping -h127.0.0.1 -uroot -proot --silent; do
+            echo "Waiting for MySQL..."
+            sleep 2
+          done
+
+      - name: Import Database Schema & Data
+        run: |
+          mysql -h 127.0.0.1 -u root -proot eav_db < schema.sql
 
       - name: Install Scrutinizer/Ocular
         run:
