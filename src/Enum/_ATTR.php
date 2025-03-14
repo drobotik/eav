@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\Enum;
 
-use Drobotik\Eav\Interface\DefineTableInterface;
+use Drobotik\Eav\Interfaces\DefineTableInterface;
 use Drobotik\Eav\Strategy;
 
 class _ATTR implements DefineTableInterface

@@ -2,7 +2,7 @@
 
 namespace Drobotik\Eav\Validation\Constraints;
 
-use Drobotik\Eav\Interface\ConstraintInterface;
+use Drobotik\Eav\Interfaces\ConstraintInterface;
 
 class NumericConstraint implements ConstraintInterface
 {

@@ -115,7 +115,7 @@ class ATTR_TYPE
         }
     }
 
-    public static function randomValue(string $name, $iterator = null): mixed
+    public static function randomValue(string $name, $iterator = null)
     {
         $faker = Factory::create();
         switch ($name) {

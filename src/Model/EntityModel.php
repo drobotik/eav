@@ -13,7 +13,7 @@ use Doctrine\DBAL\Exception;
 use Drobotik\Eav\Database\Connection;
 use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Exception\EntityException;
-use Drobotik\Eav\Trait\SingletonsTrait;
+use Drobotik\Eav\Traits\SingletonsTrait;
 use PDO;
 
 class EntityModel extends Model
@@ -69,7 +69,7 @@ class EntityModel extends Model
         return (int) $result['c'] > 0;
     }
 
-    public function getByServiceKey(int $key): bool|array
+    public function getByServiceKey(int $key)
     {
         $table = $this->getTable();
         $serviceKeyCol = _ENTITY::SERVICE_KEY;

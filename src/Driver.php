@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav;
 
-use Drobotik\Eav\Interface\DriverInterface;
+use Drobotik\Eav\Interfaces\DriverInterface;
 
 abstract class Driver implements DriverInterface
 {

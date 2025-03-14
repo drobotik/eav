@@ -14,8 +14,8 @@ use Drobotik\Eav\Result\Result;
 
 class Entity
 {
-    private int $key;
-    private int $domainKey;
+    private $key;
+    private $domainKey;
     private AttributeSet $attributeSet;
     private EntityBag $bag;
     private EntityGnome $manager;
@@ -45,14 +45,14 @@ class Entity
         return isset($this->key) && 0 !== $this->key;
     }
 
-    public function setDomainKey(int $key): self
+    public function setDomainKey($key): self
     {
         $this->domainKey = $key;
 
         return $this;
     }
 
-    public function getDomainKey(): int
+    public function getDomainKey()
     {
         return $this->domainKey;
     }

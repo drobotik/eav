@@ -114,7 +114,7 @@ class Model
         return (int) $record["count"];
     }
 
-    public function findByKey(int $key) : array|false
+    public function findByKey(int $key)
     {
         $conn = $this->db();
         $sql = sprintf("SELECT * FROM %s WHERE %s = ?", $this->getTable(), $this->getPrimaryKey());

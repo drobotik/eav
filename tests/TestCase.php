@@ -11,7 +11,7 @@ namespace Tests;
 
 use Drobotik\Eav\Database\Connection;
 use Drobotik\Eav\Factory\EavFactory;
-use Drobotik\Eav\Trait\SingletonsTrait;
+use Drobotik\Eav\Traits\SingletonsTrait;
 use Faker\Generator;
 
 class TestCase extends \PHPUnit\Framework\TestCase

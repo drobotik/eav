@@ -2,7 +2,7 @@
 
 namespace Drobotik\Eav\Validation;
 
-use Drobotik\Eav\Interface\ConstraintInterface;
+use Drobotik\Eav\Interfaces\ConstraintInterface;
 use Drobotik\Eav\Validation\Constraints\RequiredConstraint;
 
 class Validator

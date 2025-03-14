@@ -17,7 +17,7 @@ class Result
     private int $code;
     private string $message;
 
-    private mixed $data = null;
+    private $data = null;
 
     public function getCode(): int
     {
@@ -43,12 +43,12 @@ class Result
         return $this;
     }
 
-    public function getData(): mixed
+    public function getData()
     {
         return $this->data;
     }
 
-    public function setData(mixed $data): self
+    public function setData($data): self
     {
         $this->data = $data;
 

@@ -14,7 +14,7 @@ use InvalidArgumentException;
 
 class ValueParser
 {
-    public function parseDecimal($value) : string|float|int
+    public function parseDecimal($value)
     {
         $scale = ATTR_TYPE::migrateOptions(ATTR_TYPE::DECIMAL)['scale'];
         return number_format($value, $scale, '.', '');
@@ -23,7 +23,7 @@ class ValueParser
     /**
      * @throws \Exception
      */
-    public function parse($type, $value) : mixed
+    public function parse($type, $value)
     {
         switch ($type) {
             case ATTR_TYPE::INTEGER:

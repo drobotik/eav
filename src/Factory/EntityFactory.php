@@ -18,7 +18,7 @@ use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Exception\AttributeException;
 use Drobotik\Eav\Exception\EntityFactoryException;
 use Drobotik\Eav\Result\EntityFactoryResult;
-use Drobotik\Eav\Trait\SingletonsTrait;
+use Drobotik\Eav\Traits\SingletonsTrait;
 
 class EntityFactory
 {
@@ -121,7 +121,7 @@ class EntityFactory
     /**
      * @throws \Exception
      */
-    public function handleValue($type, int $entityKey, int $attrKey, mixed $value)
+    public function handleValue($type, int $entityKey, int $attrKey, $value)
     {
         $result = $this->getResult();
         $valueModel = $this->makeValueModel();

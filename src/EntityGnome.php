@@ -14,7 +14,7 @@ use Doctrine\DBAL\Exception;
 use Drobotik\Eav\Enum\_ENTITY;
 use Drobotik\Eav\Exception\EntityException;
 use Drobotik\Eav\Result\Result;
-use Drobotik\Eav\Trait\SingletonsTrait;
+use Drobotik\Eav\Traits\SingletonsTrait;
 
 class EntityGnome
 {

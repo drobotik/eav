@@ -13,7 +13,7 @@ namespace Drobotik\Eav\Value;
 use Drobotik\Eav\Enum\_RESULT;
 use Drobotik\Eav\Enum\_VALUE;
 use Drobotik\Eav\Enum\ATTR_TYPE;
-use Drobotik\Eav\Trait\ContainerTrait;
+use Drobotik\Eav\Traits\ContainerTrait;
 use Drobotik\Eav\Validation\Constraints\NotBlankConstraint;
 use Drobotik\Eav\Validation\Constraints\NumericConstraint;
 use Drobotik\Eav\Validation\Constraints\RequiredConstraint;
@@ -64,7 +64,7 @@ class ValueValidator
         return new Validator();
     }
 
-    public function validateField(): null|array
+    public function validateField()
     {
         $output = null;
         $container = $this->getAttributeContainer();

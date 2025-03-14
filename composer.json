@@ -21,12 +21,12 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "php": "^8.1",
+        "php": "^7.4",
         "ext-pdo": "*",
         "ext-bcmath": "*"
     },
     "require-dev": {
-        "fakerphp/faker": "^1.21",
-        "phpunit/phpunit": "9.6.5"
+        "phpunit/phpunit": "9.6.5",
+        "fakerphp/faker": "^1.20"
     }
 }

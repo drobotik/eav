@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace Drobotik\Eav;
 
 use Drobotik\Eav\Enum\_RESULT;
-use Drobotik\Eav\Interface\EavStrategyInterface;
-use Drobotik\Eav\Interface\StrategyInterface;
+use Drobotik\Eav\Interfaces\EavStrategyInterface;
+use Drobotik\Eav\Interfaces\StrategyInterface;
 use Drobotik\Eav\Result\Result;
-use Drobotik\Eav\Trait\ContainerTrait;
+use Drobotik\Eav\Traits\ContainerTrait;
 
 class Strategy implements StrategyInterface, EavStrategyInterface
 {

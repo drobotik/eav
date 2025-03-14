@@ -10,27 +10,27 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav;
 
-use Drobotik\Eav\Trait\ContainerTrait;
-use Drobotik\Eav\Trait\SingletonsTrait;
+use Drobotik\Eav\Traits\ContainerTrait;
+use Drobotik\Eav\Traits\SingletonsTrait;
 
 class AttributeSet
 {
     use SingletonsTrait;
     use ContainerTrait;
 
-    private int $key;
+    private $key;
     private string $name;
 
     /** @var AttributeContainer[] */
     private array $containers = [];
     private Entity $entity;
 
-    public function getKey(): int
+    public function getKey()
     {
         return $this->key;
     }
 
-    public function setKey(int $key): self
+    public function setKey($key): self
     {
         $this->key = $key;
 

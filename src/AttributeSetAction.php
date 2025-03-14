@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav;
 
-use Drobotik\Eav\Trait\ContainerTrait;
+use Drobotik\Eav\Traits\ContainerTrait;
 use Drobotik\Eav\Value\ValueManager;
 
 class AttributeSetAction

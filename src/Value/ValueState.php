@@ -10,22 +10,22 @@ declare(strict_types=1);
 namespace Drobotik\Eav\Value;
 
 /**
- * @property mixed $data
+ * @property $data
  */
 class ValueState
 {
-    protected mixed $value;
+    protected $value;
 
     public function __construct() {
         $this->clear();
     }
 
-    public function set(mixed $value) : void
+    public function set($value) : void
     {
         $this->value = $value;
     }
 
-    public function get() : mixed
+    public function get()
     {
         if(!$this->isChanged())
             return null;

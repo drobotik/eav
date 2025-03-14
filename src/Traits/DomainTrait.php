@@ -7,7 +7,7 @@
  */
 declare(strict_types=1);
 
-namespace Drobotik\Eav\Trait;
+namespace Drobotik\Eav\Traits;
 
 use Drobotik\Eav\Domain;
 

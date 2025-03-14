@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\Enum;
 
-use Drobotik\Eav\Interface\DefineTableInterface;
+use Drobotik\Eav\Interfaces\DefineTableInterface;
 
 class _DOMAIN implements DefineTableInterface
 {

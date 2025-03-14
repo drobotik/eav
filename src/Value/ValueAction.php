@@ -13,8 +13,8 @@ namespace Drobotik\Eav\Value;
 use Drobotik\Eav\Enum\_VALUE;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Result\Result;
-use Drobotik\Eav\Trait\ContainerTrait;
-use Drobotik\Eav\Trait\SingletonsTrait;
+use Drobotik\Eav\Traits\ContainerTrait;
+use Drobotik\Eav\Traits\SingletonsTrait;
 
 class ValueAction
 {

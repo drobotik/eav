@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace Tests\Eav\Traits;
 
 use Drobotik\Eav\AttributeContainer;
-use Drobotik\Eav\Trait\ContainerTrait;
+use Drobotik\Eav\Traits\ContainerTrait;
 use PHPUnit\Framework\TestCase;
 
 class ContainerTraitFunctionalTest extends TestCase
@@ -19,8 +19,8 @@ class ContainerTraitFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Trait\ContainerTrait::setAttributeContainer
-     * @covers \Drobotik\Eav\Trait\ContainerTrait::getAttributeContainer
+     * @covers \Drobotik\Eav\Traits\ContainerTrait::setAttributeContainer
+     * @covers \Drobotik\Eav\Traits\ContainerTrait::getAttributeContainer
      */
     public function getter_setter()
     {

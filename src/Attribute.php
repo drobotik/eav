@@ -13,7 +13,7 @@ namespace Drobotik\Eav;
 use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Exception\AttributeException;
-use Drobotik\Eav\Trait\ContainerTrait;
+use Drobotik\Eav\Traits\ContainerTrait;
 
 class Attribute
 {
@@ -38,12 +38,12 @@ class Attribute
         return $this;
     }
 
-    public function getKey(): ?int
+    public function getKey()
     {
         return $this->getBag()->getField(_ATTR::ID);
     }
 
-    public function setKey(?int $key): self
+    public function setKey($key): self
     {
         $this->getBag()->setField(_ATTR::ID, $key);
 

@@ -44,7 +44,7 @@ class PivotModel extends Model
         return (int) $conn->lastInsertId();
     }
 
-    public function findOne(int $domainKey, int $setKey, int $groupKey, int $attributeKey) : bool|array
+    public function findOne(int $domainKey, $setKey, $groupKey, $attributeKey)
     {
         $conn = $this->db();
         $sql = sprintf(

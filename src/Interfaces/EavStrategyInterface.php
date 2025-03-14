@@ -7,7 +7,7 @@
  */
 declare(strict_types=1);
 
-namespace Drobotik\Eav\Interface;
+namespace Drobotik\Eav\Interfaces;
 
 interface EavStrategyInterface
 {

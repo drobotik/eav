@@ -13,7 +13,7 @@ use Drobotik\Eav\Database\Connection;
 use Drobotik\Eav\Enum\_VALUE;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Import\Content\ValueSet;
-use Drobotik\Eav\Trait\SingletonsTrait;
+use Drobotik\Eav\Traits\SingletonsTrait;
 use Exception;
 use InvalidArgumentException;
 use PDO;
@@ -27,7 +27,7 @@ class ValueBase extends Model
         $this->setPrimaryKey(_VALUE::ID);
     }
 
-    public function find(string $type, int $domainKey, int $entityKey, int $attributeKey) : bool|array
+    public function find(string $type, $domainKey, $entityKey, $attributeKey)
     {
         $table = ATTR_TYPE::valueTable($type);
 
@@ -52,7 +52,7 @@ class ValueBase extends Model
     /**
      * @throws Exception
      */
-    public function create(string $type, int $domainKey, int $entityKey, int $attributeKey, $value) : int
+    public function create(string $type, $domainKey, $entityKey, $attributeKey, $value) : int
     {
         $table = ATTR_TYPE::valueTable($type);
 
@@ -78,7 +78,7 @@ class ValueBase extends Model
         return (int) $conn->lastInsertId();
     }
 
-    public function update(string $type, int $domainKey, int $entityKey, int $attributeKey, $value) : int
+    public function update(string $type, $domainKey, $entityKey, $attributeKey, $value) : int
     {
         $pdo = Connection::get();
         $table = ATTR_TYPE::valueTable($type);
@@ -100,7 +100,7 @@ class ValueBase extends Model
         return $stmt->rowCount();
     }
 
-    public function destroy(string $type, int $domainKey, int $entityKey, int $attributeKey) : int
+    public function destroy(string $type, $domainKey, $entityKey, $attributeKey) : int
     {
         $pdo = Connection::get();
         $table = ATTR_TYPE::valueTable($type);

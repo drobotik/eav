@@ -62,7 +62,7 @@ class Transporter
     }
 
     /**
-     * @param mixed $field
+     * @param $field
      */
     public function getField($field)
     {

@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\Model;
 
-use Doctrine\DBAL\Exception;
 use Drobotik\Eav\Enum\_GROUP;
 use PDO;
 

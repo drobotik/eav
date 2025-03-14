@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav\Value;
 
-use Drobotik\Eav\Trait\ContainerTrait;
+use Drobotik\Eav\Traits\ContainerTrait;
 
 class ValueManager
 {
@@ -18,7 +18,7 @@ class ValueManager
     private ValueState $runtime;
     private ValueState $stored;
 
-    private int $key;
+    private $key;
 
     public function __construct()
     {
@@ -31,12 +31,12 @@ class ValueManager
         return isset($this->key) && $this->key > 0;
     }
 
-    public function getKey(): int
+    public function getKey()
     {
         return $this->key;
     }
 
-    public function setKey(int $key): self
+    public function setKey($key): self
     {
         $this->key = $key;
 
@@ -68,12 +68,12 @@ class ValueManager
         return $this->stored->isChanged();
     }
 
-    public function getStored(): mixed
+    public function getStored()
     {
         return $this->stored->get();
     }
 
-    public function setStored(mixed $value): self
+    public function setStored($value): self
     {
         $this->stored->set($value);
 
@@ -92,12 +92,12 @@ class ValueManager
         return $this->runtime->isChanged();
     }
 
-    public function getRuntime(): mixed
+    public function getRuntime()
     {
         return $this->runtime->get();
     }
 
-    public function setRuntime(mixed $value): self
+    public function setRuntime($value): self
     {
         $this->runtime->set($value);
 
@@ -120,7 +120,7 @@ class ValueManager
         return $this->getStored();
     }
 
-    public function setValue(mixed $value): self
+    public function setValue($value): self
     {
         $this->setRuntime($value);
 

@@ -67,7 +67,7 @@ class AttributeModel extends Model
         return (int) $conn->lastInsertId();
     }
 
-    public function findByName(string $name, int $domainKey) : bool|array
+    public function findByName(string $name, int $domainKey)
     {
         $conn = $this->db();
 

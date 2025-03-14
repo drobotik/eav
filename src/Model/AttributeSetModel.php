@@ -41,7 +41,7 @@ class AttributeSetModel extends Model
     /**
      * @throws Exception
      */
-    public function findAttributes(int $domainKey, int $setKey = null) : array
+    public function findAttributes($domainKey, $setKey = null) : array
     {
         $sql = sprintf(
             "SELECT a.* FROM %s a
