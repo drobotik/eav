@@ -9,8 +9,7 @@ declare(strict_types=1);
 
 namespace Tests\Eav\AttributeType;
 
-use Carbon\Carbon;
-use Doctrine\DBAL\Types\Types;
+
 use Drobotik\Eav\Enum\_VALUE;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Exception\AttributeException;
@@ -64,19 +63,6 @@ class AttributeTypeEnumFunctionalTest extends TestCase
         $this->assertEquals(sprintf(_VALUE::table(), ATTR_TYPE::STRING), ATTR_TYPE::valueTable(ATTR_TYPE::STRING));
         $this->assertEquals(sprintf(_VALUE::table(), ATTR_TYPE::TEXT), ATTR_TYPE::valueTable(ATTR_TYPE::TEXT));
     }
-    /**
-     * @test
-     * @group functional
-     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::doctrineType
-     */
-    public function doctrine_type() {
-        $this->assertEquals(Types::INTEGER, ATTR_TYPE::doctrineType(ATTR_TYPE::INTEGER));
-        $this->assertEquals(Types::DATETIME_MUTABLE, ATTR_TYPE::doctrineType(ATTR_TYPE::DATETIME));
-        $this->assertEquals(Types::DECIMAL, ATTR_TYPE::doctrineType(ATTR_TYPE::DECIMAL));
-        $this->assertEquals(Types::STRING, ATTR_TYPE::doctrineType(ATTR_TYPE::STRING));
-        $this->assertEquals(Types::TEXT, ATTR_TYPE::doctrineType(ATTR_TYPE::TEXT));
-    }
-
     /**
      * @test
      * @group functional

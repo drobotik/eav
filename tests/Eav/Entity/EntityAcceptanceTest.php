@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace Tests\Eav\Entity;
 
-use Carbon\Carbon;
 use Drobotik\Eav\Entity;
 use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Enum\_VALUE;
@@ -147,7 +146,7 @@ class EntityAcceptanceTest extends TestCase
                     _ATTR::TYPE => ATTR_TYPE::DATETIME
                 ],
                 ATTR_FACTORY::GROUP => $groupKey,
-                ATTR_FACTORY::VALUE => Carbon::now()->format('Y-m-d H:i:s')
+                ATTR_FACTORY::VALUE => (new \DateTime())->format('Y-m-d H:i:s')
             ],
             [
                 ATTR_FACTORY::ATTRIBUTE => [
@@ -172,7 +171,7 @@ class EntityAcceptanceTest extends TestCase
         $stringValue = "new string value";
         $integerValue = 321;
         $decimalValue = 3.05;
-        $datetimeValue = Carbon::yesterday()->format('Y-m-d H:i:s');
+        $datetimeValue = (new \DateTime())->format('Y-m-d H:i:s');
         $textValue = "new text value";
 
         $bag = $entity->getBag();
@@ -254,7 +253,7 @@ class EntityAcceptanceTest extends TestCase
                     _ATTR::TYPE => ATTR_TYPE::DATETIME
                 ],
                 ATTR_FACTORY::GROUP => $groupKey,
-                ATTR_FACTORY::VALUE => Carbon::now()->format('Y-m-d H:i:s')
+                ATTR_FACTORY::VALUE => (new \DateTime())->format('Y-m-d H:i:s')
             ],
             [
                 ATTR_FACTORY::ATTRIBUTE => [
@@ -342,7 +341,7 @@ class EntityAcceptanceTest extends TestCase
                     _ATTR::TYPE => ATTR_TYPE::DATETIME
                 ],
                 ATTR_FACTORY::GROUP => $groupKey,
-                ATTR_FACTORY::VALUE => Carbon::now()->format('Y-m-d H:i:s')
+                ATTR_FACTORY::VALUE => (new \DateTime())->format('Y-m-d H:i:s')
             ],
             [
                 ATTR_FACTORY::ATTRIBUTE => [

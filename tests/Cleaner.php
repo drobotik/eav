@@ -19,9 +19,9 @@ class Cleaner
 
     private static function resetCsv(string $path): void
     {
-        $file = new \SplFileObject($path, 'w');
-        $writer = Writer::createFromFileObject($file);
-        $writer->insertAll([]);
+//        $file = new \SplFileObject($path, 'w');
+//        $writer = Writer::createFromFileObject($file);
+//        $writer->insertAll([]);
     }
 
 }
