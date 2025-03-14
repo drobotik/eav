@@ -10,7 +10,7 @@ The EAV library is designed to manage and manipulate EAV data across multiple do
 
 ### Features
 - single entity CRUD, validation
-- import/export entities
+~~- import/export entities~~
 
 ### Requirements
 - PHP >=8.1

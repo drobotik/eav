@@ -14,7 +14,10 @@ use Drobotik\Eav\Enum\_RESULT;
 use Drobotik\Eav\Enum\_VALUE;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Trait\ContainerTrait;
-use Drobotik\Eav\Validation\Assert;
+use Drobotik\Eav\Validation\Constraints\NotBlankConstraint;
+use Drobotik\Eav\Validation\Constraints\NumericConstraint;
+use Drobotik\Eav\Validation\Constraints\RequiredConstraint;
+use Drobotik\Eav\Validation\Validator;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -28,17 +31,17 @@ class ValueValidator
         return ATTR_TYPE::validationRule($this->getAttributeContainer()->getAttribute()->getType());
     }
 
-    public function getRules(): Constraints\Collection
+    public function getRules(): array
     {
         $rules = $this->getAttributeContainer()->getStrategy()->rules();
-        return new Constraints\Collection([
-            _VALUE::ENTITY_ID => [new Constraints\NotBlank(), Assert::integer()],
-            _VALUE::DOMAIN_ID => [new Constraints\NotBlank(), Assert::integer()],
-            _VALUE::ATTRIBUTE_ID => [new Constraints\NotBlank(), Assert::integer()],
+        return [
+            _VALUE::ENTITY_ID => [new RequiredConstraint(), new NotBlankConstraint(), new NumericConstraint()],
+            _VALUE::DOMAIN_ID => [new RequiredConstraint(), new NotBlankConstraint(),  new NumericConstraint()],
+            _VALUE::ATTRIBUTE_ID => [new RequiredConstraint(), new NotBlankConstraint(),  new NumericConstraint()],
             _VALUE::VALUE => is_null($rules)
                 ? $this->getDefaultValueRule()
                 : $rules,
-        ]);
+        ];
     }
 
     public function getValidatedData(): array
@@ -56,9 +59,9 @@ class ValueValidator
         ];
     }
 
-    public function getValidator(): ValidatorInterface
+    public function getValidator(): Validator
     {
-        return Validation::createValidator();
+        return new Validator();
     }
 
     public function validateField(): null|array

@@ -14,6 +14,10 @@ use Drobotik\Eav\Enum\_VALUE;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Exception\AttributeException;
 use Drobotik\Eav\Validation\Assert;
+use Drobotik\Eav\Validation\Constraints\DateConstraint;
+use Drobotik\Eav\Validation\Constraints\LengthConstraint;
+use Drobotik\Eav\Validation\Constraints\NumericConstraint;
+use Drobotik\Eav\Validation\Constraints\RegexConstraint;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraints;
 
@@ -84,11 +88,11 @@ class AttributeTypeEnumFunctionalTest extends TestCase
      * @covers \Drobotik\Eav\Enum\ATTR_TYPE::validationRule
      */
     public function validation_rule() {
-        $this->assertEquals([Assert::integer()], ATTR_TYPE::validationRule(ATTR_TYPE::INTEGER));
-        $this->assertEquals([new Constraints\Date], ATTR_TYPE::validationRule(ATTR_TYPE::DATETIME));
-        $this->assertEquals([new Constraints\Regex('/^[0-9]{1,11}(?:\.[0-9]{1,3})?$/')], ATTR_TYPE::validationRule(ATTR_TYPE::DECIMAL));
-        $this->assertEquals([new Constraints\Length(['min' => 1,'max' => 191])], ATTR_TYPE::validationRule(ATTR_TYPE::STRING));
-        $this->assertEquals([new Constraints\Length(['min' => 1,'max' => 10000])], ATTR_TYPE::validationRule(ATTR_TYPE::TEXT));
+        $this->assertEquals([new NumericConstraint()], ATTR_TYPE::validationRule(ATTR_TYPE::INTEGER));
+        $this->assertEquals([new DateConstraint('Y-m-d H:i:s')], ATTR_TYPE::validationRule(ATTR_TYPE::DATETIME));
+        $this->assertEquals([new RegexConstraint('/^[0-9]{1,11}(?:\.[0-9]{1,3})?$/')], ATTR_TYPE::validationRule(ATTR_TYPE::DECIMAL));
+        $this->assertEquals([new LengthConstraint( 1,191)], ATTR_TYPE::validationRule(ATTR_TYPE::STRING));
+        $this->assertEquals([new LengthConstraint( 1,10000)], ATTR_TYPE::validationRule(ATTR_TYPE::TEXT));
     }
     /**
      * @test

@@ -10,12 +10,16 @@ declare(strict_types=1);
 namespace Drobotik\Eav\Enum;
 
 use DateTime;
-use Doctrine\DBAL\Types\Types;
+
 use Drobotik\Eav\Exception\AttributeException;
 use Drobotik\Eav\Validation\Assert;
+use Drobotik\Eav\Validation\Constraints\DateConstraint;
+use Drobotik\Eav\Validation\Constraints\LengthConstraint;
+use Drobotik\Eav\Validation\Constraints\NumericConstraint;
+use Drobotik\Eav\Validation\Constraints\RegexConstraint;
 use Faker\Factory;
 use InvalidArgumentException;
-use Symfony\Component\Validator\Constraints;
+
 
 class ATTR_TYPE
 {
@@ -65,25 +69,6 @@ class ATTR_TYPE
         }
     }
 
-
-    public static function doctrineType(string $name): string
-    {
-        switch ($name) {
-            case self::INTEGER:
-                return Types::INTEGER;
-            case self::DATETIME:
-                return Types::DATETIME_MUTABLE;
-            case self::DECIMAL:
-                return Types::DECIMAL;
-            case self::STRING:
-                return Types::STRING;
-            case self::TEXT:
-                return Types::TEXT;
-            default:
-                throw new InvalidArgumentException("Invalid type: " . $name);
-        }
-    }
-
     public static function migrateOptions(string $name) : array
     {
         switch ($name) {
@@ -107,29 +92,23 @@ class ATTR_TYPE
         switch ($name) {
             case self::INTEGER:
                 return [
-                    Assert::integer()
+                    new NumericConstraint()
                 ];
             case self::DATETIME:
                 return [
-                    new Constraints\Date
+                    new DateConstraint('Y-m-d H:i:s')
                 ];
             case self::DECIMAL:
                 return [
-                    new Constraints\Regex('/^[0-9]{1,11}(?:\.[0-9]{1,3})?$/')
+                    new RegexConstraint('/^[0-9]{1,11}(?:\.[0-9]{1,3})?$/')
                 ];
             case self::STRING:
                 return [
-                    new Constraints\Length([
-                        'min' => 1,
-                        'max' => 191
-                    ])
+                    new LengthConstraint(1, 191)
                 ];
             case self::TEXT:
                 return [
-                    new Constraints\Length([
-                        'min' => 1,
-                        'max' => 10000
-                    ])
+                    new LengthConstraint(1, 10000)
                 ];
             default:
                 throw new InvalidArgumentException("Invalid type: " . $name);

@@ -15,9 +15,9 @@ use Drobotik\Eav\Enum\_VALUE;
 use Drobotik\Eav\Enum\ATTR_TYPE;
 use Drobotik\Eav\Result\Result;
 use Drobotik\Eav\Strategy;
+use Drobotik\Eav\Validation\Constraints\RegexConstraint;
 use Drobotik\Eav\Value\ValueValidator;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Validator\Constraints;
 
 class ValueValidatorBehaviorTest extends TestCase
 {
@@ -40,7 +40,7 @@ class ValueValidatorBehaviorTest extends TestCase
             ->onlyMethods(['rules'])
             ->getMock();
         $collection = [
-            new Constraints\Regex('/nd/')
+            new RegexConstraint('/nd/')
         ];
         $strategy->expects($this->once())
             ->method('rules')
@@ -50,9 +50,7 @@ class ValueValidatorBehaviorTest extends TestCase
             ->setStrategy($strategy);
         $this->validator->setAttributeContainer($container);
         $result = $this->validator->getRules();
-        /** @var \Symfony\Component\Validator\Constraints\Required  $t */
-        $t = $result->fields[_VALUE::VALUE];
-        $this->assertEquals($collection, $t->getNestedConstraints());
+        $this->assertSame($collection, $result[_VALUE::VALUE]);
     }
     /**
      * @test

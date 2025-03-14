@@ -16,6 +16,10 @@ use Drobotik\Eav\Enum\_RESULT;
 use Drobotik\Eav\Result\Result;
 use Drobotik\Eav\Strategy;
 use Drobotik\Eav\Validation\Assert;
+use Drobotik\Eav\Validation\Constraints\NotBlankConstraint;
+use Drobotik\Eav\Validation\Constraints\NumericConstraint;
+use Drobotik\Eav\Validation\Constraints\RequiredConstraint;
+use Drobotik\Eav\Validation\Validator;
 use Drobotik\Eav\Value\ValueAction;
 use Drobotik\Eav\Value\ValueManager;
 use Drobotik\Eav\Value\ValueValidator;
@@ -224,7 +228,7 @@ class StrategyBehaviorTest extends TestCase
      */
     public function validate_fails_action() {
 
-        $validator = Validation::createValidator();
+        $validator = new Validator();
         $valueValidator = $this->getMockBuilder(ValueValidator::class)
             ->onlyMethods(['getValidator', 'getValidatedData'])
             ->getMock();
@@ -238,7 +242,7 @@ class StrategyBehaviorTest extends TestCase
         $strategy = $this->getMockBuilder(Strategy::class)
         ->onlyMethods(['rules'])->getMock();
         $strategy->expects($this->once())
-            ->method('rules')->willReturn([new Constraints\NotBlank(), Assert::integer()]);
+            ->method('rules')->willReturn([new RequiredConstraint(), new NumericConstraint()]);
         $container->setStrategy($strategy);
         $container->setValueValidator($valueValidator);
         $strategy = $this->getMockBuilder(Strategy::class)
