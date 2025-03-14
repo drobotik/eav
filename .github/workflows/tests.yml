@@ -24,8 +24,6 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: eav_db
-          MYSQL_USER: root
-          MYSQL_PASSWORD: eav
         ports:
           - 3306:3306
         options: >-
