@@ -13,7 +13,7 @@ The EAV library is designed to manage and manipulate EAV data across multiple do
 ~~- import/export entities~~
 
 ### Requirements
-- PHP >=8.1
+- PHP >=7.4
 - ext-pdo
 - ext-bcmath
 
