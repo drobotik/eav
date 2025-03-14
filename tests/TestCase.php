@@ -23,8 +23,11 @@ class TestCase extends \PHPUnit\Framework\TestCase
     {
         parent::setUp();
         $schemaPath = dirname(__DIR__) . '/schema.sql';
+        $dsn = getenv('GITHUB_ACTIONS') === 'true'
+            ? 'mysql:host=127.0.0.1;port=3306;dbname=eav;charset=utf8mb4'
+            : 'mysql:host=eav_db;port=3306;dbname=eav;charset=utf8mb4';
         $dbParams = [
-            'dsn'      => 'mysql:host=eav_db;port=3306;dbname=eav;charset=utf8mb4',
+            'dsn'      => $dsn,
             'user'     => 'root',
             'password' => 'root',
         ];
