@@ -22,23 +22,37 @@ class TestCase extends \PHPUnit\Framework\TestCase
     protected function setUp() : void
     {
         parent::setUp();
-        $sqlitePath = dirname(__DIR__) . '/tests/test.sqlite';
+        $schemaPath = dirname(__DIR__) . '/schema.sql';
         $dbParams = [
-            'driver' => 'pdo_sqlite',
-            'path' => $sqlitePath
+            'dsn'      => 'mysql:host=eav_db;port=3306;dbname=eav;charset=utf8mb4',
+            'user'     => 'root',
+            'password' => 'root',
         ];
-        Connection::get($dbParams);
-        $migrator = new Migrator();
-        $migrator->rollback();
-        $migrator->migrate();
+        $pdo = new \PDO($dbParams['dsn'], $dbParams['user'], $dbParams['password']);
+        Connection::get($pdo);
+        $sql = file_get_contents($schemaPath);
+        $statements = array_filter(array_map('trim', explode(";", $sql)));
+        $pdo = Connection::getNativeConnection();
+        foreach ($statements as $statement) {
+            if (!empty($statement)) {
+                $pdo->exec($statement);
+            }
+        }
         $this->eavFactory = new EavFactory();
         $this->faker = \Faker\Factory::create();
     }
 
     protected function tearDown(): void
     {
-        $migrator = new Migrator();
-        $migrator->rollback();
+        $schemaPath = dirname(__DIR__) . '/schema.sql';
+        $sql = file_get_contents($schemaPath);
+        $statements = array_filter(array_map('trim', explode(";", $sql)));
+        $pdo = Connection::getNativeConnection();
+        foreach ($statements as $statement) {
+            if (!empty($statement)) {
+                $pdo->exec($statement);
+            }
+        }
         Cleaner::run();
         parent::tearDown();
     }
