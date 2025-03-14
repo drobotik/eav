@@ -58,7 +58,7 @@ jobs:
 
       - name: Import Database Schema & Data
         run: |
-          mysql -h 127.0.0.1 -u root -proot eav_db < schema.sql
+          mysql -h 127.0.0.1 -u root -proot eav < schema.sql
 
       - name: Install Scrutinizer/Ocular
         run:
