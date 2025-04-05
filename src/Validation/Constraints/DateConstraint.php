@@ -21,7 +21,7 @@ class DateConstraint implements ConstraintInterface
 
         $dateTime = \DateTime::createFromFormat($this->format, $value);
         if (!$dateTime || $dateTime->format($this->format) !== $value) {
-            return "This value must be a valid date in '{$this->format}' format.";
+            return "This value must be a valid date in {$this->format} format.";
         }
 
         return null;

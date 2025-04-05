@@ -17,10 +17,6 @@ class RegexConstraint implements ConstraintInterface
 
     public function validate($value): ?string
     {
-        if (!is_string($value)) {
-            return "This value must be a string.";
-        }
-
         if (!preg_match($this->pattern, $value)) {
             return $this->message;
         }

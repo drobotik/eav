@@ -136,6 +136,7 @@ class EavFactory
 
     public function createEavEntity(array $config, int $domainKey, int $setKey): Result
     {
+
         $result = new Result();
         $result->created();
         $factory = new EntityFactory();

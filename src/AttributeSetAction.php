@@ -42,6 +42,7 @@ class AttributeSetAction
         $container = $this->getAttributeContainer();
         $container->makeValueManager();
         $container->makeValueAction();
+        $container->makeValueValidator();
         $valueManager = $container->getValueManager();
         $attribute = $container->getAttribute();
         $entity = $container->getAttributeSet()->getEntity();

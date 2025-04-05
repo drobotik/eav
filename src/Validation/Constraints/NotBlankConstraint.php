@@ -8,7 +8,7 @@ class NotBlankConstraint implements ConstraintInterface
 {
     public function validate($value): ?string
     {
-        if (!is_string($value) || trim($value) === '') {
+        if (trim($value) === '') {
             return "This value cannot be blank.";
         }
         return null;

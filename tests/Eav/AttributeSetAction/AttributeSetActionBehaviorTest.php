@@ -58,8 +58,11 @@ class AttributeSetActionBehaviorTest extends TestCase
             ->getMock();
         $strategy->expects($this->once())->method('find');
         $container = $this->getMockBuilder(AttributeContainer::class)
-            ->onlyMethods(['getAttributeSet', 'getAttribute', 'getStrategy', 'getValueManager'])
+            ->onlyMethods(['makeValueManager', 'makeValueAction', 'makeValueValidator', 'getAttributeSet', 'getAttribute', 'getStrategy', 'getValueManager'])
             ->getMock();
+        $container->expects($this->once())->method('makeValueManager');
+        $container->expects($this->once())->method('makeValueAction');
+        $container->expects($this->once())->method('makeValueValidator');
         $container->expects($this->once())->method('getAttributeSet')->willReturn($attrSet);
         $container->expects($this->once())->method('getAttribute')->willReturn($attribute);
         $container->expects($this->once())->method('getStrategy')->willReturn($strategy);
