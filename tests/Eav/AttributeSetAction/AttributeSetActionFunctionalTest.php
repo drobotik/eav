@@ -51,6 +51,19 @@ class AttributeSetActionFunctionalTest extends TestCase
         $this->assertEquals($attribute,  $result->getBag()->getFields());
         $this->assertSame($result, $this->container->getAttribute());
     }
+
+    /**
+     * @test
+     * @group functional
+     * @covers \Drobotik\Eav\AttributeSetAction::initializeAttribute
+     */
+    public function initialize_attribute_with_empty_strategy() {
+        $attribute = [
+            _ATTR::STRATEGY => '',
+        ];
+        $this->action->initializeAttribute($attribute);
+        $this->assertSame(Strategy::class, $this->container->getAttribute()->getStrategy());
+    }
     /**
      * @test
      * @group functional

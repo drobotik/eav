@@ -5,23 +5,20 @@ namespace Drobotik\Eav\Validation;
 class Violation
 {
     private string $message;
-    private string $type;
-    public function __construct($type, $message)
+    private string $field;
+    public function __construct($field, $message)
     {
-        $this->type = $type;
+        $this->field = $field;
         $this->message = $message;
     }
-
 
     public function getMessage(): string
     {
         return $this->message;
     }
 
-    public function getPropertyPath(): string
+    public function getField(): string
     {
-        return $this->type;
+        return $this->field;
     }
-
-
 }

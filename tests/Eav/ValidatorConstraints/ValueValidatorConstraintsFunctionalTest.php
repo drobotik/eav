@@ -7,15 +7,8 @@
  */
 declare(strict_types=1);
 
-namespace Tests\Eav\ValueValidatorConstraints;
+namespace Tests\Eav\ValidatorConstraints;
 
-use Drobotik\Eav\Attribute;
-use Drobotik\Eav\AttributeContainer;
-use Drobotik\Eav\AttributeSet;
-use Drobotik\Eav\Entity;
-use Drobotik\Eav\Enum\_VALUE;
-use Drobotik\Eav\Enum\ATTR_TYPE;
-use Drobotik\Eav\Strategy;
 use Drobotik\Eav\Validation\Constraints\DateConstraint;
 use Drobotik\Eav\Validation\Constraints\LengthConstraint;
 use Drobotik\Eav\Validation\Constraints\NotBlankConstraint;
@@ -23,12 +16,7 @@ use Drobotik\Eav\Validation\Constraints\NotNullConstraint;
 use Drobotik\Eav\Validation\Constraints\NumericConstraint;
 use Drobotik\Eav\Validation\Constraints\RegexConstraint;
 use Drobotik\Eav\Validation\Constraints\RequiredConstraint;
-use Drobotik\Eav\Validation\Validator;
-use Drobotik\Eav\Value\ValueManager;
-use Drobotik\Eav\Value\ValueValidator;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Validator\Constraints;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ValueValidatorConstraintsFunctionalTest extends TestCase
 {

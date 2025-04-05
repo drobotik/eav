@@ -13,13 +13,13 @@ class Validator
      * @param array $constraints
      * @return Violation[]
      */
-    public function validate($value, array $constraints)
+    public function validate($field, $value, array $constraints)
     {
         foreach ($constraints as $constraint) {
             if ($constraint instanceof ConstraintInterface) {
                 $violation = $constraint->validate($value);
                 if ($violation !== null) {
-                    return new Violation(get_class($constraint), $violation);
+                    return new Violation($field, $violation);
                 }
             }
         }
@@ -54,9 +54,9 @@ class Validator
             }
 
             // Validate the field if present
-            $violation = $this->validate($data[$field], $constraints);
+            $violation = $this->validate($field, $data[$field], $constraints);
             if (!empty($violation)) {
-                $violations[] = new Violation($field, $violation);
+                $violations[] = $violation;
             }
         }
 

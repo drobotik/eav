@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Drobotik\Eav;
 
+use Drobotik\Eav\Enum\_ATTR;
 use Drobotik\Eav\Traits\ContainerTrait;
 use Drobotik\Eav\Value\ValueManager;
 
@@ -21,6 +22,10 @@ class AttributeSetAction
     {
         $container = $this->getAttributeContainer();
         $attribute = new Attribute();
+        // set default strategy if its empty
+        if (key_exists(_ATTR::STRATEGY, $record) && empty($record[_ATTR::STRATEGY]) ) {
+            $record[_ATTR::STRATEGY] = $attribute->getStrategy();
+        }
         $attribute->getBag()->setFields($record);
         $container->setAttribute($attribute);
 
