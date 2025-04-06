@@ -1,12 +1,7 @@
 
 ### Table of Contents
 - <a href="#common">Common</a>
-    - <a href="#cli-app">CLI</a>
     - <a href="#connection">Connection</a>
-    - <a href="#laravel-connection">Laravel connection</a>
-    - <a href="#dbal-migrations">DBAL migrations</a>
-    - <a href="#laravel-migrations">Support Laravel migrations</a>
-    - <a href="#laravel-models">Laravel models</a>
 - <a href="#objects">Objects</a>
     - <a href="#domain">Domain</a>
     - <a href="#entity">Entity</a>
@@ -18,14 +13,9 @@
     - <a href="#attribute-set-action">Attribute set action</a>
     - <a href="#value">Value</a>
     - <a href="#pivot">Pivot</a>
-- <a href="#import">Import</a>
-    - <a href="#import-attributes">Import attributes</a>
-    - <a href="#import-data">Import data</a>
-- <a href="#export">Export</a>
 - <a href="#factory">Factory</a>
     - <a href="#eav-factory">Eav factory</a>
     - <a href="#entity-factory">Entity factory</a>
-- <a href="#presenters">Examples</a>
 
 ## Common
 
@@ -33,10 +23,6 @@ The image illustrates a simplified process for creating a new entity.
 
 ![Magento way](./eav.png)
 [Link to diagram](https://miro.com/app/board/uXjVMDWBzBU=/?share_link_id=625279004139)
-
-### CLI app
-The Symfony app utilizes DBAL migration commands. 
-The CLI app is primarily used for executing migrations.
 
 ### Connection
 The CLI app relies on a database connection and utilizes Doctrine DBAL for establishing connections.<br />
@@ -53,40 +39,6 @@ $config = [
 $connection = Connection::get($config)
 ```
 Choose a [driver](https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#driver) that best suits your requirements.
-### DBAL migrations
-Migrate:
-```bash
-$ php eav migrations:migrate latest
-```
-Rollback:
-```bash
-$ php eav migrations:migrate first
-```
-## Objects
-
-### Domain
-
-The Domain is used solely as a wrapper for performing import and export operations. It provides a convenient interface for managing the import/export functionality within the library.
-```php
-use Drobotik\Eav\Domain;
-use Drobotik\Eav\Export\ExportManager();
-use Drobotik\Eav\Import\ImportManager();
-
-$domain = new Domain();
-$domain->setExportManager(new ExportManager());
-$domain->setImportManager(new ImportManager());
-
-$exportManager = $domain->getExportManager();
-$importManager = $domain->getImportManager();
-
-$domain->import();
-
-$domainKey = 1;
-$attributeSetKey = 2;
-$filters = [];
-$columns = ['name', 'size', 'weight']
-$domain->export($domainKey, $attributeSetKey, $filters, $columns);
-```
 
 ### Entity
 
@@ -392,160 +344,6 @@ $model->create([
     _PIVOT::ATTR_ID => $attributeKey
 ]);
 
-```
-
-## Import
-
-Attribute import:
-During the import process, the attribute import functionality creates new attributes that are linked to the attribute set. These attributes are specifically added and associated with the attribute set.
-
-Data Import:
-The Data Import feature is responsible for importing values for attributes that belong to the attribute set. It handles the import of actual data associated with the attributes.
-
-Before starting the process, the data is divided into two parts: new entities to create and entities to update.
-
-New entities to create:
-For new entities, a bulk import query is used, which offers fast processing. However, it is recommended to avoid using a large chunk size to prevent the query from becoming too large.
-
-Entities to update:
-The process further divides entities to update into three categories: new values, values to update, and values to create.
-
-### Import data
-
-```php
-
-use SplFileObject;
-use League\Csv\Reader;
-use Drobotik\Eav\Driver\CsvDriver;
-use Drobotik\Eav\Import\Content\Worker as ContentWorker;
-use Drobotik\Eav\Import\ImportContainer;
-use \Drobotik\Eav\Import\ImportManager;
-
-// import operation requires a data source.
-// In this example, the source is a CSV file
-$file = new SplFileObject('dir/data.csv', 'r');
-$reader = Reader::createFromFileObject($file);
-$reader->setDelimiter(',');
-$reader->setHeaderOffset(0);
-
-$driver = new CsvDriver();
-// the index or line number from which to start
-$driver->setCursor(0);
-// the import data will be imported in chunks,
-// after each iteration default state will be restored
-$driver->setChunkSize(50); // recommended to not use large chunks   
-$driver->setReader($reader);
-
-// this worker will insert data to database
-$contentWorker = new ContentWorker();
-// import DI container
-$importContainer = new ImportContainer();
-$importContainer->setContentWorker($contentWorker);
-
-// the main handler that orchestrates the execution of all necessary operations
-$importManager = new ImportManager();
-$importManager->setContainer($importContainer);
-
-```
-
-### Import attributes
-During the import process, the AttributesWorker component will retrieve column names from the source data. These column names will then be validated. If any of the column names do not correspond to existing attributes (new attributes) or attributes that are not linked with the attribute set, the process will raise an exception and provide the names of the attributes that need to be addressed.
-
-To ensure the import process works correctly, a configuration for these attributes needs to be provided. This configuration will facilitate the creation of the necessary attributes before proceeding with the data import.
-```php
-use Drobotik\Eav\Import\Attributes\Config;
-use Drobotik\Eav\Import\Attributes\ConfigAttribute;
-use Drobotik\Eav\Import\Attributes\Worker as AttributesWorker;
-use Drobotik\Eav\Import\ImportContainer;
-
-$groupKey = 1;
-
-$ageAttribute  = new ConfigAttribute()
-$ageAttribute->setFields([
-    _ATTR::NAME => "age",
-    _ATTR::TYPE => ATTR_TYPE::INT->value()
-]);
-$ageAttribute->setGroupKey($groupKey);
-
-$noteAttribute  =  new ConfigAttribute()
-$noteAttribute->setFields([
-    _ATTR::NAME => "note",
-    _ATTR::TYPE => ATTR_TYPE::TEXT
-]);
-$noteAttribute->setGroupKey($groupKey);
-
-$config = new Config();
-$config->appendAttribute($ageAttribute);
-$config->appendAttribute($noteAttribute);
-
-$attributesWorker = new AttributesWorker();
-$attributesWorker->setConfig($config);
-
-/* ... */
-
-/** @var ImportContainer $importContainer */
-$importContainer->setAttributesWorker($attributesWorker);
-```
-
-See more comprehensive examples in the
-tests/Eav/ImportManager/[ImportManagerAcceptanceTest.php](https://github.com/drobotik/eav/blob/master/tests/Eav/ImportManager/ImportManagerAcceptanceTest.php)
-
-## Export
-The export mechanism is divided into two sections: setup and querying data.
-
-The setup section involves configuring the driver and main classes. In this example, the CsvDriver setup is used.
-
-The querying data section involves utilizing an internal query builder within the library. The idea for the query builder originates from [jquery query builder](https://querybuilder.js.org/).
-
-The query builder generates a custom query based on the provided configuration.
-
-```php
-use SplFileObject;
-use League\Csv\Writer;
-use Drobotik\Eav\Driver\CsvDriver;
-use Drobotik\Eav\Export\ExportManager;
-use Drobotik\Eav\QueryBuilder\QueryBuilder;
-
-// specify where to write
-$file = new SplFileObject(d'/dir/data.csv','w');
-$writer = Writer::createFromFileObject($file);
-$driver = new CsvDriver();
-$driver->setWriter($writer);
-
-$manager = new ExportManager();
-$manager->setDriver($driver);
-
-// query builder config
-$filters = [
-    QB_CONFIG::CONDITION => QB_CONDITION::AND,
-    QB_CONFIG::RULES => [
-        [
-            QB_CONFIG::NAME => "size",
-            QB_CONFIG::OPERATOR => QB_OPERATOR::LESS,
-            QB_CONFIG::VALUE => 10000
-        ], 
-        [
-            QB_CONFIG::CONDITION => QB_CONDITION::OR,
-            QB_CONFIG::RULES => [
-                [
-                    QB_CONFIG::NAME => "name",
-                    QB_CONFIG::OPERATOR => QB_OPERATOR::CONTAINS,
-                    QB_CONFIG::VALUE => 'sit quisquam'
-                ],
-                [
-                    QB_CONFIG::NAME => "name",
-                    QB_CONFIG::OPERATOR => QB_OPERATOR::EQUAL,
-                    QB_CONFIG::VALUE => 'et dolores'
-                ]
-            ],
-        ]
-    ],
-];
-
-$domainKey = 1;
-$setKey = 2;
-$resultColumns = ["size", "name"]
-$manager->run(domainKey, $setKey, $filters, $resultColumns); // file created
 ```
 
 ### Factory

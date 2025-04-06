@@ -6,11 +6,11 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/drobotik/eav.svg?style=flat-square)](https://scrutinizer-ci.com/g/drobotik/eav)
 [![Code Coverage](https://scrutinizer-ci.com/g/drobotik/eav/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/drobotik/eav/?branch=master)
 
-The EAV library is designed to manage and manipulate EAV data across multiple domains. Library offers functionalities for configurable entity CRUD, importing and exporting entities, as well as managing attribute sets and groups. The attributes are configurable, and attribute strategies with hooks are available. The approach and concepts are inspired by the "Magento way". The application is specifically tailored for a custom CMS-oriented environment.
+The EAV engine is designed to manage and manipulate EAV data across multiple domains. Library offers functionalities for configurable entity CRUD, importing and exporting entities, as well as managing attribute sets and groups. The attributes are configurable, and attribute strategies with hooks are available. The approach and concepts are inspired by the "Magento way". The application is specifically tailored for a custom CMS-oriented environment.
 
 ### Features
-- single entity CRUD, validation
-~~- import/export entities~~
+- manage attribute types, attributes, attributes sets and groups, entities
+- entity CRUD and validation
 
 ### Requirements
 - PHP >=7.4
@@ -23,12 +23,6 @@ The EAV library is designed to manage and manipulate EAV data across multiple do
 ```bash
 $ composer require drobotik/eav
 ```
-
-### Planned features 
-
-:heavy_check_mark: Domain import/export csv<br>
-:heavy_check_mark: Switch to Symfony components<br>
-:pushpin: Attribute props and strategy improvements
 
 ### License
 
