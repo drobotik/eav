@@ -1,17 +1,17 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\PivotModel;
 
-use Drobotik\Eav\Database\Connection;
-use Drobotik\Eav\Enum\_PIVOT;
-use Drobotik\Eav\Model\PivotModel;
+use Kuperwood\Eav\Database\Connection;
+use Kuperwood\Eav\Enum\_PIVOT;
+use Kuperwood\Eav\Model\PivotModel;
 use PDO;
 use Tests\TestCase;
 
@@ -27,7 +27,7 @@ class PivotModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\PivotModel::__construct
+     * @covers \Kuperwood\Eav\Model\PivotModel::__construct
      */
     public function defaults() {
         $this->assertEquals(_PIVOT::table(), $this->model->getTable());
@@ -36,7 +36,7 @@ class PivotModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\PivotModel::create
+     * @covers \Kuperwood\Eav\Model\PivotModel::create
      */
     public function create_record()
     {
@@ -66,7 +66,7 @@ class PivotModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\PivotModel::findOne
+     * @covers \Kuperwood\Eav\Model\PivotModel::findOne
      */
     public function findOne()
     {

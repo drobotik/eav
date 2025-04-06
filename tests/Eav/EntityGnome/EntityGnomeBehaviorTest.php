@@ -1,27 +1,27 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\EntityGnome;
 
-use Drobotik\Eav\Attribute;
-use Drobotik\Eav\AttributeContainer;
-use Drobotik\Eav\AttributeSet;
-use Drobotik\Eav\Entity;
-use Drobotik\Eav\EntityBag;
-use Drobotik\Eav\EntityGnome;
-use Drobotik\Eav\Enum\_ENTITY;
-use Drobotik\Eav\Enum\_RESULT;
-use Drobotik\Eav\Model\EntityModel;
-use Drobotik\Eav\Result\Result;
-use Drobotik\Eav\Strategy;
-use Drobotik\Eav\Value\ValueManager;
-use Drobotik\Eav\Value\ValueValidator;
+use Kuperwood\Eav\Attribute;
+use Kuperwood\Eav\AttributeContainer;
+use Kuperwood\Eav\AttributeSet;
+use Kuperwood\Eav\Entity;
+use Kuperwood\Eav\EntityBag;
+use Kuperwood\Eav\EntityGnome;
+use Kuperwood\Eav\Enum\_ENTITY;
+use Kuperwood\Eav\Enum\_RESULT;
+use Kuperwood\Eav\Model\EntityModel;
+use Kuperwood\Eav\Result\Result;
+use Kuperwood\Eav\Strategy;
+use Kuperwood\Eav\Value\ValueManager;
+use Kuperwood\Eav\Value\ValueValidator;
 use Tests\TestCase;
 
 class EntityGnomeBehaviorTest extends TestCase
@@ -36,7 +36,7 @@ class EntityGnomeBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\EntityGnome::find
+     * @covers \Kuperwood\Eav\EntityGnome::find
      */
     public function find() {
         $domainModelKey = 2;
@@ -108,7 +108,7 @@ class EntityGnomeBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\EntityGnome::save
+     * @covers \Kuperwood\Eav\EntityGnome::save
      */
     public function save_fetch_containers() {
         $set = $this->getMockBuilder(AttributeSet::class)
@@ -131,7 +131,7 @@ class EntityGnomeBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\EntityGnome::save
+     * @covers \Kuperwood\Eav\EntityGnome::save
      */
     public function save_values() {
         $bag = $this->getMockBuilder(EntityBag::class)
@@ -186,7 +186,7 @@ class EntityGnomeBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\EntityGnome::save
+     * @covers \Kuperwood\Eav\EntityGnome::save
      */
     public function save_result_created() {
         $attrSet = $this->getMockBuilder(AttributeSet::class)
@@ -215,7 +215,7 @@ class EntityGnomeBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\EntityGnome::save
+     * @covers \Kuperwood\Eav\EntityGnome::save
      */
     public function save_result_updated() {
         $attrSet = $this->getMockBuilder(AttributeSet::class)
@@ -244,7 +244,7 @@ class EntityGnomeBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\EntityGnome::validate
+     * @covers \Kuperwood\Eav\EntityGnome::validate
      */
     public function validate_with_errors() {
         $attribute = $this->getMockBuilder(Attribute::class)
@@ -294,7 +294,7 @@ class EntityGnomeBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\EntityGnome::validate
+     * @covers \Kuperwood\Eav\EntityGnome::validate
      */
     public function validate_passed() {
         $validator = $this->getMockBuilder(ValueValidator::class)
@@ -337,7 +337,7 @@ class EntityGnomeBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\EntityGnome::delete
+     * @covers \Kuperwood\Eav\EntityGnome::delete
      */
     public function delete() {
         $attribute = $this->getMockBuilder(Attribute::class)
@@ -409,7 +409,7 @@ class EntityGnomeBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\EntityGnome::delete
+     * @covers \Kuperwood\Eav\EntityGnome::delete
      */
     public function not_deleted() {
         $record = $this->getMockBuilder(EntityModel::class)
@@ -448,7 +448,7 @@ class EntityGnomeBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\EntityGnome::toArray
+     * @covers \Kuperwood\Eav\EntityGnome::toArray
      */
     public function to_array() {
         $data = [

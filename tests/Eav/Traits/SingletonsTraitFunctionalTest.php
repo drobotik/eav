@@ -1,26 +1,26 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\Traits;
 
-use Drobotik\Eav\AttributeContainer;
-use Drobotik\Eav\AttributeSet;
-use Drobotik\Eav\Factory\EavFactory;
-use Drobotik\Eav\Model\AttributeGroupModel;
-use Drobotik\Eav\Model\AttributeModel;
-use Drobotik\Eav\Model\AttributeSetModel;
-use Drobotik\Eav\Model\DomainModel;
-use Drobotik\Eav\Model\EntityModel;
-use Drobotik\Eav\Model\PivotModel;
-use Drobotik\Eav\Model\ValueBase;
-use Drobotik\Eav\Traits\SingletonsTrait;
-use Drobotik\Eav\Value\ValueParser;
+use Kuperwood\Eav\AttributeContainer;
+use Kuperwood\Eav\AttributeSet;
+use Kuperwood\Eav\Factory\EavFactory;
+use Kuperwood\Eav\Model\AttributeGroupModel;
+use Kuperwood\Eav\Model\AttributeModel;
+use Kuperwood\Eav\Model\AttributeSetModel;
+use Kuperwood\Eav\Model\DomainModel;
+use Kuperwood\Eav\Model\EntityModel;
+use Kuperwood\Eav\Model\PivotModel;
+use Kuperwood\Eav\Model\ValueBase;
+use Kuperwood\Eav\Traits\SingletonsTrait;
+use Kuperwood\Eav\Value\ValueParser;
 use Faker\Generator;
 use PHPUnit\Framework\TestCase;
 
@@ -31,7 +31,7 @@ class SingletonsTraitFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Traits\SingletonsTrait::makeAttributeSetModel
+     * @covers \Kuperwood\Eav\Traits\SingletonsTrait::makeAttributeSetModel
      */
     public function testMakeAttributeSetModel()
     {
@@ -42,7 +42,7 @@ class SingletonsTraitFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Traits\SingletonsTrait::makeAttributeContainer
+     * @covers \Kuperwood\Eav\Traits\SingletonsTrait::makeAttributeContainer
      */
     public function testMakeAttributeContainer()
     {
@@ -52,7 +52,7 @@ class SingletonsTraitFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Traits\SingletonsTrait::makeEntityModel
+     * @covers \Kuperwood\Eav\Traits\SingletonsTrait::makeEntityModel
      */
     public function testMakeEntityModel()
     {
@@ -62,7 +62,7 @@ class SingletonsTraitFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Traits\SingletonsTrait::makeAttributeSet
+     * @covers \Kuperwood\Eav\Traits\SingletonsTrait::makeAttributeSet
      */
     public function testMakeAttributeSet()
     {
@@ -72,7 +72,7 @@ class SingletonsTraitFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Traits\SingletonsTrait::makeDomainModel
+     * @covers \Kuperwood\Eav\Traits\SingletonsTrait::makeDomainModel
      */
     public function testMakeDomainModel()
     {
@@ -82,7 +82,7 @@ class SingletonsTraitFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Traits\SingletonsTrait::makeGroupModel
+     * @covers \Kuperwood\Eav\Traits\SingletonsTrait::makeGroupModel
      */
     public function testMakeGroupModel()
     {
@@ -92,7 +92,7 @@ class SingletonsTraitFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Traits\SingletonsTrait::makePivotModel
+     * @covers \Kuperwood\Eav\Traits\SingletonsTrait::makePivotModel
      */
     public function testMakePivotModel()
     {
@@ -102,7 +102,7 @@ class SingletonsTraitFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Traits\SingletonsTrait::makeValueModel
+     * @covers \Kuperwood\Eav\Traits\SingletonsTrait::makeValueModel
      */
     public function testMakeValueModel()
     {
@@ -112,7 +112,7 @@ class SingletonsTraitFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Traits\SingletonsTrait::makeAttributeModel
+     * @covers \Kuperwood\Eav\Traits\SingletonsTrait::makeAttributeModel
      */
     public function testMakeAttributeModel()
     {
@@ -122,7 +122,7 @@ class SingletonsTraitFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Traits\SingletonsTrait::makeEavFactory
+     * @covers \Kuperwood\Eav\Traits\SingletonsTrait::makeEavFactory
      */
     public function testMakeEavFactory()
     {
@@ -132,7 +132,7 @@ class SingletonsTraitFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Traits\SingletonsTrait::makeValueParser
+     * @covers \Kuperwood\Eav\Traits\SingletonsTrait::makeValueParser
      */
     public function testMakeValueParser()
     {
@@ -142,7 +142,7 @@ class SingletonsTraitFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Traits\SingletonsTrait::makeFakerGenerator
+     * @covers \Kuperwood\Eav\Traits\SingletonsTrait::makeFakerGenerator
      */
     public function testMakeFakerGenerator()
     {

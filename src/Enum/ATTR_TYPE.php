@@ -1,21 +1,21 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
-namespace Drobotik\Eav\Enum;
+namespace Kuperwood\Eav\Enum;
 
 use DateTime;
 
-use Drobotik\Eav\Exception\AttributeException;
-use Drobotik\Eav\Validation\Constraints\DateConstraint;
-use Drobotik\Eav\Validation\Constraints\LengthConstraint;
-use Drobotik\Eav\Validation\Constraints\NumericConstraint;
-use Drobotik\Eav\Validation\Constraints\RegexConstraint;
+use Kuperwood\Eav\Exception\AttributeException;
+use Kuperwood\Eav\Validation\Constraints\DateConstraint;
+use Kuperwood\Eav\Validation\Constraints\LengthConstraint;
+use Kuperwood\Eav\Validation\Constraints\NumericConstraint;
+use Kuperwood\Eav\Validation\Constraints\RegexConstraint;
 use Faker\Factory;
 use InvalidArgumentException;
 

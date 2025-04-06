@@ -1,17 +1,17 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\DomainModel;
 
-use Drobotik\Eav\Database\Connection;
-use Drobotik\Eav\Enum\_DOMAIN;
-use Drobotik\Eav\Model\DomainModel;
+use Kuperwood\Eav\Database\Connection;
+use Kuperwood\Eav\Enum\_DOMAIN;
+use Kuperwood\Eav\Model\DomainModel;
 use PDO;
 use Tests\TestCase;
 
@@ -27,7 +27,7 @@ class DomainModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\DomainModel::__construct
+     * @covers \Kuperwood\Eav\Model\DomainModel::__construct
      */
     public function defaults() {
         $this->assertEquals(_DOMAIN::table(), $this->model->getTable());
@@ -36,7 +36,7 @@ class DomainModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\DomainModel::create
+     * @covers \Kuperwood\Eav\Model\DomainModel::create
      */
     public function create_record()
     {

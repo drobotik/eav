@@ -1,18 +1,18 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\Entity;
 
-use Drobotik\Eav\AttributeSet;
-use Drobotik\Eav\Entity;
-use Drobotik\Eav\EntityBag;
-use Drobotik\Eav\EntityGnome;
+use Kuperwood\Eav\AttributeSet;
+use Kuperwood\Eav\Entity;
+use Kuperwood\Eav\EntityBag;
+use Kuperwood\Eav\EntityGnome;
 use PHPUnit\Framework\TestCase;
 
 class EntityFunctionalTest extends TestCase
@@ -26,9 +26,9 @@ class EntityFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Entity::hasKey
-     * @covers \Drobotik\Eav\Entity::getKey
-     * @covers \Drobotik\Eav\Entity::setKey
+     * @covers \Kuperwood\Eav\Entity::hasKey
+     * @covers \Kuperwood\Eav\Entity::getKey
+     * @covers \Kuperwood\Eav\Entity::setKey
      */
     public function key() {
         $this->assertFalse($this->entity->hasKey());
@@ -39,9 +39,9 @@ class EntityFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Entity::hasKey
-     * @covers \Drobotik\Eav\Entity::getKey
-     * @covers \Drobotik\Eav\Entity::setKey
+     * @covers \Kuperwood\Eav\Entity::hasKey
+     * @covers \Kuperwood\Eav\Entity::getKey
+     * @covers \Kuperwood\Eav\Entity::setKey
      */
     public function key_zero() {
         $this->entity->setKey(0);
@@ -51,9 +51,9 @@ class EntityFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Entity::hasDomainKey
-     * @covers \Drobotik\Eav\Entity::getDomainKey
-     * @covers \Drobotik\Eav\Entity::setDomainKey
+     * @covers \Kuperwood\Eav\Entity::hasDomainKey
+     * @covers \Kuperwood\Eav\Entity::getDomainKey
+     * @covers \Kuperwood\Eav\Entity::setDomainKey
      */
     public function domain_key() {
         $this->entity->setDomainKey(0);
@@ -63,9 +63,9 @@ class EntityFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Entity::hasDomainKey
-     * @covers \Drobotik\Eav\Entity::getDomainKey
-     * @covers \Drobotik\Eav\Entity::setDomainKey
+     * @covers \Kuperwood\Eav\Entity::hasDomainKey
+     * @covers \Kuperwood\Eav\Entity::getDomainKey
+     * @covers \Kuperwood\Eav\Entity::setDomainKey
      */
     public function domain_key_zero() {
         $this->entity->setDomainKey(0);
@@ -75,9 +75,9 @@ class EntityFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Entity::setAttributeSet
-     * @covers \Drobotik\Eav\Entity::getAttributeSet
-     * @covers \Drobotik\Eav\Entity::__construct
+     * @covers \Kuperwood\Eav\Entity::setAttributeSet
+     * @covers \Kuperwood\Eav\Entity::getAttributeSet
+     * @covers \Kuperwood\Eav\Entity::__construct
      */
     public function attribute_set() {
         $attributeSet = $this->entity->getAttributeSet();
@@ -92,8 +92,8 @@ class EntityFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Entity::getBag
-     * @covers \Drobotik\Eav\Entity::__construct
+     * @covers \Kuperwood\Eav\Entity::getBag
+     * @covers \Kuperwood\Eav\Entity::__construct
      */
     public function bag() {
         $this->assertInstanceOf(EntityBag::class, $this->entity->getBag());
@@ -101,8 +101,8 @@ class EntityFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Entity::getGnome
-     * @covers \Drobotik\Eav\Entity::__construct
+     * @covers \Kuperwood\Eav\Entity::getGnome
+     * @covers \Kuperwood\Eav\Entity::__construct
      */
     public function gnome() {
         $gnome = $this->entity->getGnome();

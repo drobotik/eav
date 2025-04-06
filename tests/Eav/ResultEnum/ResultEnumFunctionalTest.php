@@ -1,15 +1,15 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\ResultEnum;
 
-use Drobotik\Eav\Enum\_RESULT;
+use Kuperwood\Eav\Enum\_RESULT;
 use PHPUnit\Framework\TestCase;
 
 class ResultEnumFunctionalTest extends TestCase
@@ -17,7 +17,7 @@ class ResultEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Enum\_RESULT::code
+     * @covers \Kuperwood\Eav\Enum\_RESULT::code
      */
     public function codes() {
         $this->assertEquals(1, _RESULT::CREATED);
@@ -40,7 +40,7 @@ class ResultEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Enum\_RESULT::message
+     * @covers \Kuperwood\Eav\Enum\_RESULT::message
      */
     public function messages() {
         $this->assertEquals('Created', _RESULT::message(_RESULT::CREATED));

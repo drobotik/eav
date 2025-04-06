@@ -1,28 +1,28 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\Strategy;
 
-use Drobotik\Eav\AttributeContainer;
-use Drobotik\Eav\AttributeSet;
-use Drobotik\Eav\Entity;
-use Drobotik\Eav\Enum\_RESULT;
-use Drobotik\Eav\Result\Result;
-use Drobotik\Eav\Strategy;
-use Drobotik\Eav\Validation\Assert;
-use Drobotik\Eav\Validation\Constraints\NotBlankConstraint;
-use Drobotik\Eav\Validation\Constraints\NumericConstraint;
-use Drobotik\Eav\Validation\Constraints\RequiredConstraint;
-use Drobotik\Eav\Validation\Validator;
-use Drobotik\Eav\Value\ValueAction;
-use Drobotik\Eav\Value\ValueManager;
-use Drobotik\Eav\Value\ValueValidator;
+use Kuperwood\Eav\AttributeContainer;
+use Kuperwood\Eav\AttributeSet;
+use Kuperwood\Eav\Entity;
+use Kuperwood\Eav\Enum\_RESULT;
+use Kuperwood\Eav\Result\Result;
+use Kuperwood\Eav\Strategy;
+use Kuperwood\Eav\Validation\Assert;
+use Kuperwood\Eav\Validation\Constraints\NotBlankConstraint;
+use Kuperwood\Eav\Validation\Constraints\NumericConstraint;
+use Kuperwood\Eav\Validation\Constraints\RequiredConstraint;
+use Kuperwood\Eav\Validation\Validator;
+use Kuperwood\Eav\Value\ValueAction;
+use Kuperwood\Eav\Value\ValueManager;
+use Kuperwood\Eav\Value\ValueValidator;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Constraints;
@@ -39,7 +39,7 @@ class StrategyBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\Strategy::create
+     * @covers \Kuperwood\Eav\Strategy::create
      */
     public function create_action() {
         $valueAction = $this->getMockBuilder(ValueAction::class)
@@ -61,7 +61,7 @@ class StrategyBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\Strategy::find
+     * @covers \Kuperwood\Eav\Strategy::find
      */
     public function find_action() {
         $valueAction = $this->getMockBuilder(ValueAction::class)
@@ -83,7 +83,7 @@ class StrategyBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\Strategy::update
+     * @covers \Kuperwood\Eav\Strategy::update
      */
     public function update_action_updated() {
         $valueAction = $this->getMockBuilder(ValueAction::class)
@@ -110,7 +110,7 @@ class StrategyBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\Strategy::update
+     * @covers \Kuperwood\Eav\Strategy::update
      */
     public function update_action_created() {
         $valueAction = $this->getMockBuilder(ValueAction::class)
@@ -131,7 +131,7 @@ class StrategyBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\Strategy::delete
+     * @covers \Kuperwood\Eav\Strategy::delete
      */
     public function delete_action() {
         $strategy = $this->getMockBuilder(ValueAction::class)
@@ -153,7 +153,7 @@ class StrategyBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\Strategy::save
+     * @covers \Kuperwood\Eav\Strategy::save
      */
     public function save_action_create()
     {
@@ -187,7 +187,7 @@ class StrategyBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\Strategy::save
+     * @covers \Kuperwood\Eav\Strategy::save
      */
     public function save_action_update()
     {
@@ -224,7 +224,7 @@ class StrategyBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\Strategy::validate
+     * @covers \Kuperwood\Eav\Strategy::validate
      */
     public function validate_fails_action() {
 
@@ -261,7 +261,7 @@ class StrategyBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\Strategy::validate
+     * @covers \Kuperwood\Eav\Strategy::validate
      */
     public function validate_passed_action() {
         $valueValidator = $this->getMockBuilder(ValueValidator::class)

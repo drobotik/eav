@@ -1,19 +1,19 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\AttributeSet;
 
-use Drobotik\Eav\Enum\_ATTR;
-use Drobotik\Eav\AttributeContainer;
-use Drobotik\Eav\AttributeSet;
-use Drobotik\Eav\AttributeSetAction;
-use Drobotik\Eav\Model\AttributeSetModel;
+use Kuperwood\Eav\Enum\_ATTR;
+use Kuperwood\Eav\AttributeContainer;
+use Kuperwood\Eav\AttributeSet;
+use Kuperwood\Eav\AttributeSetAction;
+use Kuperwood\Eav\Model\AttributeSetModel;
 use PHPUnit\Framework\TestCase;
 
 class AttributeSetBehaviorTest extends TestCase
@@ -21,7 +21,7 @@ class AttributeSetBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\AttributeSet::fetchContainers
+     * @covers \Kuperwood\Eav\AttributeSet::fetchContainers
      */
     public function fetch_containers() {
         $key = 321;
@@ -69,7 +69,7 @@ class AttributeSetBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\AttributeSet::fetchContainers
+     * @covers \Kuperwood\Eav\AttributeSet::fetchContainers
      */
     public function fetch_containers_no_key() {
         $instance = $this->getMockBuilder(AttributeSet::class)
@@ -83,7 +83,7 @@ class AttributeSetBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\AttributeSet::fetchContainers
+     * @covers \Kuperwood\Eav\AttributeSet::fetchContainers
      */
     public function fetch_containers_no_force() {
         $instance = $this->getMockBuilder(AttributeSet::class)
@@ -97,7 +97,7 @@ class AttributeSetBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\AttributeSet::fetchContainers
+     * @covers \Kuperwood\Eav\AttributeSet::fetchContainers
      */
     public function fetch_containers_force() {
         $model = $this->getMockBuilder(AttributeSetModel::class)

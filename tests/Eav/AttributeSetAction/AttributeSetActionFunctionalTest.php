@@ -1,24 +1,24 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\AttributeSetAction;
 
-use Drobotik\Eav\Attribute;
-use Drobotik\Eav\AttributeContainer;
-use Drobotik\Eav\AttributeSet;
-use Drobotik\Eav\AttributeSetAction;
-use Drobotik\Eav\Database\Connection;
-use Drobotik\Eav\Entity;
-use Drobotik\Eav\Enum\_ATTR;
-use Drobotik\Eav\Enum\ATTR_TYPE;
-use Drobotik\Eav\Model\ValueBase;
-use Drobotik\Eav\Strategy;
+use Kuperwood\Eav\Attribute;
+use Kuperwood\Eav\AttributeContainer;
+use Kuperwood\Eav\AttributeSet;
+use Kuperwood\Eav\AttributeSetAction;
+use Kuperwood\Eav\Database\Connection;
+use Kuperwood\Eav\Entity;
+use Kuperwood\Eav\Enum\_ATTR;
+use Kuperwood\Eav\Enum\ATTR_TYPE;
+use Kuperwood\Eav\Model\ValueBase;
+use Kuperwood\Eav\Strategy;
 use PDO;
 use Tests\TestCase;
 
@@ -37,7 +37,7 @@ class AttributeSetActionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\AttributeSetAction::initializeAttribute
+     * @covers \Kuperwood\Eav\AttributeSetAction::initializeAttribute
      */
     public function initialize_attribute() {
         $attribute = [
@@ -55,7 +55,7 @@ class AttributeSetActionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\AttributeSetAction::initializeAttribute
+     * @covers \Kuperwood\Eav\AttributeSetAction::initializeAttribute
      */
     public function initialize_attribute_with_empty_strategy() {
         $attribute = [
@@ -67,7 +67,7 @@ class AttributeSetActionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\AttributeSetAction::initializeAttribute
+     * @covers \Kuperwood\Eav\AttributeSetAction::initializeAttribute
      */
     public function initialized_attribute_with_pivot() {
         $domainKey = $this->eavFactory->createDomain();
@@ -89,7 +89,7 @@ class AttributeSetActionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\AttributeSetAction::initializeStrategy
+     * @covers \Kuperwood\Eav\AttributeSetAction::initializeStrategy
      */
     public function initialized_strategy() {
         $attribute = new Attribute();
@@ -100,7 +100,7 @@ class AttributeSetActionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\AttributeSetAction::initialize
+     * @covers \Kuperwood\Eav\AttributeSetAction::initialize
      */
     public function initialize() {
         $domainKey = $this->eavFactory->createDomain();

@@ -1,17 +1,17 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\EavFactoryResult;
 
-use Drobotik\Eav\Enum\_ATTR;
+use Kuperwood\Eav\Enum\_ATTR;
 use PHPUnit\Framework\TestCase;
-use Drobotik\Eav\Result\EntityFactoryResult;
+use Kuperwood\Eav\Result\EntityFactoryResult;
 
 class EavFactoryResultFunctionalTest extends TestCase
 {
@@ -24,8 +24,8 @@ class EavFactoryResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\EntityFactoryResult::getDomainKey
-     * @covers \Drobotik\Eav\Result\EntityFactoryResult::setDomainKey
+     * @covers \Kuperwood\Eav\Result\EntityFactoryResult::getDomainKey
+     * @covers \Kuperwood\Eav\Result\EntityFactoryResult::setDomainKey
      */
     public function domain_key() {
         $this->result->setDomainKey(1);
@@ -34,8 +34,8 @@ class EavFactoryResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\EntityFactoryResult::getSetKey
-     * @covers \Drobotik\Eav\Result\EntityFactoryResult::setSetKey
+     * @covers \Kuperwood\Eav\Result\EntityFactoryResult::getSetKey
+     * @covers \Kuperwood\Eav\Result\EntityFactoryResult::setSetKey
      */
     public function set_key() {
         $this->result->setSetKey(1);
@@ -44,8 +44,8 @@ class EavFactoryResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\EntityFactoryResult::getEntityKey
-     * @covers \Drobotik\Eav\Result\EntityFactoryResult::setEntityKey
+     * @covers \Kuperwood\Eav\Result\EntityFactoryResult::getEntityKey
+     * @covers \Kuperwood\Eav\Result\EntityFactoryResult::setEntityKey
      */
     public function entity_model() {
         $this->result->setEntityKey(1);
@@ -54,8 +54,8 @@ class EavFactoryResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\EntityFactoryResult::addAttribute
-     * @covers \Drobotik\Eav\Result\EntityFactoryResult::getAttributes
+     * @covers \Kuperwood\Eav\Result\EntityFactoryResult::addAttribute
+     * @covers \Kuperwood\Eav\Result\EntityFactoryResult::getAttributes
      */
     public function attributes() {
         $this->assertEquals([], $this->result->getAttributes());
@@ -66,8 +66,8 @@ class EavFactoryResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\EntityFactoryResult::addValue
-     * @covers \Drobotik\Eav\Result\EntityFactoryResult::getValues
+     * @covers \Kuperwood\Eav\Result\EntityFactoryResult::addValue
+     * @covers \Kuperwood\Eav\Result\EntityFactoryResult::getValues
      */
     public function values() {
         $this->assertEquals([], $this->result->getValues());
@@ -77,8 +77,8 @@ class EavFactoryResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\EntityFactoryResult::addPivot
-     * @covers \Drobotik\Eav\Result\EntityFactoryResult::getPivots
+     * @covers \Kuperwood\Eav\Result\EntityFactoryResult::addPivot
+     * @covers \Kuperwood\Eav\Result\EntityFactoryResult::getPivots
      */
     public function pivots() {
         $this->assertEquals([], $this->result->getPivots());

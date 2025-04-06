@@ -1,19 +1,19 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\ValueModel;
 
-use Drobotik\Eav\Database\Connection;
-use Drobotik\Eav\Enum\_VALUE;
-use Drobotik\Eav\Enum\ATTR_TYPE;
-use Drobotik\Eav\Model\ValueBase;
-use Drobotik\Eav\Value\ValueParser;
+use Kuperwood\Eav\Database\Connection;
+use Kuperwood\Eav\Enum\_VALUE;
+use Kuperwood\Eav\Enum\ATTR_TYPE;
+use Kuperwood\Eav\Model\ValueBase;
+use Kuperwood\Eav\Value\ValueParser;
 use PDO;
 use Tests\TestCase;
 
@@ -29,7 +29,7 @@ class ValueModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\ValueBase::__construct
+     * @covers \Kuperwood\Eav\Model\ValueBase::__construct
      */
     public function defaults() {
         $this->assertEquals(_VALUE::ID, $this->model->getPrimaryKey());
@@ -45,7 +45,7 @@ class ValueModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\ValueBase::create
+     * @covers \Kuperwood\Eav\Model\ValueBase::create
      */
     public function create_record()
     {
@@ -76,7 +76,7 @@ class ValueModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\ValueBase::find
+     * @covers \Kuperwood\Eav\Model\ValueBase::find
      */
     public function find_record()
     {
@@ -95,7 +95,7 @@ class ValueModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\ValueBase::update
+     * @covers \Kuperwood\Eav\Model\ValueBase::update
      */
     public function update_record()
     {
@@ -119,7 +119,7 @@ class ValueModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\ValueBase::destroy
+     * @covers \Kuperwood\Eav\Model\ValueBase::destroy
      */
     public function destroy_record()
     {

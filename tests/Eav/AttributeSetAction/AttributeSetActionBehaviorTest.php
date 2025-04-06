@@ -1,22 +1,22 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\AttributeSetAction;
 
-use Drobotik\Eav\Attribute;
-use Drobotik\Eav\AttributeContainer;
-use Drobotik\Eav\AttributeSet;
-use Drobotik\Eav\AttributeSetAction;
-use Drobotik\Eav\Entity;
-use Drobotik\Eav\EntityBag;
-use Drobotik\Eav\Strategy;
-use Drobotik\Eav\Value\ValueManager;
+use Kuperwood\Eav\Attribute;
+use Kuperwood\Eav\AttributeContainer;
+use Kuperwood\Eav\AttributeSet;
+use Kuperwood\Eav\AttributeSetAction;
+use Kuperwood\Eav\Entity;
+use Kuperwood\Eav\EntityBag;
+use Kuperwood\Eav\Strategy;
+use Kuperwood\Eav\Value\ValueManager;
 use PHPUnit\Framework\TestCase;
 
 class AttributeSetActionBehaviorTest extends TestCase
@@ -24,7 +24,7 @@ class AttributeSetActionBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\AttributeSetAction::initializeValueManager
+     * @covers \Kuperwood\Eav\AttributeSetAction::initializeValueManager
      */
     public function initialize_value_manager() {
         $value = 'test';
@@ -76,7 +76,7 @@ class AttributeSetActionBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\AttributeSetAction::initialize
+     * @covers \Kuperwood\Eav\AttributeSetAction::initialize
      */
     public function initialize() {
         $attributeRecord = [123];

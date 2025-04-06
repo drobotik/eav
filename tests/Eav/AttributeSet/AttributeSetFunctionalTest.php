@@ -1,18 +1,18 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\AttributeSet;
 
-use Drobotik\Eav\Attribute;
-use Drobotik\Eav\AttributeContainer;
-use Drobotik\Eav\AttributeSet;
-use Drobotik\Eav\Entity;
+use Kuperwood\Eav\Attribute;
+use Kuperwood\Eav\AttributeContainer;
+use Kuperwood\Eav\AttributeSet;
+use Kuperwood\Eav\Entity;
 use PHPUnit\Framework\TestCase;
 
 class AttributeSetFunctionalTest extends TestCase
@@ -27,9 +27,9 @@ class AttributeSetFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\AttributeSet::setKey
-     * @covers \Drobotik\Eav\AttributeSet::getKey
-     * @covers \Drobotik\Eav\AttributeSet::hasKey
+     * @covers \Kuperwood\Eav\AttributeSet::setKey
+     * @covers \Kuperwood\Eav\AttributeSet::getKey
+     * @covers \Kuperwood\Eav\AttributeSet::hasKey
      */
     public function key() {
         $this->assertFalse($this->instance->hasKey());
@@ -40,9 +40,9 @@ class AttributeSetFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\AttributeSet::setKey
-     * @covers \Drobotik\Eav\AttributeSet::getKey
-     * @covers \Drobotik\Eav\AttributeSet::hasKey
+     * @covers \Kuperwood\Eav\AttributeSet::setKey
+     * @covers \Kuperwood\Eav\AttributeSet::getKey
+     * @covers \Kuperwood\Eav\AttributeSet::hasKey
      */
     public function key_zero() {
         $this->instance->setKey(0);
@@ -52,8 +52,8 @@ class AttributeSetFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\AttributeSet::setEntity
-     * @covers \Drobotik\Eav\AttributeSet::getEntity
+     * @covers \Kuperwood\Eav\AttributeSet::setEntity
+     * @covers \Kuperwood\Eav\AttributeSet::getEntity
      */
     public function entity()
     {
@@ -64,8 +64,8 @@ class AttributeSetFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\AttributeSet::setName
-     * @covers \Drobotik\Eav\AttributeSet::getName
+     * @covers \Kuperwood\Eav\AttributeSet::setName
+     * @covers \Kuperwood\Eav\AttributeSet::getName
      */
     public function name_accessor() {
         $this->instance->setName('test');
@@ -74,7 +74,7 @@ class AttributeSetFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\AttributeSet::getContainers
+     * @covers \Kuperwood\Eav\AttributeSet::getContainers
      */
     public function get_containers() {
         $this->assertEquals([], $this->instance->getContainers());
@@ -82,7 +82,7 @@ class AttributeSetFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\AttributeSet::pushContainer
+     * @covers \Kuperwood\Eav\AttributeSet::pushContainer
      */
     public function push_container() {
         $attribute = new Attribute();
@@ -95,7 +95,7 @@ class AttributeSetFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\AttributeSet::getContainer
+     * @covers \Kuperwood\Eav\AttributeSet::getContainer
      */
     public function get_container() {
         $attribute = new Attribute();
@@ -108,7 +108,7 @@ class AttributeSetFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\AttributeSet::getContainer
+     * @covers \Kuperwood\Eav\AttributeSet::getContainer
      */
     public function get_container_return_null() {
         $this->assertNull($this->instance->getContainer('test'));
@@ -116,7 +116,7 @@ class AttributeSetFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\AttributeSet::hasContainer
+     * @covers \Kuperwood\Eav\AttributeSet::hasContainer
      */
     public function has_container() {
         $this->assertFalse($this->instance->hasContainer('test'));
@@ -130,7 +130,7 @@ class AttributeSetFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\AttributeSet::hasContainers
+     * @covers \Kuperwood\Eav\AttributeSet::hasContainers
      */
     public function has_containers() {
         $this->assertFalse($this->instance->hasContainers());
@@ -144,7 +144,7 @@ class AttributeSetFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\AttributeSet::resetContainers
+     * @covers \Kuperwood\Eav\AttributeSet::resetContainers
      */
     public function reset_containers() {
         $attribute = new Attribute();

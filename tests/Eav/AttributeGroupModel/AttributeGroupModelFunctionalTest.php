@@ -1,17 +1,17 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\AttributeGroupModel;
 
-use Drobotik\Eav\Database\Connection;
-use Drobotik\Eav\Enum\_GROUP;
-use Drobotik\Eav\Model\AttributeGroupModel;
+use Kuperwood\Eav\Database\Connection;
+use Kuperwood\Eav\Enum\_GROUP;
+use Kuperwood\Eav\Model\AttributeGroupModel;
 use PDO;
 use Tests\TestCase;
 
@@ -28,7 +28,7 @@ class AttributeGroupModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\AttributeGroupModel::__construct
+     * @covers \Kuperwood\Eav\Model\AttributeGroupModel::__construct
      */
     public function defaults() {
         $this->assertEquals(_GROUP::table(), $this->model->getTable());
@@ -38,7 +38,7 @@ class AttributeGroupModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\AttributeGroupModel::create
+     * @covers \Kuperwood\Eav\Model\AttributeGroupModel::create
      */
     public function create_record()
     {
@@ -64,7 +64,7 @@ class AttributeGroupModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\AttributeGroupModel::checkGroupInAttributeSet
+     * @covers \Kuperwood\Eav\Model\AttributeGroupModel::checkGroupInAttributeSet
      */
     public function checkGroupKeyInAttributeSet()
     {

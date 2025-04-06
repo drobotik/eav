@@ -1,18 +1,18 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\AttributeModel;
 
-use Drobotik\Eav\Database\Connection;
-use Drobotik\Eav\Enum\_ATTR;
-use Drobotik\Eav\Enum\ATTR_TYPE;
-use Drobotik\Eav\Model\AttributeModel;
+use Kuperwood\Eav\Database\Connection;
+use Kuperwood\Eav\Enum\_ATTR;
+use Kuperwood\Eav\Enum\ATTR_TYPE;
+use Kuperwood\Eav\Model\AttributeModel;
 use PDO;
 use Tests\TestCase;
 
@@ -28,7 +28,7 @@ class AttributeModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\AttributeModel::__construct
+     * @covers \Kuperwood\Eav\Model\AttributeModel::__construct
      */
     public function defaults() {
         $this->assertEquals(_ATTR::table(), $this->model->getTable());
@@ -38,7 +38,7 @@ class AttributeModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\AttributeModel::create
+     * @covers \Kuperwood\Eav\Model\AttributeModel::create
      */
     public function create_record()
     {
@@ -74,7 +74,7 @@ class AttributeModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\AttributeModel::findByName
+     * @covers \Kuperwood\Eav\Model\AttributeModel::findByName
      */
     public function find_by_name()
     {

@@ -1,15 +1,15 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\AttributePropEnum;
 
-use Drobotik\Eav\Enum\_ATTR_PROP;
+use Kuperwood\Eav\Enum\_ATTR_PROP;
 use PHPUnit\Framework\TestCase;
 
 class AttributePropEnumFunctionalTest extends TestCase
@@ -17,7 +17,7 @@ class AttributePropEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Enum\_ATTR_PROP::table
+     * @covers \Kuperwood\Eav\Enum\_ATTR_PROP::table
      */
     public function table() {
         $this->assertEquals('eav_attribute_properties', _ATTR_PROP::table());
@@ -25,10 +25,10 @@ class AttributePropEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Enum\_ATTR_PROP::KEY
-     * @covers \Drobotik\Eav\Enum\_ATTR_PROP::ATTRIBUTE_KEY
-     * @covers \Drobotik\Eav\Enum\_ATTR_PROP::NAME
-     * @covers \Drobotik\Eav\Enum\_ATTR_PROP::VALUE
+     * @covers \Kuperwood\Eav\Enum\_ATTR_PROP::KEY
+     * @covers \Kuperwood\Eav\Enum\_ATTR_PROP::ATTRIBUTE_KEY
+     * @covers \Kuperwood\Eav\Enum\_ATTR_PROP::NAME
+     * @covers \Kuperwood\Eav\Enum\_ATTR_PROP::VALUE
      */
     public function column() {
         $this->assertEquals('property_key',  _ATTR_PROP::KEY);

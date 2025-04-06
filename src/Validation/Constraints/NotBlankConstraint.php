@@ -1,8 +1,8 @@
 <?php
 
-namespace Drobotik\Eav\Validation\Constraints;
+namespace Kuperwood\Eav\Validation\Constraints;
 
-use Drobotik\Eav\Interfaces\ConstraintInterface;
+use Kuperwood\Eav\Interfaces\ConstraintInterface;
 
 class NotBlankConstraint implements ConstraintInterface
 {

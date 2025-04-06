@@ -1,18 +1,18 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\ValueEnum;
 
-use Drobotik\Eav\Enum\_ATTR;
-use Drobotik\Eav\Enum\_DOMAIN;
-use Drobotik\Eav\Enum\_ENTITY;
-use Drobotik\Eav\Enum\_VALUE;
+use Kuperwood\Eav\Enum\_ATTR;
+use Kuperwood\Eav\Enum\_DOMAIN;
+use Kuperwood\Eav\Enum\_ENTITY;
+use Kuperwood\Eav\Enum\_VALUE;
 use PHPUnit\Framework\TestCase;
 
 class ValueEnumFunctionalTest extends TestCase
@@ -20,7 +20,7 @@ class ValueEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Enum\_VALUE::table
+     * @covers \Kuperwood\Eav\Enum\_VALUE::table
      */
     public function table() {
         $this->assertEquals('eav_value_%s', _VALUE::table());
@@ -28,11 +28,11 @@ class ValueEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Enum\_VALUE::ID
-     * @covers \Drobotik\Eav\Enum\_VALUE::DOMAIN_ID
-     * @covers \Drobotik\Eav\Enum\_VALUE::ENTITY_ID
-     * @covers \Drobotik\Eav\Enum\_VALUE::ATTRIBUTE_ID
-     * @covers \Drobotik\Eav\Enum\_VALUE::VALUE
+     * @covers \Kuperwood\Eav\Enum\_VALUE::ID
+     * @covers \Kuperwood\Eav\Enum\_VALUE::DOMAIN_ID
+     * @covers \Kuperwood\Eav\Enum\_VALUE::ENTITY_ID
+     * @covers \Kuperwood\Eav\Enum\_VALUE::ATTRIBUTE_ID
+     * @covers \Kuperwood\Eav\Enum\_VALUE::VALUE
      */
     public function columns() {
         $this->assertEquals('value_id', _VALUE::ID);

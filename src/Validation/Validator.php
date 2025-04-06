@@ -1,9 +1,9 @@
 <?php
 
-namespace Drobotik\Eav\Validation;
+namespace Kuperwood\Eav\Validation;
 
-use Drobotik\Eav\Interfaces\ConstraintInterface;
-use Drobotik\Eav\Validation\Constraints\RequiredConstraint;
+use Kuperwood\Eav\Interfaces\ConstraintInterface;
+use Kuperwood\Eav\Validation\Constraints\RequiredConstraint;
 
 class Validator
 {

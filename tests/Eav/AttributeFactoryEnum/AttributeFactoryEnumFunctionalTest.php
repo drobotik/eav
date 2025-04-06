@@ -1,16 +1,16 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\AttributeFactoryEnum;
 
-use Drobotik\Eav\Enum\_DOMAIN;
-use Drobotik\Eav\Enum\ATTR_FACTORY;
+use Kuperwood\Eav\Enum\_DOMAIN;
+use Kuperwood\Eav\Enum\ATTR_FACTORY;
 use PHPUnit\Framework\TestCase;
 
 class AttributeFactoryEnumFunctionalTest extends TestCase
@@ -19,9 +19,9 @@ class AttributeFactoryEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Enum\ATTR_FACTORY::ATTRIBUTE
-     * @covers \Drobotik\Eav\Enum\ATTR_FACTORY::GROUP
-     * @covers \Drobotik\Eav\Enum\ATTR_FACTORY::VALUE
+     * @covers \Kuperwood\Eav\Enum\ATTR_FACTORY::ATTRIBUTE
+     * @covers \Kuperwood\Eav\Enum\ATTR_FACTORY::GROUP
+     * @covers \Kuperwood\Eav\Enum\ATTR_FACTORY::VALUE
      */
     public function columns() {
         $this->assertEquals('attribute', ATTR_FACTORY::ATTRIBUTE);

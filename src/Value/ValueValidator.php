@@ -2,22 +2,22 @@
 /**
  * This file is part of the eav package.
  *
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
-namespace Drobotik\Eav\Value;
+namespace Kuperwood\Eav\Value;
 
-use Drobotik\Eav\Enum\_RESULT;
-use Drobotik\Eav\Enum\_VALUE;
-use Drobotik\Eav\Enum\ATTR_TYPE;
-use Drobotik\Eav\Traits\ContainerTrait;
-use Drobotik\Eav\Validation\Constraints\NotBlankConstraint;
-use Drobotik\Eav\Validation\Constraints\NumericConstraint;
-use Drobotik\Eav\Validation\Constraints\RequiredConstraint;
-use Drobotik\Eav\Validation\Validator;
+use Kuperwood\Eav\Enum\_RESULT;
+use Kuperwood\Eav\Enum\_VALUE;
+use Kuperwood\Eav\Enum\ATTR_TYPE;
+use Kuperwood\Eav\Traits\ContainerTrait;
+use Kuperwood\Eav\Validation\Constraints\NotBlankConstraint;
+use Kuperwood\Eav\Validation\Constraints\NumericConstraint;
+use Kuperwood\Eav\Validation\Constraints\RequiredConstraint;
+use Kuperwood\Eav\Validation\Validator;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Validator\Validator\ValidatorInterface;

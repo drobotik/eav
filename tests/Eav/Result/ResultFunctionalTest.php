@@ -1,16 +1,16 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\Result;
 
-use Drobotik\Eav\Enum\_RESULT;
-use Drobotik\Eav\Result\Result;
+use Kuperwood\Eav\Enum\_RESULT;
+use Kuperwood\Eav\Result\Result;
 use PHPUnit\Framework\TestCase;
 
 class ResultFunctionalTest extends TestCase
@@ -24,8 +24,8 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\Result::getCode
-     * @covers \Drobotik\Eav\Result\Result::setCode
+     * @covers \Kuperwood\Eav\Result\Result::getCode
+     * @covers \Kuperwood\Eav\Result\Result::setCode
      */
     public function code()
     {
@@ -36,8 +36,8 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\Result::getMessage
-     * @covers \Drobotik\Eav\Result\Result::setMessage
+     * @covers \Kuperwood\Eav\Result\Result::getMessage
+     * @covers \Kuperwood\Eav\Result\Result::setMessage
      */
     public function message()
     {
@@ -48,8 +48,8 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\Result::getData
-     * @covers \Drobotik\Eav\Result\Result::setData
+     * @covers \Kuperwood\Eav\Result\Result::getData
+     * @covers \Kuperwood\Eav\Result\Result::setData
      */
     public function data()
     {
@@ -61,7 +61,7 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\Result::created
+     * @covers \Kuperwood\Eav\Result\Result::created
      */
     public function created()
     {
@@ -72,7 +72,7 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\Result::updated
+     * @covers \Kuperwood\Eav\Result\Result::updated
      */
     public function updated()
     {
@@ -83,7 +83,7 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\Result::deleted
+     * @covers \Kuperwood\Eav\Result\Result::deleted
      */
     public function deleted()
     {
@@ -94,7 +94,7 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\Result::notDeleted
+     * @covers \Kuperwood\Eav\Result\Result::notDeleted
      */
     public function not_deleted()
     {
@@ -105,7 +105,7 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\Result::found
+     * @covers \Kuperwood\Eav\Result\Result::found
      */
     public function found()
     {
@@ -116,7 +116,7 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\Result::notFound
+     * @covers \Kuperwood\Eav\Result\Result::notFound
      */
     public function not_found()
     {
@@ -127,7 +127,7 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\Result::notEnoughArgs
+     * @covers \Kuperwood\Eav\Result\Result::notEnoughArgs
      */
     public function not_enough_args()
     {
@@ -138,7 +138,7 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\Result::notAllowed
+     * @covers \Kuperwood\Eav\Result\Result::notAllowed
      */
     public function not_allowed()
     {
@@ -149,7 +149,7 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\Result::empty
+     * @covers \Kuperwood\Eav\Result\Result::empty
      */
     public function empty()
     {
@@ -160,7 +160,7 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\Result::validationFails
+     * @covers \Kuperwood\Eav\Result\Result::validationFails
      */
     public function validation_fails()
     {
@@ -171,7 +171,7 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\Result::validationPassed
+     * @covers \Kuperwood\Eav\Result\Result::validationPassed
      */
     public function validation_passed()
     {
@@ -182,7 +182,7 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\Result::exportSuccess
+     * @covers \Kuperwood\Eav\Result\Result::exportSuccess
      */
     public function export_success()
     {
@@ -194,7 +194,7 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\Result::exportFailed
+     * @covers \Kuperwood\Eav\Result\Result::exportFailed
      */
     public function export_failed()
     {
@@ -206,7 +206,7 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\Result::importSuccess
+     * @covers \Kuperwood\Eav\Result\Result::importSuccess
      */
     public function import_success()
     {
@@ -218,7 +218,7 @@ class ResultFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Result\Result::importFailed
+     * @covers \Kuperwood\Eav\Result\Result::importFailed
      */
     public function import_failed()
     {

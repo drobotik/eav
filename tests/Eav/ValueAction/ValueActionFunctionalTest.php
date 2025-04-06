@@ -1,27 +1,27 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\ValueAction;
 
-use Drobotik\Eav\Attribute;
-use Drobotik\Eav\AttributeContainer;
-use Drobotik\Eav\AttributeSet;
-use Drobotik\Eav\Database\Connection;
-use Drobotik\Eav\Entity;
-use Drobotik\Eav\Enum\_ATTR;
-use Drobotik\Eav\Enum\_RESULT;
-use Drobotik\Eav\Enum\_VALUE;
-use Drobotik\Eav\Enum\ATTR_TYPE;
-use Drobotik\Eav\Model\ValueBase;
-use Drobotik\Eav\Result\Result;
-use Drobotik\Eav\Value\ValueAction;
-use Drobotik\Eav\Value\ValueManager;
+use Kuperwood\Eav\Attribute;
+use Kuperwood\Eav\AttributeContainer;
+use Kuperwood\Eav\AttributeSet;
+use Kuperwood\Eav\Database\Connection;
+use Kuperwood\Eav\Entity;
+use Kuperwood\Eav\Enum\_ATTR;
+use Kuperwood\Eav\Enum\_RESULT;
+use Kuperwood\Eav\Enum\_VALUE;
+use Kuperwood\Eav\Enum\ATTR_TYPE;
+use Kuperwood\Eav\Model\ValueBase;
+use Kuperwood\Eav\Result\Result;
+use Kuperwood\Eav\Value\ValueAction;
+use Kuperwood\Eav\Value\ValueManager;
 use PDO;
 use Tests\TestCase;
 
@@ -38,7 +38,7 @@ class ValueActionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueAction::create
+     * @covers \Kuperwood\Eav\Value\ValueAction::create
      */
     public function create_value() {
         $entityKey = 1;
@@ -82,7 +82,7 @@ class ValueActionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueAction::create
+     * @covers \Kuperwood\Eav\Value\ValueAction::create
      */
     public function create_value_no_runtime() {
         $entity = new Entity();
@@ -113,7 +113,7 @@ class ValueActionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueAction::find
+     * @covers \Kuperwood\Eav\Value\ValueAction::find
      */
     public function find() {
         $domainKey = $this->eavFactory->createDomain();
@@ -163,7 +163,7 @@ class ValueActionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueAction::find
+     * @covers \Kuperwood\Eav\Value\ValueAction::find
      */
     public function find_no_keys() {
         $entity = new Entity();
@@ -183,7 +183,7 @@ class ValueActionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueAction::find
+     * @covers \Kuperwood\Eav\Value\ValueAction::find
      */
     public function find_not_found() {
         $entity = new Entity();
@@ -213,7 +213,7 @@ class ValueActionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueAction::update
+     * @covers \Kuperwood\Eav\Value\ValueAction::update
      */
     public function update_value() {
         $valueToSave = 'new';
@@ -264,7 +264,7 @@ class ValueActionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueAction::update
+     * @covers \Kuperwood\Eav\Value\ValueAction::update
      */
     public function update_value_no_runtime() {
         $container = new AttributeContainer();
@@ -291,7 +291,7 @@ class ValueActionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueAction::delete
+     * @covers \Kuperwood\Eav\Value\ValueAction::delete
      */
     public function delete_value() {
         $domainKey = 1;
@@ -338,7 +338,7 @@ class ValueActionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueAction::delete
+     * @covers \Kuperwood\Eav\Value\ValueAction::delete
      */
     public function delete_value_no_key() {
         $domainKey = 1;
@@ -372,7 +372,7 @@ class ValueActionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueAction::delete
+     * @covers \Kuperwood\Eav\Value\ValueAction::delete
      */
     public function delete_not_deleted_status() {
         $valueModel = $this->getMockBuilder(ValueBase::class)

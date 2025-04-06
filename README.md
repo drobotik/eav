@@ -28,4 +28,4 @@ $ composer require kuperwood/eav
 
 Eav package is licensed under the [MIT License](http://opensource.org/licenses/MIT).
 
-Copyright 2023 [Alex Kuperwood](https://github.com/kuperwood)
+Copyright 2025 [Alex Kuperwood](https://github.com/kuperwood)

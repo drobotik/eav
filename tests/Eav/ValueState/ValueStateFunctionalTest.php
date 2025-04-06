@@ -1,15 +1,15 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\ValueState;
 
-use Drobotik\Eav\Value\ValueState;
+use Kuperwood\Eav\Value\ValueState;
 use PHPUnit\Framework\TestCase;
 
 class ValueStateFunctionalTest extends TestCase
@@ -24,7 +24,7 @@ class ValueStateFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueState::__construct(
+     * @covers \Kuperwood\Eav\Value\ValueState::__construct(
      */
     public function constructor()
     {
@@ -37,8 +37,8 @@ class ValueStateFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueState::get
-     * @covers \Drobotik\Eav\Value\ValueState::set
+     * @covers \Kuperwood\Eav\Value\ValueState::get
+     * @covers \Kuperwood\Eav\Value\ValueState::set
      */
     public function getter_setter() {
         $this->assertEquals(null, $this->state->get());
@@ -48,7 +48,7 @@ class ValueStateFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueState::isChanged
+     * @covers \Kuperwood\Eav\Value\ValueState::isChanged
      */
     public function isChanged() {
         $this->assertFalse($this->state->isChanged());
@@ -58,7 +58,7 @@ class ValueStateFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueState::clear
+     * @covers \Kuperwood\Eav\Value\ValueState::clear
      */
     public function clear() {
         $this->state->set(1);
@@ -69,7 +69,7 @@ class ValueStateFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueState::set
+     * @covers \Kuperwood\Eav\Value\ValueState::set
      */
     public function setter_null() {
         $this->state->set(null);

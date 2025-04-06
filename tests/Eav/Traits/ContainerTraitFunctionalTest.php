@@ -1,16 +1,16 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\Traits;
 
-use Drobotik\Eav\AttributeContainer;
-use Drobotik\Eav\Traits\ContainerTrait;
+use Kuperwood\Eav\AttributeContainer;
+use Kuperwood\Eav\Traits\ContainerTrait;
 use PHPUnit\Framework\TestCase;
 
 class ContainerTraitFunctionalTest extends TestCase
@@ -19,8 +19,8 @@ class ContainerTraitFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Traits\ContainerTrait::setAttributeContainer
-     * @covers \Drobotik\Eav\Traits\ContainerTrait::getAttributeContainer
+     * @covers \Kuperwood\Eav\Traits\ContainerTrait::setAttributeContainer
+     * @covers \Kuperwood\Eav\Traits\ContainerTrait::getAttributeContainer
      */
     public function getter_setter()
     {

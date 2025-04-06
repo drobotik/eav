@@ -1,6 +1,6 @@
 <?php
 
-namespace Drobotik\Eav\Validation;
+namespace Kuperwood\Eav\Validation;
 
 class Violation
 {

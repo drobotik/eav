@@ -1,15 +1,15 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\ValueManager;
 
-use Drobotik\Eav\Value\ValueManager;
+use Kuperwood\Eav\Value\ValueManager;
 use PHPUnit\Framework\TestCase;
 
 class ValueManagerFunctionalTest extends TestCase
@@ -24,9 +24,9 @@ class ValueManagerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueManager::hasKey
-     * @covers \Drobotik\Eav\Value\ValueManager::getKey
-     * @covers \Drobotik\Eav\Value\ValueManager::setKey
+     * @covers \Kuperwood\Eav\Value\ValueManager::hasKey
+     * @covers \Kuperwood\Eav\Value\ValueManager::getKey
+     * @covers \Kuperwood\Eav\Value\ValueManager::setKey
      */
     public function key() {
         $this->assertFalse($this->value->hasKey());
@@ -37,9 +37,9 @@ class ValueManagerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueManager::hasKey
-     * @covers \Drobotik\Eav\Value\ValueManager::getKey
-     * @covers \Drobotik\Eav\Value\ValueManager::setKey
+     * @covers \Kuperwood\Eav\Value\ValueManager::hasKey
+     * @covers \Kuperwood\Eav\Value\ValueManager::getKey
+     * @covers \Kuperwood\Eav\Value\ValueManager::setKey
      */
     public function zero_key() {
         $this->value->setKey(0);
@@ -49,8 +49,8 @@ class ValueManagerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueManager::getRuntime
-     * @covers \Drobotik\Eav\Value\ValueManager::__construct
+     * @covers \Kuperwood\Eav\Value\ValueManager::getRuntime
+     * @covers \Kuperwood\Eav\Value\ValueManager::__construct
      */
     public function get_runtime_value() {
         $this->assertEquals(null, $this->value->getRuntime());
@@ -58,7 +58,7 @@ class ValueManagerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueManager::setRuntime
+     * @covers \Kuperwood\Eav\Value\ValueManager::setRuntime
      */
     public function set_runtime_value() {
         $this->value->setRuntime(1);
@@ -69,7 +69,7 @@ class ValueManagerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueManager::isRuntime
+     * @covers \Kuperwood\Eav\Value\ValueManager::isRuntime
      */
     public function is_runtime_value() {
         $this->assertFalse($this->value->isRuntime());
@@ -79,7 +79,7 @@ class ValueManagerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueManager::clearValue
+     * @covers \Kuperwood\Eav\Value\ValueManager::clearValue
      */
     public function clear_runtime_value() {
         $this->value->setRuntime(1);
@@ -89,8 +89,8 @@ class ValueManagerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueManager::getStored
-     * @covers \Drobotik\Eav\Value\ValueManager::__construct
+     * @covers \Kuperwood\Eav\Value\ValueManager::getStored
+     * @covers \Kuperwood\Eav\Value\ValueManager::__construct
      */
     public function get_stored_value() {
         $this->assertEquals(null, $this->value->getStored());
@@ -98,7 +98,7 @@ class ValueManagerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueManager::setStored
+     * @covers \Kuperwood\Eav\Value\ValueManager::setStored
      */
     public function set_stored_value() {
         $this->value->setStored(1);
@@ -109,7 +109,7 @@ class ValueManagerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueManager::isStored
+     * @covers \Kuperwood\Eav\Value\ValueManager::isStored
      */
     public function is_stored_value() {
         $this->assertFalse($this->value->isStored());
@@ -119,7 +119,7 @@ class ValueManagerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueManager::isRuntime
+     * @covers \Kuperwood\Eav\Value\ValueManager::isRuntime
      */
     public function clear_stored_value() {
         $this->value->setStored(1);
@@ -129,7 +129,7 @@ class ValueManagerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueManager::getValue
+     * @covers \Kuperwood\Eav\Value\ValueManager::getValue
      */
     public function get_value() {
         $this->assertEquals(null, $this->value->getValue());
@@ -139,10 +139,10 @@ class ValueManagerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueManager::setValue
-     * @covers \Drobotik\Eav\Value\ValueManager::clearStored
-     * @covers \Drobotik\Eav\Value\ValueManager::clearRuntime
-     * @covers \Drobotik\Eav\Value\ValueManager::clearValue
+     * @covers \Kuperwood\Eav\Value\ValueManager::setValue
+     * @covers \Kuperwood\Eav\Value\ValueManager::clearStored
+     * @covers \Kuperwood\Eav\Value\ValueManager::clearRuntime
+     * @covers \Kuperwood\Eav\Value\ValueManager::clearValue
      */
     public function set_value() {
         $this->value->setValue(1);
@@ -179,8 +179,8 @@ class ValueManagerFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueManager::isClean
-     * @covers \Drobotik\Eav\Value\ValueManager::isEquivalent
+     * @covers \Kuperwood\Eav\Value\ValueManager::isClean
+     * @covers \Kuperwood\Eav\Value\ValueManager::isEquivalent
      */
     public function is_clean() {
         $this->assertTrue($this->value->isClean());

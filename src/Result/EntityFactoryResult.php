@@ -1,16 +1,16 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
-namespace Drobotik\Eav\Result;
+namespace Kuperwood\Eav\Result;
 
-use Drobotik\Eav\Enum\_ATTR;
-use Drobotik\Eav\Model\ValueBase;
+use Kuperwood\Eav\Enum\_ATTR;
+use Kuperwood\Eav\Model\ValueBase;
 
 class EntityFactoryResult
 {

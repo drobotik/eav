@@ -1,21 +1,21 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\ValidatorConstraints;
 
-use Drobotik\Eav\Validation\Constraints\DateConstraint;
-use Drobotik\Eav\Validation\Constraints\LengthConstraint;
-use Drobotik\Eav\Validation\Constraints\NotBlankConstraint;
-use Drobotik\Eav\Validation\Constraints\NotNullConstraint;
-use Drobotik\Eav\Validation\Constraints\NumericConstraint;
-use Drobotik\Eav\Validation\Constraints\RegexConstraint;
-use Drobotik\Eav\Validation\Constraints\RequiredConstraint;
+use Kuperwood\Eav\Validation\Constraints\DateConstraint;
+use Kuperwood\Eav\Validation\Constraints\LengthConstraint;
+use Kuperwood\Eav\Validation\Constraints\NotBlankConstraint;
+use Kuperwood\Eav\Validation\Constraints\NotNullConstraint;
+use Kuperwood\Eav\Validation\Constraints\NumericConstraint;
+use Kuperwood\Eav\Validation\Constraints\RegexConstraint;
+use Kuperwood\Eav\Validation\Constraints\RequiredConstraint;
 use PHPUnit\Framework\TestCase;
 
 class ValueValidatorConstraintsFunctionalTest extends TestCase
@@ -27,7 +27,7 @@ class ValueValidatorConstraintsFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Validation\Constraints\DateConstraint::validate
+     * @covers \Kuperwood\Eav\Validation\Constraints\DateConstraint::validate
      */
     public function date_constraint() {
         $constraint = new DateConstraint();
@@ -41,7 +41,7 @@ class ValueValidatorConstraintsFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Validation\Constraints\LengthConstraint::validate
+     * @covers \Kuperwood\Eav\Validation\Constraints\LengthConstraint::validate
      */
     public function length_constraint() {
         $constraint = new LengthConstraint(1, 5);
@@ -54,7 +54,7 @@ class ValueValidatorConstraintsFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Validation\Constraints\NotBlankConstraint::validate
+     * @covers \Kuperwood\Eav\Validation\Constraints\NotBlankConstraint::validate
      */
     public function not_blank_constraint() {
         $constraint = new NotBlankConstraint();
@@ -65,7 +65,7 @@ class ValueValidatorConstraintsFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Validation\Constraints\NotBlankConstraint::validate
+     * @covers \Kuperwood\Eav\Validation\Constraints\NotBlankConstraint::validate
      */
     public function not_null_constraint() {
         $constraint = new NotNullConstraint();
@@ -76,7 +76,7 @@ class ValueValidatorConstraintsFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Validation\Constraints\NumericConstraint::validate
+     * @covers \Kuperwood\Eav\Validation\Constraints\NumericConstraint::validate
      */
     public function numeric_constraint() {
         $constraint = new NumericConstraint();
@@ -88,7 +88,7 @@ class ValueValidatorConstraintsFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Validation\Constraints\RegexConstraint::validate
+     * @covers \Kuperwood\Eav\Validation\Constraints\RegexConstraint::validate
      */
     public function regex_constraint() {
         // Match a simple email pattern
@@ -121,7 +121,7 @@ class ValueValidatorConstraintsFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Validation\Constraints\RequiredConstraint::validate
+     * @covers \Kuperwood\Eav\Validation\Constraints\RequiredConstraint::validate
      */
     public function required_constraint() {
         $constraint = new RequiredConstraint();

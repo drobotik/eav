@@ -1,18 +1,18 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\Attribute;
 
-use Drobotik\Eav\Attribute;
-use Drobotik\Eav\AttributeBag;
-use Drobotik\Eav\Enum\ATTR_TYPE;
-use Drobotik\Eav\Exception\AttributeException;
+use Kuperwood\Eav\Attribute;
+use Kuperwood\Eav\AttributeBag;
+use Kuperwood\Eav\Enum\ATTR_TYPE;
+use Kuperwood\Eav\Exception\AttributeException;
 use PHPUnit\Framework\TestCase;
 
 class AttributeFunctionalTest extends TestCase
@@ -27,9 +27,9 @@ class AttributeFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Attribute::getBag
-     * @covers \Drobotik\Eav\Attribute::setBag
-     * @covers \Drobotik\Eav\Attribute::__construct()
+     * @covers \Kuperwood\Eav\Attribute::getBag
+     * @covers \Kuperwood\Eav\Attribute::setBag
+     * @covers \Kuperwood\Eav\Attribute::__construct()
      */
     public function bag() {
         $this->assertInstanceOf(AttributeBag::class, $this->attribute->getBag());
@@ -40,8 +40,8 @@ class AttributeFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Attribute::getKey
-     * @covers \Drobotik\Eav\Attribute::setKey
+     * @covers \Kuperwood\Eav\Attribute::getKey
+     * @covers \Kuperwood\Eav\Attribute::setKey
      */
     public function key() {
         $this->attribute->setKey(123);
@@ -52,8 +52,8 @@ class AttributeFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Attribute::getDomainKey
-     * @covers \Drobotik\Eav\Attribute::setDomainKey
+     * @covers \Kuperwood\Eav\Attribute::getDomainKey
+     * @covers \Kuperwood\Eav\Attribute::setDomainKey
      */
     public function domain_key() {
         $this->attribute->setDomainKey(123);
@@ -64,8 +64,8 @@ class AttributeFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Attribute::getName
-     * @covers \Drobotik\Eav\Attribute::setName
+     * @covers \Kuperwood\Eav\Attribute::getName
+     * @covers \Kuperwood\Eav\Attribute::setName
      */
     public function name_accessor() {
         $this->attribute->setName('test');
@@ -76,8 +76,8 @@ class AttributeFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Attribute::getType
-     * @covers \Drobotik\Eav\Attribute::setType
+     * @covers \Kuperwood\Eav\Attribute::getType
+     * @covers \Kuperwood\Eav\Attribute::setType
      */
     public function get_type() {
         $this->attribute->setType(ATTR_TYPE::STRING);
@@ -86,7 +86,7 @@ class AttributeFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Attribute::getType
+     * @covers \Kuperwood\Eav\Attribute::getType
      */
     public function get_type_throws_unexpected_type() {
         $this->expectException(AttributeException::class);
@@ -97,8 +97,8 @@ class AttributeFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Attribute::setStrategy
-     * @covers \Drobotik\Eav\Attribute::getStrategy
+     * @covers \Kuperwood\Eav\Attribute::setStrategy
+     * @covers \Kuperwood\Eav\Attribute::getStrategy
      */
     public function strategy() {
         $this->attribute->setStrategy('test');
@@ -107,8 +107,8 @@ class AttributeFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Attribute::setSource
-     * @covers \Drobotik\Eav\Attribute::getSource
+     * @covers \Kuperwood\Eav\Attribute::setSource
+     * @covers \Kuperwood\Eav\Attribute::getSource
      */
     public function source() {
         $this->attribute->setSource('test');
@@ -117,8 +117,8 @@ class AttributeFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Attribute::setDefaultValue
-     * @covers \Drobotik\Eav\Attribute::getDefaultValue
+     * @covers \Kuperwood\Eav\Attribute::setDefaultValue
+     * @covers \Kuperwood\Eav\Attribute::getDefaultValue
      */
     public function default_value() {
         $this->attribute->setDefaultValue('test');
@@ -127,8 +127,8 @@ class AttributeFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Attribute::setDescription
-     * @covers \Drobotik\Eav\Attribute::getDescription
+     * @covers \Kuperwood\Eav\Attribute::setDescription
+     * @covers \Kuperwood\Eav\Attribute::getDescription
      */
     public function get_description() {
         $this->attribute->setDescription('test');

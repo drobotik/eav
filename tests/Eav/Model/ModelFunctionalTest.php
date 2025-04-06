@@ -1,17 +1,17 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\Model;
 
-use Drobotik\Eav\Database\Connection;
-use Drobotik\Eav\Enum\_DOMAIN;
-use Drobotik\Eav\Model\Model;
+use Kuperwood\Eav\Database\Connection;
+use Kuperwood\Eav\Enum\_DOMAIN;
+use Kuperwood\Eav\Model\Model;
 use PDO;
 use Tests\TestCase;
 
@@ -31,7 +31,7 @@ class ModelFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Model\Model::db
+     * @covers \Kuperwood\Eav\Model\Model::db
      */
     public function db()
     {
@@ -43,8 +43,8 @@ class ModelFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Model\Model::getPrimaryKey
-     * @covers \Drobotik\Eav\Model\Model::setPrimaryKey
+     * @covers \Kuperwood\Eav\Model\Model::getPrimaryKey
+     * @covers \Kuperwood\Eav\Model\Model::setPrimaryKey
      */
     public function keyName()
     {
@@ -58,8 +58,8 @@ class ModelFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Model\Model::getTable
-     * @covers \Drobotik\Eav\Model\Model::setTable
+     * @covers \Kuperwood\Eav\Model\Model::getTable
+     * @covers \Kuperwood\Eav\Model\Model::setTable
      */
     public function table()
     {
@@ -72,7 +72,7 @@ class ModelFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Model\Model::insert
+     * @covers \Kuperwood\Eav\Model\Model::insert
      */
     public function insert_record()
     {
@@ -103,7 +103,7 @@ class ModelFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Model\Model::updateByArray
+     * @covers \Kuperwood\Eav\Model\Model::updateByArray
      */
     public function update_record()
     {
@@ -145,7 +145,7 @@ class ModelFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Model\Model::deleteByKey
+     * @covers \Kuperwood\Eav\Model\Model::deleteByKey
      */
     public function delete_record()
     {
@@ -180,7 +180,7 @@ class ModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\Model::count
+     * @covers \Kuperwood\Eav\Model\Model::count
      */
     public function records_count()
     {
@@ -201,7 +201,7 @@ class ModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\Model::findByKey
+     * @covers \Kuperwood\Eav\Model\Model::findByKey
      */
     public function find_by_key()
     {

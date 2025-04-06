@@ -1,25 +1,25 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
-namespace Drobotik\Eav\Traits;
+namespace Kuperwood\Eav\Traits;
 
-use Drobotik\Eav\AttributeContainer;
-use Drobotik\Eav\AttributeSet;
-use Drobotik\Eav\Factory\EavFactory;
-use Drobotik\Eav\Model\AttributeGroupModel;
-use Drobotik\Eav\Model\AttributeModel;
-use Drobotik\Eav\Model\AttributeSetModel;
-use Drobotik\Eav\Model\DomainModel;
-use Drobotik\Eav\Model\EntityModel;
-use Drobotik\Eav\Model\PivotModel;
-use Drobotik\Eav\Model\ValueBase;
-use Drobotik\Eav\Value\ValueParser;
+use Kuperwood\Eav\AttributeContainer;
+use Kuperwood\Eav\AttributeSet;
+use Kuperwood\Eav\Factory\EavFactory;
+use Kuperwood\Eav\Model\AttributeGroupModel;
+use Kuperwood\Eav\Model\AttributeModel;
+use Kuperwood\Eav\Model\AttributeSetModel;
+use Kuperwood\Eav\Model\DomainModel;
+use Kuperwood\Eav\Model\EntityModel;
+use Kuperwood\Eav\Model\PivotModel;
+use Kuperwood\Eav\Model\ValueBase;
+use Kuperwood\Eav\Value\ValueParser;
 use Faker\Factory;
 use Faker\Generator;
 

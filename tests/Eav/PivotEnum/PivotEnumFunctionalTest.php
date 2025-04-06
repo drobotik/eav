@@ -1,19 +1,19 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\PivotEnum;
 
-use Drobotik\Eav\Enum\_ATTR;
-use Drobotik\Eav\Enum\_DOMAIN;
-use Drobotik\Eav\Enum\_GROUP;
-use Drobotik\Eav\Enum\_PIVOT;
-use Drobotik\Eav\Enum\_SET;
+use Kuperwood\Eav\Enum\_ATTR;
+use Kuperwood\Eav\Enum\_DOMAIN;
+use Kuperwood\Eav\Enum\_GROUP;
+use Kuperwood\Eav\Enum\_PIVOT;
+use Kuperwood\Eav\Enum\_SET;
 use PHPUnit\Framework\TestCase;
 
 class PivotEnumFunctionalTest extends TestCase
@@ -21,7 +21,7 @@ class PivotEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Enum\_PIVOT::table
+     * @covers \Kuperwood\Eav\Enum\_PIVOT::table
      */
     public function table() {
         $this->assertEquals('eav_pivot', _PIVOT::table());
@@ -29,11 +29,11 @@ class PivotEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Enum\_PIVOT::ID
-     * @covers \Drobotik\Eav\Enum\_PIVOT::DOMAIN_ID
-     * @covers \Drobotik\Eav\Enum\_PIVOT::SET_ID
-     * @covers \Drobotik\Eav\Enum\_PIVOT::GROUP_ID
-     * @covers \Drobotik\Eav\Enum\_PIVOT::ATTR_ID
+     * @covers \Kuperwood\Eav\Enum\_PIVOT::ID
+     * @covers \Kuperwood\Eav\Enum\_PIVOT::DOMAIN_ID
+     * @covers \Kuperwood\Eav\Enum\_PIVOT::SET_ID
+     * @covers \Kuperwood\Eav\Enum\_PIVOT::GROUP_ID
+     * @covers \Kuperwood\Eav\Enum\_PIVOT::ATTR_ID
      */
     public function columns() {
         $this->assertEquals('pivot_id', _PIVOT::ID);

@@ -1,17 +1,17 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\Entity;
 
-use Drobotik\Eav\Entity;
-use Drobotik\Eav\EntityGnome;
-use Drobotik\Eav\Result\Result;
+use Kuperwood\Eav\Entity;
+use Kuperwood\Eav\EntityGnome;
+use Kuperwood\Eav\Result\Result;
 use PHPUnit\Framework\TestCase;
 
 class EntityBehaviorTest extends TestCase
@@ -19,7 +19,7 @@ class EntityBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\Entity::find
+     * @covers \Kuperwood\Eav\Entity::find
      */
     public function find() {
         $entity = $this->getMockBuilder(Entity::class)
@@ -41,7 +41,7 @@ class EntityBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\Entity::save
+     * @covers \Kuperwood\Eav\Entity::save
      */
     public function save() {
         $entity = $this->getMockBuilder(Entity::class)
@@ -63,7 +63,7 @@ class EntityBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\Entity::delete
+     * @covers \Kuperwood\Eav\Entity::delete
      */
     public function delete() {
         $entity = $this->getMockBuilder(Entity::class)
@@ -85,7 +85,7 @@ class EntityBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\Entity::validate
+     * @covers \Kuperwood\Eav\Entity::validate
      */
     public function validate() {
         $entity = $this->getMockBuilder(Entity::class)
@@ -107,7 +107,7 @@ class EntityBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\Entity::toArray
+     * @covers \Kuperwood\Eav\Entity::toArray
      */
     public function to_array() {
         $entity = $this->getMockBuilder(Entity::class)

@@ -1,15 +1,15 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\AttributeException;
 
-use Drobotik\Eav\Exception\AttributeException;
+use Kuperwood\Eav\Exception\AttributeException;
 use PHPUnit\Framework\TestCase;
 
 class AttributeExceptionFunctionalTest extends TestCase
@@ -17,7 +17,7 @@ class AttributeExceptionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Exception\AttributeException::undefinedAttributeName
+     * @covers \Kuperwood\Eav\Exception\AttributeException::undefinedAttributeName
      */
     public function undefined_name()
     {
@@ -28,7 +28,7 @@ class AttributeExceptionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Exception\AttributeException::undefinedAttributeType
+     * @covers \Kuperwood\Eav\Exception\AttributeException::undefinedAttributeType
      */
     public function undefined_type()
     {
@@ -40,7 +40,7 @@ class AttributeExceptionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Exception\AttributeException::unsupportedType
+     * @covers \Kuperwood\Eav\Exception\AttributeException::unsupportedType
      */
     public function unsupported_type()
     {

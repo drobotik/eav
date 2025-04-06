@@ -1,15 +1,15 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\EntityBag;
 
-use Drobotik\Eav\Entity;
+use Kuperwood\Eav\Entity;
 use PHPUnit\Framework\TestCase;
 
 class EntityBagFunctionalTest extends TestCase
@@ -17,8 +17,8 @@ class EntityBagFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\EntityBag::getEntity
-     * @covers \Drobotik\Eav\EntityBag::setEntity
+     * @covers \Kuperwood\Eav\EntityBag::getEntity
+     * @covers \Kuperwood\Eav\EntityBag::setEntity
      */
     public function entity() {
         $entity = new Entity();

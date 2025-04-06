@@ -1,27 +1,27 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\ValueValidator;
 
-use Drobotik\Eav\Attribute;
-use Drobotik\Eav\AttributeContainer;
-use Drobotik\Eav\AttributeSet;
-use Drobotik\Eav\Entity;
-use Drobotik\Eav\Enum\_VALUE;
-use Drobotik\Eav\Enum\ATTR_TYPE;
-use Drobotik\Eav\Strategy;
-use Drobotik\Eav\Validation\Constraints\NotBlankConstraint;
-use Drobotik\Eav\Validation\Constraints\NumericConstraint;
-use Drobotik\Eav\Validation\Constraints\RequiredConstraint;
-use Drobotik\Eav\Validation\Validator;
-use Drobotik\Eav\Value\ValueManager;
-use Drobotik\Eav\Value\ValueValidator;
+use Kuperwood\Eav\Attribute;
+use Kuperwood\Eav\AttributeContainer;
+use Kuperwood\Eav\AttributeSet;
+use Kuperwood\Eav\Entity;
+use Kuperwood\Eav\Enum\_VALUE;
+use Kuperwood\Eav\Enum\ATTR_TYPE;
+use Kuperwood\Eav\Strategy;
+use Kuperwood\Eav\Validation\Constraints\NotBlankConstraint;
+use Kuperwood\Eav\Validation\Constraints\NumericConstraint;
+use Kuperwood\Eav\Validation\Constraints\RequiredConstraint;
+use Kuperwood\Eav\Validation\Validator;
+use Kuperwood\Eav\Value\ValueManager;
+use Kuperwood\Eav\Value\ValueValidator;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -38,7 +38,7 @@ class ValueValidatorFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueValidator::getDefaultValueRule
+     * @covers \Kuperwood\Eav\Value\ValueValidator::getDefaultValueRule
      */
     public function default_value_rule() {
         $attribute = new Attribute();
@@ -53,7 +53,7 @@ class ValueValidatorFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueValidator::getRules
+     * @covers \Kuperwood\Eav\Value\ValueValidator::getRules
      */
     public function validation_rules() {
         $attribute = new Attribute();
@@ -75,7 +75,7 @@ class ValueValidatorFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueValidator::getRules
+     * @covers \Kuperwood\Eav\Value\ValueValidator::getRules
      */
     public function validation_rules_with_custom_rule() {
         $attribute = new Attribute();
@@ -98,7 +98,7 @@ class ValueValidatorFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueValidator::getValidatedData
+     * @covers \Kuperwood\Eav\Value\ValueValidator::getValidatedData
      */
     public function validation_data() {
         $entity = new Entity();
@@ -130,7 +130,7 @@ class ValueValidatorFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Value\ValueValidator::getValidator
+     * @covers \Kuperwood\Eav\Value\ValueValidator::getValidator
      */
     public function validator() {
         $entity = new Entity();

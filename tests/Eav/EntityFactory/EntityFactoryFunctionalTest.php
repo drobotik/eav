@@ -2,29 +2,29 @@
 /**
  * This file is part of the eav package.
  *
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\EntityFactory;
 
-use Drobotik\Eav\Database\Connection;
-use Drobotik\Eav\Enum\_ATTR;
-use Drobotik\Eav\Enum\_ENTITY;
-use Drobotik\Eav\Enum\_PIVOT;
-use Drobotik\Eav\Enum\_VALUE;
-use Drobotik\Eav\Enum\ATTR_FACTORY;
-use Drobotik\Eav\Enum\ATTR_TYPE;
-use Drobotik\Eav\Exception\AttributeException;
-use Drobotik\Eav\Exception\EntityFactoryException;
-use Drobotik\Eav\Factory\EntityFactory;
-use Drobotik\Eav\Model\AttributeModel;
-use Drobotik\Eav\Model\PivotModel;
-use Drobotik\Eav\Model\ValueBase;
-use Drobotik\Eav\Result\EntityFactoryResult;
-use Drobotik\Eav\Value\ValueParser;
+use Kuperwood\Eav\Database\Connection;
+use Kuperwood\Eav\Enum\_ATTR;
+use Kuperwood\Eav\Enum\_ENTITY;
+use Kuperwood\Eav\Enum\_PIVOT;
+use Kuperwood\Eav\Enum\_VALUE;
+use Kuperwood\Eav\Enum\ATTR_FACTORY;
+use Kuperwood\Eav\Enum\ATTR_TYPE;
+use Kuperwood\Eav\Exception\AttributeException;
+use Kuperwood\Eav\Exception\EntityFactoryException;
+use Kuperwood\Eav\Factory\EntityFactory;
+use Kuperwood\Eav\Model\AttributeModel;
+use Kuperwood\Eav\Model\PivotModel;
+use Kuperwood\Eav\Model\ValueBase;
+use Kuperwood\Eav\Result\EntityFactoryResult;
+use Kuperwood\Eav\Value\ValueParser;
 use PDO;
 use Tests\TestCase;
 
@@ -84,14 +84,14 @@ class EntityFactoryFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Factory\EntityFactory::create
-     * @covers \Drobotik\Eav\Factory\EntityFactory::makeNewResult
-     * @covers \Drobotik\Eav\Factory\EntityFactory::getResult
-     * @covers \Drobotik\Eav\Factory\EntityFactory::validateFields
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleAttribute
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handlePivot
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleValue
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleField
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::create
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::makeNewResult
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::getResult
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::validateFields
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleAttribute
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handlePivot
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleValue
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleField
      */
     public function create_entity() {
         $domainKey = $this->eavFactory->createDomain();
@@ -126,14 +126,14 @@ class EntityFactoryFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Factory\EntityFactory::create
-     * @covers \Drobotik\Eav\Factory\EntityFactory::makeNewResult
-     * @covers \Drobotik\Eav\Factory\EntityFactory::getResult
-     * @covers \Drobotik\Eav\Factory\EntityFactory::validateFields
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleAttribute
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handlePivot
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleValue
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleField
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::create
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::makeNewResult
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::getResult
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::validateFields
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleAttribute
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handlePivot
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleValue
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleField
      */
     public function create_attributes_no_group_exception() {
         $this->expectException(EntityFactoryException::class);
@@ -147,14 +147,14 @@ class EntityFactoryFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Factory\EntityFactory::create
-     * @covers \Drobotik\Eav\Factory\EntityFactory::makeNewResult
-     * @covers \Drobotik\Eav\Factory\EntityFactory::getResult
-     * @covers \Drobotik\Eav\Factory\EntityFactory::validateFields
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleAttribute
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handlePivot
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleValue
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleField
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::create
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::makeNewResult
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::getResult
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::validateFields
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleAttribute
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handlePivot
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleValue
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleField
      */
     public function create_attributes_not_existing_group_exception() {
         $this->expectException(EntityFactoryException::class);
@@ -174,14 +174,14 @@ class EntityFactoryFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Factory\EntityFactory::create
-     * @covers \Drobotik\Eav\Factory\EntityFactory::makeNewResult
-     * @covers \Drobotik\Eav\Factory\EntityFactory::getResult
-     * @covers \Drobotik\Eav\Factory\EntityFactory::validateFields
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleAttribute
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handlePivot
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleValue
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleField
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::create
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::makeNewResult
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::getResult
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::validateFields
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleAttribute
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handlePivot
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleValue
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleField
      */
     public function create_attributes() {
         $domainKey = $this->eavFactory->createDomain();
@@ -327,14 +327,14 @@ class EntityFactoryFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Factory\EntityFactory::create
-     * @covers \Drobotik\Eav\Factory\EntityFactory::makeNewResult
-     * @covers \Drobotik\Eav\Factory\EntityFactory::getResult
-     * @covers \Drobotik\Eav\Factory\EntityFactory::validateFields
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleAttribute
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handlePivot
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleValue
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleField
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::create
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::makeNewResult
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::getResult
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::validateFields
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleAttribute
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handlePivot
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleValue
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleField
      */
     public function create_attribute_array_not_provided() {
         $this->expectException(EntityFactoryException::class);
@@ -355,14 +355,14 @@ class EntityFactoryFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Factory\EntityFactory::create
-     * @covers \Drobotik\Eav\Factory\EntityFactory::makeNewResult
-     * @covers \Drobotik\Eav\Factory\EntityFactory::getResult
-     * @covers \Drobotik\Eav\Factory\EntityFactory::validateFields
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleAttribute
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handlePivot
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleValue
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleField
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::create
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::makeNewResult
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::getResult
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::validateFields
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleAttribute
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handlePivot
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleValue
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleField
      */
     public function create_attribute_name_not_provided() {
         $this->expectException(AttributeException::class);
@@ -384,14 +384,14 @@ class EntityFactoryFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Factory\EntityFactory::create
-     * @covers \Drobotik\Eav\Factory\EntityFactory::makeNewResult
-     * @covers \Drobotik\Eav\Factory\EntityFactory::getResult
-     * @covers \Drobotik\Eav\Factory\EntityFactory::validateFields
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleAttribute
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handlePivot
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleValue
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleField
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::create
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::makeNewResult
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::getResult
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::validateFields
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleAttribute
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handlePivot
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleValue
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleField
      */
     public function create_attribute_type_not_provided() {
         $this->expectException(AttributeException::class);
@@ -413,14 +413,14 @@ class EntityFactoryFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Factory\EntityFactory::create
-     * @covers \Drobotik\Eav\Factory\EntityFactory::makeNewResult
-     * @covers \Drobotik\Eav\Factory\EntityFactory::getResult
-     * @covers \Drobotik\Eav\Factory\EntityFactory::validateFields
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleAttribute
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handlePivot
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleValue
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleField
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::create
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::makeNewResult
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::getResult
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::validateFields
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleAttribute
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handlePivot
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleValue
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleField
      */
     public function create_attribute_type_not_supported() {
         $this->expectException(AttributeException::class);
@@ -442,14 +442,14 @@ class EntityFactoryFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Factory\EntityFactory::create
-     * @covers \Drobotik\Eav\Factory\EntityFactory::makeNewResult
-     * @covers \Drobotik\Eav\Factory\EntityFactory::getResult
-     * @covers \Drobotik\Eav\Factory\EntityFactory::validateFields
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleAttribute
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handlePivot
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleValue
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleField
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::create
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::makeNewResult
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::getResult
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::validateFields
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleAttribute
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handlePivot
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleValue
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleField
      */
     public function create_pivot_table_rows() {
         $domainKey = $this->eavFactory->createDomain();
@@ -553,14 +553,14 @@ class EntityFactoryFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Factory\EntityFactory::create
-     * @covers \Drobotik\Eav\Factory\EntityFactory::makeNewResult
-     * @covers \Drobotik\Eav\Factory\EntityFactory::getResult
-     * @covers \Drobotik\Eav\Factory\EntityFactory::validateFields
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleAttribute
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handlePivot
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleValue
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleField
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::create
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::makeNewResult
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::getResult
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::validateFields
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleAttribute
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handlePivot
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleValue
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleField
      */
     public function create_values() {
         $domainKey = $this->eavFactory->createDomain();
@@ -662,7 +662,7 @@ class EntityFactoryFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Factory\EntityFactory::create
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::create
      */
     public function create_skip_creating_values() {
         $domainKey = $this->eavFactory->createDomain();
@@ -724,7 +724,7 @@ class EntityFactoryFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleAttribute
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleAttribute
      */
     public function handleAttribute_update()
     {
@@ -772,7 +772,7 @@ class EntityFactoryFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handlePivot
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handlePivot
      */
     public function handlePivot_using_old_pivot_record()
     {
@@ -806,7 +806,7 @@ class EntityFactoryFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Factory\EntityFactory::handleValue
+     * @covers \Kuperwood\Eav\Factory\EntityFactory::handleValue
      */
     public function handleValue_update()
     {

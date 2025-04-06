@@ -1,19 +1,19 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\EntityBag;
 
-use Drobotik\Eav\AttributeContainer;
-use Drobotik\Eav\AttributeSet;
-use Drobotik\Eav\Entity;
-use Drobotik\Eav\EntityBag;
-use Drobotik\Eav\Value\ValueManager;
+use Kuperwood\Eav\AttributeContainer;
+use Kuperwood\Eav\AttributeSet;
+use Kuperwood\Eav\Entity;
+use Kuperwood\Eav\EntityBag;
+use Kuperwood\Eav\Value\ValueManager;
 use PHPUnit\Framework\TestCase;
 
 class EntityBagBehaviorTest extends TestCase
@@ -21,7 +21,7 @@ class EntityBagBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\EntityBag::setField
+     * @covers \Kuperwood\Eav\EntityBag::setField
      */
     public function set_field() {
         $attrName = 'email';
@@ -66,7 +66,7 @@ class EntityBagBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\EntityBag::setField
+     * @covers \Kuperwood\Eav\EntityBag::setField
      */
     public function set_field_result() {
 
@@ -96,7 +96,7 @@ class EntityBagBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\EntityBag::removeField
+     * @covers \Kuperwood\Eav\EntityBag::removeField
      */
     public function remove_field() {
         $attrName = 'email';
@@ -139,7 +139,7 @@ class EntityBagBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\EntityBag::setFields
+     * @covers \Kuperwood\Eav\EntityBag::setFields
      */
     public function set_fields() {
         $data = ['one' => 1, 'two' => 2, 'three' => 3];

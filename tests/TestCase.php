@@ -1,17 +1,17 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests;
 
-use Drobotik\Eav\Database\Connection;
-use Drobotik\Eav\Factory\EavFactory;
-use Drobotik\Eav\Traits\SingletonsTrait;
+use Kuperwood\Eav\Database\Connection;
+use Kuperwood\Eav\Factory\EavFactory;
+use Kuperwood\Eav\Traits\SingletonsTrait;
 use Faker\Generator;
 
 class TestCase extends \PHPUnit\Framework\TestCase

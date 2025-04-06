@@ -1,15 +1,15 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\Transporter;
 
-use Drobotik\Eav\Transporter;
+use Kuperwood\Eav\Transporter;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
@@ -25,7 +25,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Transporter::setField
+     * @covers \Kuperwood\Eav\Transporter::setField
      */
     public function setField()
     {
@@ -54,7 +54,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Transporter::getField
+     * @covers \Kuperwood\Eav\Transporter::getField
      */
     public function getField()
     {
@@ -70,7 +70,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Transporter::getData
+     * @covers \Kuperwood\Eav\Transporter::getData
      */
     public function getData()
     {
@@ -100,7 +100,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Transporter::setData
+     * @covers \Kuperwood\Eav\Transporter::setData
      */
     public function test_setData()
     {
@@ -131,7 +131,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Transporter::hasField
+     * @covers \Kuperwood\Eav\Transporter::hasField
      */
     public function hasField()
     {
@@ -148,7 +148,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Transporter::removeField
+     * @covers \Kuperwood\Eav\Transporter::removeField
      */
     public function removeField()
     {
@@ -168,7 +168,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Transporter::clear
+     * @covers \Kuperwood\Eav\Transporter::clear
      */
     public function clear()
     {
@@ -189,7 +189,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Transporter::__get
+     * @covers \Kuperwood\Eav\Transporter::__get
      */
     public function magicGet()
     {
@@ -200,7 +200,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Transporter::__set
+     * @covers \Kuperwood\Eav\Transporter::__set
      */
     public function magicSet()
     {
@@ -230,7 +230,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Transporter::__isset
+     * @covers \Kuperwood\Eav\Transporter::__isset
      */
     public function test__isset()
     {
@@ -243,7 +243,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Transporter::__unset
+     * @covers \Kuperwood\Eav\Transporter::__unset
      */
     public function unsetRemovesFieldFromDataArray(): void
     {
@@ -261,7 +261,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Transporter::__toString
+     * @covers \Kuperwood\Eav\Transporter::__toString
      */
     public function toStringReturnsJsonEncodedDataArray(): void
     {
@@ -283,7 +283,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Transporter::__toArray
+     * @covers \Kuperwood\Eav\Transporter::__toArray
      */
     public function toArrayReturnsArrayRepresentationOfDataArray(): void
     {
@@ -305,7 +305,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Transporter::__toJson
+     * @covers \Kuperwood\Eav\Transporter::__toJson
      */
     public function toJsonReturnsJsonEncodedStringRepresentationOfDataArray(): void
     {
@@ -327,7 +327,7 @@ class TransporterFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Transporter::__toObject
+     * @covers \Kuperwood\Eav\Transporter::__toObject
      */
     public function toObjectReturnsObject()
     {

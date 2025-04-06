@@ -1,18 +1,18 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\EntityModel;
 
-use Drobotik\Eav\Database\Connection;
-use Drobotik\Eav\Enum\_ENTITY;
-use Drobotik\Eav\Exception\EntityException;
-use Drobotik\Eav\Model\EntityModel;
+use Kuperwood\Eav\Database\Connection;
+use Kuperwood\Eav\Enum\_ENTITY;
+use Kuperwood\Eav\Exception\EntityException;
+use Kuperwood\Eav\Model\EntityModel;
 use Faker\Generator;
 use PDO;
 use Tests\TestCase;
@@ -29,7 +29,7 @@ class EntityModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\EntityModel::__construct
+     * @covers \Kuperwood\Eav\Model\EntityModel::__construct
      */
     public function defaults() {
         $this->assertEquals(_ENTITY::table(), $this->model->getTable());
@@ -38,7 +38,7 @@ class EntityModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\EntityModel::create
+     * @covers \Kuperwood\Eav\Model\EntityModel::create
      */
     public function create_record()
     {
@@ -71,7 +71,7 @@ class EntityModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\EntityModel::isServiceKey
+     * @covers \Kuperwood\Eav\Model\EntityModel::isServiceKey
      */
     public function is_service_key()
     {
@@ -96,7 +96,7 @@ class EntityModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\EntityModel::getByServiceKey
+     * @covers \Kuperwood\Eav\Model\EntityModel::getByServiceKey
      */
     public function get_by_service_key()
     {
@@ -132,7 +132,7 @@ class EntityModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\EntityModel::getServiceKey
+     * @covers \Kuperwood\Eav\Model\EntityModel::getServiceKey
      */
     public function create_new_service_key()
     {
@@ -154,7 +154,7 @@ class EntityModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\EntityModel::getServiceKey
+     * @covers \Kuperwood\Eav\Model\EntityModel::getServiceKey
      */
     public function existing_service_key()
     {
@@ -193,7 +193,7 @@ class EntityModelFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Model\EntityModel::bulkCreate
+     * @covers \Kuperwood\Eav\Model\EntityModel::bulkCreate
      */
     public function bulk_create_entity_records() {
         $serviceKey = 123;
@@ -212,7 +212,7 @@ class EntityModelFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Model\EntityModel::bulkCreate
+     * @covers \Kuperwood\Eav\Model\EntityModel::bulkCreate
      */
     public function bulk_create_entities_null_amount() {
         $this->expectException(EntityException::class);
@@ -223,7 +223,7 @@ class EntityModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\EntityModel::getBySetAndDomain
+     * @covers \Kuperwood\Eav\Model\EntityModel::getBySetAndDomain
      */
     public function get_by_setKey_and_domainKey()
     {

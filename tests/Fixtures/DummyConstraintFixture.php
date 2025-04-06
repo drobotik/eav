@@ -2,7 +2,7 @@
 
 namespace Tests\Fixtures;
 
-use Drobotik\Eav\Interfaces\ConstraintInterface;
+use Kuperwood\Eav\Interfaces\ConstraintInterface;
 
 class DummyConstraintFixture implements ConstraintInterface
 {

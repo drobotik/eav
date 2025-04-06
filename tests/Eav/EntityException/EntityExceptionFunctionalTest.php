@@ -1,15 +1,15 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\EntityException;
 
-use Drobotik\Eav\Exception\EntityException;
+use Kuperwood\Eav\Exception\EntityException;
 use PHPUnit\Framework\TestCase;
 
 class EntityExceptionFunctionalTest extends TestCase
@@ -17,7 +17,7 @@ class EntityExceptionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Exception\EntityException::undefinedDomainKey
+     * @covers \Kuperwood\Eav\Exception\EntityException::undefinedDomainKey
      */
     public function undefinedDomainKey()
     {
@@ -28,7 +28,7 @@ class EntityExceptionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Exception\EntityException::domainNotFound
+     * @covers \Kuperwood\Eav\Exception\EntityException::domainNotFound
      */
     public function domainNotFound()
     {
@@ -39,7 +39,7 @@ class EntityExceptionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Exception\EntityException::undefinedAttributeSetKey
+     * @covers \Kuperwood\Eav\Exception\EntityException::undefinedAttributeSetKey
      */
     public function undefinedAttributeSetKey()
     {
@@ -50,7 +50,7 @@ class EntityExceptionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Exception\EntityException::attrSetNotFound
+     * @covers \Kuperwood\Eav\Exception\EntityException::attrSetNotFound
      */
     public function attrSetNotFound()
     {
@@ -61,7 +61,7 @@ class EntityExceptionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Exception\EntityException::undefinedEntityKey
+     * @covers \Kuperwood\Eav\Exception\EntityException::undefinedEntityKey
      */
     public function undefinedEntityKey()
     {
@@ -72,7 +72,7 @@ class EntityExceptionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Exception\EntityException::entityNotFound
+     * @covers \Kuperwood\Eav\Exception\EntityException::entityNotFound
      */
     public function entityNotFound()
     {
@@ -83,7 +83,7 @@ class EntityExceptionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Exception\EntityException::mustBePositiveAmount
+     * @covers \Kuperwood\Eav\Exception\EntityException::mustBePositiveAmount
      */
     public function mustBePositiveAmount()
     {
@@ -94,7 +94,7 @@ class EntityExceptionFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Exception\EntityException::mustBeEntityKey
+     * @covers \Kuperwood\Eav\Exception\EntityException::mustBeEntityKey
      */
     public function mustBeEntityKey()
     {

@@ -1,16 +1,16 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\Connection;
 
-use Drobotik\Eav\Database\Connection;
-use Drobotik\Eav\Exception\ConnectionException;
+use Kuperwood\Eav\Database\Connection;
+use Kuperwood\Eav\Exception\ConnectionException;
 use PHPUnit\Framework\TestCase;
 
 class ConnectionFunctionalTest extends TestCase
@@ -25,7 +25,7 @@ class ConnectionFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Database\Connection::get
+     * @covers \Kuperwood\Eav\Database\Connection::get
      */
     public function no_connection()
     {
@@ -38,7 +38,7 @@ class ConnectionFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Database\Connection::get
+     * @covers \Kuperwood\Eav\Database\Connection::get
      */
     public function manual_connection()
     {
@@ -62,8 +62,8 @@ class ConnectionFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Database\Connection::reset
-     * @covers \Drobotik\Eav\Database\Connection::get
+     * @covers \Kuperwood\Eav\Database\Connection::reset
+     * @covers \Kuperwood\Eav\Database\Connection::get
      */
     public function reset()
     {

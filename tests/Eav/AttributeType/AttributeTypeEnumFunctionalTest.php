@@ -1,8 +1,8 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
@@ -10,14 +10,14 @@ declare(strict_types=1);
 namespace Tests\Eav\AttributeType;
 
 
-use Drobotik\Eav\Enum\_VALUE;
-use Drobotik\Eav\Enum\ATTR_TYPE;
-use Drobotik\Eav\Exception\AttributeException;
-use Drobotik\Eav\Validation\Assert;
-use Drobotik\Eav\Validation\Constraints\DateConstraint;
-use Drobotik\Eav\Validation\Constraints\LengthConstraint;
-use Drobotik\Eav\Validation\Constraints\NumericConstraint;
-use Drobotik\Eav\Validation\Constraints\RegexConstraint;
+use Kuperwood\Eav\Enum\_VALUE;
+use Kuperwood\Eav\Enum\ATTR_TYPE;
+use Kuperwood\Eav\Exception\AttributeException;
+use Kuperwood\Eav\Validation\Assert;
+use Kuperwood\Eav\Validation\Constraints\DateConstraint;
+use Kuperwood\Eav\Validation\Constraints\LengthConstraint;
+use Kuperwood\Eav\Validation\Constraints\NumericConstraint;
+use Kuperwood\Eav\Validation\Constraints\RegexConstraint;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraints;
 
@@ -26,12 +26,12 @@ class AttributeTypeEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::INTEGER
-     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::DATETIME
-     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::DECIMAL
-     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::STRING
-     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::TEXT
-     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::MANUAL
+     * @covers \Kuperwood\Eav\Enum\ATTR_TYPE::INTEGER
+     * @covers \Kuperwood\Eav\Enum\ATTR_TYPE::DATETIME
+     * @covers \Kuperwood\Eav\Enum\ATTR_TYPE::DECIMAL
+     * @covers \Kuperwood\Eav\Enum\ATTR_TYPE::STRING
+     * @covers \Kuperwood\Eav\Enum\ATTR_TYPE::TEXT
+     * @covers \Kuperwood\Eav\Enum\ATTR_TYPE::MANUAL
      */
     public function value() {
         $this->assertEquals("int", ATTR_TYPE::INTEGER);
@@ -44,7 +44,7 @@ class AttributeTypeEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::isValid
+     * @covers \Kuperwood\Eav\Enum\ATTR_TYPE::isValid
      */
     public function is_valid() {
         $this->assertTrue(ATTR_TYPE::isValid(ATTR_TYPE::INTEGER));
@@ -58,7 +58,7 @@ class AttributeTypeEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::valueTable
+     * @covers \Kuperwood\Eav\Enum\ATTR_TYPE::valueTable
      */
     public function value_table() {
         $this->assertEquals(sprintf(_VALUE::table(), ATTR_TYPE::INTEGER), ATTR_TYPE::valueTable(ATTR_TYPE::INTEGER));
@@ -70,7 +70,7 @@ class AttributeTypeEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::validationRule
+     * @covers \Kuperwood\Eav\Enum\ATTR_TYPE::validationRule
      */
     public function validation_rule() {
         $this->assertEquals([new NumericConstraint()], ATTR_TYPE::validationRule(ATTR_TYPE::INTEGER));
@@ -82,7 +82,7 @@ class AttributeTypeEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::getCase
+     * @covers \Kuperwood\Eav\Enum\ATTR_TYPE::getCase
      */
     public function get_case() {
         $this->assertEquals(ATTR_TYPE::INTEGER, ATTR_TYPE::getCase(ATTR_TYPE::INTEGER));
@@ -94,7 +94,7 @@ class AttributeTypeEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::getCase
+     * @covers \Kuperwood\Eav\Enum\ATTR_TYPE::getCase
      */
     public function get_case_exception() {
         $this->expectException(AttributeException::class);
@@ -105,7 +105,7 @@ class AttributeTypeEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::randomValue
+     * @covers \Kuperwood\Eav\Enum\ATTR_TYPE::randomValue
      */
     public function random_value() {
         $this->assertTrue(is_string(ATTR_TYPE::randomValue(ATTR_TYPE::STRING)));

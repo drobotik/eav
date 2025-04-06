@@ -1,15 +1,15 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
-namespace Drobotik\Eav\Interfaces;
+namespace Kuperwood\Eav\Interfaces;
 
-use Drobotik\Eav\Result\Result;
+use Kuperwood\Eav\Result\Result;
 
 interface StrategyInterface
 {

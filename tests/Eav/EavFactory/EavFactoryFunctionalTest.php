@@ -2,27 +2,27 @@
 /**
  * This file is part of the eav package.
  *
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\EavFactory;
 
-use Drobotik\Eav\Database\Connection;
-use Drobotik\Eav\Enum\_ATTR;
-use Drobotik\Eav\Enum\_DOMAIN;
-use Drobotik\Eav\Enum\_ENTITY;
-use Drobotik\Eav\Enum\_GROUP;
-use Drobotik\Eav\Enum\_PIVOT;
-use Drobotik\Eav\Enum\_RESULT;
-use Drobotik\Eav\Enum\_SET;
-use Drobotik\Eav\Enum\ATTR_FACTORY;
-use Drobotik\Eav\Enum\ATTR_TYPE;
-use Drobotik\Eav\Model\AttributeSetModel;
-use Drobotik\Eav\Result\EntityFactoryResult;
-use Drobotik\Eav\Result\Result;
+use Kuperwood\Eav\Database\Connection;
+use Kuperwood\Eav\Enum\_ATTR;
+use Kuperwood\Eav\Enum\_DOMAIN;
+use Kuperwood\Eav\Enum\_ENTITY;
+use Kuperwood\Eav\Enum\_GROUP;
+use Kuperwood\Eav\Enum\_PIVOT;
+use Kuperwood\Eav\Enum\_RESULT;
+use Kuperwood\Eav\Enum\_SET;
+use Kuperwood\Eav\Enum\ATTR_FACTORY;
+use Kuperwood\Eav\Enum\ATTR_TYPE;
+use Kuperwood\Eav\Model\AttributeSetModel;
+use Kuperwood\Eav\Result\EntityFactoryResult;
+use Kuperwood\Eav\Result\Result;
 use Faker\Generator;
 use PDO;
 use ReflectionClass;
@@ -40,7 +40,7 @@ class EavFactoryFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Factory\EavFactory::__construct
+     * @covers \Kuperwood\Eav\Factory\EavFactory::__construct
      */
     public function faker()
     {
@@ -56,7 +56,7 @@ class EavFactoryFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Factory\EavFactory::createDomain
+     * @covers \Kuperwood\Eav\Factory\EavFactory::createDomain
      */
     public function domainDefault()
     {
@@ -69,7 +69,7 @@ class EavFactoryFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Factory\EavFactory::createDomain
+     * @covers \Kuperwood\Eav\Factory\EavFactory::createDomain
      */
     public function domainInputData()
     {
@@ -94,7 +94,7 @@ class EavFactoryFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Factory\EavFactory::createEntity
+     * @covers \Kuperwood\Eav\Factory\EavFactory::createEntity
      */
     public function entityDefault()
     {
@@ -128,7 +128,7 @@ class EavFactoryFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Factory\EavFactory::createAttributeSet
+     * @covers \Kuperwood\Eav\Factory\EavFactory::createAttributeSet
      */
     public function attributeSet()
     {
@@ -141,7 +141,7 @@ class EavFactoryFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Factory\EavFactory::createAttributeSet
+     * @covers \Kuperwood\Eav\Factory\EavFactory::createAttributeSet
      */
     public function attributeSetInput()
     {
@@ -167,7 +167,7 @@ class EavFactoryFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Factory\EavFactory::createGroup
+     * @covers \Kuperwood\Eav\Factory\EavFactory::createGroup
      */
     public function attributeGroup()
     {
@@ -180,7 +180,7 @@ class EavFactoryFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Factory\EavFactory::createGroup
+     * @covers \Kuperwood\Eav\Factory\EavFactory::createGroup
      */
     public function attributeGroupInput()
     {
@@ -207,7 +207,7 @@ class EavFactoryFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Factory\EavFactory::createAttribute
+     * @covers \Kuperwood\Eav\Factory\EavFactory::createAttribute
      */
     public function attribute()
     {
@@ -220,7 +220,7 @@ class EavFactoryFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Factory\EavFactory::createAttribute
+     * @covers \Kuperwood\Eav\Factory\EavFactory::createAttribute
      */
     public function attributeInput()
     {
@@ -258,7 +258,7 @@ class EavFactoryFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Factory\EavFactory::createPivot
+     * @covers \Kuperwood\Eav\Factory\EavFactory::createPivot
      */
     public function pivot()
     {
@@ -291,7 +291,7 @@ class EavFactoryFunctionalTest extends TestCase
      *
      * @group functional
      *
-     * @covers \Drobotik\Eav\Factory\EavFactory::createEavEntity
+     * @covers \Kuperwood\Eav\Factory\EavFactory::createEavEntity
      */
     public function createEavEntity()
     {

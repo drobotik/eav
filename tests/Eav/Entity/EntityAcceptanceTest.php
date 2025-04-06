@@ -1,21 +1,21 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\Entity;
 
-use Drobotik\Eav\Entity;
-use Drobotik\Eav\Enum\_ATTR;
-use Drobotik\Eav\Enum\_VALUE;
-use Drobotik\Eav\Enum\ATTR_FACTORY;
-use Drobotik\Eav\Enum\ATTR_TYPE;
-use Drobotik\Eav\Model\EntityModel;
-use Drobotik\Eav\Result\EntityFactoryResult;
+use Kuperwood\Eav\Entity;
+use Kuperwood\Eav\Enum\_ATTR;
+use Kuperwood\Eav\Enum\_VALUE;
+use Kuperwood\Eav\Enum\ATTR_FACTORY;
+use Kuperwood\Eav\Enum\ATTR_TYPE;
+use Kuperwood\Eav\Model\EntityModel;
+use Kuperwood\Eav\Result\EntityFactoryResult;
 use Tests\TestCase;
 
 
@@ -24,7 +24,7 @@ class EntityAcceptanceTest extends TestCase
     /**
      * @test
      * @group acceptance
-     * @covers \Drobotik\Eav\Entity::save()
+     * @covers \Kuperwood\Eav\Entity::save()
      */
     public function creating_entities() {
         $domainKey = $this->eavFactory->createDomain();
@@ -108,7 +108,7 @@ class EntityAcceptanceTest extends TestCase
     /**
      * @test
      * @group acceptance
-     * @covers \Drobotik\Eav\Entity::save()
+     * @covers \Kuperwood\Eav\Entity::save()
      */
     public function find_and_update() {
         $domainKey = $this->eavFactory->createDomain();
@@ -216,7 +216,7 @@ class EntityAcceptanceTest extends TestCase
     /**
      * @test
      * @group acceptance
-     * @covers \Drobotik\Eav\Entity::delete()
+     * @covers \Kuperwood\Eav\Entity::delete()
      */
     public function delete() {
         $domainKey = $this->eavFactory->createDomain();
@@ -304,7 +304,7 @@ class EntityAcceptanceTest extends TestCase
     /**
      * @test
      * @group acceptance
-     * @covers \Drobotik\Eav\Entity::delete()
+     * @covers \Kuperwood\Eav\Entity::delete()
      */
     public function find_and_delete() {
         $domainKey = $this->eavFactory->createDomain();

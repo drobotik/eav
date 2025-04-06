@@ -1,17 +1,17 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\AttributeBag;
 
-use Drobotik\Eav\AttributeBag;
-use Drobotik\Eav\Enum\_ATTR;
-use Drobotik\Eav\Strategy;
+use Kuperwood\Eav\AttributeBag;
+use Kuperwood\Eav\Enum\_ATTR;
+use Kuperwood\Eav\Strategy;
 use PHPUnit\Framework\TestCase;
 
 class AttributeBagFunctionalTest extends TestCase
@@ -27,9 +27,9 @@ class AttributeBagFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\AttributeBag::setField
-     * @covers \Drobotik\Eav\AttributeBag::getField
-     * @covers \Drobotik\Eav\AttributeBag::resetField
+     * @covers \Kuperwood\Eav\AttributeBag::setField
+     * @covers \Kuperwood\Eav\AttributeBag::getField
+     * @covers \Kuperwood\Eav\AttributeBag::resetField
      */
     public function field() {
         $this->bag->setField(_ATTR::STRATEGY, 'test');
@@ -41,8 +41,8 @@ class AttributeBagFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\AttributeBag::getFields
-     * @covers \Drobotik\Eav\AttributeBag::__construct
+     * @covers \Kuperwood\Eav\AttributeBag::getFields
+     * @covers \Kuperwood\Eav\AttributeBag::__construct
      */
     public function get_fields() {
         $this->assertSame(_ATTR::bag(), $this->bag->getFields());
@@ -51,8 +51,8 @@ class AttributeBagFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\AttributeBag::setFields
-     * @covers \Drobotik\Eav\AttributeBag::getFields
+     * @covers \Kuperwood\Eav\AttributeBag::setFields
+     * @covers \Kuperwood\Eav\AttributeBag::getFields
      */
     public function set_fields() {
         $input = [

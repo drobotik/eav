@@ -33,7 +33,7 @@ To set up a connection, need to follow these steps:
 2. Feed PDO instance to Connection::get($pdo), it's static and will be used in the EAV engine.
 ```php
 #connection.php
-use Drobotik\Eav\Database\Connection;
+use Kuperwood\Eav\Database\Connection;
 $pdo = new PDO()
 $connection = Connection::get($pdo)
 if ($connection->get() instanceof PDO)
@@ -46,7 +46,7 @@ Choose a [driver](https://www.doctrine-project.org/projects/doctrine-dbal/en/lat
 The Entity model is a robust CRUD model that simplifies working with the EAV (Entity-Attribute-Value) data structure. It serves as the primary model for working with individual data records, making it well-suited for single record operations. However, it is not recommended for bulk usage or performing operations on a large number of records simultaneously.
 
 ```php
-use Drobotik\Eav\Entity;
+use Kuperwood\Eav\Entity;
 
 $entityKey = 1;
 $domainKey = 2;
@@ -93,7 +93,7 @@ $entity->delete();
 ```
 Entity create (without $entity->setKey())
 ```php
-use Drobotik\Eav\Entity;
+use Kuperwood\Eav\Entity;
 
 $domainKey = 2;
 $attributeSetKey = 3;
@@ -111,8 +111,8 @@ $entity->save();
 ```
 Other features
 ```php
-use Drobotik\Eav\Entity;
-use Drobotik\Eav\AttributeSet;
+use Kuperwood\Eav\Entity;
+use Kuperwood\Eav\AttributeSet;
     
 /* Override attributeSet */
 $entity = new Entity();
@@ -126,16 +126,16 @@ $gnome = $entity->getGnome();
 $entity->toArray(); 
 ```
 More examples:<br>
-tests/Eav/Entity/[EntityAcceptanceTest.php](https://github.com/drobotik/eav/blob/master/tests/Eav/Entity/EntityAcceptanceTest.php)
+tests/Eav/Entity/[EntityAcceptanceTest.php](https://github.com/Kuperwood/eav/blob/master/tests/Eav/Entity/EntityAcceptanceTest.php)
 
 ### Attribute set
 
 This class serves as a wrapper for Attribute Containers and is an integral part of Entity.
 ```php
 
-use Drobotik\Eav\Entity;
-use Drobotik\Eav\AttributeSet;
-use Drobotik\Eav\AttributeContainer;
+use Kuperwood\Eav\Entity;
+use Kuperwood\Eav\AttributeSet;
+use Kuperwood\Eav\AttributeContainer;
 
 $attributeSetKey = 1;
 
@@ -178,10 +178,10 @@ The Attribute class represents attribute data retrieved from the database. It pl
 
 ```php
 
-use Drobotik\Eav\Attribute;
-use Drobotik\Eav\Strategy;
-use Drobotik\Eav\Enum\_ATTR;
-use Drobotik\Eav\Enum\ATTR_TYPE;
+use Kuperwood\Eav\Attribute;
+use Kuperwood\Eav\Strategy;
+use Kuperwood\Eav\Enum\_ATTR;
+use Kuperwood\Eav\Enum\ATTR_TYPE;
 
 $attribute = new Attribute();
 $bag = $attribute->getBag();
@@ -210,16 +210,16 @@ The AttributeContainer class is extensively utilized by the AttributeSet to cons
 
 ```php
 
-use Drobotik\Eav\AttributeContainer;
-use Drobotik\Eav\AttributeSet;
-use Drobotik\Eav\Attribute;
-use Drobotik\Eav\AttributeSetAction;
-use Drobotik\Eav\Strategy;
-use Drobotik\Eav\Value\ValueAction;
-use Drobotik\Eav\Value\ValueValidator;
-use Drobotik\Eav\Value\ValueManager;
+use Kuperwood\Eav\AttributeContainer;
+use Kuperwood\Eav\AttributeSet;
+use Kuperwood\Eav\Attribute;
+use Kuperwood\Eav\AttributeSetAction;
+use Kuperwood\Eav\Strategy;
+use Kuperwood\Eav\Value\ValueAction;
+use Kuperwood\Eav\Value\ValueValidator;
+use Kuperwood\Eav\Value\ValueManager;
 
-$container = new \Drobotik\Eav\AttributeContainer();
+$container = new \Kuperwood\Eav\AttributeContainer();
 
 $container->setAttributeSet(new AttributeSet());
 $container->getAttributeSet();
@@ -249,7 +249,7 @@ $container->getValueManager();
 The strategy class is frequently employed to customize manipulations with specific attributes or to introduce new features. The current strategy includes predefined CRUD operations and validation for Attribute EAV values.
 
 ```php
-use Drobotik\Eav\Strategy;
+use Kuperwood\Eav\Strategy;
 
 $strategy = new Strategy();
 
@@ -279,9 +279,9 @@ The helper class is utilized to initialize attribute objects. The AttributeSet e
 
 ```php
 
-use Drobotik\Eav\AttributeSetAction;
-use Drobotik\Eav\AttributeContainer;
-use Drobotik\Eav\Model\AttributeModel;
+use Kuperwood\Eav\AttributeSetAction;
+use Kuperwood\Eav\AttributeContainer;
+use Kuperwood\Eav\Model\AttributeModel;
 
 $action = new AttributeSetAction();
 $action->setAttributeContainer(new AttributeContainer());
@@ -307,7 +307,7 @@ On the other hand, the storedValue represents a value that has already been stor
 
 ```php
 
-use Drobotik\Eav\Value\ValueManager;
+use Kuperwood\Eav\Value\ValueManager;
 
 $value = new ValueManager();
 $value->setStored(123);
@@ -327,8 +327,8 @@ $value->isStored(); // true
 Before working with EAV (Entity-Attribute-Value) data, it is necessary to specify the structure of the attribute set. If an attribute is not linked in the pivot table, both the attribute and its corresponding data will not be fetched by the AttributeSet.
 
 ```php
-use Drobotik\Eav\Model\PivotModel;
-use \Drobotik\Eav\Enum\_PIVOT;
+use Kuperwood\Eav\Model\PivotModel;
+use \Kuperwood\Eav\Enum\_PIVOT;
 
 $domainKey = 1
 $setKey = 2 

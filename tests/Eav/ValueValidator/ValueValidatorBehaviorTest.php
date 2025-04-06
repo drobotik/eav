@@ -1,22 +1,22 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\ValueValidator;
 
-use Drobotik\Eav\Attribute;
-use Drobotik\Eav\AttributeContainer;
-use Drobotik\Eav\Enum\_VALUE;
-use Drobotik\Eav\Enum\ATTR_TYPE;
-use Drobotik\Eav\Result\Result;
-use Drobotik\Eav\Strategy;
-use Drobotik\Eav\Validation\Constraints\RegexConstraint;
-use Drobotik\Eav\Value\ValueValidator;
+use Kuperwood\Eav\Attribute;
+use Kuperwood\Eav\AttributeContainer;
+use Kuperwood\Eav\Enum\_VALUE;
+use Kuperwood\Eav\Enum\ATTR_TYPE;
+use Kuperwood\Eav\Result\Result;
+use Kuperwood\Eav\Strategy;
+use Kuperwood\Eav\Validation\Constraints\RegexConstraint;
+use Kuperwood\Eav\Value\ValueValidator;
 use PHPUnit\Framework\TestCase;
 
 class ValueValidatorBehaviorTest extends TestCase
@@ -31,7 +31,7 @@ class ValueValidatorBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\Value\ValueValidator::getRules
+     * @covers \Kuperwood\Eav\Value\ValueValidator::getRules
      */
     public function validation_rules_with_custom_rule() {
         $attribute = new Attribute();
@@ -55,7 +55,7 @@ class ValueValidatorBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\Value\ValueValidator::validateField
+     * @covers \Kuperwood\Eav\Value\ValueValidator::validateField
      */
     public function validate_field_fails() {
         $result = (new Result())->validationFails();
@@ -83,7 +83,7 @@ class ValueValidatorBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\Value\ValueValidator::validateField
+     * @covers \Kuperwood\Eav\Value\ValueValidator::validateField
      */
     public function validate_field_ok() {
         $result = (new Result())->validationPassed();

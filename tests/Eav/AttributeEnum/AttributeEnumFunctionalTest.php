@@ -1,18 +1,18 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\AttributeEnum;
 
-use Drobotik\Eav\Enum\_ATTR;
-use Drobotik\Eav\Enum\_DOMAIN;
-use Drobotik\Eav\Enum\ATTR_TYPE;
-use Drobotik\Eav\Strategy;
+use Kuperwood\Eav\Enum\_ATTR;
+use Kuperwood\Eav\Enum\_DOMAIN;
+use Kuperwood\Eav\Enum\ATTR_TYPE;
+use Kuperwood\Eav\Strategy;
 use PHPUnit\Framework\TestCase;
 
 class AttributeEnumFunctionalTest extends TestCase
@@ -20,7 +20,7 @@ class AttributeEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Enum\_ATTR::table
+     * @covers \Kuperwood\Eav\Enum\_ATTR::table
      */
     public function table() {
         $this->assertEquals('eav_attributes', _ATTR::table());
@@ -28,14 +28,14 @@ class AttributeEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Enum\_ATTR::ID
-     * @covers \Drobotik\Eav\Enum\_ATTR::NAME
-     * @covers \Drobotik\Eav\Enum\_ATTR::DOMAIN_ID
-     * @covers \Drobotik\Eav\Enum\_ATTR::SOURCE
-     * @covers \Drobotik\Eav\Enum\_ATTR::DEFAULT_VALUE
-     * @covers \Drobotik\Eav\Enum\_ATTR::TYPE
-     * @covers \Drobotik\Eav\Enum\_ATTR::STRATEGY
-     * @covers \Drobotik\Eav\Enum\_ATTR::DESCRIPTION
+     * @covers \Kuperwood\Eav\Enum\_ATTR::ID
+     * @covers \Kuperwood\Eav\Enum\_ATTR::NAME
+     * @covers \Kuperwood\Eav\Enum\_ATTR::DOMAIN_ID
+     * @covers \Kuperwood\Eav\Enum\_ATTR::SOURCE
+     * @covers \Kuperwood\Eav\Enum\_ATTR::DEFAULT_VALUE
+     * @covers \Kuperwood\Eav\Enum\_ATTR::TYPE
+     * @covers \Kuperwood\Eav\Enum\_ATTR::STRATEGY
+     * @covers \Kuperwood\Eav\Enum\_ATTR::DESCRIPTION
      */
     public function columns() {
         $this->assertEquals('attribute_id', _ATTR::ID);
@@ -50,7 +50,7 @@ class AttributeEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Enum\_ATTR::bag
+     * @covers \Kuperwood\Eav\Enum\_ATTR::bag
      */
     public function bag() {
         $this->assertEquals(null, _ATTR::bag(_ATTR::ID));

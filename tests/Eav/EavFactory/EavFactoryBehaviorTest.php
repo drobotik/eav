@@ -1,15 +1,15 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\EavFactory;
 
-use Drobotik\Eav\Factory\EavFactory;
+use Kuperwood\Eav\Factory\EavFactory;
 use Tests\TestCase;
 
 class EavFactoryBehaviorTest extends TestCase
@@ -17,7 +17,7 @@ class EavFactoryBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\Factory\EavFactory::createDomain
+     * @covers \Kuperwood\Eav\Factory\EavFactory::createDomain
      */
     public function entity_domain() {
         $factory = $this->getMockBuilder(EavFactory::class)
@@ -31,7 +31,7 @@ class EavFactoryBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\Factory\EavFactory::createEntity
+     * @covers \Kuperwood\Eav\Factory\EavFactory::createEntity
      */
     public function entity_attr_set() {
         $factory = $this->getMockBuilder(EavFactory::class)
@@ -46,7 +46,7 @@ class EavFactoryBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\Factory\EavFactory::createAttributeSet
+     * @covers \Kuperwood\Eav\Factory\EavFactory::createAttributeSet
      */
     public function attribute_set_domain() {
         $factory = $this->getMockBuilder(EavFactory::class)
@@ -60,7 +60,7 @@ class EavFactoryBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\Factory\EavFactory::createGroup
+     * @covers \Kuperwood\Eav\Factory\EavFactory::createGroup
      */
     public function attribute_group_attribute_set() {
         $factory = $this->getMockBuilder(EavFactory::class)
@@ -74,7 +74,7 @@ class EavFactoryBehaviorTest extends TestCase
     /**
      * @test
      * @group behavior
-     * @covers \Drobotik\Eav\Factory\EavFactory::createAttribute
+     * @covers \Kuperwood\Eav\Factory\EavFactory::createAttribute
      */
     public function attribute_domain() {
         $factory = $this->getMockBuilder(EavFactory::class)

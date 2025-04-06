@@ -2,23 +2,23 @@
 /**
  * This file is part of the eav package.
  *
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
-namespace Drobotik\Eav\Factory;
+namespace Kuperwood\Eav\Factory;
 
-use Drobotik\Eav\Enum\_ATTR;
-use Drobotik\Eav\Enum\_PIVOT;
-use Drobotik\Eav\Enum\_VALUE;
-use Drobotik\Eav\Enum\ATTR_FACTORY;
-use Drobotik\Eav\Enum\ATTR_TYPE;
-use Drobotik\Eav\Exception\AttributeException;
-use Drobotik\Eav\Exception\EntityFactoryException;
-use Drobotik\Eav\Result\EntityFactoryResult;
-use Drobotik\Eav\Traits\SingletonsTrait;
+use Kuperwood\Eav\Enum\_ATTR;
+use Kuperwood\Eav\Enum\_PIVOT;
+use Kuperwood\Eav\Enum\_VALUE;
+use Kuperwood\Eav\Enum\ATTR_FACTORY;
+use Kuperwood\Eav\Enum\ATTR_TYPE;
+use Kuperwood\Eav\Exception\AttributeException;
+use Kuperwood\Eav\Exception\EntityFactoryException;
+use Kuperwood\Eav\Result\EntityFactoryResult;
+use Kuperwood\Eav\Traits\SingletonsTrait;
 
 class EntityFactory
 {

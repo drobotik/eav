@@ -1,18 +1,18 @@
 <?php
 /**
  * This file is part of the eav package.
- * @author    Aleksandr Drobotik <drobotiksbox@gmail.com>
- * @copyright 2023 Aleksandr Drobotik
+ * @author    Alex Kuperwood <alexkuperwood@gmail.com>
+ * @copyright 2025 Alex Kuperwood
  * @license   https://opensource.org/license/mit  The MIT License
  */
 declare(strict_types=1);
 
 namespace Tests\Eav\AttributeSetModel;
 
-use Drobotik\Eav\Database\Connection;
-use Drobotik\Eav\Enum\_ATTR;
-use Drobotik\Eav\Enum\_SET;
-use Drobotik\Eav\Model\AttributeSetModel;
+use Kuperwood\Eav\Database\Connection;
+use Kuperwood\Eav\Enum\_ATTR;
+use Kuperwood\Eav\Enum\_SET;
+use Kuperwood\Eav\Model\AttributeSetModel;
 use PDO;
 use Tests\TestCase;
 
@@ -30,7 +30,7 @@ class AttributeSetModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\AttributeSetModel::__construct
+     * @covers \Kuperwood\Eav\Model\AttributeSetModel::__construct
      */
     public function defaults()
     {
@@ -40,7 +40,7 @@ class AttributeSetModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\AttributeSetModel::create
+     * @covers \Kuperwood\Eav\Model\AttributeSetModel::create
      */
     public function create_record()
     {
@@ -63,7 +63,7 @@ class AttributeSetModelFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Model\AttributeSetModel::findAttributes
+     * @covers \Kuperwood\Eav\Model\AttributeSetModel::findAttributes
      */
     public function findAttributes() {
 
