@@ -104,7 +104,7 @@ class ATTR_TYPE
             case self::DATETIME:
                 return (new DateTime())->setTimestamp(rand(strtotime('1980-01-01 00:00:00'), strtotime('2025-12-31 23:59:59')))->format('Y-m-d H:i:s.u');
             case self::DECIMAL:
-                return $faker->randomFloat(3);
+                return $faker->randomFloat(6);
             case self::STRING:
                 return $faker->words(2, true);
             case self::TEXT:
