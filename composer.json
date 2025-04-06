@@ -1,6 +1,6 @@
 {
-    "name": "drobotik/eav",
-    "description": "multi domain EAV package",
+    "name": "kuperwood/eav",
+    "description": "multi domain EAV engine",
     "type": "library",
     "license": "MIT",
     "autoload": {
@@ -16,7 +16,7 @@
     },
     "authors": [
         {
-            "name": "Aleksandr Drobotik"
+            "name": "Alex Kuperwood"
         }
     ],
     "minimum-stability": "dev",
