@@ -25,18 +25,19 @@ The image illustrates a simplified process for creating a new entity.
 [Link to diagram](https://miro.com/app/board/uXjVMDWBzBU=/?share_link_id=625279004139)
 
 ### Connection
-The CLI app relies on a database connection and utilizes Doctrine DBAL for establishing connections.<br />
-No pre-configured connection information is available. To set up a connection in non-docker environments, you need to follow these steps:
+EAV engine relies on a database connection and utilizes PDO php extension for establishing connections.<br />
+No pre-configured connection information is available. <br /> 
+To set up a connection, need to follow these steps:
 
-1. Create a new file named connection.php in the root folder.
-2. The contents of this file will be automatically included in the application.
+1. Define the PDO connection on top of the EAV engine.
+2. Feed PDO instance to Connection::get($pdo), it's static and will be used in the EAV engine.
 ```php
 #connection.php
 use Drobotik\Eav\Database\Connection;
-$config = [
-    // connection settings
-]
-$connection = Connection::get($config)
+$pdo = new PDO()
+$connection = Connection::get($pdo)
+if ($connection->get() instanceof PDO)
+    echo 'defined';
 ```
 Choose a [driver](https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#driver) that best suits your requirements.
 
