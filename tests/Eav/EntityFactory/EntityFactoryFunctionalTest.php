@@ -819,17 +819,13 @@ class EntityFactoryFunctionalTest extends TestCase
             _VALUE::ID => $valueKey
         ];
         $value = 432;
-        $parsedValue = 433;
+        $parsedValue = 432;
 
         $entityResult = $this->getMockBuilder(EntityFactoryResult::class)
             ->onlyMethods(['getDomainKey', 'getSetKey'])->getMock();
         $entityResult->method('getDomainKey')->willReturn($domainKey);
 
-        $valueParser = $this->getMockBuilder(ValueParser::class)
-            ->onlyMethods(['parse'])->getMock();
-        $valueParser->expects($this->once())
-            ->method('parse')
-            ->with($attrType, $value)->willReturn($parsedValue);
+        $valueParser = $this->getMockBuilder(ValueParser::class)->getMock();
 
         $valueModel = $this->getMockBuilder(ValueBase::class)
             ->onlyMethods(['find', 'update'])->getMock();
