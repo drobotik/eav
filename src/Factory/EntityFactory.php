@@ -125,15 +125,14 @@ class EntityFactory
     {
         $result = $this->getResult();
         $valueModel = $this->makeValueModel();
-        $valueParser = $this->makeValueParser();
         $domainKey = $result->getDomainKey();
 
         $record = $valueModel->find($type, $domainKey, $entityKey, $attrKey);
         if($record === false) {
-            $key = $valueModel->create($type, $domainKey, $entityKey, $attrKey, $valueParser->parse($type, $value));
+            $key = $valueModel->create($type, $domainKey, $entityKey, $attrKey, $value);
         } else {
             $key = $record[_VALUE::ID];
-            $valueModel->update($type, $domainKey, $entityKey, $attrKey, $valueParser->parse($type, $value));
+            $valueModel->update($type, $domainKey, $entityKey, $attrKey, $value);
         }
         $result->addValue($attrKey, $key);
         return $key;
