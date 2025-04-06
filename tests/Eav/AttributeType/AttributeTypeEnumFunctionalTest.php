@@ -70,21 +70,6 @@ class AttributeTypeEnumFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
-     * @covers \Drobotik\Eav\Enum\ATTR_TYPE::migrateOptions
-     */
-    public function migrate_options() {
-        $this->assertEquals([], ATTR_TYPE::migrateOptions(ATTR_TYPE::INTEGER));
-        $this->assertEquals([], ATTR_TYPE::migrateOptions(ATTR_TYPE::DATETIME));
-        $this->assertEquals([
-            'precision' => 21,
-            'scale' => 6
-        ], ATTR_TYPE::migrateOptions(ATTR_TYPE::DECIMAL));
-        $this->assertEquals([], ATTR_TYPE::migrateOptions(ATTR_TYPE::STRING));
-        $this->assertEquals([], ATTR_TYPE::migrateOptions(ATTR_TYPE::TEXT));
-    }
-    /**
-     * @test
-     * @group functional
      * @covers \Drobotik\Eav\Enum\ATTR_TYPE::validationRule
      */
     public function validation_rule() {

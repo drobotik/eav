@@ -12,14 +12,12 @@ namespace Drobotik\Eav\Enum;
 use DateTime;
 
 use Drobotik\Eav\Exception\AttributeException;
-use Drobotik\Eav\Validation\Assert;
 use Drobotik\Eav\Validation\Constraints\DateConstraint;
 use Drobotik\Eav\Validation\Constraints\LengthConstraint;
 use Drobotik\Eav\Validation\Constraints\NumericConstraint;
 use Drobotik\Eav\Validation\Constraints\RegexConstraint;
 use Faker\Factory;
 use InvalidArgumentException;
-
 
 class ATTR_TYPE
 {
@@ -64,24 +62,6 @@ class ATTR_TYPE
                 return sprintf(_VALUE::table(), self::STRING);
             case self::TEXT:
                 return sprintf(_VALUE::table(), self::TEXT);
-            default:
-                throw new InvalidArgumentException("Invalid type: " . $name);
-        }
-    }
-
-    public static function migrateOptions(string $name) : array
-    {
-        switch ($name) {
-            case self::DATETIME:
-            case self::STRING:
-            case self::TEXT:
-            case self::INTEGER:
-                return [];
-            case self::DECIMAL:
-                return [
-                    'precision' => 21,
-                    'scale' => 6
-                ];
             default:
                 throw new InvalidArgumentException("Invalid type: " . $name);
         }

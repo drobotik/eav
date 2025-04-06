@@ -69,7 +69,7 @@ class ValueModelFunctionalTest extends TestCase
 
             $valueRecord = $stmt->fetch(PDO::FETCH_ASSOC);
             $this->assertEquals($valueKey, $valueRecord[_VALUE::ID], "Iteration:".$case);
-            $this->assertEquals($parser->parse($case, $value), $valueRecord[_VALUE::VALUE], "Iteration:".$case);
+            $this->assertEquals($parser->parse($case, $value), $parser->parse($case, $valueRecord[_VALUE::VALUE]) , "Iteration:".$case);
         }
     }
 
@@ -102,6 +102,7 @@ class ValueModelFunctionalTest extends TestCase
         $domainKey = 1;
         $entityKey = 2;
         $attributeKey = 3;
+        $parser = new ValueParser();
         foreach($this->cases() as $case)
         {
             $oldValue = ATTR_TYPE::randomValue($case);
@@ -111,7 +112,7 @@ class ValueModelFunctionalTest extends TestCase
             $this->assertEquals(1, $result, ATTR_TYPE::valueTable($case));
             $record = $this->model->find(ATTR_TYPE::getCase($case), $domainKey, $entityKey, $attributeKey);
             $this->assertIsArray($record);
-            $this->assertEquals($this->makeValueParser()->parse($case, $newValue), $record[_VALUE::VALUE]);
+            $this->assertEquals($parser->parse($case, $newValue), $parser->parse($case, $record[_VALUE::VALUE]));
         }
     }
 

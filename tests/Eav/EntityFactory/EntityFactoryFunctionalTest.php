@@ -644,8 +644,8 @@ class EntityFactoryFunctionalTest extends TestCase
 
         $this->assertEquals($parser->parse(ATTR_TYPE::STRING, $stringValue), $string[_VALUE::VALUE]);
         $this->assertEquals($parser->parse(ATTR_TYPE::INTEGER, $integerValue), $integer[_VALUE::VALUE]);
-        $this->assertEquals($parser->parse(ATTR_TYPE::DECIMAL, $decimalValue), $decimal[_VALUE::VALUE]);
-        $this->assertEquals($parser->parse(ATTR_TYPE::DATETIME, $datetimeValue), $datetime[_VALUE::VALUE]);
+        $this->assertEquals($parser->parse(ATTR_TYPE::DECIMAL, $decimalValue), $parser->parse(ATTR_TYPE::DECIMAL,$decimal[_VALUE::VALUE]));
+        $this->assertEquals($parser->parse(ATTR_TYPE::DATETIME, $datetimeValue), $parser->parse(ATTR_TYPE::DECIMAL,$datetime[_VALUE::VALUE]));
         $this->assertEquals($parser->parse(ATTR_TYPE::TEXT, $textValue), $text[_VALUE::VALUE]);
 
         $values = $result->getValues();

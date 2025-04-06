@@ -14,12 +14,6 @@ use InvalidArgumentException;
 
 class ValueParser
 {
-    public function parseDecimal($value)
-    {
-        $scale = ATTR_TYPE::migrateOptions(ATTR_TYPE::DECIMAL)['scale'];
-        return number_format($value, $scale, '.', '');
-    }
-
     /**
      * @throws \Exception
      */
@@ -34,7 +28,7 @@ class ValueParser
             case ATTR_TYPE::DATETIME:
                 return (new DateTime($value))->format('Y-m-d H:i:s');
             case ATTR_TYPE::DECIMAL:
-                return $this->parseDecimal($value);
+                return rtrim(rtrim($value, '0'), '.');
             default:
                 throw new InvalidArgumentException("Unknown attribute type: " . $type);
         }

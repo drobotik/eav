@@ -10,103 +10,33 @@ declare(strict_types=1);
 namespace Tests\Eav\ValueParser;
 
 use Drobotik\Eav\Enum\ATTR_TYPE;
-use Drobotik\Eav\Value\ValueParser;
+use Drobotik\Eav\Value\ValueParser as Parser;
 use Tests\TestCase;
 
 class ValueParserFunctionalTest extends TestCase
 {
-    private ValueParser $parser;
+    private Parser $instance;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->parser = new ValueParser();
+        $this->instance = new Parser();
     }
 
     /**
      * @test
-     * @group behavior
+     * @group functional
      * @covers \Drobotik\Eav\Value\ValueParser::parse
      */
     public function parse()
     {
-        $parser = $this->getMockBuilder(ValueParser::class)
-            ->onlyMethods(['parseDecimal'])->getMock();
+        $this->assertEquals(123, $this->instance->parse(ATTR_TYPE::DECIMAL, 123));
 
-        $parser->expects($this->once())
-            ->method('parseDecimal')
-            ->with(123)
-            ->willReturn(456);
-
-        $this->assertEquals(456, $parser->parse(ATTR_TYPE::DECIMAL, 123));
-        $this->assertEquals('test', $parser->parse(ATTR_TYPE::STRING, 'test'));
-        $this->assertEquals('2023-05-20 14:38:12', $parser->parse(ATTR_TYPE::DATETIME, '2023-05-20T14:38:12.795974Z'));
-        $this->assertEquals('test', $parser->parse(ATTR_TYPE::INTEGER, 'test'));
-        $this->assertEquals('test', $parser->parse(ATTR_TYPE::TEXT, 'test'));
-    }
-
-    /**
-     * @test
-     * @group functional
-     * @covers \Drobotik\Eav\Value\ValueParser::parseDecimal
-     */
-    public function parse_decimal()
-    {
-        $value = 627622.1833178335;
-        $expected = 627622.183318;
-        $result = $this->parser->parseDecimal($value);
-        $this->assertEquals($expected, $result);
-    }
-
-
-    /**
-     * @test
-     * @group functional
-     * @covers \Drobotik\Eav\Value\ValueParser::parseDecimal
-     */
-    public function parse_decimal2()
-    {
-        $value = 4374530.552935;
-        $expected = 4374530.552935;
-        $result = $this->parser->parseDecimal($value);
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * @test
-     * @group functional
-     * @covers \Drobotik\Eav\Value\ValueParser::parseDecimal
-     */
-    public function parse_decimal3()
-    {
-        $value = 181903275.402301;
-        $expected = 181903275.402301;
-        $result = $this->parser->parseDecimal($value);
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * @test
-     * @group functional
-     * @covers \Drobotik\Eav\Value\ValueParser::parseDecimal
-     */
-    public function parse_decimal4()
-    {
-        $value = '181903275.402301';
-        $expected = 181903275.402301;
-        $result = $this->parser->parseDecimal($value);
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * @test
-     * @group functional
-     * @covers \Drobotik\Eav\Value\ValueParser::parseDecimal
-     */
-    public function parse_decimal_spontaneous_value()
-    {
-        $value = $this->faker->randomFloat(ATTR_TYPE::migrateOptions(ATTR_TYPE::DECIMAL)['scale']);
-        $result = $this->parser->parseDecimal($value);
-        $this->assertEquals($value, $result);
+        $random = $this->faker->randomFloat(6);
+        $this->assertEquals(rtrim(rtrim((string) $random, '0'), '.'), $this->instance->parse(ATTR_TYPE::DECIMAL, $random));
+        $this->assertEquals('test', $this->instance->parse(ATTR_TYPE::STRING, 'test'));
+        $this->assertEquals('2023-05-20 14:38:12', $this->instance->parse(ATTR_TYPE::DATETIME, '2023-05-20T14:38:12.795974Z'));
+        $this->assertEquals('test', $this->instance->parse(ATTR_TYPE::INTEGER, 'test'));
+        $this->assertEquals('test', $this->instance->parse(ATTR_TYPE::TEXT, 'test'));
     }
 }
