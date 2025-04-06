@@ -35,7 +35,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
         Connection::get($pdo);
         $sql = file_get_contents($schemaPath);
         $statements = array_filter(array_map('trim', explode(";", $sql)));
-        $pdo = Connection::getNativeConnection();
+        $pdo = Connection::get();
         foreach ($statements as $statement) {
             if (!empty($statement)) {
                 $pdo->exec($statement);
@@ -50,13 +50,12 @@ class TestCase extends \PHPUnit\Framework\TestCase
         $schemaPath = dirname(__DIR__) . '/schema.sql';
         $sql = file_get_contents($schemaPath);
         $statements = array_filter(array_map('trim', explode(";", $sql)));
-        $pdo = Connection::getNativeConnection();
+        $pdo = Connection::get();
         foreach ($statements as $statement) {
             if (!empty($statement)) {
                 $pdo->exec($statement);
             }
         }
-        Cleaner::run();
         parent::tearDown();
     }
 }

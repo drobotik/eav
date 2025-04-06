@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Kuperwood\Eav\Model;
 
+use Kuperwood\Eav\Database\Connection;
 use Kuperwood\Eav\Enum\_GROUP;
 use PDO;
 
@@ -23,7 +24,7 @@ class AttributeGroupModel extends Model
 
     public function create(array $data) : int
     {
-        $conn = $this->getNativeConnection();
+        $conn = Connection::get();
         $sql = sprintf("INSERT INTO %s (%s, %s) values(:sid, :name)", _GROUP::table(), _GROUP::SET_ID, _GROUP::NAME);
         $stmt = $conn->prepare($sql);
         $stmt->execute(['sid' => $data[_GROUP::SET_ID], 'name' => $data[_GROUP::NAME]]);

@@ -9,8 +9,6 @@ declare(strict_types=1);
 
 namespace Kuperwood\Eav\Database;
 
-use Doctrine\DBAL\Connection as DBALConnection;
-use Doctrine\DBAL\DriverManager;
 use Kuperwood\Eav\Exception\ConnectionException;
 use PDO;
 
@@ -36,11 +34,6 @@ class Connection
             return self::$conn;
         }
         ConnectionException::undefined();
-    }
-
-    public static function getNativeConnection() : PDO
-    {
-        return self::$conn;
     }
 
 }

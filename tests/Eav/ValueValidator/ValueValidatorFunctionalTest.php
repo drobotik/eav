@@ -23,8 +23,6 @@ use Kuperwood\Eav\Validation\Validator;
 use Kuperwood\Eav\Value\ValueManager;
 use Kuperwood\Eav\Value\ValueValidator;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Validator\Constraints;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ValueValidatorFunctionalTest extends TestCase
 {

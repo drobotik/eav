@@ -15,8 +15,6 @@ use Kuperwood\Eav\Entity;
 use Kuperwood\Eav\Enum\_RESULT;
 use Kuperwood\Eav\Result\Result;
 use Kuperwood\Eav\Strategy;
-use Kuperwood\Eav\Validation\Assert;
-use Kuperwood\Eav\Validation\Constraints\NotBlankConstraint;
 use Kuperwood\Eav\Validation\Constraints\NumericConstraint;
 use Kuperwood\Eav\Validation\Constraints\RequiredConstraint;
 use Kuperwood\Eav\Validation\Validator;
@@ -24,8 +22,6 @@ use Kuperwood\Eav\Value\ValueAction;
 use Kuperwood\Eav\Value\ValueManager;
 use Kuperwood\Eav\Value\ValueValidator;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Validator\Validation;
-use Symfony\Component\Validator\Constraints;
 
 
 class StrategyBehaviorTest extends TestCase

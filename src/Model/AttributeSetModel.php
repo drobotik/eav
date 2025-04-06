@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace Kuperwood\Eav\Model;
 
-use Doctrine\DBAL\Exception;
 use Kuperwood\Eav\Enum\_ATTR;
 use Kuperwood\Eav\Enum\_PIVOT;
 use Kuperwood\Eav\Enum\_SET;

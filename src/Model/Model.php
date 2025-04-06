@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace Kuperwood\Eav\Model;
 
 use Kuperwood\Eav\Database\Connection;
-use Doctrine\DBAL\Connection as DBALConnection;
 use PDO;
 
 class Model
@@ -22,11 +21,6 @@ class Model
     public function db() : PDO
     {
         return Connection::get();
-    }
-
-    public function getNativeConnection() : PDO
-    {
-        return Connection::getNativeConnection();
     }
 
     public function setPrimaryKey(string $name): void

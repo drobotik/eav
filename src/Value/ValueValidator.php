@@ -18,9 +18,6 @@ use Kuperwood\Eav\Validation\Constraints\NotBlankConstraint;
 use Kuperwood\Eav\Validation\Constraints\NumericConstraint;
 use Kuperwood\Eav\Validation\Constraints\RequiredConstraint;
 use Kuperwood\Eav\Validation\Validator;
-use Symfony\Component\Validator\Validation;
-use Symfony\Component\Validator\Constraints;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ValueValidator
 {

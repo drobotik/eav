@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace Kuperwood\Eav;
 
-use Doctrine\DBAL\Exception;
 use Kuperwood\Eav\Enum\_ENTITY;
 use Kuperwood\Eav\Exception\EntityException;
 use Kuperwood\Eav\Result\Result;

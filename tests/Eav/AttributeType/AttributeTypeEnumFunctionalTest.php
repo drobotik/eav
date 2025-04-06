@@ -9,17 +9,14 @@ declare(strict_types=1);
 
 namespace Tests\Eav\AttributeType;
 
-
 use Kuperwood\Eav\Enum\_VALUE;
 use Kuperwood\Eav\Enum\ATTR_TYPE;
 use Kuperwood\Eav\Exception\AttributeException;
-use Kuperwood\Eav\Validation\Assert;
 use Kuperwood\Eav\Validation\Constraints\DateConstraint;
 use Kuperwood\Eav\Validation\Constraints\LengthConstraint;
 use Kuperwood\Eav\Validation\Constraints\NumericConstraint;
 use Kuperwood\Eav\Validation\Constraints\RegexConstraint;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Validator\Constraints;
 
 class AttributeTypeEnumFunctionalTest extends TestCase
 {
