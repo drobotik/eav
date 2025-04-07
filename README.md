@@ -1,7 +1,7 @@
 # EAV library
 
 [![Latest Version](https://img.shields.io/github/release/kuperwood/eav.svg?style=flat-square)](https://github.com/kuperwood/eav/releases)
-[![Build Status](https://github.com/kuperwood/eav/workflows/tests/badge.svg)](https://github.com/kuperwood/actions)
+[![Build Status](https://github.com/kuperwood/eav/workflows/tests/badge.svg)](https://github.com/kuperwood/eav/actions)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://opensource.org/license/mit)
 [![Quality Score](https://img.shields.io/scrutinizer/g/kuperwood/eav.svg?style=flat-square)](https://scrutinizer-ci.com/g/kuperwood/eav)
 [![Code Coverage](https://scrutinizer-ci.com/g/kuperwood/eav/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/kuperwood/eav/?branch=master)
