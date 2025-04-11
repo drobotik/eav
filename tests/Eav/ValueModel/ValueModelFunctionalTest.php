@@ -36,9 +36,9 @@ class ValueModelFunctionalTest extends TestCase
     }
 
     /**
-     * @return ATTR_TYPE[]
+     * @return array
      */
-    private function cases(): array
+    private function typesList(): array
     {
         return [ATTR_TYPE::STRING, ATTR_TYPE::INTEGER, ATTR_TYPE::DECIMAL, ATTR_TYPE::DATETIME, ATTR_TYPE::TEXT];
     }
@@ -53,7 +53,7 @@ class ValueModelFunctionalTest extends TestCase
         $entityKey = 2;
         $attributeKey = 3;
         $parser = new ValueParser();
-        foreach($this->cases() as $case)
+        foreach($this->typesList() as $case)
         {
             $value = ATTR_TYPE::randomValue($case);
             $valueKey = $this->model->create($case, $domainKey, $entityKey, $attributeKey, $value);
@@ -82,7 +82,7 @@ class ValueModelFunctionalTest extends TestCase
         $entityKey = 2;
         $attributeKey = 3;
         $parser = new ValueParser();
-        foreach($this->cases() as $case)
+        foreach($this->typesList() as $case)
         {
             $valueKey = $this->model->create($case, $domainKey, $entityKey, $attributeKey, ATTR_TYPE::randomValue($case));
 
@@ -112,7 +112,7 @@ class ValueModelFunctionalTest extends TestCase
         $entityKey = 2;
         $attributeKey = 3;
         $parser = new ValueParser();
-        foreach($this->cases() as $case)
+        foreach($this->typesList() as $case)
         {
             $oldValue = ATTR_TYPE::randomValue($case);
             $newValue = ATTR_TYPE::randomValue($case);
@@ -136,7 +136,7 @@ class ValueModelFunctionalTest extends TestCase
         $entityKey = 2;
         $attributeKey = 3;
 
-        foreach($this->cases() as $case)
+        foreach($this->typesList() as $case)
         {
             $this->model->create($case, $domainKey, $entityKey, $attributeKey, ATTR_TYPE::randomValue($case));
             $result = $this->model->destroy($case, $domainKey, $entityKey, $attributeKey);
