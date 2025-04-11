@@ -1,3 +1,24 @@
+### 1.19.4 - 2025-04-06
+
+#### Added
+
+- Nothing
+
+#### Deprecated
+
+- Nothing
+
+#### Fixed
+
+- types saving
+- types formatting
+- entity toArray
+- entity bag fields
+
+#### Removed
+
+- Nothing
+
 ### 1.19.2 - 2025-04-06
 
 #### Added
