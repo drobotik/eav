@@ -644,8 +644,8 @@ class EntityFactoryFunctionalTest extends TestCase
 
         $this->assertEquals($parser->parse(ATTR_TYPE::STRING, $stringValue), $string[_VALUE::VALUE]);
         $this->assertEquals($parser->parse(ATTR_TYPE::INTEGER, $integerValue), $integer[_VALUE::VALUE]);
-        $this->assertEquals($parser->parse(ATTR_TYPE::DECIMAL, $decimalValue), $parser->parse(ATTR_TYPE::DECIMAL,$decimal[_VALUE::VALUE]));
-        $this->assertEquals($parser->parse(ATTR_TYPE::DATETIME, $datetimeValue), $parser->parse(ATTR_TYPE::DATETIME,$datetime[_VALUE::VALUE]));
+        $this->assertEquals($parser->parse(ATTR_TYPE::DECIMAL, $decimalValue), $decimal[_VALUE::VALUE]);
+        $this->assertEquals($parser->parse(ATTR_TYPE::DATETIME, $datetimeValue), $datetime[_VALUE::VALUE]);
         $this->assertEquals($parser->parse(ATTR_TYPE::TEXT, $textValue), $text[_VALUE::VALUE]);
 
         $values = $result->getValues();
@@ -825,8 +825,6 @@ class EntityFactoryFunctionalTest extends TestCase
             ->onlyMethods(['getDomainKey', 'getSetKey'])->getMock();
         $entityResult->method('getDomainKey')->willReturn($domainKey);
 
-        $valueParser = $this->getMockBuilder(ValueParser::class)->getMock();
-
         $valueModel = $this->getMockBuilder(ValueBase::class)
             ->onlyMethods(['find', 'update'])->getMock();
         $valueModel->method('find')->willReturn($record);
@@ -834,9 +832,8 @@ class EntityFactoryFunctionalTest extends TestCase
             ->with($attrType, $domainKey, $entityKey, $attrKey, $parsedValue);
 
         $entityFactory = $this->getMockBuilder(EntityFactory::class)
-            ->onlyMethods(['makeValueModel', 'makeValueParser', 'getResult'])->getMock();
+            ->onlyMethods(['makeValueModel', 'getResult'])->getMock();
         $entityFactory->method('makeValueModel')->willReturn($valueModel);
-        $entityFactory->method('makeValueParser')->willReturn($valueParser);
         $entityFactory->method('getResult')->willReturn($entityResult);
 
         $this->assertEquals($valueKey, $entityFactory->handleValue($attrType, $entityKey, $attrKey, $value));

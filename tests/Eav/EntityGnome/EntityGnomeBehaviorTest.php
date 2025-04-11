@@ -135,25 +135,40 @@ class EntityGnomeBehaviorTest extends TestCase
      */
     public function save_values() {
         $bag = $this->getMockBuilder(EntityBag::class)
-            ->onlyMethods(['clear'])
+            ->onlyMethods(['clear', 'setField'])
             ->getMock();
         $bag->expects($this->once())
             ->method('clear');
+        $bag->expects($this->exactly(2))
+            ->method('setField')
+            ->withConsecutive(
+                [$this->equalTo('phone'), $this->equalTo('12345')],
+                [$this->equalTo('email'), $this->equalTo('test@email')]
+            );
         $attribute = $this->getMockBuilder(Attribute::class)
             ->onlyMethods(['getName'])
             ->getMock();
-        $attribute->expects($this->exactly(2))
+        $attribute->expects($this->exactly(4))
             ->method('getName')
-            ->willReturn('phone', 'email');
+            ->willReturn('phone', 'email', 'phone', 'email');
         $strategy = $this->getMockBuilder(Strategy::class)
             ->onlyMethods(['save'])
             ->getMock();
         $strategy->expects($this->exactly(2))
             ->method('save');
+        $valueManager = $this->getMockBuilder(ValueManager::class)
+            ->onlyMethods(['getValue'])
+            ->getMock();
+        $valueManager->expects($this->exactly(2))
+            ->method('getValue')
+            ->willReturn('12345', 'test@email');
         $container = $this->getMockBuilder(AttributeContainer::class)
-            ->onlyMethods(['getAttribute', 'getStrategy'])
+            ->onlyMethods(['getAttribute', 'getStrategy', 'getValueManager'])
             ->getMock();
         $container->expects($this->exactly(2))
+            ->method('getValueManager')
+            ->willReturn($valueManager);
+        $container->expects($this->exactly(4))
             ->method('getAttribute')
             ->willReturn($attribute);
         $container->expects($this->exactly(2))
@@ -164,7 +179,7 @@ class EntityGnomeBehaviorTest extends TestCase
             ->getMock();
         $attrSet->expects($this->once())
             ->method('fetchContainers');
-        $attrSet->expects($this->once())
+        $attrSet->expects($this->exactly(2))
             ->method('getContainers')
             ->willReturn([$container, $container]);
         $entity = $this->getMockBuilder(Entity::class)

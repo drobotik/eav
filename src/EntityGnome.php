@@ -95,6 +95,14 @@ class EntityGnome
         $set->setKey($record[_ENTITY::ATTR_SET_ID]);
         $set->fetchContainers();
 
+        $bag = $entity->getBag();
+        foreach ($set->getContainers() as $container) {
+            $attribute = $container->getAttribute();
+            $valueManger = $container->getValueManager();
+            $value = $valueManger->getValue();
+            $bag->setField($attribute->getName(), $value);
+        }
+
         $result->found();
 
         return $result;
@@ -120,8 +128,16 @@ class EntityGnome
             ? $result->created()
             : $result->updated();
         $result->setData($valueResults);
+
+        // fill bag with new values
         $bag = $entity->getBag();
         $bag->clear();
+        foreach ($set->getContainers() as $container) {
+            $attribute = $container->getAttribute();
+            $name = $attribute->getName();
+            $value = $container->getValueManager()->getValue();
+            $bag->setField($name, $value);
+        }
 
         return $result;
     }
@@ -158,6 +174,9 @@ class EntityGnome
         $entity->setDomainKey(0);
         $set->setKey(0);
         $set->resetContainers();
+
+        $bag = $entity->getBag();
+        $bag->clear();
 
         $result->deleted();
         $result->setData($deleteResults);

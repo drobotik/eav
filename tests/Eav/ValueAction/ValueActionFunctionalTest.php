@@ -22,6 +22,7 @@ use Kuperwood\Eav\Model\ValueBase;
 use Kuperwood\Eav\Result\Result;
 use Kuperwood\Eav\Value\ValueAction;
 use Kuperwood\Eav\Value\ValueManager;
+use Kuperwood\Eav\Value\ValueParser;
 use PDO;
 use Tests\TestCase;
 
@@ -44,7 +45,7 @@ class ValueActionFunctionalTest extends TestCase
         $entityKey = 1;
         $domainKey = 2;
         $attrKey = 3;
-        $valueToSave = 'test';
+        $valueToSave = $this->faker->randomFloat(3);
         $entity = new Entity();
         $entity->setKey($entityKey);
         $entity->setDomainKey($domainKey);
@@ -52,6 +53,7 @@ class ValueActionFunctionalTest extends TestCase
         $attrSet->setEntity($entity);
         $attribute = new Attribute();
         $attribute->setKey($attrKey);
+        $attribute->setType(ATTR_TYPE::DECIMAL);
         $valueManager = new ValueManager();
         $valueManager->setRuntime($valueToSave);
         $container = new AttributeContainer();
@@ -60,19 +62,23 @@ class ValueActionFunctionalTest extends TestCase
             ->setValueManager($valueManager);
         $this->action->setAttributeContainer($container);
         $result = $this->action->create();
-        $valueModel = $this->makeValueModel();
-        $valueRecord = $valueModel->find(
-            ATTR_TYPE::STRING,
-            $domainKey,
-            $entityKey,
-            $attrKey
-        );
+
+        $pdo = Connection::get();
+        $table = ATTR_TYPE::valueTable(ATTR_TYPE::DECIMAL);
+        $sql = "SELECT * FROM `$table` WHERE " . _VALUE::DOMAIN_ID . " = ? 
+        AND " . _VALUE::ENTITY_ID . " = ? 
+        AND " . _VALUE::ATTRIBUTE_ID . " = ? LIMIT 1";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$domainKey, $entityKey, $attrKey]);
+        $valueRecord = $stmt->fetch(PDO::FETCH_ASSOC);
+
         $this->assertIsArray($valueRecord);
         $valueKey = $valueRecord[_VALUE::ID];
         $this->assertEquals($valueToSave, $valueRecord[_VALUE::VALUE]);
 
+        $valueParser = new ValueParser();
         $this->assertNull($valueManager->getRuntime());
-        $this->assertEquals($valueToSave, $valueManager->getStored());
+        $this->assertSame($valueParser->parse(ATTR_TYPE::DECIMAL, $valueRecord[_VALUE::VALUE]), $valueManager->getStored());
         $this->assertEquals($valueKey, $valueManager->getKey());
 
         $this->assertInstanceOf(Result::class, $result);
@@ -116,11 +122,13 @@ class ValueActionFunctionalTest extends TestCase
      * @covers \Kuperwood\Eav\Value\ValueAction::find
      */
     public function find() {
+        $valueToSave = $this->faker->randomFloat(3);
+
         $domainKey = $this->eavFactory->createDomain();
         $entityKey = $this->eavFactory->createEntity($domainKey);
         $setKey = $this->eavFactory->createAttributeSet($domainKey);
         $groupKey = $this->eavFactory->createGroup($setKey);
-        $attrKey = $this->eavFactory->createAttribute($domainKey);
+        $attrKey = $this->eavFactory->createAttribute($domainKey, [_ATTR::TYPE => ATTR_TYPE::DECIMAL]);
 
         $pdo = Connection::get();
         $table = _ATTR::table();
@@ -132,7 +140,7 @@ class ValueActionFunctionalTest extends TestCase
         $this->eavFactory->createPivot($domainKey, $setKey, $groupKey, $attrKey);
 
         $valueModel = new ValueBase();
-        $valueKey = $valueModel->create(ATTR_TYPE::STRING, $domainKey, $entityKey, $attrKey,"test");
+        $valueKey = $valueModel->create(ATTR_TYPE::DECIMAL, $domainKey, $entityKey, $attrKey, $valueToSave);
 
         $entity = new Entity();
         $entity->setKey($entityKey);
@@ -150,10 +158,21 @@ class ValueActionFunctionalTest extends TestCase
             ->setValueManager($valueManager);
         $this->action->setAttributeContainer($container);
 
+        $pdo = Connection::get();
+        $table = ATTR_TYPE::valueTable(ATTR_TYPE::DECIMAL);
+        $sql = "SELECT * FROM `$table` WHERE " . _VALUE::DOMAIN_ID . " = ? 
+        AND " . _VALUE::ENTITY_ID . " = ? 
+        AND " . _VALUE::ATTRIBUTE_ID . " = ? LIMIT 1";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$domainKey, $entityKey, $attrKey]);
+        $valueRecord = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $valueParser = $this->makeValueParser();
+
         $result = $this->action->find();
 
         $this->assertNull($valueManager->getRuntime());
-        $this->assertEquals("test", $valueManager->getStored());
+        $this->assertEquals($valueParser->parse(ATTR_TYPE::DECIMAL, $valueRecord[_VALUE::VALUE]), $valueManager->getStored());
         $this->assertEquals($valueKey, $valueManager->getKey());
 
         $this->assertInstanceOf(Result::class, $result);
@@ -216,18 +235,20 @@ class ValueActionFunctionalTest extends TestCase
      * @covers \Kuperwood\Eav\Value\ValueAction::update
      */
     public function update_value() {
-        $valueToSave = 'new';
+
+        $newValue = $this->faker->randomFloat(3);
+        $oldValue = $this->faker->randomFloat(3);
         $domainKey = 1;
         $entityKey = 2;
         $attrKey = 2;
         $attrSetKey = 4;
 
         $valueModel = $this->makeValueModel();
-        $valueKey = $valueModel->create(ATTR_TYPE::STRING, $domainKey, $entityKey, $attrKey, 'old');
+        $valueKey = $valueModel->create(ATTR_TYPE::DECIMAL, $domainKey, $entityKey, $attrKey, $oldValue);
 
         $valueManager = new ValueManager();
         $valueManager->setKey($valueKey);
-        $valueManager->setRuntime($valueToSave);
+        $valueManager->setRuntime($newValue);
 
         $entity = new Entity();
         $entity->setKey($entityKey);
@@ -239,6 +260,7 @@ class ValueActionFunctionalTest extends TestCase
 
         $attribute = new Attribute();
         $attribute->setKey($attrKey);
+        $attribute->setType(ATTR_TYPE::DECIMAL);
 
         $container = new AttributeContainer();
         $container
@@ -249,12 +271,21 @@ class ValueActionFunctionalTest extends TestCase
         $this->action->setAttributeContainer($container);
         $result = $this->action->update();
 
-        $record = $valueModel->find(ATTR_TYPE::STRING, $domainKey, $entityKey, $attrKey);
+        $pdo = Connection::get();
+        $table = ATTR_TYPE::valueTable(ATTR_TYPE::DECIMAL);
+        $sql = "SELECT * FROM `$table` WHERE " . _VALUE::DOMAIN_ID . " = ? 
+        AND " . _VALUE::ENTITY_ID . " = ? 
+        AND " . _VALUE::ATTRIBUTE_ID . " = ? LIMIT 1";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$domainKey, $entityKey, $attrKey]);
+        $record = $stmt->fetch(PDO::FETCH_ASSOC);
+
         $this->assertIsArray($record);
-        $this->assertEquals($valueToSave, $record[_VALUE::VALUE]);
+        $this->assertEquals($newValue, $record[_VALUE::VALUE]);
 
         $this->assertNull($valueManager->getRuntime());
-        $this->assertEquals($valueToSave, $valueManager->getStored());
+        $valueParser = new ValueParser();
+        $this->assertEquals($valueParser->parse(ATTR_TYPE::DECIMAL, $record[_VALUE::VALUE]), $valueManager->getStored());
         $this->assertEquals($valueKey, $valueManager->getKey());
 
         $this->assertInstanceOf(Result::class, $result);

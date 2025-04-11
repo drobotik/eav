@@ -87,7 +87,12 @@ class EntityAcceptanceTest extends TestCase
             $this->assertIsArray($datetimeValue, $message);
             $this->assertIsArray($textValue, $message);
 
-            $data["datetime"] = $this->makeValueParser()->parse(ATTR_TYPE::DATETIME, $data["datetime"]);
+            $valueParser = $this->makeValueParser();
+            $data["string"] = $valueParser->parse(ATTR_TYPE::STRING, $data["string"]);
+            $data["integer"] = $valueParser->parse(ATTR_TYPE::INTEGER, $data["integer"]);
+            $data["decimal"] = $valueParser->parse(ATTR_TYPE::DECIMAL, $data["decimal"]);
+            $data["datetime"] = $valueParser->parse(ATTR_TYPE::DATETIME, $data["datetime"]);
+            $data["text"] = $valueParser->parse(ATTR_TYPE::TEXT, $data["text"]);
 
             $this->assertEquals($data["string"], $stringValue[_VALUE::VALUE], $message);
             $this->assertEquals($data["integer"], $integerValue[_VALUE::VALUE], $message);
@@ -101,7 +106,10 @@ class EntityAcceptanceTest extends TestCase
                 $container = $set->getContainer($name);
                 $this->assertEquals($value, $container->getValueManager()->getStored());
             }
-            $this->assertEquals($data, $entity->toArray());
+            $this->assertSame($data, $entity->toArray());
+
+            $bag = $entity->getBag();
+            $this->assertSame($data, $bag->getData());
         }
     }
 

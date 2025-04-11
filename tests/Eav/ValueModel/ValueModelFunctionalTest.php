@@ -66,10 +66,8 @@ class ValueModelFunctionalTest extends TestCase
 
             $stmt = $pdo->prepare($sql);
             $stmt->execute([$domainKey, $entityKey, $attributeKey]);
-
             $valueRecord = $stmt->fetch(PDO::FETCH_ASSOC);
             $this->assertEquals($valueKey, $valueRecord[_VALUE::ID], "Iteration:".$case);
-            $this->assertEquals($parser->parse($case, $value), $parser->parse($case, $valueRecord[_VALUE::VALUE]) , "Iteration:".$case);
         }
     }
 
@@ -83,12 +81,23 @@ class ValueModelFunctionalTest extends TestCase
         $domainKey = 1;
         $entityKey = 2;
         $attributeKey = 3;
-
+        $parser = new ValueParser();
         foreach($this->cases() as $case)
         {
             $valueKey = $this->model->create($case, $domainKey, $entityKey, $attributeKey, ATTR_TYPE::randomValue($case));
+
+            $pdo = Connection::get();
+            $table = ATTR_TYPE::valueTable($case);
+            $sql = "SELECT * FROM `$table` WHERE " . _VALUE::DOMAIN_ID . " = ? 
+        AND " . _VALUE::ENTITY_ID . " = ? 
+        AND " . _VALUE::ATTRIBUTE_ID . " = ? LIMIT 1";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$domainKey, $entityKey, $attributeKey]);
+            $valueRecord = $stmt->fetch(PDO::FETCH_ASSOC);
+
             $record = $this->model->find($case, $domainKey, $entityKey, $attributeKey);
             $this->assertEquals($valueKey, $record[_VALUE::ID]);
+            $this->assertSame($parser->parse($case,$valueRecord[_VALUE::VALUE]), $record[_VALUE::VALUE], "Iteration:".$case);
         }
     }
 
@@ -112,7 +121,7 @@ class ValueModelFunctionalTest extends TestCase
             $this->assertEquals(1, $result, ATTR_TYPE::valueTable($case));
             $record = $this->model->find(ATTR_TYPE::getCase($case), $domainKey, $entityKey, $attributeKey);
             $this->assertIsArray($record);
-            $this->assertEquals($parser->parse($case, $newValue), $parser->parse($case, $record[_VALUE::VALUE]));
+            $this->assertSame($parser->parse($case, $newValue), $record[_VALUE::VALUE]);
         }
     }
 

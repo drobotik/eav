@@ -13,7 +13,7 @@ use Kuperwood\Eav\Attribute;
 use Kuperwood\Eav\AttributeContainer;
 use Kuperwood\Eav\AttributeSet;
 use Kuperwood\Eav\Entity;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class AttributeSetFunctionalTest extends TestCase
 {

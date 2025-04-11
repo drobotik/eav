@@ -19,6 +19,7 @@ use Kuperwood\Eav\Enum\ATTR_TYPE;
 use Kuperwood\Eav\Exception\EntityException;
 use Kuperwood\Eav\Model\EntityModel;
 use Kuperwood\Eav\Result\Result;
+use Kuperwood\Eav\Value\ValueParser;
 use Tests\TestCase;
 
 class EntityGnomeFunctionalTest extends TestCase
@@ -279,7 +280,11 @@ class EntityGnomeFunctionalTest extends TestCase
         );
         $this->assertFalse($noteRecord);
 
-        $this->assertEquals([], $entity->getBag()->getData());
+        $this->assertEquals([
+            "email" => "test@email.net",
+            'phone' => '1234567890',
+            'note' => null
+        ], $entity->getBag()->getData());
 
         $this->assertInstanceOf(Result::class, $result);
         $this->assertEquals(_RESULT::CREATED, $result->getCode());
@@ -329,5 +334,82 @@ class EntityGnomeFunctionalTest extends TestCase
         $entity = $this->gnome->getEntity();
         $entity->getAttributeSet()->setKey(1);
         $this->gnome->delete();
+    }
+
+    /**
+     * @test
+     * @group functional
+     * @covers \Kuperwood\Eav\EntityGnome::toArray
+     * @covers \Kuperwood\Eav\EntityGnome::find
+     * @covers \Kuperwood\Eav\Entity::getBag
+     */
+    public function find()
+    {
+        $eavFactory = $this->eavFactory;
+        $domainKey = $eavFactory->createDomain();
+        $setKey = $eavFactory->createAttributeSet($domainKey);
+        $groupKey = $eavFactory->createGroup($setKey);
+        $eavFactory->createEntity($domainKey, $setKey);
+        $stringAttributeKey = $eavFactory->createAttribute($domainKey, [
+            _ATTR::NAME => "string",
+            _ATTR::TYPE => ATTR_TYPE::STRING
+        ]);
+        $integerAttributeKey = $eavFactory->createAttribute($domainKey, [
+            _ATTR::NAME => "integer",
+            _ATTR::TYPE => ATTR_TYPE::INTEGER
+        ]);
+        $decimalAttributeKey = $eavFactory->createAttribute($domainKey, [
+            _ATTR::NAME => "decimal",
+            _ATTR::TYPE => ATTR_TYPE::DECIMAL
+        ]);
+        $datetimeAttributeKey = $eavFactory->createAttribute($domainKey, [
+            _ATTR::NAME => "datetime",
+            _ATTR::TYPE => ATTR_TYPE::DATETIME
+        ]);
+        $textAttributeKey = $eavFactory->createAttribute($domainKey, [
+            _ATTR::NAME => "text",
+            _ATTR::TYPE => ATTR_TYPE::TEXT
+        ]);
+        $eavFactory->createPivot($domainKey, $setKey, $groupKey, $stringAttributeKey);
+        $eavFactory->createPivot($domainKey, $setKey, $groupKey, $integerAttributeKey);
+        $eavFactory->createPivot($domainKey, $setKey, $groupKey, $decimalAttributeKey);
+        $eavFactory->createPivot($domainKey, $setKey, $groupKey, $datetimeAttributeKey);
+        $eavFactory->createPivot($domainKey, $setKey, $groupKey, $textAttributeKey);
+        $data = [
+            "string" => $this->faker->word,
+            "integer" => $this->faker->randomNumber(),
+            "decimal" => $this->faker->randomFloat(3),
+            "datetime" => ATTR_TYPE::randomValue(ATTR_TYPE::DATETIME),
+            "text" => $this->faker->text
+        ];
+        $entity = new Entity();
+        $entity->setDomainKey($domainKey);
+        $entity->getAttributeSet()->setKey($setKey);
+        $entity->getBag()->setFields($data);
+        $entity->save();
+        $entityKey = $entity->getKey();
+
+        // SETUP
+        $entityModel = new Entity();
+        $entityModel->setKey($entityKey);
+        $entityModel->setDomainKey($domainKey);
+        $entityModel ->getAttributeSet()->setKey($setKey);
+        $entityModel->find();
+        $entityData = $entityModel->toArray();
+
+        $valueParser = new ValueParser();
+
+        $expectedData = [
+            'string' => $valueParser->parse(ATTR_TYPE::STRING, $data['string']),
+            'integer' => $valueParser->parse( ATTR_TYPE::INTEGER, $data['integer']),
+            'decimal' => $valueParser->parse(ATTR_TYPE::DECIMAL, $data['decimal']),
+            'datetime' => $valueParser->parse(ATTR_TYPE::DATETIME, $data['datetime']),
+            'text' => $valueParser->parse(ATTR_TYPE::TEXT, $data['text'])
+        ];
+
+        $this->assertEquals($expectedData, $entityData);
+
+        $bag = $entityModel->getBag();
+        $this->assertEquals($expectedData, $bag->getData());
     }
 }

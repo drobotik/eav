@@ -30,13 +30,14 @@ class ValueAction
         $entity = $container->getAttributeSet()->getEntity();
         $valueManager = $container->getValueManager();
         $valueModel = $this->makeValueModel();
-        $parser = $this->makeValueParser();
+        $valueParser = $this->makeValueParser();
+
         if (!$valueManager->isRuntime()) {
             return $result->empty();
         }
 
         $type = $attribute->getType();
-        $value = $parser->parse($type, $valueManager->getRuntime());
+        $value = $valueManager->getRuntime();
 
         $valueKey = $valueModel->create(
             $type,
@@ -46,7 +47,7 @@ class ValueAction
             $value
         );
 
-        $valueManager->setStored($value)
+        $valueManager->setStored($valueParser->parse($type, $value))
             ->setKey($valueKey)
             ->clearRuntime();
 
@@ -99,7 +100,6 @@ class ValueAction
         $type = $attribute->getType();
         $valueManager = $container->getValueManager();
         $valueModel = $this->makeValueModel();
-        $valueParser = $this->makeValueParser();
 
         if (!$valueManager->isRuntime()) {
             return $result->empty();
@@ -109,7 +109,7 @@ class ValueAction
         $entityKey = $entity->getKey();
         $attributeKey = $attribute->getKey();
 
-        $value = $valueParser->parse($type, $valueManager->getRuntime());
+        $value = $valueManager->getRuntime();
 
         $valueModel->update(
             $type,

@@ -12,10 +12,8 @@ namespace Kuperwood\Eav\Model;
 use Kuperwood\Eav\Database\Connection;
 use Kuperwood\Eav\Enum\_VALUE;
 use Kuperwood\Eav\Enum\ATTR_TYPE;
-use Kuperwood\Eav\Import\Content\ValueSet;
 use Kuperwood\Eav\Traits\SingletonsTrait;
 use Exception;
-use InvalidArgumentException;
 use PDO;
 
 class ValueBase extends Model
@@ -46,7 +44,11 @@ class ValueBase extends Model
         $stmt->bindParam(':attr', $attributeKey, PDO::PARAM_INT);
         $stmt->execute();
 
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $record = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($record)
+            $record[_VALUE::VALUE] = $this->makeValueParser()->parse($type, $record[_VALUE::VALUE]);
+
+        return $record;
     }
 
     /**
@@ -70,8 +72,7 @@ class ValueBase extends Model
         $stmt->bindParam(':domain_id', $domainKey, PDO::PARAM_INT);
         $stmt->bindParam(':entity_id', $entityKey, PDO::PARAM_INT);
         $stmt->bindParam(':attribute_id', $attributeKey, PDO::PARAM_INT);
-        $v = $this->makeValueParser()->parse($type, $value);
-        $stmt->bindParam(':value',$v);
+        $stmt->bindParam(':value',$value);
 
         $stmt->execute();
 
@@ -82,7 +83,6 @@ class ValueBase extends Model
     {
         $pdo = Connection::get();
         $table = ATTR_TYPE::valueTable($type);
-        $parsedValue = $this->makeValueParser()->parse($type, $value);
 
         $sql = "UPDATE $table 
             SET " . _VALUE::VALUE . " = :val 
@@ -91,7 +91,7 @@ class ValueBase extends Model
             AND " . _VALUE::ATTRIBUTE_ID . " = :attr";
 
         $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':val', $parsedValue);
+        $stmt->bindParam(':val', $value);
         $stmt->bindParam(':domain', $domainKey, PDO::PARAM_INT);
         $stmt->bindParam(':entity', $entityKey, PDO::PARAM_INT);
         $stmt->bindParam(':attr', $attributeKey, PDO::PARAM_INT);
