@@ -428,14 +428,14 @@ class EntityGnomeFunctionalTest extends TestCase
         $group2Key = $eavFactory->createGroup($setKey, [_GROUP::NAME => 'group2']);
 
         $group1 = [
-            _GROUP::ID => (string) $group1Key,
-            _GROUP::SET_ID => (string) $setKey,
+            _GROUP::ID => $group1Key,
+            _GROUP::SET_ID => $setKey,
             _GROUP::NAME => 'group1',
         ];
 
         $group2 = [
-            _GROUP::ID => (string) $group2Key,
-            _GROUP::SET_ID => (string) $setKey,
+            _GROUP::ID => $group2Key,
+            _GROUP::SET_ID => $setKey,
             _GROUP::NAME => 'group2',
         ];
 
@@ -465,22 +465,22 @@ class EntityGnomeFunctionalTest extends TestCase
         ];
 
         $attr1 = $defaultAttrData;
-        $attr1[_ATTR::ID] = (string) $attr1Key;
+        $attr1[_ATTR::ID] = $attr1Key;
         $attr1[_ATTR::NAME] = 'attr1';
         $attr1[_ATTR::TYPE] = ATTR_TYPE::STRING;
-        $attr1[_ATTR::GROUP_ID] = (string) $group1Key;
+        $attr1[_ATTR::GROUP_ID] = $group1Key;
 
         $attr2 = $defaultAttrData;
-        $attr2[_ATTR::ID] = (string) $attr2Key;
+        $attr2[_ATTR::ID] = $attr2Key;
         $attr2[_ATTR::NAME] = 'attr2';
         $attr2[_ATTR::TYPE] = ATTR_TYPE::STRING;
-        $attr2[_ATTR::GROUP_ID] = (string) $group2Key;
+        $attr2[_ATTR::GROUP_ID] = $group2Key;
 
         $attr3 = $defaultAttrData;
-        $attr3[_ATTR::ID] = (string) $attr3Key;
+        $attr3[_ATTR::ID] = $attr3Key;
         $attr3[_ATTR::NAME] = 'attr3';
         $attr3[_ATTR::TYPE] = ATTR_TYPE::STRING;
-        $attr3[_ATTR::GROUP_ID] = (string) $group2Key;
+        $attr3[_ATTR::GROUP_ID] = $group2Key;
 
         $eavFactory->createPivot($domainKey, $setKey, $group1Key, $attr1Key);
         $eavFactory->createPivot($domainKey, $setKey, $group2Key, $attr2Key);
@@ -498,7 +498,7 @@ class EntityGnomeFunctionalTest extends TestCase
         $entity->save();
 
         $result = $entity->getGnome()->toArrayByGroup();
-        $this->assertSame([
+        $this->assertEquals([
             $group1Key => [
                 'group' => $group1,
                 'attributes' => [
