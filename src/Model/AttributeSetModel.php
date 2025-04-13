@@ -43,11 +43,14 @@ class AttributeSetModel extends Model
     public function findAttributes($domainKey, $setKey = null) : array
     {
         $sql = sprintf(
-            "SELECT a.* FROM %s a
+            "SELECT a.*, p.%s FROM %s a
         INNER JOIN %s p ON a.%s = p.%s
         WHERE p.%s = :domain_id",
-            _ATTR::table(), _PIVOT::table(),
-            _ATTR::ID, _PIVOT::ATTR_ID,
+            _PIVOT::GROUP_ID,
+            _ATTR::table(),
+            _PIVOT::table(),
+            _ATTR::ID,
+            _PIVOT::ATTR_ID,
             _PIVOT::DOMAIN_ID
         );
 

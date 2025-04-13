@@ -17,6 +17,7 @@ class _ATTR implements DefineTableInterface
 
     public const ID = 'attribute_id';
     public const DOMAIN_ID = 'domain_id';
+    public const GROUP_ID = 'group_id';
     public const NAME = 'name';
     public const TYPE = 'type';
     public const STRATEGY = 'strategy';

@@ -64,6 +64,18 @@ class AttributeFunctionalTest extends TestCase
     /**
      * @test
      * @group functional
+     * @covers \Kuperwood\Eav\Attribute::getGroupKey
+     * @covers \Kuperwood\Eav\Attribute::setGroupKey
+     */
+    public function group_key() {
+        $this->attribute->setGroupKey('123');
+        $this->assertEquals(123, $this->attribute->getGroupKey());
+        $this->attribute->setGroupKey(null);
+        $this->assertNull($this->attribute->getDomainKey());
+    }
+    /**
+     * @test
+     * @group functional
      * @covers \Kuperwood\Eav\Attribute::getName
      * @covers \Kuperwood\Eav\Attribute::setName
      */

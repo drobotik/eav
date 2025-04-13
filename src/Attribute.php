@@ -62,6 +62,18 @@ class Attribute
         return $this;
     }
 
+    public function getGroupKey(): ?int
+    {
+        return (int) $this->getBag()->getField(_ATTR::GROUP_ID);
+    }
+
+    public function setGroupKey($key): self
+    {
+        $this->getBag()->setField(_ATTR::GROUP_ID, $key);
+
+        return $this;
+    }
+
     public function getName(): ?string
     {
         return $this->getBag()->getField(_ATTR::NAME);

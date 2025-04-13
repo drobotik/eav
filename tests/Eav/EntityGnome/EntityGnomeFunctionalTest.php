@@ -13,6 +13,7 @@ use Kuperwood\Eav\Entity;
 use Kuperwood\Eav\EntityGnome;
 use Kuperwood\Eav\Enum\_ATTR;
 use Kuperwood\Eav\Enum\_ENTITY;
+use Kuperwood\Eav\Enum\_GROUP;
 use Kuperwood\Eav\Enum\_RESULT;
 use Kuperwood\Eav\Enum\_VALUE;
 use Kuperwood\Eav\Enum\ATTR_TYPE;
@@ -411,5 +412,115 @@ class EntityGnomeFunctionalTest extends TestCase
 
         $bag = $entityModel->getBag();
         $this->assertEquals($expectedData, $bag->getData());
+    }
+
+    /**
+     * @test
+     * @group functional
+     * @covers \Kuperwood\Eav\EntityGnome::toArray
+     */
+    public function to_array_with_groups()
+    {
+        $eavFactory = $this->eavFactory;
+        $domainKey = $eavFactory->createDomain();
+        $setKey = $eavFactory->createAttributeSet($domainKey);
+        $group1Key = $eavFactory->createGroup($setKey, [_GROUP::NAME => 'group1']);
+        $group2Key = $eavFactory->createGroup($setKey, [_GROUP::NAME => 'group2']);
+
+        $group1 = [
+            _GROUP::ID => (string) $group1Key,
+            _GROUP::SET_ID => (string) $setKey,
+            _GROUP::NAME => 'group1',
+        ];
+
+        $group2 = [
+            _GROUP::ID => (string) $group2Key,
+            _GROUP::SET_ID => (string) $setKey,
+            _GROUP::NAME => 'group2',
+        ];
+
+        $attr1Key = $eavFactory->createAttribute($domainKey, [
+            _ATTR::NAME => "attr1",
+            _ATTR::TYPE => ATTR_TYPE::STRING
+        ]);
+        $attr2Key = $eavFactory->createAttribute($domainKey, [
+            _ATTR::NAME => "attr2",
+            _ATTR::TYPE => ATTR_TYPE::STRING
+        ]);
+        $attr3Key = $eavFactory->createAttribute($domainKey, [
+            _ATTR::NAME => "attr3",
+            _ATTR::TYPE => ATTR_TYPE::STRING
+        ]);
+
+        $defaultAttrData = [
+            _ATTR::ID => null,
+            _ATTR::DOMAIN_ID => (string) $domainKey,
+            _ATTR::NAME => $this->faker->slug(2),
+            _ATTR::TYPE => _ATTR::bag(_ATTR::TYPE),
+            _ATTR::STRATEGY => _ATTR::bag(_ATTR::STRATEGY),
+            _ATTR::SOURCE => _ATTR::bag(_ATTR::SOURCE),
+            _ATTR::DEFAULT_VALUE => _ATTR::bag(_ATTR::DEFAULT_VALUE),
+            _ATTR::DESCRIPTION => _ATTR::bag(_ATTR::DESCRIPTION),
+            _ATTR::GROUP_ID => null
+        ];
+
+        $attr1 = $defaultAttrData;
+        $attr1[_ATTR::ID] = (string) $attr1Key;
+        $attr1[_ATTR::NAME] = 'attr1';
+        $attr1[_ATTR::TYPE] = ATTR_TYPE::STRING;
+        $attr1[_ATTR::GROUP_ID] = (string) $group1Key;
+
+        $attr2 = $defaultAttrData;
+        $attr2[_ATTR::ID] = (string) $attr2Key;
+        $attr2[_ATTR::NAME] = 'attr2';
+        $attr2[_ATTR::TYPE] = ATTR_TYPE::STRING;
+        $attr2[_ATTR::GROUP_ID] = (string) $group2Key;
+
+        $attr3 = $defaultAttrData;
+        $attr3[_ATTR::ID] = (string) $attr3Key;
+        $attr3[_ATTR::NAME] = 'attr3';
+        $attr3[_ATTR::TYPE] = ATTR_TYPE::STRING;
+        $attr3[_ATTR::GROUP_ID] = (string) $group2Key;
+
+        $eavFactory->createPivot($domainKey, $setKey, $group1Key, $attr1Key);
+        $eavFactory->createPivot($domainKey, $setKey, $group2Key, $attr2Key);
+        $eavFactory->createPivot($domainKey, $setKey, $group2Key, $attr3Key);
+
+        $data = [
+            "attr1" => 'value1',
+            "attr2" => 'value2',
+            "attr3" => 'value3'
+        ];
+        $entity = new Entity();
+        $entity->setDomainKey($domainKey);
+        $entity->getAttributeSet()->setKey($setKey);
+        $entity->getBag()->setFields($data);
+        $entity->save();
+
+        $result = $entity->getGnome()->toArrayByGroup();
+        $this->assertSame([
+            $group1Key => [
+                'group' => $group1,
+                'attributes' => [
+                    [
+                        'attribute' => $attr1,
+                        'value' => 'value1'
+                    ]
+                ]
+            ],
+            $group2Key => [
+                'group' => $group2,
+                'attributes' => [
+                    [
+                        'attribute' => $attr2,
+                        'value' => 'value2'
+                    ],
+                    [
+                        'attribute' => $attr3,
+                        'value' => 'value3'
+                    ]
+                ]
+            ],
+        ], $result);
     }
 }

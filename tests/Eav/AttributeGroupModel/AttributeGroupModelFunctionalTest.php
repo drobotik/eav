@@ -82,4 +82,41 @@ class AttributeGroupModelFunctionalTest extends TestCase
         $this->assertFalse($this->model->checkGroupInAttributeSet($set2Key, $group1Key));
         $this->assertFalse($this->model->checkGroupInAttributeSet($set2Key, $group2Key));
     }
+
+    /**
+     * @test
+     * @group functional
+     * @covers \Kuperwood\Eav\Model\AttributeGroupModel::findBySetKey
+     */
+    public function findBySetKey()
+    {
+        $domainKey = $this->eavFactory->createDomain();
+        $set1Key = $this->eavFactory->createAttributeSet($domainKey);
+        $set2Key = $this->eavFactory->createAttributeSet($domainKey);
+        $group1Key = $this->eavFactory->createGroup($set1Key, [_GROUP::NAME => 'group1']);
+        $group2Key = $this->eavFactory->createGroup($set1Key, [_GROUP::NAME => 'group2']);
+        $group3Key = $this->eavFactory->createGroup($set2Key, [_GROUP::NAME => 'group3']);
+        $result = $this->model->findBySetKey($set1Key);
+        $this->assertEquals([
+            [
+                _GROUP::ID => (string) $group1Key,
+                _GROUP::NAME => 'group1',
+                _GROUP::SET_ID => (string) $set1Key
+            ],
+            [
+                _GROUP::ID => (string) $group2Key,
+                _GROUP::NAME => 'group2',
+                _GROUP::SET_ID => (string) $set1Key
+            ]
+        ], $result);
+        $result = $this->model->findBySetKey($set2Key);
+        $this->assertEquals([
+            [
+                _GROUP::ID => (string) $group3Key,
+                _GROUP::NAME => 'group3',
+                _GROUP::SET_ID => (string) $set2Key
+            ]
+        ], $result);
+    }
+
 }

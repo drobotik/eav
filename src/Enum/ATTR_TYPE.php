@@ -80,7 +80,7 @@ class ATTR_TYPE
                 ];
             case self::DECIMAL:
                 return [
-                    new RegexConstraint('/^[0-9]{1,11}(?:\.[0-9]{1,3})?$/')
+                    new RegexConstraint('/^[0-9]{1,21}(?:\.[0-9]{1,6})?$/')
                 ];
             case self::STRING:
                 return [

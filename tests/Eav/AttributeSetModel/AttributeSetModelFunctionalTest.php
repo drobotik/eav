@@ -11,6 +11,7 @@ namespace Tests\Eav\AttributeSetModel;
 
 use Kuperwood\Eav\Database\Connection;
 use Kuperwood\Eav\Enum\_ATTR;
+use Kuperwood\Eav\Enum\_PIVOT;
 use Kuperwood\Eav\Enum\_SET;
 use Kuperwood\Eav\Model\AttributeSetModel;
 use PDO;
@@ -78,8 +79,20 @@ class AttributeSetModelFunctionalTest extends TestCase
         $result = $this->model->findAttributes(123);
         $this->assertEquals([], $result);
 
-        $sql = sprintf("SELECT * FROM %s", _ATTR::table()); // Using the table name from _ATTR
+        $sql = sprintf(
+            "SELECT a.*, p.%s FROM %s a
+        INNER JOIN %s p ON a.%s = p.%s
+        WHERE p.%s = :domain_id",
+            _PIVOT::GROUP_ID,
+            _ATTR::table(),
+            _PIVOT::table(),
+            _ATTR::ID,
+            _PIVOT::ATTR_ID,
+            _PIVOT::DOMAIN_ID
+        );
+
         $stmt =  Connection::get()->prepare($sql);
+        $stmt->bindParam(':domain_id', $domainKey, PDO::PARAM_INT);
         $stmt->execute();
         $expected = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

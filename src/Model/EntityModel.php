@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Kuperwood\Eav\Model;
 
+use Exception;
 use Kuperwood\Eav\Database\Connection;
 use Kuperwood\Eav\Enum\_ENTITY;
 use Kuperwood\Eav\Exception\EntityException;

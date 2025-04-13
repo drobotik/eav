@@ -11,7 +11,9 @@ declare(strict_types=1);
 namespace Kuperwood\Eav;
 
 use Kuperwood\Eav\Enum\_ENTITY;
+use Kuperwood\Eav\Enum\_GROUP;
 use Kuperwood\Eav\Exception\EntityException;
+use Kuperwood\Eav\Model\AttributeGroupModel;
 use Kuperwood\Eav\Result\Result;
 use Kuperwood\Eav\Traits\SingletonsTrait;
 
@@ -215,6 +217,31 @@ class EntityGnome
         }
 
         return $result;
+    }
+
+    public function toArrayByGroup(): array
+    {
+        $entity = $this->getEntity();
+        $attrSet = $entity->getAttributeSet();
+        $setKey = $attrSet->getKey();
+        $groupModel = new AttributeGroupModel();
+        $groups = array_column($groupModel->findBySetKey($setKey), null, _GROUP::ID);
+        $out = [];
+        foreach ($attrSet->getContainers() as $container) {
+            $attribute = $container->getAttribute();
+            $groupKey = $attribute->getGroupKey();
+            if (!key_exists($groupKey, $out)) {
+                $out[$groupKey] = [
+                    'group' => $groups[$groupKey],
+                    'attributes' => []
+                ];
+            }
+            $out[$groupKey]['attributes'][] = [
+                'attribute' => $container->getAttribute()->getBag()->getFields(),
+                'value' => $container->getValueManager()->getValue()
+            ];
+        }
+        return $out;
     }
 
     /**

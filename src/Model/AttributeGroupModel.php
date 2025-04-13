@@ -21,7 +21,6 @@ class AttributeGroupModel extends Model
         $this->setPrimaryKey(_GROUP::ID);
     }
 
-
     public function create(array $data) : int
     {
         $conn = Connection::get();
@@ -48,5 +47,20 @@ class AttributeGroupModel extends Model
 
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result !== false;
+    }
+
+    public function findBySetKey($setKey)
+    {
+        $conn = $this->db();
+        $sql = sprintf(
+            "SELECT * FROM %s WHERE %s = :set_id ",
+            $this->getTable(),
+            _GROUP::SET_ID,
+        );
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':set_id', $setKey, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

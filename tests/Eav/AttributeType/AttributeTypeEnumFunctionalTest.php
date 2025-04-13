@@ -72,7 +72,7 @@ class AttributeTypeEnumFunctionalTest extends TestCase
     public function validation_rule() {
         $this->assertEquals([new NumericConstraint()], ATTR_TYPE::validationRule(ATTR_TYPE::INTEGER));
         $this->assertEquals([new DateConstraint('Y-m-d H:i:s')], ATTR_TYPE::validationRule(ATTR_TYPE::DATETIME));
-        $this->assertEquals([new RegexConstraint('/^[0-9]{1,11}(?:\.[0-9]{1,3})?$/')], ATTR_TYPE::validationRule(ATTR_TYPE::DECIMAL));
+        $this->assertEquals([new RegexConstraint('/^[0-9]{1,21}(?:\.[0-9]{1,6})?$/')], ATTR_TYPE::validationRule(ATTR_TYPE::DECIMAL));
         $this->assertEquals([new LengthConstraint( 1,191)], ATTR_TYPE::validationRule(ATTR_TYPE::STRING));
         $this->assertEquals([new LengthConstraint( 1,10000)], ATTR_TYPE::validationRule(ATTR_TYPE::TEXT));
     }

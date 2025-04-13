@@ -11,6 +11,7 @@ namespace Tests\Eav\AttributeEnum;
 
 use Kuperwood\Eav\Enum\_ATTR;
 use Kuperwood\Eav\Enum\_DOMAIN;
+use Kuperwood\Eav\Enum\_GROUP;
 use Kuperwood\Eav\Enum\ATTR_TYPE;
 use Kuperwood\Eav\Strategy;
 use PHPUnit\Framework\TestCase;
@@ -36,6 +37,7 @@ class AttributeEnumFunctionalTest extends TestCase
      * @covers \Kuperwood\Eav\Enum\_ATTR::TYPE
      * @covers \Kuperwood\Eav\Enum\_ATTR::STRATEGY
      * @covers \Kuperwood\Eav\Enum\_ATTR::DESCRIPTION
+     * @covers \Kuperwood\Eav\Enum\_ATTR::GROUP_ID
      */
     public function columns() {
         $this->assertEquals('attribute_id', _ATTR::ID);
@@ -46,6 +48,7 @@ class AttributeEnumFunctionalTest extends TestCase
         $this->assertEquals('type', _ATTR::TYPE);
         $this->assertEquals('strategy', _ATTR::STRATEGY);
         $this->assertEquals('description', _ATTR::DESCRIPTION);
+        $this->assertEquals(_GROUP::ID, _ATTR::GROUP_ID);
     }
     /**
      * @test

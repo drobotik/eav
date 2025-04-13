@@ -14,6 +14,10 @@ use Kuperwood\Eav\Factory\EavFactory;
 use Kuperwood\Eav\Traits\SingletonsTrait;
 use Faker\Generator;
 
+if (file_exists('connection.php')) {
+    require_once 'connection.php';
+}
+
 class TestCase extends \PHPUnit\Framework\TestCase
 {
     use SingletonsTrait;
