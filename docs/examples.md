@@ -8,7 +8,7 @@ $stmt->execute();
 ```
 Then let's create first attribute set for that domain. For example notebook.
 ```php
-$stmt = $pdo->prepare("INSERT INTO eav_attribute_sets (domain_id, name) VALUE (1, 'Car')");
+$stmt = $pdo->prepare("INSERT INTO eav_attribute_sets (domain_id, name) VALUE (1, 'Notebooks')");
 $stmt->execute();
 ```
 Attribute set must have at least one group of attributes. But usually more. 
