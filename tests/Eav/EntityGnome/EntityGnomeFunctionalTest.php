@@ -454,7 +454,7 @@ class EntityGnomeFunctionalTest extends TestCase
 
         $defaultAttrData = [
             _ATTR::ID => null,
-            _ATTR::DOMAIN_ID => (string) $domainKey,
+            _ATTR::DOMAIN_ID => $domainKey,
             _ATTR::NAME => $this->faker->slug(2),
             _ATTR::TYPE => _ATTR::bag(_ATTR::TYPE),
             _ATTR::STRATEGY => _ATTR::bag(_ATTR::STRATEGY),

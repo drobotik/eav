@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Kuperwood\Eav;
 
+use Kuperwood\Eav\Enum\_RESULT;
 use Kuperwood\Eav\Result\Result;
 
 class Entity
@@ -108,5 +109,14 @@ class Entity
     public function toArray(): array
     {
         return $this->getGnome()->toArray();
+    }
+
+    public static function findByKey($entityKey) : ?Entity
+    {
+        $entity = new self();
+        $entity->setKey($entityKey);
+        if ($entity->find()->getCode() === _RESULT::FOUND)
+            return $entity;
+        return null;
     }
 }

@@ -95,7 +95,7 @@ class ATTR_TYPE
         }
     }
 
-    public static function randomValue(string $name, $iterator = null)
+    public static function randomValue(string $name)
     {
         $faker = Factory::create();
         switch ($name) {
@@ -117,7 +117,7 @@ class ATTR_TYPE
     /**
      * @throws AttributeException
      */
-    public static function getCase(string $type)
+    public static function getCase(string $type): string
     {
         switch ($type) {
             case self::INTEGER:

@@ -9,11 +9,12 @@ class Validator
 {
 
     /**
+     * @param $field
      * @param $value
      * @param array $constraints
-     * @return Violation[]
+     * @return Violation
      */
-    public function validate($field, $value, array $constraints)
+    public function validate($field, $value, array $constraints): ?Violation
     {
         foreach ($constraints as $constraint) {
             if ($constraint instanceof ConstraintInterface) {

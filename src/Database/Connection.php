@@ -24,13 +24,12 @@ class Connection
     /**
      * @throws ConnectionException
      */
-    public static function get(?PDO $pdo = null) : PDO
+    public static function get(PDO $pdo = null) : ?PDO
     {
-        if(self::$conn instanceof PDO) {
-            return self::$conn;
-        }
-        if($pdo instanceof PDO) {
+        if ($pdo instanceof PDO) {
             self::$conn = $pdo;
+            return self::$conn;
+        } else if (self::$conn instanceof PDO) {
             return self::$conn;
         }
         ConnectionException::undefined();
