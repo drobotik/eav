@@ -39,11 +39,9 @@ $connection = Connection::get($pdo)
 if ($connection->get() instanceof PDO)
     echo 'defined';
 ```
-Choose a [driver](https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#driver) that best suits your requirements.
-
 ### Entity
 
-The Entity model is a robust CRUD model that simplifies working with the EAV (Entity-Attribute-Value) data structure. It serves as the primary model for working with individual data records, making it well-suited for single record operations. However, it is not recommended for bulk usage or performing operations on a large number of records simultaneously.
+The Entity is a CRUD class that simplifies working with the EAV. It serves as the primary model for working with individual data records, making it well-suited for single record operations.
 
 ```php
 use Kuperwood\Eav\Entity;

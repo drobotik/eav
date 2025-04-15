@@ -16,7 +16,8 @@ The EAV engine is designed to manage and manipulate EAV data across multiple dom
 - PHP >=7.4
 - ext-pdo
 
-[Documentation](./docs/eav.md)
+[Documentation](./docs/eav.md)<br>
+[Examples](./docs/examples.md)
 
 ### Installation
 ```bash
