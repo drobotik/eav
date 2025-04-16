@@ -85,7 +85,12 @@ $stmt = $pdo->prepare("INSERT INTO eav_pivot (domain_id, set_id, group_id, attri
 $stmt->execute();
 ```
 
-EAV management is finished. It's possible to CRUD entity data using eav engine.
+EAV management is finished. 
+
+### Entity CRUD
+
+When EAV management is done, CRUD engine is ready to go.
+
 ```php
 use Kuperwood\Eav\Entity;
 use Kuperwood\Eav\Enum\_RESULT;
